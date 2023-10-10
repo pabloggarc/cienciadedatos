@@ -1,0 +1,129 @@
+contributors()
+
+help() -> se carga en el paquete utils que se carga por defecto, entre parentesis, todos los atributos que puede utilizar la función, en arguments explica cada uno de los atributos, notas, referencias, algo más, ejemplos
+
+help(getwd) -> getwd {paquete}, paquete al que pertenece, se carga por defecto
+
+getwd() -> nos dice el directorio actual en el que nos encontramos, devuelve la ruta completa
+
+setwd("") -> cambia el directorio actual de trabajo, entre comillas y con /
+
+list.files() / dir() -> devuelve los elementos del directorio actual
+
+----------------------
+
+ahora vamos a hacer un txt para introducir los datos del ejercicio y leerlo desde R
+
+	debe haber una tabulación entre dato y dato
+	debe haber una primera columna que enumere las filas (excepto la primera que tendrá un expacio en blanco)
+	en la priemra fila se pondrán los nombres de las variables
+	hay que ontroducir un enter a final de la última fila
+	la utilización de los puntos y comas no es lo mismo en la separación de los números decimales (de momento usaremos .)
+	al escribir un nombre NO hay que dehar huecos en blanco
+	vamos a llamar al fichero satelites.txt
+
+intrucción:
+	s<-read.table("satelites.txt")
+
+dim(s) -> dimensiones de dataframe
+length(s$radio) -> tamaño de una de las dimensiones
+
+so = s[order(s$radio),] -> ordena las filas en funcion del radio, deja dejas columnas sin ordenar
+so = s[rev(order(s$radio)),]
+
+rango = max(s$radio) - min(s$radio)
+range(s$radio) -> devuelve el maximo y el minimo, no la resta
+
+r = s$radio -> asigno variable
+
+rango = function(r){max(r)-min(r)} -> definir una funcion llamandola rango, no asigna variable
+
+rango(r)
+
+dump("rango", file="rango.R") -> crear fichero con la funcion
+source("rango.R") -> cargar un fichero
+
+frecabsradio <- table(r)
+frecabsacumradio <- cumsum(frecabsradio)
+frel = function(r){table(r)/length(r)}
+frelacum = function(r){cumsum(table(r))/length(r)}
+
+dump("frel",file="frecrel.R")
+
+
+mr = mean(r)
+
+sdr = sd(r) -> sale distinto que en teoría ya que usa n-1 en vez de n, ya que se iba a usar para analisis poblacional. para poder solucionarlo y usar el de clase podemos multiplicar por length()-1/length()
+
+sdr = function(x){sqrt((sd(x)^2)*(length(x)-1)/length(x))}
+
+varr = function(x){var(x)*(length(x)-1)/length(x)}
+
+med = median(r)
+
+cuar1 = quantile(r, 0.25)
+
+
+********************************
+
+
+rnwfile = system.file("Sweave", "example-1.Rnw", package="utils")
+
+Sweave(rnwfile)
+
+tools::texi2pdf("example-1.tex")
+
+
+
+
+***************************************************************
+lab 3
+*****
+
+getOption("defaultPackages")
+
+library(help="base")
+library(help="datasets")
+library(help="utils")
+library(help="getDevices")
+library(help="graphics")
+library(help="stats")
+library(help="methods")
+
+library() -> nos dice que paquetes están en la libreria estandar, viene instalados
+library(class) -> carga el paquete
+
+search()
+
+formas de instalar paquetes
+1.
+utils:::menuInstallPkgs()
+library(LearningRlab)
+search() -> ya aparece el paquete
+
+2.
+install.packages("LearnClust")
+
+3.
+install.packages("c:/tmp/arules_1.7-6.zip", rep=NULL)
+librery(ggplot2)
+install.packages("c:/tmp/generics_0.1.3.zip", rep=NULL)
+library(generics)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
