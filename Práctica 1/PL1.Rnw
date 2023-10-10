@@ -89,6 +89,20 @@
 			<<>>=
 			dim(s)
 			@
+			
+			También podemos ordenar el dataframe, en función de una de las magnitudes (columnas), usando la función \texttt{order} aplicando recursivamente el concepto de acceder por filas y columnas. Veamos un ejemplo, si en \texttt{s} teníamos guardado nuestro dataframe, y queremos ordenar por \texttt{radio}, la manera de hacerlo sería la siguiente: 
+			
+			<<>>=
+			s_ordered <- s[order(s$radio), ]
+			print(s_ordered)
+			@
+			
+			Podemos introducir nuevos criterios a la ordenación, como por ejemplo, hacerlo en orden descendente. Para esto usaremos la función \texttt{rev}. 
+			
+			<<>>=
+			s_ordered_rev <- s[rev(order(s$radio)), ]
+			print(s_ordered_rev)
+			@
 		
 		\section{Asociación}
 		
