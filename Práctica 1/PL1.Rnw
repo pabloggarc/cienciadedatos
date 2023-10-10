@@ -7,8 +7,6 @@
 \usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, mathtools, hyperref, hologo, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
-\usetikzlibrary{arrows}
-
 \pagestyle{fancy}
 \lhead{\footnotesize \leftmark}
 \rhead{\footnotesize \rightmark}
