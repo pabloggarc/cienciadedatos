@@ -4,7 +4,10 @@
 \usepackage[spanish]{babel}
 \usepackage[margin=2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, mathtools, hyperref}
+\usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, mathtools, hyperref, hologo, tikz, tikz-cd}
+\usepackage[spanish, noabbrev]{cleveref}
+
+\usetikzlibrary{arrows}
 
 \pagestyle{fancy}
 \lhead{\footnotesize \leftmark}
@@ -49,7 +52,6 @@
 
 \begin{document}
 	
-	\renewcommand{\tablename}{Tabla}
 	\renewcommand{\chaptername}{Parte}
 	\maketitle \thispagestyle{empty}
 	
@@ -57,9 +59,53 @@
 	
 	\tableofcontents
 	
-	\chapter*{Introducción}
+	\chapter*{Introducción}\addcontentsline{toc}{chapter}{Introducción}\pagestyle{plain}
 	
-	\chapter{Ejercicios guiados}
+		\section*{El lenguaje R}\addcontentsline{toc}{section}{El lenguaje R}
+		
+		\section*{El lenguaje \LaTeX}\addcontentsline{toc}{section}{El lenguaje \LaTeX}
+
+			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado dando una mayor flexibilidad, aunque no sea su objetivo principal. Veremos ahora los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que necesitaremos es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que estamos trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
+			
+			Una vez hemos tratado ambos lenguajes, necesitamos entender con qué tipos de extensiones se suelen trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo queremos almacenar nuestro documento, o cómo están almacenadas dependencias de estos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. 
+			
+			\begin{figure}[H]
+				\centering
+				\begin{tikzcd}
+					& \texttt{.Rnw} \arrow[d] & \\
+					& \texttt{.tex} \arrow[ld] \arrow[rd] \arrow[dd] & \\
+					\texttt{.dvi} \arrow[rr] \arrow[rd] & & \texttt{.ps} \arrow[ld] \\
+					& \texttt{.pdf} &               
+				\end{tikzcd}
+				\caption{Esquema de extensiones en \LaTeX}
+				\label{fig:extensiones}
+			\end{figure}
+			
+			Para ello nos fijaremos en la \Cref{fig:extensiones}. Por ahora nos quedaremos con las extensiones que trabajaremos más a menudo, que serán \texttt{.Rnw}, \texttt{.tex}, y \texttt{.pdf}. La primera de ellas representan los archivos que tienen código \LaTeX{} y R ``mezclado'', la segunda aquellos que contienen código \LaTeX{} puro, y la última nuestro documento final. \\
+			
+			Existen dos herramientas que nos permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, optaremos por la segunda, pues existieron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr nos ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages('knitr')} en una consola de R. Sweave viene ya por defecto con \texttt{utils}. \\
+			
+			Por último, se explicará cómo hemos agilizado el proceso de trabajo con Knitr y \TeX{}Studio. Lo primero será hacer que R cargue por defecto Knitr, para ello modificaremos el archivo \texttt{Rprofile} en \texttt{libray/base/R} dentro de la carpeta de instalación de R, añadiendo \texttt{knitr} al resto de paquetes que carga por defecto. Una vez hecho esto, iremos a la configuración de \TeX{}Studio, y aquí a \textit{Compilar}. En la zona \textit{Órdenes de usuario}, crearemos una nueva tal y como se ve en la \Cref{fig:orden}, de manera que le digamos dónde están los binarios de R, para que pueda crear un fichero \texttt{.tex}, y posteriormente invocar a nuestro compilador, para obtener nuestro documento en \texttt{.pdf}. \TeX{}Studio se encargará de reemplazar el símbolo \% por el nombre del archivo que le ordenamos compilar. 
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale = 0.7]{img/o_usuario}
+				\caption{Creación de orden de usuario}
+				\label{fig:orden}
+			\end{figure}
+			
+			Ahora basta modificar el botón verde del IDE para que en vez de invocar al compilador \hologo{pdfLaTeX}, lleve a cabo la instrucción que le hemos dado. Para ello volveremos al menú de compilación en el que nos ubicábamos previamente, y observaremos la sección de \textit{Meta-Órdenes}. Modificaremos el valor del campo \textit{Compilador por defecto}, escribiendo \texttt{txs:///knitr} para que se ejecute la orden que previamente hemos creado, o podemos hacerlo de manera gráfica como se observa en la \Cref{fig:comp}. Ahora bastará pulsar el botón verde o F5 para ver a nuestra izquierda el código de nuestro documento, y a la derecha actualizado, el documento PDF final. 
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale = 0.7]{img/compilacion}
+				\caption{Modificación de compilación}
+				\label{fig:comp}
+			\end{figure}
+			
+			Por último, para llevar un mejor control de versiones del proyecto, y de coordinación entre los miembros del grupo, se usará un repositorio de GitHub. Añadiremos un archivo \texttt{.gitignore} para no cargar en el repositorio los archivos temporales generados durante la compilación. Otra alternativa que se podría haber usado, es usar Overleaf (aquí usaríamos la extensión \texttt{.Rtex} en vez de \texttt{.Rnw}), ya que no sería necesaria la instalación de ningún software, y también trabaja con Knitr. Sin embargo, la integración de GitHub en Overleaf es de pago, por lo que optamos por usar la configuración explicada hasta el momento, para poder tener un mejor control de versiones sin coste alguno. 
+			
+	\chapter{Ejercicios guiados}\pagestyle{fancy}
 	
 		En esta primera parte de esta práctica, repetirán los ejercicios explicados y realizados por el profesor en las clases de laboratorio, utilizando los mismos procedimientos vistos plasmándolos en un documento \LaTeX{}. 
 	
@@ -102,6 +148,50 @@
 			<<>>=
 			s_ordered_rev <- s[rev(order(s$radio)), ]
 			print(s_ordered_rev)
+			@
+			
+			También suele ser útil conocer cuántos elementos tiene una columna. Podemos averiguarlo con la función \texttt{length}, veamos un ejemplo. 
+			
+			<<>>=
+			length(s$radio)
+			@
+			
+			Otro valor que nos podemos plantear calcular es el rango. Para ello podemos usar las funciones \texttt{max} y \texttt{min}. Debemos tener cuidado con la función \texttt{range} y no confundirnos, pues nos dará los valores máximo y mínimo. 
+			
+			<<>>=
+			r <- max(s$radio) - min(s$radio)
+			print(r)
+			range(s$radio)
+			@
+			
+			Para una mejor lectura, podemos cambiar la forma de obtener la columna de los radios: 
+			
+			<<>>=
+			radio <- s$radio
+			@
+			
+			La idea de calcular la diferencia de el máximo y el mínimo a mano parece funcionar, sin embargo, para futuros casos sería más ágil tener codificada una función como la siguiente. 
+			
+			<<>>=
+			rango <- function(radio){max(radio) - min(radio)}
+			rango(radio)
+			@
+			
+			Sin embargo, al salir de R, la definición de la función se pierde, por lo que deberemos guardarla en un fichero, y posteriormente cargarlo en futuras ejecuciones. Lo haremos de la siguiente manera: 
+			
+			<<>>=
+			dump("rango", file = "fn/rango.R")
+			source("fn/rango.R")
+			@
+			
+			Volviendo al estudio de nuestros datos, veamos cómo calcular las frecuencias absolutas y acumuladas. 
+			
+			<<>>=
+			fabs_radio <- table(radio)
+			fabsacum_radio <- cumsum(fabs_radio)
+			
+			print(fabs_radio)
+			print(fabsacum_radio)
 			@
 		
 		\section{Asociación}
