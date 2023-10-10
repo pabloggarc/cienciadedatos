@@ -1,0 +1,26 @@
+dim(s) da las dimensiones del dataframe
+so = s[order(s$Radio),] es con igual pero es lo mismo. los corchetes tienen dos posiciones. Primera -> Fila, Segunda -> Columna
+La función order se aplica sobre la variable Radio, y se pone el dólar porque está dentro de la variable.
+so = s[rev(order(s$radioKm)),] -> Ordena de mayor a menor (Reversa)
+length(s$radioKm) -> Obtiene la longitud de la variable radio. 
+No existe ninguna función de R que da el rango. Hay que calcularlo.
+rango=max(s$radioKm)-min(s$radioKm) -> max da el máximo y min el mínimo pensaba que era al revés :/
+range(s$Radio) te da dos valores, el mínimo y el máximo en un array
+Radio = s$radioKm -> Crea variable rango para no tener que ponerlo tolrato
+rango=function(Radio){max(Radio)-min(Radio)} -> Con el igual se nombra a la función. La variable de entrada entre paréntesis. Entre llaves de define lo que hace la función.
+Es como en scala que no hay que hacer return, el último valor de devuelve.
+A la función se le llama con rango(Radio), se puede guardar en una variable como r=rango(Radio).
+Guardar el programa en un fichero -> dump("rango", file="rango.R"). Guarda la función en el directorio cargado con el nombre rango.r. .r porq es un programa
+Se carga con source -> source("rango.R")
+Frecuencia Absoluta -> frecabsradio<-table(s$Radio)
+Frecuencia Absoluta Acumulada -> frecabsacumradio<-cumsum(frecabsradio)
+Frecuencia Relativa -> frecRel = function(Dato){table(Dato)/length(Dato)}
+Frecuencia Relativa Acumulada -> frecRelAcum = function(Dato){cumsum(table(Dato))/length(Dato)}
+No hay nada para hacer la moda
+Media -> mean(Radio) La media de radio
+Desviación típica -> sdr = sd(Radio) -> Sale "mal" porque lo hace dividido entre N-1 porque es mejor al extrapolar, para hacer inferencia. Pero si tienes todos los datos es mejor dividir entre N
+Solución -> sdr = sd(Radio)*sqrt(length(Radio)-1)/sqrt(length(Radio)) ó sdr = sqrt(sd(Radio)^2*(length(Radio)-1)/length(Radio))
+Varianza -> varr=var(Radio) -> Pasa lo mismo
+Solución -> varr = var(Radio)*(length(Radio)-1)/length(Radio)
+Mediana -> medianr = median(Radio) -> Sale bien pero de potra
+Cuantiles -> cuarl = quantile(Radio, 0.25) -> Este sí sale mál. Hace una inferencia. No hay forma de arreglarlo. Hay que programarlo

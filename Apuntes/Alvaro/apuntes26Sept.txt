@@ -1,0 +1,30 @@
+Con contributors() se ve la gente que ha trabajado y desarrollado R. Las funciones hay que ponerlas con () porque sino te saca el código de la función
+
+help() abre un html con la ayuda relacionada con un comando específico. Ahora lo que hemos hecho ha sido abrir la yuda del comando help(), el cual
+por como se ve en el html vemos entre corchetes el paquete al que pertenece. En este caso pertenece al paquete utils el cual se carga por defecto.
+Entre paréntesis se ven los argumentos que puede llevar la función, y en la sección de Arguments viene mejor explicados. Más abajo hay detalles, referencias y ejemplos de uso
+
+Podemos hacer help(getwd) para la ayuda de ese comando específico, que te dice en que directorio estás trabajando. El paquete base también se carag por defecto
+si usas getwd los ficheros con los que vayas a trabajar tienen que estar en el mismo directorio
+
+se puede acceder a la ayuda con ?getwd == help(getwd)
+
+con setwd() seteamos el directorio de trabajo actual
+
+con dir() y list.files() vemos todos los archivos que hay en el directorio actual
+
+REGLAS PARA LOS FICHEROS TXT 
+
+	- Debe haber una tabulación entre dato y dato
+
+	- Debe haber una primera columna con el número de fila. En la primera no habrá número y se pondrá el nombre de las variables 
+
+	- Hay que meter un intro al final de la última fila. 
+
+	- La utilización de los puntos y comas no es lo mismo en la separación de los números decimales, y de momento se usan puntos para decimales. 
+
+	- Al escribir los nombres no se pueden usar espacios
+	
+Creamos el fichero satelites.txt
+
+Lo leemos e introducimos en R con: 

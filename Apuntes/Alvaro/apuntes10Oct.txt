@@ -1,0 +1,41 @@
+En cada paquete hay diferentes funcionalidades que nos permiten aplicar cosas
+¿qué paquete sse han cargado por defecto? getOption("defaultPackages")
+a mi no me sale foreign porque eso está ahí como resultado de la clase anterior. Me aparecen los 6 primeros, que conforman el paquete básico de R
+"datasets"  "utils"     "grDevices" "graphics"  "stats"     "methods" 
+Los paquetes ya están instalados, hay 23 o así en el paquete que se instala por defecto. Solo aparecen 6 porque hay que ir cargando el resto
+
+base tiene la funcionalidad básica para que funcione R y algunas funciones inicilaes de estadística y gráficos básicas
+library(help="base")
+library(help="datasets")
+Conjuntos de datos precargados. Los atributos no vienen bien descritos. En análisis de datos hace falta una buena descripción de los datos
+
+library(help="utils")
+...
+
+Contiene funciones de utilidad como la funciñon help y otras funciones asociadas. Paquete de utilidades
+
+grDevice tiene que ver con salidas de informaciñon gráficas y graphics tiene que ver con gráficas. Si a estos dos le unimos el de stats (funciones deestadística fundamentales) son los más básicos
+
+Methods: Tiene que ver con POO
+
+Algunos se cargan por defecto. Base por ejemplo no se puede quitar, pero luego el resto se pueden cargar, quitar...
+library() nos da todos los paquetes estándar. Estos no hay que instalarlos, con carfgarlos vale. Como se cargan?
+Si voy a paquetes en R y cargarPaquetes puedo seleccionar de los instalados cual quiero cargar. Para comprobarlo pongo search() y veo que está cargado
+
+igual que library me dice los paquetes que hay en la librería estandar si le pongo el njombre del paquete me lo carga directamente
+
+ns que hace paquetes-seleccionar espejo de cran y seleccionar repositorio
+
+ahora vamos a instalar un paquete el LearningRlab.
+ Si hago search no lo veo. tengo que hacer un library. si lo hago y vuelvo a hacer search ya lo veo
+ 
+ Otra forma de instalar paquetes mediante la instrucción install.packages("LearnClust"). Hago lo mismo de search y library y search
+ Otra forma de instalar la que hay que hacer con todos los paquetes que utilicemos dentro de la asignatura. Me voy a cran paquetes y sorted by name y busco el ggplot2
+ Hay que ver bien la úktima fecha en la que se ha resubido
+ Hayq eu bajarse el manual y las viñetas de todos los paquetes que utilicemos
+ descargamos el r-release, lo meto en el directorio tmp de C y lo meto ahÍ
+ > install.packages("C:/tmp/ggplot2_3.4.3.zip", rep=NULL) rep Null para decirle que el paquete está en mi maquina y que no tiene que buscar en  ningun repositorio y lo cargamos
+ no va porque necesita más dpenedencias. luego lo resolvemos
+ 
+ como mofiicar la carga por defecto de paquetes. C:\Program Files\R\R-4.3.1\library\base\R En RProfile está nuestro perfil y lo que se carga por defecto
+ Me lo llevo al escriotiro para poder modifucarlo y actualizarlo

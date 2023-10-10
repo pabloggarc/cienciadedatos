@@ -1,0 +1,32 @@
+contributors() -> Ver personas que han trabajado
+
+help() -> Abre en html la ayuda, entre corchetes sale el paquete, en este caso utils. Salen entre paréntesis todos los atributos posibles.
+	Debajo aparecen todos explicados. Aparecen debajo más detalles y referencias en las que se habla de la función, así como ejemplos de código usando la función. 
+
+
+help(getwd) -> aparece la información correspondiente a getwd. Entre corchetes sale "base", paquete al que pertenece, este se carga por defecto. 
+
+getwd() -> nos dice el directorio en el que estamos, devuelve la ruta actual. 
+
+?getwd -> nos abre el mismo HTML que al usar help(getwd). 
+
+setwd("C:/") -> nos cambia el directorio de trabajo al especificado. 
+
+list.files() -> nos muestra un listado de los ficheros del directorio actual. También se puede hacer con "dir()". 
+
+----Empieza la PL1----
+
+Algunas reglas de optimización para los .txt: 
+
+- Debe haber tab entre dato y dato
+
+- Debe haber una primera columna que numere las filas, excepto la primera que tendrá un espacio en blanco y en esa primera se ponen los nombres de las variables. 
+
+- Hay que introducir un intro al final de la última fila. 
+
+- La utilización de los puntos y comas no es lo mismo en la separación de los números decimales. (Por ahora usaremos puntos). 
+
+- Al escribir los nombres no se pueden usar espacios -> luna_1999
+
+
+Llamamos a un fichero satelites.txt, introducimos 's<-read.table("satelites.txt")'. '<-' es el operador asignación. 
