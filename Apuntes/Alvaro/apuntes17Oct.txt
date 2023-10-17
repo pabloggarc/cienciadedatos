@@ -1,0 +1,39 @@
+ALGORTITMO A PRIORI EN R
+
+No podemos usar ap-rules en nuestra parte
+Search para ver que tenemos arules instalado
+
+Matrix viene en arules. Voy a introducir los datos en frma de matriz
+
+muestra <- Matrix(c(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=list(c("suceso1","suceso2","suceso3","suceso4","suceso5","suceso6"),c("Pan","Agua","Café","Leche","Naranjas")),sparse=TRUE))
+CON BYROW LE DECIMOS QUE METEA LOS DATOS POR FILAS Y NO POR COLUMNAS. Los primeros 6 numeros los mete, luego los siguientes en otra fila y asís ucesivamente
+dimnames son los bnombres de las filas y las columnas
+lo definimos como una matriz sparse porque asíu nos lo pide arules para poder usarlo
+
+hacemos muestra para ver que nos coincide la muestra de teoría con la que hemos introducido con Matrix
+ahora vamos a hacer un par de conversiones
+
+muestrangCMatrix<-as(muestra,"nsparseMatrix") Con esto convertimos a una matriz de puntos y rayas
+
+Ahor l atrsponemos
+
+traspmuestrangCMatrix<-t(muestrangCMatrix)
+
+transacciones<-as(traspmuestrangCMatrix, "transactions") Nos dice que tenemos 6 filas (transacciones) y 5 items
+
+summary(transacciones) Nos da información detallada, cuantas veces aparece cada elemento y análisis descriptivo del cnjunto de datos
+
+se va  hacer un anlisis de asociacion sobre transacciones. La funcion se llama a priori y se hara sobre transacciones y ahora le tengo que pasar los parametros. 
+En esta lista de parametros tendre que poner los valores del soporte y la confianza
+Los valores del soporte y la confianza van de 0 a 1. Entoncespondré 0.5 y 0.8 como en teoría
+Cuando esto se ponga a hacer cosas hará todo lo que hemos ido haciendo en teoría
+
+asociaciones<-apriori(transacciones, parameter=list(support=0.5,confidence=0.8))
+
+Es una muestra pequeña asi que lo hace al instante. Por debajo ya está todo calculado y nos empieza a decir detalles del cálculo, pero yo quiero saber las aosicaciones.
+Para ello las vemos así: inspect(asociaciones)
+
+No nos importan las que no tiene nada, es inevitable por temaa de programación. Nos salen las cinco que nos salen en teoría con los mismos valores de soporte y confianza
+
+puedo progarmar todo, programar cosas sueltas del algoritmo, usar paquetes
+
