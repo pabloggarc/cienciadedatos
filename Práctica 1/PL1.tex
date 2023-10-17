@@ -50,7 +50,6 @@
 
 \usepackage{alltt}
 
-\usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage[margin=2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
@@ -138,6 +137,8 @@
 				
 				\item Documentation: Aquí los usuarios pueden encontrar documentación esencial relacionada con R. Esto incluye manuales, preguntas frecuentes (FAQs) y contribuciones de la comunidad para ayudar a los usuarios a comprender y utilizar R de manera efectiva.
 			\end{itemize}
+		
+			%EXPLICAR INSTALACION PAQUETES
 		
 		\section*{El lenguaje \LaTeX}\addcontentsline{toc}{section}{El lenguaje \LaTeX}
 
@@ -367,13 +368,15 @@
 \end{kframe}
 \end{knitrout}
 			
-			Volviendo al estudio de nuestros datos, veamos cómo calcular las frecuencias absolutas y acumuladas. 
+			Volviendo al estudio de nuestros datos, veamos cómo calcular las diferentes frecuencias. Como en R no existe una función para las frecuencias relativas, se definirá y guardará una propia. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{fabs_radio} \hlkwb{<-} \hlkwd{table}\hlstd{(radio)}
 \hlstd{fabsacum_radio} \hlkwb{<-} \hlkwd{cumsum}\hlstd{(fabs_radio)}
+\hlstd{frecrel} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{r}\hlstd{)\{}\hlkwd{table}\hlstd{(r)}\hlopt{/}\hlkwd{length}\hlstd{(r)\}}
+\hlkwd{dump}\hlstd{(}\hlstr{"frecrel"}\hlstd{,} \hlkwc{file} \hlstd{=} \hlstr{"fn/frecrel.R"}\hlstd{)}
 
 \hlkwd{print}\hlstd{(fabs_radio)}
 \end{alltt}
@@ -389,8 +392,121 @@
 ## 13 15 16 20 22 27 29 30 33 34 42 
 ##  1  2  3  5  6  7  8  9 10 11 12
 \end{verbatim}
+\begin{alltt}
+\hlkwd{print}\hlstd{(}\hlkwd{frecrel}\hlstd{(radio))}
+\end{alltt}
+\begin{verbatim}
+## r
+##         13         15         16         20         22         27         29 
+## 0.08333333 0.08333333 0.08333333 0.16666667 0.08333333 0.08333333 0.08333333 
+##         30         33         34         42 
+## 0.08333333 0.08333333 0.08333333 0.08333333
+\end{verbatim}
 \end{kframe}
 \end{knitrout}
+			
+			Otro valor que podemos calcular es la media aritmética de los datos, para ello se cuenta con la función \texttt{mean}. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{mr} \hlkwb{<-} \hlkwd{mean}\hlstd{(radio)}
+\hlkwd{print}\hlstd{(mr)}
+\end{alltt}
+\begin{verbatim}
+## [1] 25.08333
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Ahora calcularemos la desviación típica, para ello se cuenta con la función \texttt{sd}. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{sdr} \hlkwb{<-} \hlkwd{sd}\hlstd{(radio)}
+\hlkwd{print}\hlstd{(sdr)}
+\end{alltt}
+\begin{verbatim}
+## [1] 8.857029
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Sin embargo, el resultado obtenido no es el esperado. Esto se debe a que esta función realiza el siguiente cálculo
+			$$
+			\sigma = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n-1}}
+			$$
+			que es más utilizado en inferencia estadística, porque hace que se parezca más a una campana de Gauss (menos sesgo), mientras que la fórmula vista en clase utiliza un factor de $n$ en vez de $n-1$ en el denominador (dentro de la raíz). Para ello, el profesor lo corrigió de la siguiente manera: 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{sdr2} \hlkwb{<-} \hlkwd{sqrt}\hlstd{((sdr}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{*}\hlstd{(}\hlkwd{length}\hlstd{(radio)}\hlopt{-}\hlnum{1}\hlstd{)}\hlopt{/}\hlkwd{length}\hlstd{(radio))}
+\hlkwd{print}\hlstd{(sdr2)}
+\end{alltt}
+\begin{verbatim}
+## [1] 8.47996
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			En realidad lo que se está realizando es el siguiente ``ajuste'': 
+			$$
+			\sigma' = \sqrt{\sigma^2\cdot\frac{n-1}{n}}
+			$$
+			
+			Una vez hemos visto cómo se calcula la desviación típica, podremos ver cómo calcular la varianza. Como sabemos que es el cuadrado de la desviación típica, bastaría con elevar al cuadrado si no fuera por el ``fallo'' de $n-1$ visto previamente. En este caso, el profesor lo arregló para el caso particular de la siguiente manera: 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{varr} \hlkwb{<-} \hlkwd{var}\hlstd{(radio)}
+\hlstd{varr} \hlkwb{<-} \hlnum{11}\hlopt{/}\hlnum{12} \hlopt{*} \hlstd{varr}
+\hlkwd{print}\hlstd{(varr)}
+\end{alltt}
+\begin{verbatim}
+## [1] 71.90972
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Otro de los valores que se ha enseñado cómo calcular, es la mediana. Para este caso existe la función \texttt{median}. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{medianr} \hlkwb{<-} \hlkwd{median}\hlstd{(radio)}
+\hlkwd{print}\hlstd{(medianr)}
+\end{alltt}
+\begin{verbatim}
+## [1] 24.5
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			En último lugar, el profesor enseñó cómo calcular cuantiles, y para ello mostró la función \texttt{quantile}, pero se mencionó que se obtienen resultados diferentes a los esperados debido a la forma que tiene de calcularlos, y se deberá programar. Aquí se muestra un ejemplo de cómo se calcularía el primer cuartil. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{cuar1} \hlkwb{<-} \hlkwd{quantile}\hlstd{(radio,} \hlnum{0.25}\hlstd{)}
+\hlkwd{print}\hlstd{(cuar1)}
+\end{alltt}
+\begin{verbatim}
+## 25% 
+##  19
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Como añadido, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque como ya se explicó en la introducción, usaremos otra forma de trabajar con estos archivos a lo largo de la práctica. 
+			
+			\begin{verbatim}
+				rnwfile<-system.file("Sweave", "example-1.Rnw", package="utils")
+				Sweave(rnwfile)
+				tools::texi2pdf("example-1.tex")
+			\end{verbatim}
 		
 		\section{Asociación}
 		
@@ -400,7 +516,90 @@
 		
 			\subsection{Primer ejercicio}
 			
-				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''
+				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''\\
+				
+				Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente: 
+				$$
+				\begin{pmatrix}
+					1 & 1 & 0 & 1 & 1\\
+					1 & 1 & 1 & 1 & 0\\
+					1 & 1 & 0 & 1 & 0\\
+					1 & 0 & 1 & 1 & 0\\
+					1 & 1 & 0 & 0 & 0\\
+					0 & 0 & 0 & 1 & 0
+				\end{pmatrix}
+				$$
+				
+				Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{muestra} \hlkwb{<-} \hlkwd{Matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}
+\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,}
+\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,}
+\hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,}
+\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,}
+\hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlnum{6}\hlstd{,} \hlnum{5}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
+\hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,} \hlstr{"suceso2"}\hlstd{,} \hlstr{"suceso3"}\hlstd{,} \hlstr{"suceso4"}\hlstd{,} \hlstr{"suceso5"}\hlstd{,} \hlstr{"suceso6"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\hlstd{muestra}
+\end{alltt}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "dgCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   1    1    .     1        1
+## suceso2   1    1    1     1        .
+## suceso3   1    1    .     1        .
+## suceso4   1    .    1     1        .
+## suceso5   1    1    .     .        .
+## suceso6   .    .    .     1        .
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+				
+				A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{muestrangCMatrix} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
+\hlstd{muestrangCMatrix}
+\end{alltt}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "ngCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   |    |    .     |        |
+## suceso2   |    |    |     |        .
+## suceso3   |    |    .     |        .
+## suceso4   |    .    |     |        .
+## suceso5   |    |    .     .        .
+## suceso6   .    .    .     |        .
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+				
+				Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{transpmuestrangCMatrix} \hlkwb{<-} \hlkwd{t}\hlstd{(muestrangCMatrix)}
+\hlstd{transpmuestrangCMatrix}
+\end{alltt}
+\begin{verbatim}
+## 5 x 6 sparse Matrix of class "ngCMatrix"
+##          suceso1 suceso2 suceso3 suceso4 suceso5 suceso6
+## Pan            |       |       |       |       |       .
+## Agua           |       |       |       .       |       .
+## Café           .       |       .       |       .       .
+## Leche          |       |       |       |       .       |
+## Naranjas       |       .       .       .       .       .
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+				
+				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. 
 			
 			\subsection{Segundo ejercicio}
 			

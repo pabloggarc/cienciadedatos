@@ -1,6 +1,5 @@
 \documentclass[12pt]{report}
 
-\usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage[margin=2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
@@ -88,6 +87,8 @@
 				
 				\item Documentation: Aquí los usuarios pueden encontrar documentación esencial relacionada con R. Esto incluye manuales, preguntas frecuentes (FAQs) y contribuciones de la comunidad para ayudar a los usuarios a comprender y utilizar R de manera efectiva.
 			\end{itemize}
+		
+			%EXPLICAR INSTALACION PAQUETES
 		
 		\section*{El lenguaje \LaTeX}\addcontentsline{toc}{section}{El lenguaje \LaTeX}
 
@@ -219,15 +220,78 @@
 			source("fn/rango.R")
 			@
 			
-			Volviendo al estudio de nuestros datos, veamos cómo calcular las frecuencias absolutas y acumuladas. 
+			Volviendo al estudio de nuestros datos, veamos cómo calcular las diferentes frecuencias. Como en R no existe una función para las frecuencias relativas, se definirá y guardará una propia. 
 			
 			<<>>=
 			fabs_radio <- table(radio)
 			fabsacum_radio <- cumsum(fabs_radio)
+			frecrel <- function(r){table(r)/length(r)}
+			dump("frecrel", file = "fn/frecrel.R")
 			
 			print(fabs_radio)
 			print(fabsacum_radio)
+			print(frecrel(radio))
 			@
+			
+			Otro valor que podemos calcular es la media aritmética de los datos, para ello se cuenta con la función \texttt{mean}. 
+			
+			<<>>=
+			mr <- mean(radio)
+			print(mr)
+			@
+			
+			Ahora calcularemos la desviación típica, para ello se cuenta con la función \texttt{sd}. 
+			
+			<<>>=
+			sdr <- sd(radio)
+			print(sdr)
+			@
+			
+			Sin embargo, el resultado obtenido no es el esperado. Esto se debe a que esta función realiza el siguiente cálculo
+			$$
+			\sigma = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n-1}}
+			$$
+			que es más utilizado en inferencia estadística, porque hace que se parezca más a una campana de Gauss (menos sesgo), mientras que la fórmula vista en clase utiliza un factor de $n$ en vez de $n-1$ en el denominador (dentro de la raíz). Para ello, el profesor lo corrigió de la siguiente manera: 
+			
+			<<>>=
+			sdr2 <- sqrt((sdr^2)*(length(radio)-1)/length(radio))
+			print(sdr2)
+			@
+			
+			En realidad lo que se está realizando es el siguiente ``ajuste'': 
+			$$
+			\sigma' = \sqrt{\sigma^2\cdot\frac{n-1}{n}}
+			$$
+			
+			Una vez hemos visto cómo se calcula la desviación típica, podremos ver cómo calcular la varianza. Como sabemos que es el cuadrado de la desviación típica, bastaría con elevar al cuadrado si no fuera por el ``fallo'' de $n-1$ visto previamente. En este caso, el profesor lo arregló para el caso particular de la siguiente manera: 
+			
+			<<>>=
+			varr <- var(radio)
+			varr <- 11/12 * varr
+			print(varr)
+			@
+			
+			Otro de los valores que se ha enseñado cómo calcular, es la mediana. Para este caso existe la función \texttt{median}. 
+			
+			<<>>=
+			medianr <- median(radio)
+			print(medianr)
+			@
+			
+			En último lugar, el profesor enseñó cómo calcular cuantiles, y para ello mostró la función \texttt{quantile}, pero se mencionó que se obtienen resultados diferentes a los esperados debido a la forma que tiene de calcularlos, y se deberá programar. Aquí se muestra un ejemplo de cómo se calcularía el primer cuartil. 
+			
+			<<>>=
+			cuar1 <- quantile(radio, 0.25)
+			print(cuar1)
+			@
+			
+			Como añadido, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque como ya se explicó en la introducción, usaremos otra forma de trabajar con estos archivos a lo largo de la práctica. 
+			
+			\begin{verbatim}
+				rnwfile<-system.file("Sweave", "example-1.Rnw", package="utils")
+				Sweave(rnwfile)
+				tools::texi2pdf("example-1.tex")
+			\end{verbatim}
 		
 		\section{Asociación}
 		
@@ -237,7 +301,49 @@
 		
 			\subsection{Primer ejercicio}
 			
-				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''
+				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''\\
+				
+				Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente: 
+				$$
+				\begin{pmatrix}
+					1 & 1 & 0 & 1 & 1\\
+					1 & 1 & 1 & 1 & 0\\
+					1 & 1 & 0 & 1 & 0\\
+					1 & 0 & 1 & 1 & 0\\
+					1 & 1 & 0 & 0 & 0\\
+					0 & 0 & 0 & 1 & 0
+				\end{pmatrix}
+				$$
+				
+				Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
+				
+				<<>>=
+				muestra <- Matrix(c(1, 1, 0, 1, 1,  
+				1, 1, 1, 1, 0,  
+				1, 1, 0, 1, 0,  
+				1, 0, 1, 1, 0,  
+				1, 1, 0, 0, 0,  
+				0, 0, 0, 1, 0), 6, 5, byrow = TRUE, dimnames = list(
+				c("suceso1", "suceso2", "suceso3", "suceso4", "suceso5", "suceso6"), 
+				c("Pan", "Agua", "Café", "Leche", "Naranjas")), sparse=TRUE)
+				muestra
+				@
+				
+				A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
+				
+				<<>>=
+				muestrangCMatrix <- as(muestra, "nsparseMatrix")
+				muestrangCMatrix
+				@
+				
+				Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
+				
+				<<>>=
+				transpmuestrangCMatrix <- t(muestrangCMatrix)
+				transpmuestrangCMatrix
+				@
+				
+				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. 
 			
 			\subsection{Segundo ejercicio}
 			
