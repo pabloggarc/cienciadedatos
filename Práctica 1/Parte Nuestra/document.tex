@@ -1,0 +1,162 @@
+\documentclass[12pt]{report}\usepackage[]{graphicx}\usepackage[dvipsnames]{xcolor}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.54cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, mathtools, tikz, tikz-cd}
+\usepackage[spanish, noabbrev]{cleveref}
+
+\pagestyle{fancy}
+\lhead{\footnotesize \leftmark}
+\rhead{\footnotesize \rightmark}
+
+\title{
+	\huge
+	\noindent\textbf{Fundamentos de la Ciencia de Datos}\\
+	
+	{\Large \textit{Práctica 1}}
+	\vspace{1cm}
+	
+	\huge
+	Grado en Ingeniería Informática\\
+	Universidad de Alcalá\\
+	
+	\vspace{1cm}
+	
+	\includegraphics[scale=0.075]{img/logo}
+}
+
+\author{
+	Pablo García García\\
+	Abel López Martínez\\
+	Álvaro Jesús Martínez Parra\\
+	Raúl Moratilla Núñez
+}
+
+\date{
+	\large{14 de noviembre de 2023}
+}
+
+\hypersetup{
+	pdftitle={Práctica 1}, 
+	pdfauthor={Pablo García García, Abel López Martínez, Álvaro Jesús Martínez Parra, Raúl Moratilla Núñez}, 
+	pdfsubject={Fundamentos de la Ciencia de Datos}, 
+	pdfcenterwindow, 
+	pdfnewwindow=true, 
+	pdfkeywords={Entrega de la PL1 de laboratorio correspondiente al Curso 2023-2024}, 
+	bookmarksopen=true 
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fichero} \hlkwb{=} \hlkwd{read.csv2}\hlstd{(}\hlstr{"distancia_universitarios.csv"}\hlstd{)}
+\hlstd{distancias} \hlkwb{=} \hlstd{fichero}\hlopt{$}\hlstd{Distancia}
+\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{count} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list)\{}
+                \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
+        \hlstd{\}}
+        \hlstd{count}
+\hlstd{\}}
+\hlstd{distancias}
+\end{alltt}
+\begin{verbatim}
+##  [1] 16.5 34.8 20.7  6.2  4.4  3.4 24.0 24.0 32.0 30.0 33.0 27.0 15.0  9.4  2.1
+## [16] 34.0 24.0 12.0  4.4 28.0 31.4 21.6  3.1  4.5  5.1  4.0  3.2 25.0  4.5 20.0
+## [31] 34.0 12.0 12.0 12.0 12.0  5.0 19.0 30.0  5.5 38.0 25.0  3.7  9.0 30.0 13.0
+## [46] 30.0 30.0 26.0 30.0 30.0  1.0 26.0 22.0 10.0  9.7 11.0 24.1 33.0 17.2 27.0
+## [61] 24.0 27.0 21.0 28.0 30.0  4.0 46.0 29.0  3.7  2.7  8.1 19.0 16.0
+\end{verbatim}
+\begin{alltt}
+\hlkwd{len}\hlstd{(distancias)}
+\end{alltt}
+\begin{verbatim}
+## [1] 73
+\end{verbatim}
+\begin{alltt}
+\hlstd{j} \hlkwb{=} \hlnum{72}
+\hlkwd{print}\hlstd{(distancias[j]} \hlopt{>} \hlstd{distancias[j}\hlopt{+}\hlnum{1}\hlstd{])}
+\end{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\begin{alltt}
+\hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlstd{i}\hlopt{-}\hlnum{1}\hlstd{))\{}
+                        \hlkwa{if} \hlstd{(list[j]} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
+                                \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
+                                \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
+                                \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{list}
+\hlstd{\}}
+\hlstd{distanciasordenadas} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in if (list[j] > list[j + 1]) \{: argumento tiene longitud cero}}\begin{alltt}
+\hlstd{distanciasordenadas}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'distanciasordenadas' no encontrado}}\end{kframe}
+\end{knitrout}
+\end{document}          

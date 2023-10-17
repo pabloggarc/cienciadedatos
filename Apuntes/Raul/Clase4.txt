@@ -1,0 +1,21 @@
+Programación de Asociación con arules (con search() vemos paquetes instalados.
+muestra<-Matrix(c(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0), 6,5,byrow=TRUE,dimnames=list(c("Suceso1","Suceso2","Suceso3","Suceso4","Suceso5","Suceso6"), c("Pan", "Agua", "Café", "Leche", "Naranjas")), sparse=TRUE)
+Primero valores de entrada. 1 si está, 0 si no está. Después se indica el número de filas y de columnas, el byrow es para rellenar las filas por filas, para que no meta las cosas en columnas. Trastear con ello. Dimnames para dar nombres a filas y columnas.
+Lo de sucesos es los nombres de las filas y lo otro los nombres de las columnas. Se define como matriz sparse porque arules lo pide.
+Matrix es del paquete Matrix que instala arules. También hay un matrix por defecto (minuscula)
+> muestrangCMatrix<-as(muestra, "nsparseMatrix")
+> muestrangCMatrix
+Para cambiar los 1 por | (lo pide arules)
+> traspmuestrangCMatrix<-t(muestrangCMatrix)
+> traspmuestrangCMatrix
+Transpone la matriz (lo pide arules)
+> transacciones<-as(traspmuestrangCMatrix, "transactions")
+Te dice número de transacciones e items (filas y columnas)
+> summary(transacciones)
+Datos sobre la muestra. Calcula el soporte de los sucesos elementales, elementos más frecuentes.
+Para que empiece a dar datos de verdad, hay que establecer el umbral del soporte y de la asociación.
+> asociaciones<-apriori(transacciones, parameter=list(support= , confidence= ))
+Función apriori. Se realiza sobre la variable transacciones. Se indica el soporte y la confianza.
+Da un resumen de lo que ha hecho pero no devuelve nada. Para devolverlo es:
+> inspect(asociaciones)
+
