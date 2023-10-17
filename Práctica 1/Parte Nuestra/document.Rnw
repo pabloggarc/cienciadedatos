@@ -52,7 +52,7 @@
 	
 <<>>=
 fichero = read.csv2("distancia_universitarios.csv")
-distancias = fichero$Distancia
+
 len = function(list){
 	count = 0
 	for (element in list){
@@ -60,7 +60,8 @@ len = function(list){
 	}
 	count
 }
-distancias
+
+distancias = fichero$Distancia
 len(distancias)
 
 bubble = function(list){
@@ -79,7 +80,13 @@ bubble = function(list){
 distanciasordenadas = bubble(distancias)
 distanciasordenadas
 
-rank(
+rank = function(list){
+	ordered_list = bubble(list)
+	ordered_list[len(ordered_list)] - ordered_list[1]
+}
+
+rango = rank(distanciasordenadas)
+rango
 
 @
 \end{document}          
