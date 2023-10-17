@@ -62,12 +62,11 @@ len = function(list){
 }
 distancias
 len(distancias)
-distancias[1,0]
 
 bubble = function(list){
 	n = len(list)
 	for (i in 2:n){
-		for (j in 1:n-1){
+		for (j in 1:(n-1)){
 			if (list[j] > list[j+1]){
 				temp = list[j]
 				list[j] = list[j+1]
@@ -79,6 +78,8 @@ bubble = function(list){
 }
 distanciasordenadas = bubble(distancias)
 distanciasordenadas
+
+rank(
 
 @
 \end{document}          

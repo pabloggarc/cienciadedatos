@@ -128,15 +128,17 @@
 ## [1] 73
 \end{verbatim}
 \begin{alltt}
-\hlstd{distancias[}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{]}
+\hlstd{j} \hlkwb{=} \hlnum{72}
+\hlkwd{print}\hlstd{(distancias[j]} \hlopt{>} \hlstd{distancias[j}\hlopt{+}\hlnum{1}\hlstd{])}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in distancias[1, 0]: número incorreto de dimensiones}}\begin{alltt}
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+\begin{alltt}
 \hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n}\hlopt{-}\hlnum{1}\hlstd{)\{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlstd{i}\hlopt{-}\hlnum{1}\hlstd{))\{}
                         \hlkwa{if} \hlstd{(list[j]} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
                                 \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
                                 \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
