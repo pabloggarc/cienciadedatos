@@ -51,7 +51,7 @@
 \begin{document}
 	
 <<>>=
-fichero = read.csv2("distancia_universitarios.csv")
+fichero = read.csv2("prueba.csv")
 
 len = function(list){
 	count = 0
@@ -61,7 +61,8 @@ len = function(list){
 	count
 }
 
-distancias = fichero$Distancia
+distancias = fichero$Numeros
+
 len(distancias)
 
 bubble = function(list){
@@ -87,6 +88,128 @@ rank = function(list){
 
 rango = rank(distanciasordenadas)
 rango
+
+mean = function(list){
+	total = 0
+	n = len(list)
+	for (i in 1:n){
+		total = total + list[i]
+	}
+	mean = total / n
+	mean
+}
+
+media = mean(distancias)
+media
+
+mode = function(list){
+	ordered_list = bubble(list)
+	n = len(ordered_list)
+	actual_mode = ordered_list[1]
+	times_mode = 0
+	for (i in 1:n){
+		actual_element = ordered_list[i]
+		actual_c = 0
+		j = i
+		while(j <= n & actual_element == ordered_list[j]){
+			actual_c = actual_c + 1
+			j = j+1
+		}
+		if (actual_c > times_mode){
+			times_mode = actual_c
+			actual_mode = actual_element
+		}
+	}
+	actual_mode
+}
+
+moda = mode(distancias)
+moda
+	
+median = function(list){
+	n = len(list)
+	if (n%%2 == 0){
+		median = (list[n/2] + list[(n/2)+1]) / 2
+	}
+	else{
+		median = list[(n+1)/2]
+	}
+	median
+}
+
+mediana = median(distancias)
+mediana
+
+standard_desv = function(list){
+	mean = mean(list)
+	n = len(list)
+	add = 0
+	for (i in 1:n){
+		add = add + ((list[i] - mean)^2)
+	}
+	sqrt(add/n)
+}
+
+desviacion = standard_desv(distancias)
+desviacion
+
+variance = function(list){
+	desv = standard_desv(list)
+	var = desv^2
+	var
+}
+
+varianza = variance(distancias)
+varianza
+
+quant = function(list, c){
+	ordered_list = bubble(list)
+	n = len(list)
+	if (c < 0){
+		quant = 0
+	}
+	else{
+		if((n*c)%%1 == 0){
+			quant = (ordered_list[(n*c)] + ordered_list[(n*c) + 1]) / 2
+		}
+		else {
+			int_prod = floor(n*c)
+			quant = ordered_list[int_prod + 1]
+		}
+	}
+	quant
+}	
+
+cuartil1 = quant(distancias,0.25)
+cuartil2 = quant(distancias,0.5)
+cuartil3 = quant(distancias,0.75)
+cuartil1
+cuartil2
+cuartil3		
+			
+absolute_freq = function(list){
+	ordered_list = bubble(list)
+	n = len(ordered_list)
+	elements = vector()
+	frequencies = vector()
+	i = 1
+	while (i <= n){
+		actual_element = ordered_list[i]
+		elements = append(elements, actual_element)
+		actual_freq = 0
+		j = i
+		while(j <= n & actual_element == ordered_list[j]){
+			actual_freq = actual_freq + 1
+			j = j+1
+		}
+		frequencies = append(frequencies, actual_freq)
+		i = j
+	}	
+	frequencies
+}
+frecuencia_abs = absolute_freq(distancias)
+frecuencia_abs
+	
 
 @
 \end{document}          
