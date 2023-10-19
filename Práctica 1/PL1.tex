@@ -53,12 +53,29 @@
 \usepackage[spanish]{babel}
 \usepackage[margin=2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, mathtools, tikz, tikz-cd}
+\usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
 \pagestyle{fancy}
 \lhead{\footnotesize \leftmark}
 \rhead{\footnotesize \rightmark}
+
+\lstdefinestyle{estilo_pablo}{
+	basicstyle = \ttfamily\footnotesize, 
+	tabsize = 2, 
+	commentstyle = \color{gray}, 
+	keywordstyle = \color{cyan}, 
+	stringstyle = \color{purple}, 
+	tabsize = 1, 
+	frame = tb, 
+	breaklines = true, 
+	showstringspaces = false, 
+	numbers = left, 
+	numberstyle = \footnotesize\color{gray}, 
+	stepnumber = 1, 
+	captionpos = b
+}
+\crefname{listing}{Código}{Códigos}
 
 \title{
 	\huge
@@ -100,6 +117,7 @@
 \begin{document}
 	
 	\renewcommand{\chaptername}{Parte}
+	\renewcommand{\lstlistingname}{Código}
 	\maketitle \thispagestyle{empty}
 	
 	\newpage
@@ -141,34 +159,35 @@
 			En R, los paquetes son extensiones de software que contienen funciones, datos y documentación para realizar tareas específicas. Antes de utilizar un paquete, debes instalarlo y cargarlo en tu sesión de R. Algunas de las funciones más útiles para preparar los paquetes de un proyecto son:
 			
 			\begin{itemize}
-				\item Paquetes por defecto\\
-				Mediante \texttt{getOption(``defaultPackages'')} se muestra una lista de los paquetes que se cargan automáticamente cuando inicias una sesión de R. Son los paquetes básicos que R carga por defecto.\\
-				Para cambiar la lista de archivos que R carga por defecto podemos acceder a la siguiente ubicación (instalación de R por defecto):\\``\texttt{C:/Program Files/R/R-4.3.1/library/base/R/RProfile}'', copiar el archivo al escritorio, modificarlo, y devolverlo al directorio anterior.
+				\item \textbf{Paquetes por defecto}: \\
+				Mediante \texttt{getOption("defaultPackages")} se muestra una lista de los paquetes que se cargan automáticamente cuando inicias una sesión de R. Son los paquetes básicos que R carga por defecto. Para cambiar la lista de archivos que R carga por defecto podemos acceder a la siguiente ubicación (instalación de R por defecto):\\\texttt{C:/Program Files/R/R-4.3.1/library/base/R/RProfile}, y modificar el archivo como se observa en el \Cref{cod:rprofile}, añadiendo al vector \texttt{dp} los paquetes que deseemos. 
 				
-				\item Instalación de paquetes\\
+				\lstinputlisting[language = R, style = estilo_pablo, firstline = 46, lastline = 54, firstnumber = 46, caption = Modificación en fichero \texttt{Rprofile}, label = cod:rprofile]{C:/Program Files/R/R-4.3.1/library/base/R/Rprofile}
+				
+				\item \textbf{Instalación de paquetes}: \\
 				La instalación de paquetes puede ser realizada de tres formas distintas:
 				
-				\begin{itemize}
-					\item[-] \texttt{install.packages(``nombre\_del\_paquete'')}\\
+				\begin{enumerate}[label = \textbf{\arabic*. }]
+					\item \texttt{install.packages("nombre\_del\_paquete")}\\
 					A esta función se le debe pasar por parámetro el nombre del paquete que se desea instalar.
 					
-					\item[-] \texttt{install.packages(``ubicacion\_del\_paquete'', rep=NULL)}\\
+					\item \texttt{install.packages("ubicacion\_del\_paquete", rep=NULL)}\\
 					A la función también se le puede pasar por parámetros la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``c:/'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
 					
-					\item[-] \texttt{utils:::menuInstallPkgs()}\\
+					\item \texttt{utils:::menuInstallPkgs()}\\
 					Tras la ejecución de este comando aparecerá una ventana donde se podrá elegir el mirror desde el que se va a descargar el paquete, y tras elegir el mirror (Spain (Madrid) en nuestro caso), aparece otra ventana donde se puede elegir el paquete que se quiere instalar, tras hacer doble click, este se instalará automáticamente.
-				\end{itemize}
+				\end{enumerate}
 				
-				\item Información de un paquete\\
-				Cuando ejecutas \texttt{library(help=``nombre\_del\_paquete'')}, R te mostrará información detallada sobre el paquete especificado. Esto incluye una descripción del paquete y una lista de las funciones que contiene, junto con sus descripciones.
+				\item \textbf{Información de un paquete}: \\
+				Cuando ejecutas \texttt{library(help="nombre\_del\_paquete")}, R te mostrará información detallada sobre el paquete especificado. Esto incluye una descripción del paquete y una lista de las funciones que contiene, junto con sus descripciones.
 				
-				\item Carga de paquetes\\
+				\item \textbf{Carga de paquetes}: \\
 				Si ejecutas \texttt{library(nombre\_del\_paquete)} con el nombre de un paquete, R cargará el paquete en tu sesión para que puedas utilizar sus funciones y objetos.
 				
-				\item Lista de paquetes instalados\\
+				\item \textbf{Lista de paquetes instalados}: \\
 				Al ejecutar \texttt{library()} sin argumentos, R te mostrará una lista de los paquetes que están actualmente cargados en tu sesión de R. Esto te permite verificar qué paquetes están disponibles para su uso.
 				
-				\item Lista de paquetes cargados\\
+				\item \textbf{Lista de paquetes cargados}: \\
 				Mediante \texttt{search()} podemos ver un listado completo de los paquetes actualmente cargados en memoria.
 				
 			\end{itemize}
@@ -183,7 +202,7 @@
 			
 			Para ello nos fijaremos en la \Cref{fig:extensiones}. Por ahora nos quedaremos con las extensiones que trabajaremos más a menudo, que serán \texttt{.Rnw}, \texttt{.tex}, y \texttt{.pdf}. La primera de ellas representan los archivos que tienen código \LaTeX{} y R ``mezclado'', la segunda aquellos que contienen código \LaTeX{} puro, y la última nuestro documento final. \\
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\centering
 				\begin{tikzcd}
 					& \texttt{.Rnw} \arrow[d] & \\
