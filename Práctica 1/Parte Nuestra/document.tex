@@ -103,7 +103,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{fichero} \hlkwb{=} \hlkwd{read.csv2}\hlstd{(}\hlstr{"distancia_universitarios.csv"}\hlstd{)}
+\hlstd{fichero} \hlkwb{=} \hlkwd{read.csv2}\hlstd{(}\hlstr{"prueba.csv"}\hlstd{)}
 
 \hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
         \hlstd{count} \hlkwb{=} \hlnum{0}
@@ -113,11 +113,12 @@
         \hlstd{count}
 \hlstd{\}}
 
-\hlstd{distancias} \hlkwb{=} \hlstd{fichero}\hlopt{$}\hlstd{Distancia}
+\hlstd{distancias} \hlkwb{=} \hlstd{fichero}\hlopt{$}\hlstd{Numeros}
+
 \hlkwd{len}\hlstd{(distancias)}
 \end{alltt}
 \begin{verbatim}
-## [1] 73
+## [1] 12
 \end{verbatim}
 \begin{alltt}
 \hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
@@ -137,11 +138,7 @@
 \hlstd{distanciasordenadas}
 \end{alltt}
 \begin{verbatim}
-##  [1]  1.0  2.1  2.7  3.1  3.2  3.4  3.7  3.7  4.0  4.0  4.4  4.4  4.5  4.5  5.0
-## [16]  5.1  5.5  6.2  8.1  9.0  9.4  9.7 10.0 11.0 12.0 12.0 12.0 12.0 12.0 13.0
-## [31] 15.0 16.0 16.5 17.2 19.0 19.0 20.0 20.7 21.0 21.6 22.0 24.0 24.0 24.0 24.0
-## [46] 24.1 25.0 25.0 26.0 26.0 27.0 27.0 27.0 28.0 28.0 29.0 30.0 30.0 30.0 30.0
-## [61] 30.0 30.0 30.0 30.0 31.4 32.0 33.0 33.0 34.0 34.0 34.8 38.0 46.0
+##  [1] 13 15 16 20 20 22 27 29 30 33 34 42
 \end{verbatim}
 \begin{alltt}
 \hlstd{rank} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
@@ -153,7 +150,168 @@
 \hlstd{rango}
 \end{alltt}
 \begin{verbatim}
-## [1] 45
+## [1] 29
+\end{verbatim}
+\begin{alltt}
+\hlstd{mean} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{total} \hlkwb{=} \hlnum{0}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
+                \hlstd{total} \hlkwb{=} \hlstd{total} \hlopt{+} \hlstd{list[i]}
+        \hlstd{\}}
+        \hlstd{mean} \hlkwb{=} \hlstd{total} \hlopt{/} \hlstd{n}
+        \hlstd{mean}
+\hlstd{\}}
+
+\hlstd{media} \hlkwb{=} \hlkwd{mean}\hlstd{(distancias)}
+\hlstd{media}
+\end{alltt}
+\begin{verbatim}
+## [1] 25.08333
+\end{verbatim}
+\begin{alltt}
+\hlstd{mode} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
+        \hlstd{actual_mode} \hlkwb{=} \hlstd{ordered_list[}\hlnum{1}\hlstd{]}
+        \hlstd{times_mode} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
+                \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
+                \hlstd{actual_c} \hlkwb{=} \hlnum{0}
+                \hlstd{j} \hlkwb{=} \hlstd{i}
+                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
+                        \hlstd{actual_c} \hlkwb{=} \hlstd{actual_c} \hlopt{+} \hlnum{1}
+                        \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
+                \hlstd{\}}
+                \hlkwa{if} \hlstd{(actual_c} \hlopt{>} \hlstd{times_mode)\{}
+                        \hlstd{times_mode} \hlkwb{=} \hlstd{actual_c}
+                        \hlstd{actual_mode} \hlkwb{=} \hlstd{actual_element}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{actual_mode}
+\hlstd{\}}
+
+\hlstd{moda} \hlkwb{=} \hlkwd{mode}\hlstd{(distancias)}
+\hlstd{moda}
+\end{alltt}
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+\begin{alltt}
+\hlstd{median} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlkwa{if} \hlstd{(n}\hlopt{%%}\hlnum{2} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                \hlstd{median} \hlkwb{=} \hlstd{(list[n}\hlopt{/}\hlnum{2}\hlstd{]} \hlopt{+} \hlstd{list[(n}\hlopt{/}\hlnum{2}\hlstd{)}\hlopt{+}\hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+        \hlstd{\}}
+        \hlkwa{else}\hlstd{\{}
+                \hlstd{median} \hlkwb{=} \hlstd{list[(n}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{/}\hlnum{2}\hlstd{]}
+        \hlstd{\}}
+        \hlstd{median}
+\hlstd{\}}
+
+\hlstd{mediana} \hlkwb{=} \hlkwd{median}\hlstd{(distancias)}
+\hlstd{mediana}
+\end{alltt}
+\begin{verbatim}
+## [1] 24.5
+\end{verbatim}
+\begin{alltt}
+\hlstd{standard_desv} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{mean} \hlkwb{=} \hlkwd{mean}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlstd{add} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
+                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{((list[i]} \hlopt{-} \hlstd{mean)}\hlopt{^}\hlnum{2}\hlstd{)}
+        \hlstd{\}}
+        \hlkwd{sqrt}\hlstd{(add}\hlopt{/}\hlstd{n)}
+\hlstd{\}}
+
+\hlstd{desviacion} \hlkwb{=} \hlkwd{standard_desv}\hlstd{(distancias)}
+\hlstd{desviacion}
+\end{alltt}
+\begin{verbatim}
+## [1] 8.47996
+\end{verbatim}
+\begin{alltt}
+\hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{desv} \hlkwb{=} \hlkwd{standard_desv}\hlstd{(list)}
+        \hlstd{var} \hlkwb{=} \hlstd{desv}\hlopt{^}\hlnum{2}
+        \hlstd{var}
+\hlstd{\}}
+
+\hlstd{varianza} \hlkwb{=} \hlkwd{variance}\hlstd{(distancias)}
+\hlstd{varianza}
+\end{alltt}
+\begin{verbatim}
+## [1] 71.90972
+\end{verbatim}
+\begin{alltt}
+\hlstd{quant} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{c}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlkwa{if} \hlstd{(c} \hlopt{<} \hlnum{0}\hlstd{)\{}
+                \hlstd{quant} \hlkwb{=} \hlnum{0}
+        \hlstd{\}}
+        \hlkwa{else}\hlstd{\{}
+                \hlkwa{if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                        \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+                \hlstd{\}}
+                \hlkwa{else} \hlstd{\{}
+                        \hlstd{int_prod} \hlkwb{=} \hlkwd{floor}\hlstd{(n}\hlopt{*}\hlstd{c)}
+                        \hlstd{quant} \hlkwb{=} \hlstd{ordered_list[int_prod} \hlopt{+} \hlnum{1}\hlstd{]}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{quant}
+\hlstd{\}}
+
+\hlstd{cuartil1} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.25}\hlstd{)}
+\hlstd{cuartil2} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.5}\hlstd{)}
+\hlstd{cuartil3} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.75}\hlstd{)}
+\hlstd{cuartil1}
+\end{alltt}
+\begin{verbatim}
+## [1] 18
+\end{verbatim}
+\begin{alltt}
+\hlstd{cuartil2}
+\end{alltt}
+\begin{verbatim}
+## [1] 24.5
+\end{verbatim}
+\begin{alltt}
+\hlstd{cuartil3}
+\end{alltt}
+\begin{verbatim}
+## [1] 31.5
+\end{verbatim}
+\begin{alltt}
+\hlstd{absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
+        \hlstd{elements} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{frequencies} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{i} \hlkwb{=} \hlnum{1}
+        \hlkwa{while} \hlstd{(i} \hlopt{<=} \hlstd{n)\{}
+                \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
+                \hlstd{elements} \hlkwb{=} \hlkwd{append}\hlstd{(elements, actual_element)}
+                \hlstd{actual_freq} \hlkwb{=} \hlnum{0}
+                \hlstd{j} \hlkwb{=} \hlstd{i}
+                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
+                        \hlstd{actual_freq} \hlkwb{=} \hlstd{actual_freq} \hlopt{+} \hlnum{1}
+                        \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
+                \hlstd{\}}
+                \hlstd{frequencies} \hlkwb{=} \hlkwd{append}\hlstd{(frequencies, actual_freq)}
+                \hlstd{i} \hlkwb{=} \hlstd{j}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, frequencies)}
+\hlstd{\}}
+\hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_abs}
+\end{alltt}
+\begin{verbatim}
+##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11]
+## elements      13   15   16   20   22   27   29   30   33    34    42
+## frequencies    1    1    1    2    1    1    1    1    1     1     1
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
