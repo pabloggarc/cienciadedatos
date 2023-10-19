@@ -303,13 +303,15 @@
                 \hlstd{frequencies} \hlkwb{=} \hlkwd{append}\hlstd{(frequencies, actual_freq)}
                 \hlstd{i} \hlkwb{=} \hlstd{j}
         \hlstd{\}}
-        \hlstd{frequencies}
+        \hlkwd{rbind}\hlstd{(elements, frequencies)}
 \hlstd{\}}
 \hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
 \hlstd{frecuencia_abs}
 \end{alltt}
 \begin{verbatim}
-##  [1] 1 1 1 2 1 1 1 1 1 1 1
+##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11]
+## elements      13   15   16   20   22   27   29   30   33    34    42
+## frequencies    1    1    1    2    1    1    1    1    1     1     1
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

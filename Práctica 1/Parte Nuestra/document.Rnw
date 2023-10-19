@@ -204,8 +204,8 @@ absolute_freq = function(list){
 		}
 		frequencies = append(frequencies, actual_freq)
 		i = j
-	}	
-	frequencies
+	}
+	rbind(elements, frequencies)
 }
 frecuencia_abs = absolute_freq(distancias)
 frecuencia_abs
