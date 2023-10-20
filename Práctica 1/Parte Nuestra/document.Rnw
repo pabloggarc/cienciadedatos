@@ -89,6 +89,69 @@ rank = function(list){
 rango = rank(distanciasordenadas)
 rango
 
+absolute_freq = function(list){
+	ordered_list = bubble(list)
+	n = len(ordered_list)
+	elements = vector()
+	frequencies = vector()
+	i = 1
+	while (i <= n){
+		actual_element = ordered_list[i]
+		elements = append(elements, actual_element)
+		actual_freq = 0
+		j = i
+		while(j <= n & actual_element == ordered_list[j]){
+			actual_freq = actual_freq + 1
+			j = j+1
+		}
+		frequencies = append(frequencies, actual_freq)
+		i = j
+	}
+	rbind(elements, frequencies)
+}
+frecuencia_abs = absolute_freq(distancias)
+frecuencia_abs
+
+relative_freq = function(list){
+	f_abs = absolute_freq(list)
+	elements = f_abs[1,]
+	abs_fvalues = f_abs[2,]
+	rbind(elements,abs_fvalues/len(list))
+}
+
+frecuencia_rel = relative_freq(distancias)
+frecuencia_rel
+
+acum_absolute_freq = function(list){
+	f_abs = absolute_freq(list)
+	elements = f_abs[1,]
+	abs_fvalues = f_abs[2,]
+	acum_abs_fvalues = vector()
+	acum = 0
+	for (i in 1:len(elements)){
+		acum = acum + abs_fvalues[i]
+		acum_abs_fvalues = append(acum_abs_fvalues, acum)
+	}
+	rbind(elements, acum_abs_fvalues)
+}
+frecuencia_abs_acum = acum_absolute_freq(distancias)
+frecuencia_abs_acum
+
+acum_relative_freq = function(list){
+	f_rel = relative_freq(list)
+	elements = f_rel[1,]
+	rel_fvalues = f_rel[2,]
+	acum_rel_fvalues = vector()
+	acum = 0
+	for (i in 1:len(elements)){
+		acum = acum + rel_fvalues[i]
+		acum_rel_fvalues = append(acum_rel_fvalues, acum)
+	}
+	rbind(elements, acum_rel_fvalues)
+}
+frecuencia_rel_acum = acum_relative_freq(distancias)
+frecuencia_rel_acum
+
 mean = function(list){
 	total = 0
 	n = len(list)
@@ -103,21 +166,15 @@ media = mean(distancias)
 media
 
 mode = function(list){
-	ordered_list = bubble(list)
-	n = len(ordered_list)
-	actual_mode = ordered_list[1]
-	times_mode = 0
-	for (i in 1:n){
-		actual_element = ordered_list[i]
-		actual_c = 0
-		j = i
-		while(j <= n & actual_element == ordered_list[j]){
-			actual_c = actual_c + 1
-			j = j+1
-		}
-		if (actual_c > times_mode){
-			times_mode = actual_c
-			actual_mode = actual_element
+	frequencies = absolute_freq(list)
+	elements = frequencies[1,]
+	freq_values = frequencies[2,]
+	actual_mode = 0
+	actual_mode_val = 0
+	for (i in 1:len(elements)){
+		if (freq_values[i] > actual_mode_val){
+			actual_mode_val = freq_values[i]
+			actual_mode = elements[i]
 		}
 	}
 	actual_mode
@@ -186,30 +243,6 @@ cuartil3 = quant(distancias,0.75)
 cuartil1
 cuartil2
 cuartil3		
-			
-absolute_freq = function(list){
-	ordered_list = bubble(list)
-	n = len(ordered_list)
-	elements = vector()
-	frequencies = vector()
-	i = 1
-	while (i <= n){
-		actual_element = ordered_list[i]
-		elements = append(elements, actual_element)
-		actual_freq = 0
-		j = i
-		while(j <= n & actual_element == ordered_list[j]){
-			actual_freq = actual_freq + 1
-			j = j+1
-		}
-		frequencies = append(frequencies, actual_freq)
-		i = j
-	}
-	rbind(elements, frequencies)
-}
-frecuencia_abs = absolute_freq(distancias)
-frecuencia_abs
-	
 
 @
 \end{document}          

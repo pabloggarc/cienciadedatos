@@ -153,6 +153,99 @@
 ## [1] 29
 \end{verbatim}
 \begin{alltt}
+\hlstd{absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
+        \hlstd{elements} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{frequencies} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{i} \hlkwb{=} \hlnum{1}
+        \hlkwa{while} \hlstd{(i} \hlopt{<=} \hlstd{n)\{}
+                \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
+                \hlstd{elements} \hlkwb{=} \hlkwd{append}\hlstd{(elements, actual_element)}
+                \hlstd{actual_freq} \hlkwb{=} \hlnum{0}
+                \hlstd{j} \hlkwb{=} \hlstd{i}
+                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
+                        \hlstd{actual_freq} \hlkwb{=} \hlstd{actual_freq} \hlopt{+} \hlnum{1}
+                        \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
+                \hlstd{\}}
+                \hlstd{frequencies} \hlkwb{=} \hlkwd{append}\hlstd{(frequencies, actual_freq)}
+                \hlstd{i} \hlkwb{=} \hlstd{j}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, frequencies)}
+\hlstd{\}}
+\hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_abs}
+\end{alltt}
+\begin{verbatim}
+##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11]
+## elements      13   15   16   20   22   27   29   30   33    34    42
+## frequencies    1    1    1    2    1    1    1    1    1     1     1
+\end{verbatim}
+\begin{alltt}
+\hlstd{relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
+        \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
+        \hlkwd{rbind}\hlstd{(elements,abs_fvalues}\hlopt{/}\hlkwd{len}\hlstd{(list))}
+\hlstd{\}}
+
+\hlstd{frecuencia_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_rel}
+\end{alltt}
+\begin{verbatim}
+##                 [,1]        [,2]        [,3]       [,4]        [,5]        [,6]
+## elements 13.00000000 15.00000000 16.00000000 20.0000000 22.00000000 27.00000000
+##           0.08333333  0.08333333  0.08333333  0.1666667  0.08333333  0.08333333
+##                 [,7]        [,8]        [,9]       [,10]       [,11]
+## elements 29.00000000 30.00000000 33.00000000 34.00000000 42.00000000
+##           0.08333333  0.08333333  0.08333333  0.08333333  0.08333333
+\end{verbatim}
+\begin{alltt}
+\hlstd{acum_absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
+        \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
+        \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{acum} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{abs_fvalues[i]}
+                \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_abs_fvalues, acum)}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, acum_abs_fvalues)}
+\hlstd{\}}
+\hlstd{frecuencia_abs_acum} \hlkwb{=} \hlkwd{acum_absolute_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_abs_acum}
+\end{alltt}
+\begin{verbatim}
+##                  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11]
+## elements           13   15   16   20   22   27   29   30   33    34    42
+## acum_abs_fvalues    1    2    3    5    6    7    8    9   10    11    12
+\end{verbatim}
+\begin{alltt}
+\hlstd{acum_relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{f_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{f_rel[}\hlnum{1}\hlstd{,]}
+        \hlstd{rel_fvalues} \hlkwb{=} \hlstd{f_rel[}\hlnum{2}\hlstd{,]}
+        \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{acum} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{rel_fvalues[i]}
+                \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_rel_fvalues, acum)}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, acum_rel_fvalues)}
+\hlstd{\}}
+\hlstd{frecuencia_rel_acum} \hlkwb{=} \hlkwd{acum_relative_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_rel_acum}
+\end{alltt}
+\begin{verbatim}
+##                         [,1]       [,2]  [,3]       [,4] [,5]       [,6]
+## elements         13.00000000 15.0000000 16.00 20.0000000 22.0 27.0000000
+## acum_rel_fvalues  0.08333333  0.1666667  0.25  0.4166667  0.5  0.5833333
+##                        [,7]  [,8]       [,9]      [,10] [,11]
+## elements         29.0000000 30.00 33.0000000 34.0000000    42
+## acum_rel_fvalues  0.6666667  0.75  0.8333333  0.9166667     1
+\end{verbatim}
+\begin{alltt}
 \hlstd{mean} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
         \hlstd{total} \hlkwb{=} \hlnum{0}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
@@ -171,21 +264,15 @@
 \end{verbatim}
 \begin{alltt}
 \hlstd{mode} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
-        \hlstd{actual_mode} \hlkwb{=} \hlstd{ordered_list[}\hlnum{1}\hlstd{]}
-        \hlstd{times_mode} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
-                \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
-                \hlstd{actual_c} \hlkwb{=} \hlnum{0}
-                \hlstd{j} \hlkwb{=} \hlstd{i}
-                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
-                        \hlstd{actual_c} \hlkwb{=} \hlstd{actual_c} \hlopt{+} \hlnum{1}
-                        \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
-                \hlstd{\}}
-                \hlkwa{if} \hlstd{(actual_c} \hlopt{>} \hlstd{times_mode)\{}
-                        \hlstd{times_mode} \hlkwb{=} \hlstd{actual_c}
-                        \hlstd{actual_mode} \hlkwb{=} \hlstd{actual_element}
+        \hlstd{frequencies} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{frequencies[}\hlnum{1}\hlstd{,]}
+        \hlstd{freq_values} \hlkwb{=} \hlstd{frequencies[}\hlnum{2}\hlstd{,]}
+        \hlstd{actual_mode} \hlkwb{=} \hlnum{0}
+        \hlstd{actual_mode_val} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+                \hlkwa{if} \hlstd{(freq_values[i]} \hlopt{>} \hlstd{actual_mode_val)\{}
+                        \hlstd{actual_mode_val} \hlkwb{=} \hlstd{freq_values[i]}
+                        \hlstd{actual_mode} \hlkwb{=} \hlstd{elements[i]}
                 \hlstd{\}}
         \hlstd{\}}
         \hlstd{actual_mode}
@@ -283,35 +370,6 @@
 \end{alltt}
 \begin{verbatim}
 ## [1] 31.5
-\end{verbatim}
-\begin{alltt}
-\hlstd{absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
-        \hlstd{elements} \hlkwb{=} \hlkwd{vector}\hlstd{()}
-        \hlstd{frequencies} \hlkwb{=} \hlkwd{vector}\hlstd{()}
-        \hlstd{i} \hlkwb{=} \hlnum{1}
-        \hlkwa{while} \hlstd{(i} \hlopt{<=} \hlstd{n)\{}
-                \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
-                \hlstd{elements} \hlkwb{=} \hlkwd{append}\hlstd{(elements, actual_element)}
-                \hlstd{actual_freq} \hlkwb{=} \hlnum{0}
-                \hlstd{j} \hlkwb{=} \hlstd{i}
-                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
-                        \hlstd{actual_freq} \hlkwb{=} \hlstd{actual_freq} \hlopt{+} \hlnum{1}
-                        \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
-                \hlstd{\}}
-                \hlstd{frequencies} \hlkwb{=} \hlkwd{append}\hlstd{(frequencies, actual_freq)}
-                \hlstd{i} \hlkwb{=} \hlstd{j}
-        \hlstd{\}}
-        \hlkwd{rbind}\hlstd{(elements, frequencies)}
-\hlstd{\}}
-\hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_abs}
-\end{alltt}
-\begin{verbatim}
-##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11]
-## elements      13   15   16   20   22   27   29   30   33    34    42
-## frequencies    1    1    1    2    1    1    1    1    1     1     1
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
