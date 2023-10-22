@@ -408,7 +408,203 @@
 		\section{Descripción de los datos}
 		
 			``\textit{El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.}''
+			
+			Para empezar, hemos introducido todos estos datos en un fichero CSV. Para realizar este fichero se ha abierto un Excel y hemos ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que hemos puesto \textit{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez hemos introducido todos los datos guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R hacemos uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \textit{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un data frame haciendo corresponder las filas y las columnas de la tabla. La función que hemos utilizado es \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma habría que haber usado \texttt{read.csv2}. Observamos en la siguiente línea de código cómo hemos creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura que hemos mencionado previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio habría que pasar por parámetro la ruta donde se encuentra el archivo.
+			
+			<<>>=
+			fichero = read.csv("data/distancia_universitarios.csv")
+			fichero
+			@
+			
+			Como podemos observar se nos ha leído correctamente el fichero, creando el dataframe con los datos correctamente leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si lo separamos por comas se nos leerán dos datos en vez de uno. 
+			
+			Como vamos a trabajar todo el rato con la columna \textit{Distancia} del dataframe, para no tener que estar accediendo todo el rato a esta podemos definirla en una variable nueva a la que llamaremos distancias, de tal forma que no tengamos que estar haciendo \texttt{fichero\$Distancia} todo el rato.
+			
+			<<>>=
+			distancias = fichero$Distancia
+			@
+			
+			Para saber la longitud de \textit{distancias} hemos decidido elaborar nuestra propia función la cual nos dará un escalar con el número de elementos que haya en nuestra lista (distancias en este caso). 
+			
+			<<>>=
+			len = function(list){
+				count = 0
+				for (element in list){
+					count = count + 1
+				}
+				count
+			}
+			@
+			
+			Nuestra función len se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como veremos más adelante. Vamos a ver cuántas distancias tenemos:
+			
+			<<>>=
+			longitud = len(distancias)
+			longitud
+			@
+			
+			Observamos que tenemos 73 elementos, es decir, 73 distancias.
+			
+			La próxima utilidad que necesitamos es la ordenación de nuestra lista de distancias. Para ello hemos elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando para ello el método de la burbuja. 
+			
+			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. La función que realiza este método de ordenación es la siguiente:
+			
+			<<>>=
+			bubble = function(list, asc = TRUE){
+				n = len(list)
+				if(asc){
+					for (i in 2:n){
+						for (j in 1:(n-1)){
+							if (list[j] > list[j+1]){
+								temp = list[j]
+								list[j] = list[j+1]
+								list[j+1] = temp
+							}
+						}
+					}
+				}
+				else {
+					for (i in 2:n){
+						for (j in 1:(n-1)){
+							if (list[j] < list[j+1]){
+								temp = list[j]
+								list[j] = list[j+1]
+								list[j+1] = temp
+							}
+						}
+					}
+				}
+				list
+			}
+			@
+			
+			A esta función habrá que pasarle la lista que se quiere ordenar y TRUE o FALSE para indicar en el sentido que se quiere ordenar. En caso de ser TRUE se ordenará ascendentemente, y en caso de FALSE se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
+			
+			<<>>=
+			distancias_asc = bubble(distancias)
+			distancias_asc
+			
+			distancias_desc = bubble(distancias, FALSE)
+			distancias_desc
+			@
+			
+			Con la lista ordenada se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, teníamos que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que nos resulta muy fácil crear una función rango.
+			
+			<<>>=
+			rank = function(list){
+				ordered_list = bubble(list)
+				ordered_list[len(ordered_list)] - ordered_list[1]
+			}
+			@
+			
+			Primeramente hemos ordenado la lista en orden ascendente, de tal forma que el valor máximo se encontrará en el último índice y el valor mínimo en el primero. Lo que hacemos para calcular el rango es restar el elemento del último índice menos el del primero. Comprobamos nuestra función y observamos que nos sale un rango de 45.
+			
+			<<>>=
+			rango_dist = rank(distancias)
+			rango_dist
+			@
+			
+			Ahora vamos a realizar el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente crearemos una función para cada una. 
+			
+			La primera que vamos a realizar y en la que se van a basar el resto será la frecuencia absoluta. El código de la función es el siguiente:
+			
+			<<>>=
+			absolute_freq = function(list){
+				ordered_list = bubble(list)
+				n = len(ordered_list)
+				elements = vector()
+				frequencies = vector()
+				i = 1
+				while (i <= n){
+					actual_element = ordered_list[i]
+					elements = append(elements, actual_element)
+					actual_freq = 0
+					j = i
+					while(j <= n & actual_element == ordered_list[j]){
+						actual_freq = actual_freq + 1
+						j = j+1
+					}
+					frequencies = append(frequencies, actual_freq)
+					i = j
+				}
+				rbind(elements, frequencies)
+			}
+			@
+			
+			El algoritmo consiste en iterar toda la lista. Tenemos dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que encontremos un elemento distinto del anterior, lo apuntaremos en la lista de elementos, y mientras continuamos iterando la lista vamos apuntando en un contador auxiliar las veces que va apareciendo es elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en l resto de la lista ya que previamente la hemos ordenado. De esta forma, encontramos un elemento, contamos las veces contiguas que aparece y cuando aparece otro elemento apuntamos las frecuencias del anteior e inciamos el mismo procedimiento con el siguiente elemento. Una vez completamos la iteración de la lista devolvemos con rbind una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.
+			
+			Para esta función hemos utilizado las funciones de append (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función rbind (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila.
+			
+			Comprobamos las frecuencias absolutas:
+			
+			<<>>=
+			frecuencia_abs = absolute_freq(distancias)
+			frecuencia_abs
+			@
+			
+			Una vez hemos hecho las frecuencias absolutas pasamos a hacer las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo disponemos de todas las herramientas, ya que tenemos la función \texttt{len} que nos dice cuántos elementos hay y la función de frecuencias absolutas que hemos visto ahora mismo. Podemos codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que hemos visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
+			
+			<<>>=
+			relative_freq = function(list){
+				f_abs = absolute_freq(list)
+				elements = f_abs[1,]
+				abs_fvalues = f_abs[2,]
+				rbind(elements,abs_fvalues/len(list))
+			}
+			@
+			
+			Y comprobamos las frecuencias relativas de la lista.
+			
+			<<>>=
+			frecuencia_rel = relative_freq(distancias)
+			frecuencia_rel
+			@
+			
+			Por último, vamos a elaborar dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada podemos iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando tendremos que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Iremos iterando cada elemento e iremos creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
+			
+			<<>>=
+			acum_absolute_freq = function(list){
+				f_abs = absolute_freq(list)
+				elements = f_abs[1,]
+				abs_fvalues = f_abs[2,]
+				acum_abs_fvalues = vector()
+				acum = 0
+				for (i in 1:len(elements)){
+					acum = acum + abs_fvalues[i]
+					acum_abs_fvalues = append(acum_abs_fvalues, acum)
+				}
+				rbind(elements, acum_abs_fvalues)
+			}
+			@
+			
+			<<>>=
+			acum_relative_freq = function(list){
+			f_rel = relative_freq(list)
+			elements = f_rel[1,]
+			rel_fvalues = f_rel[2,]
+			acum_rel_fvalues = vector()
+			acum = 0
+			for (i in 1:len(elements)){
+				acum = acum + rel_fvalues[i]
+				acum_rel_fvalues = append(acum_rel_fvalues, acum)
+			}
+			rbind(elements, acum_rel_fvalues)
+			}
+			@ 
+			
+			Como se puede observar es el mismo código solo que en uno trabajamos con las frecuencias absolutas y en el otro con las relativas. Comprobamos su funcionamiento:
+			
+			<<>>=
+			frecuencia_abs_acum = acum_absolute_freq(distancias)
+			frecuencia_abs_acum
+			
+			frecuencia_rel_acum = acum_relative_freq(distancias)
+			frecuencia_rel_acum
+			@
+			
+			Se puede comprobar que están bien ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.
 		
+			
 		\section{Asociación}
 		
 			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''

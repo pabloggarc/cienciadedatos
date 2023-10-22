@@ -51,7 +51,8 @@
 \begin{document}
 	
 <<>>=
-fichero = read.csv2("prueba.csv")
+fichero = read.csv("distancia_universitarios.csv")
+fichero
 
 len = function(list){
 	count = 0
@@ -61,24 +62,38 @@ len = function(list){
 	count
 }
 
-distancias = fichero$Numeros
+distancias = fichero$Distancia
 
-len(distancias)
+longitud = len(distancias)
+longitud
 
-bubble = function(list){
+bubble = function(list, asc = TRUE){
 	n = len(list)
-	for (i in 2:n){
-		for (j in 1:(n-1)){
-			if (list[j] > list[j+1]){
-				temp = list[j]
-				list[j] = list[j+1]
-				list[j+1] = temp
+	if(asc){
+		for (i in 2:n){
+			for (j in 1:(n-1)){
+				if (list[j] > list[j+1]){
+					temp = list[j]
+					list[j] = list[j+1]
+					list[j+1] = temp
+				}
+			}
+		}
+	}
+	else {
+		for (i in 2:n){
+			for (j in 1:(n-1)){
+				if (list[j] < list[j+1]){
+					temp = list[j]
+					list[j] = list[j+1]
+					list[j+1] = temp
+				}
 			}
 		}
 	}
 	list
 }
-distanciasordenadas = bubble(distancias)
+distanciasordenadas = bubble(distancias, FALSE)
 distanciasordenadas
 
 rank = function(list){

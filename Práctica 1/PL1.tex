@@ -664,7 +664,453 @@
 		\section{Descripción de los datos}
 		
 			``\textit{El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.}''
+			
+			Para empezar, hemos introducido todos estos datos en un fichero CSV. Para realizar este fichero se ha abierto un Excel y hemos ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que hemos puesto \textit{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez hemos introducido todos los datos guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R hacemos uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \textit{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un data frame haciendo corresponder las filas y las columnas de la tabla. La función que hemos utilizado es \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma habría que haber usado \texttt{read.csv2}. Observamos en la siguiente línea de código cómo hemos creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura que hemos mencionado previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio habría que pasar por parámetro la ruta donde se encuentra el archivo.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fichero} \hlkwb{=} \hlkwd{read.csv}\hlstd{(}\hlstr{"data/distancia_universitarios.csv"}\hlstd{)}
+\hlstd{fichero}
+\end{alltt}
+\begin{verbatim}
+##    Distancia
+## 1       16.5
+## 2       34.8
+## 3       20.7
+## 4        6.2
+## 5        4.4
+## 6        3.4
+## 7       24.0
+## 8       24.0
+## 9       32.0
+## 10      30.0
+## 11      33.0
+## 12      27.0
+## 13      15.0
+## 14       9.4
+## 15       2.1
+## 16      34.0
+## 17      24.0
+## 18      12.0
+## 19       4.4
+## 20      28.0
+## 21      31.4
+## 22      21.6
+## 23       3.1
+## 24       4.5
+## 25       5.1
+## 26       4.0
+## 27       3.2
+## 28      25.0
+## 29       4.5
+## 30      20.0
+## 31      34.0
+## 32      12.0
+## 33      12.0
+## 34      12.0
+## 35      12.0
+## 36       5.0
+## 37      19.0
+## 38      30.0
+## 39       5.5
+## 40      38.0
+## 41      25.0
+## 42       3.7
+## 43       9.0
+## 44      30.0
+## 45      13.0
+## 46      30.0
+## 47      30.0
+## 48      26.0
+## 49      30.0
+## 50      30.0
+## 51       1.0
+## 52      26.0
+## 53      22.0
+## 54      10.0
+## 55       9.7
+## 56      11.0
+## 57      24.1
+## 58      33.0
+## 59      17.2
+## 60      27.0
+## 61      24.0
+## 62      27.0
+## 63      21.0
+## 64      28.0
+## 65      30.0
+## 66       4.0
+## 67      46.0
+## 68      29.0
+## 69       3.7
+## 70       2.7
+## 71       8.1
+## 72      19.0
+## 73      16.0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Como podemos observar se nos ha leído correctamente el fichero, creando el dataframe con los datos correctamente leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si lo separamos por comas se nos leerán dos datos en vez de uno. 
+			
+			Como vamos a trabajar todo el rato con la columna \textit{Distancia} del dataframe, para no tener que estar accediendo todo el rato a esta podemos definirla en una variable nueva a la que llamaremos distancias, de tal forma que no tengamos que estar haciendo \texttt{fichero\$Distancia} todo el rato.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{distancias} \hlkwb{=} \hlstd{fichero}\hlopt{$}\hlstd{Distancia}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Para saber la longitud de \textit{distancias} hemos decidido elaborar nuestra propia función la cual nos dará un escalar con el número de elementos que haya en nuestra lista (distancias en este caso). 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{count} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list)\{}
+                \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
+        \hlstd{\}}
+        \hlstd{count}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Nuestra función len se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como veremos más adelante. Vamos a ver cuántas distancias tenemos:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{longitud} \hlkwb{=} \hlkwd{len}\hlstd{(distancias)}
+\hlstd{longitud}
+\end{alltt}
+\begin{verbatim}
+## [1] 73
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Observamos que tenemos 73 elementos, es decir, 73 distancias.
+			
+			La próxima utilidad que necesitamos es la ordenación de nuestra lista de distancias. Para ello hemos elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando para ello el método de la burbuja. 
+			
+			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. La función que realiza este método de ordenación es la siguiente:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{asc} \hlstd{=} \hlnum{TRUE}\hlstd{)\{}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlkwa{if}\hlstd{(asc)\{}
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
+                        \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
+                                \hlkwa{if} \hlstd{(list[j]} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
+                                        \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
+                                        \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
+                                        \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
+                                \hlstd{\}}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlkwa{else} \hlstd{\{}
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
+                        \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
+                                \hlkwa{if} \hlstd{(list[j]} \hlopt{<} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
+                                        \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
+                                        \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
+                                        \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
+                                \hlstd{\}}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{list}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			A esta función habrá que pasarle la lista que se quiere ordenar y TRUE o FALSE para indicar en el sentido que se quiere ordenar. En caso de ser TRUE se ordenará ascendentemente, y en caso de FALSE se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{distancias_asc} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias)}
+\hlstd{distancias_asc}
+\end{alltt}
+\begin{verbatim}
+##  [1]  1.0  2.1  2.7  3.1  3.2  3.4  3.7  3.7  4.0  4.0  4.4  4.4  4.5  4.5  5.0
+## [16]  5.1  5.5  6.2  8.1  9.0  9.4  9.7 10.0 11.0 12.0 12.0 12.0 12.0 12.0 13.0
+## [31] 15.0 16.0 16.5 17.2 19.0 19.0 20.0 20.7 21.0 21.6 22.0 24.0 24.0 24.0 24.0
+## [46] 24.1 25.0 25.0 26.0 26.0 27.0 27.0 27.0 28.0 28.0 29.0 30.0 30.0 30.0 30.0
+## [61] 30.0 30.0 30.0 30.0 31.4 32.0 33.0 33.0 34.0 34.0 34.8 38.0 46.0
+\end{verbatim}
+\begin{alltt}
+\hlstd{distancias_desc} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias,} \hlnum{FALSE}\hlstd{)}
+\hlstd{distancias_desc}
+\end{alltt}
+\begin{verbatim}
+##  [1] 46.0 38.0 34.8 34.0 34.0 33.0 33.0 32.0 31.4 30.0 30.0 30.0 30.0 30.0 30.0
+## [16] 30.0 30.0 29.0 28.0 28.0 27.0 27.0 27.0 26.0 26.0 25.0 25.0 24.1 24.0 24.0
+## [31] 24.0 24.0 22.0 21.6 21.0 20.7 20.0 19.0 19.0 17.2 16.5 16.0 15.0 13.0 12.0
+## [46] 12.0 12.0 12.0 12.0 11.0 10.0  9.7  9.4  9.0  8.1  6.2  5.5  5.1  5.0  4.5
+## [61]  4.5  4.4  4.4  4.0  4.0  3.7  3.7  3.4  3.2  3.1  2.7  2.1  1.0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Con la lista ordenada se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, teníamos que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que nos resulta muy fácil crear una función rango.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{rank} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{ordered_list[}\hlkwd{len}\hlstd{(ordered_list)]} \hlopt{-} \hlstd{ordered_list[}\hlnum{1}\hlstd{]}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Primeramente hemos ordenado la lista en orden ascendente, de tal forma que el valor máximo se encontrará en el último índice y el valor mínimo en el primero. Lo que hacemos para calcular el rango es restar el elemento del último índice menos el del primero. Comprobamos nuestra función y observamos que nos sale un rango de 45.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{rango_dist} \hlkwb{=} \hlkwd{rank}\hlstd{(distancias)}
+\hlstd{rango_dist}
+\end{alltt}
+\begin{verbatim}
+## [1] 45
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Ahora vamos a realizar el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente crearemos una función para cada una. 
+			
+			La primera que vamos a realizar y en la que se van a basar el resto será la frecuencia absoluta. El código de la función es el siguiente:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
+        \hlstd{elements} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{frequencies} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{i} \hlkwb{=} \hlnum{1}
+        \hlkwa{while} \hlstd{(i} \hlopt{<=} \hlstd{n)\{}
+                \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
+                \hlstd{elements} \hlkwb{=} \hlkwd{append}\hlstd{(elements, actual_element)}
+                \hlstd{actual_freq} \hlkwb{=} \hlnum{0}
+                \hlstd{j} \hlkwb{=} \hlstd{i}
+                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
+                        \hlstd{actual_freq} \hlkwb{=} \hlstd{actual_freq} \hlopt{+} \hlnum{1}
+                        \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
+                \hlstd{\}}
+                \hlstd{frequencies} \hlkwb{=} \hlkwd{append}\hlstd{(frequencies, actual_freq)}
+                \hlstd{i} \hlkwb{=} \hlstd{j}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, frequencies)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			El algoritmo consiste en iterar toda la lista. Tenemos dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que encontremos un elemento distinto del anterior, lo apuntaremos en la lista de elementos, y mientras continuamos iterando la lista vamos apuntando en un contador auxiliar las veces que va apareciendo es elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en l resto de la lista ya que previamente la hemos ordenado. De esta forma, encontramos un elemento, contamos las veces contiguas que aparece y cuando aparece otro elemento apuntamos las frecuencias del anteior e inciamos el mismo procedimiento con el siguiente elemento. Una vez completamos la iteración de la lista devolvemos con rbind una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.
+			
+			Para esta función hemos utilizado las funciones de append (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función rbind (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila.
+			
+			Comprobamos las frecuencias absolutas:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_abs}
+\end{alltt}
+\begin{verbatim}
+##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
+## elements       1  2.1  2.7  3.1  3.2  3.4  3.7    4  4.4   4.5     5   5.1
+## frequencies    1  1.0  1.0  1.0  1.0  1.0  2.0    2  2.0   2.0     1   1.0
+##             [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23]
+## elements      5.5   6.2   8.1     9   9.4   9.7    10    11    12    13    15
+## frequencies   1.0   1.0   1.0     1   1.0   1.0     1     1     5     1     1
+##             [,24] [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34]
+## elements       16  16.5  17.2    19    20  20.7    21  21.6    22    24  24.1
+## frequencies     1   1.0   1.0     2     1   1.0     1   1.0     1     4   1.0
+##             [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45]
+## elements       25    26    27    28    29    30  31.4    32    33    34  34.8
+## frequencies     2     2     3     2     1     8   1.0     1     2     2   1.0
+##             [,46] [,47]
+## elements       38    46
+## frequencies     1     1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Una vez hemos hecho las frecuencias absolutas pasamos a hacer las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo disponemos de todas las herramientas, ya que tenemos la función \texttt{len} que nos dice cuántos elementos hay y la función de frecuencias absolutas que hemos visto ahora mismo. Podemos codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que hemos visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
+        \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
+        \hlkwd{rbind}\hlstd{(elements,abs_fvalues}\hlopt{/}\hlkwd{len}\hlstd{(list))}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Y comprobamos las frecuencias relativas de la lista.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{frecuencia_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_rel}
+\end{alltt}
+\begin{verbatim}
+##                [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## elements 1.00000000 2.10000000 2.70000000 3.10000000 3.20000000 3.40000000
+##          0.01369863 0.01369863 0.01369863 0.01369863 0.01369863 0.01369863
+##                [,7]       [,8]       [,9]      [,10]      [,11]      [,12]
+## elements 3.70000000 4.00000000 4.40000000 4.50000000 5.00000000 5.10000000
+##          0.02739726 0.02739726 0.02739726 0.02739726 0.01369863 0.01369863
+##               [,13]      [,14]      [,15]      [,16]      [,17]      [,18]
+## elements 5.50000000 6.20000000 8.10000000 9.00000000 9.40000000 9.70000000
+##          0.01369863 0.01369863 0.01369863 0.01369863 0.01369863 0.01369863
+##                [,19]       [,20]       [,21]       [,22]       [,23]
+## elements 10.00000000 11.00000000 12.00000000 13.00000000 15.00000000
+##           0.01369863  0.01369863  0.06849315  0.01369863  0.01369863
+##                [,24]       [,25]       [,26]       [,27]       [,28]
+## elements 16.00000000 16.50000000 17.20000000 19.00000000 20.00000000
+##           0.01369863  0.01369863  0.01369863  0.02739726  0.01369863
+##                [,29]       [,30]       [,31]       [,32]       [,33]
+## elements 20.70000000 21.00000000 21.60000000 22.00000000 24.00000000
+##           0.01369863  0.01369863  0.01369863  0.01369863  0.05479452
+##                [,34]       [,35]       [,36]       [,37]       [,38]
+## elements 24.10000000 25.00000000 26.00000000 27.00000000 28.00000000
+##           0.01369863  0.02739726  0.02739726  0.04109589  0.02739726
+##                [,39]     [,40]       [,41]       [,42]       [,43]       [,44]
+## elements 29.00000000 30.000000 31.40000000 32.00000000 33.00000000 34.00000000
+##           0.01369863  0.109589  0.01369863  0.01369863  0.02739726  0.02739726
+##                [,45]       [,46]       [,47]
+## elements 34.80000000 38.00000000 46.00000000
+##           0.01369863  0.01369863  0.01369863
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Por último, vamos a elaborar dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada podemos iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando tendremos que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Iremos iterando cada elemento e iremos creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{acum_absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
+        \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
+        \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{acum} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{abs_fvalues[i]}
+                \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_abs_fvalues, acum)}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, acum_abs_fvalues)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{acum_relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{f_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(list)}
+\hlstd{elements} \hlkwb{=} \hlstd{f_rel[}\hlnum{1}\hlstd{,]}
+\hlstd{rel_fvalues} \hlkwb{=} \hlstd{f_rel[}\hlnum{2}\hlstd{,]}
+\hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+\hlstd{acum} \hlkwb{=} \hlnum{0}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+        \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{rel_fvalues[i]}
+        \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_rel_fvalues, acum)}
+\hlstd{\}}
+\hlkwd{rbind}\hlstd{(elements, acum_rel_fvalues)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Como se puede observar es el mismo código solo que en uno trabajamos con las frecuencias absolutas y en el otro con las relativas. Comprobamos su funcionamiento:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{frecuencia_abs_acum} \hlkwb{=} \hlkwd{acum_absolute_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_abs_acum}
+\end{alltt}
+\begin{verbatim}
+##                  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
+## elements            1  2.1  2.7  3.1  3.2  3.4  3.7    4  4.4   4.5     5   5.1
+## acum_abs_fvalues    1  2.0  3.0  4.0  5.0  6.0  8.0   10 12.0  14.0    15  16.0
+##                  [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22]
+## elements           5.5   6.2   8.1     9   9.4   9.7    10    11    12    13
+## acum_abs_fvalues  17.0  18.0  19.0    20  21.0  22.0    23    24    29    30
+##                  [,23] [,24] [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32]
+## elements            15    16  16.5  17.2    19    20  20.7    21  21.6    22
+## acum_abs_fvalues    31    32  33.0  34.0    36    37  38.0    39  40.0    41
+##                  [,33] [,34] [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42]
+## elements            24  24.1    25    26    27    28    29    30  31.4    32
+## acum_abs_fvalues    45  46.0    48    50    53    55    56    64  65.0    66
+##                  [,43] [,44] [,45] [,46] [,47]
+## elements            33    34  34.8    38    46
+## acum_abs_fvalues    68    70  71.0    72    73
+\end{verbatim}
+\begin{alltt}
+\hlstd{frecuencia_rel_acum} \hlkwb{=} \hlkwd{acum_relative_freq}\hlstd{(distancias)}
+\hlstd{frecuencia_rel_acum}
+\end{alltt}
+\begin{verbatim}
+##                        [,1]       [,2]       [,3]       [,4]       [,5]
+## elements         1.00000000 2.10000000 2.70000000 3.10000000 3.20000000
+## acum_rel_fvalues 0.01369863 0.02739726 0.04109589 0.05479452 0.06849315
+##                        [,6]     [,7]      [,8]      [,9]     [,10]     [,11]
+## elements         3.40000000 3.700000 4.0000000 4.4000000 4.5000000 5.0000000
+## acum_rel_fvalues 0.08219178 0.109589 0.1369863 0.1643836 0.1917808 0.2054795
+##                      [,12]     [,13]     [,14]    [,15]     [,16]     [,17]
+## elements         5.1000000 5.5000000 6.2000000 8.100000 9.0000000 9.4000000
+## acum_rel_fvalues 0.2191781 0.2328767 0.2465753 0.260274 0.2739726 0.2876712
+##                      [,18]      [,19]      [,20]      [,21]      [,22]
+## elements         9.7000000 10.0000000 11.0000000 12.0000000 13.0000000
+## acum_rel_fvalues 0.3013699  0.3150685  0.3287671  0.3972603  0.4109589
+##                       [,23]      [,24]      [,25]      [,26]      [,27]
+## elements         15.0000000 16.0000000 16.5000000 17.2000000 19.0000000
+## acum_rel_fvalues  0.4246575  0.4383562  0.4520548  0.4657534  0.4931507
+##                       [,28]      [,29]      [,30]      [,31]      [,32]
+## elements         20.0000000 20.7000000 21.0000000 21.6000000 22.0000000
+## acum_rel_fvalues  0.5068493  0.5205479  0.5342466  0.5479452  0.5616438
+##                       [,33]     [,34]      [,35]      [,36]      [,37]
+## elements         24.0000000 24.100000 25.0000000 26.0000000 27.0000000
+## acum_rel_fvalues  0.6164384  0.630137  0.6575342  0.6849315  0.7260274
+##                       [,38]      [,39]      [,40]     [,41]      [,42]
+## elements         28.0000000 29.0000000 30.0000000 31.400000 32.0000000
+## acum_rel_fvalues  0.7534247  0.7671233  0.8767123  0.890411  0.9041096
+##                       [,43]      [,44]      [,45]      [,46] [,47]
+## elements         33.0000000 34.0000000 34.8000000 38.0000000    46
+## acum_rel_fvalues  0.9315068  0.9589041  0.9726027  0.9863014     1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Se puede comprobar que están bien ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.
 		
+			
 		\section{Asociación}
 		
 			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''
