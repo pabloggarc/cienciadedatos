@@ -398,6 +398,11 @@
 				@
 				
 				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. 
+				
+				<<>>=
+				transacciones = as(traspmuestrangCMatrix, "transactions")
+				transacciones
+				@
 			
 			\subsection{Segundo ejercicio}
 			
@@ -579,16 +584,16 @@
 			
 			<<>>=
 			acum_relative_freq = function(list){
-			f_rel = relative_freq(list)
-			elements = f_rel[1,]
-			rel_fvalues = f_rel[2,]
-			acum_rel_fvalues = vector()
-			acum = 0
-			for (i in 1:len(elements)){
-				acum = acum + rel_fvalues[i]
-				acum_rel_fvalues = append(acum_rel_fvalues, acum)
-			}
-			rbind(elements, acum_rel_fvalues)
+				f_rel = relative_freq(list)
+				elements = f_rel[1,]
+				rel_fvalues = f_rel[2,]
+				acum_rel_fvalues = vector()
+				acum = 0
+				for (i in 1:len(elements)){
+					acum = acum + rel_fvalues[i]
+					acum_rel_fvalues = append(acum_rel_fvalues, acum)
+				}
+				rbind(elements, acum_rel_fvalues)
 			}
 			@ 
 			

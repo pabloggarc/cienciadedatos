@@ -654,6 +654,21 @@
 \end{knitrout}
 				
 				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. 
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(traspmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'traspmuestrangCMatrix' no encontrado}}\begin{alltt}
+\hlstd{transacciones}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\end{kframe}
+\end{knitrout}
 			
 			\subsection{Segundo ejercicio}
 			
@@ -1032,16 +1047,16 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{acum_relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-\hlstd{f_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(list)}
-\hlstd{elements} \hlkwb{=} \hlstd{f_rel[}\hlnum{1}\hlstd{,]}
-\hlstd{rel_fvalues} \hlkwb{=} \hlstd{f_rel[}\hlnum{2}\hlstd{,]}
-\hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
-\hlstd{acum} \hlkwb{=} \hlnum{0}
-\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
-        \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{rel_fvalues[i]}
-        \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_rel_fvalues, acum)}
-\hlstd{\}}
-\hlkwd{rbind}\hlstd{(elements, acum_rel_fvalues)}
+        \hlstd{f_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{f_rel[}\hlnum{1}\hlstd{,]}
+        \hlstd{rel_fvalues} \hlkwb{=} \hlstd{f_rel[}\hlnum{2}\hlstd{,]}
+        \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
+        \hlstd{acum} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{rel_fvalues[i]}
+                \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_rel_fvalues, acum)}
+        \hlstd{\}}
+        \hlkwd{rbind}\hlstd{(elements, acum_rel_fvalues)}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
