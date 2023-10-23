@@ -499,7 +499,7 @@
         \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlkwa{if} \hlstd{(c} \hlopt{<} \hlnum{0}\hlstd{)\{}
-                \hlstd{quant} \hlkwb{=} \hlnum{0}
+                \hlstd{quant} \hlkwb{=} \hlkwa{NULL}
         \hlstd{\}}
         \hlkwa{else}\hlstd{\{}
                 \hlkwa{if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{)\{}
@@ -516,6 +516,7 @@
 \hlstd{cuartil1} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.25}\hlstd{)}
 \hlstd{cuartil2} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.5}\hlstd{)}
 \hlstd{cuartil3} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.75}\hlstd{)}
+\hlstd{cuartiln} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,} \hlopt{-}\hlnum{0.2}\hlstd{)}
 \hlstd{cuartil1}
 \end{alltt}
 \begin{verbatim}
@@ -532,6 +533,12 @@
 \end{alltt}
 \begin{verbatim}
 ## [1] 28
+\end{verbatim}
+\begin{alltt}
+\hlstd{cuartiln}
+\end{alltt}
+\begin{verbatim}
+## NULL
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

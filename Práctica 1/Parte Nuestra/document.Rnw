@@ -200,11 +200,12 @@ moda
 	
 median = function(list){
 	n = len(list)
+	ordered_list = bubble(list)
 	if (n%%2 == 0){
-		median = (list[n/2] + list[(n/2)+1]) / 2
+		median = (ordered_list[n/2] + ordered_list[(n/2)+1]) / 2
 	}
 	else{
-		median = list[(n+1)/2]
+		median = ordered_list[(n+1)/2]
 	}
 	median
 }
@@ -238,7 +239,7 @@ quant = function(list, c){
 	ordered_list = bubble(list)
 	n = len(list)
 	if (c < 0){
-		quant = 0
+		quant = NULL
 	}
 	else{
 		if((n*c)%%1 == 0){
@@ -255,9 +256,11 @@ quant = function(list, c){
 cuartil1 = quant(distancias,0.25)
 cuartil2 = quant(distancias,0.5)
 cuartil3 = quant(distancias,0.75)
+cuartiln = quant(distancias, -0.2)
 cuartil1
 cuartil2
-cuartil3		
+cuartil3
+cuartiln		
 
 @
 \end{document}          

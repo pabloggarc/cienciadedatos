@@ -658,16 +658,73 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(traspmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'traspmuestrangCMatrix' no encontrado}}\begin{alltt}
+\hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(transpmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
 \hlstd{transacciones}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\end{kframe}
+\begin{verbatim}
+## transactions in sparse format with
+##  6 transactions (rows) and
+##  5 items (columns)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(transacciones)}
+\end{alltt}
+\begin{verbatim}
+## transactions as itemMatrix in sparse format with
+##  6 rows (elements/itemsets/transactions) and
+##  5 columns (items) and a density of 0.5666667 
+## 
+## most frequent items:
+##      Pan    Leche     Agua     Café Naranjas  (Other) 
+##        5        5        4        2        1        0 
+## 
+## element (itemset/transaction) length distribution:
+## sizes
+## 1 2 3 4 
+## 1 1 2 2 
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   2.250   3.000   2.833   3.750   4.000 
+## 
+## includes extended item information - examples:
+##   labels
+## 1    Pan
+## 2   Agua
+## 3   Café
+## 
+## includes extended transaction information - examples:
+##   itemsetID
+## 1   suceso1
+## 2   suceso2
+## 3   suceso3
+\end{verbatim}
+\begin{alltt}
+\hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{support}\hlstd{=}\hlnum{0.5}\hlstd{,}\hlkwc{confidence}\hlstd{=}\hlnum{0.8}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5     0.5      1
+##  maxlen target  ext
+##      10  rules TRUE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 3 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[5 item(s), 6 transaction(s)] done [0.00s].
+## sorting and recoding items ... [3 item(s)] done [0.00s].
+## creating transaction tree ... done [0.00s].
+## checking subsets of size 1 2 3 done [0.00s].
+## writing ... [7 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.00s].
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			\subsection{Segundo ejercicio}
@@ -1124,8 +1181,167 @@
 \end{knitrout}
 			
 			Se puede comprobar que están bien ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.
-		
 			
+			Prosiguiendo con el análisis de datos, tenemos que obtener la moda del conjunto de datos. Para ello hemos elaborado una función que nos calculará este valor. Ayudándonos de las frecuencias absolutas, podemos iterar estas y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Así vamos iterando la frecuencia de cada elemento diferente de la lista y vamos comprobando si su frecuencia es la mayor hasta ahora. En caso de serlo, la moda temporal correspondera a ese elemento. Así observaremos todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{mode} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{frequencies} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
+        \hlstd{elements} \hlkwb{=} \hlstd{frequencies[}\hlnum{1}\hlstd{,]}
+        \hlstd{freq_values} \hlkwb{=} \hlstd{frequencies[}\hlnum{2}\hlstd{,]}
+        \hlstd{actual_mode} \hlkwb{=} \hlnum{0}
+        \hlstd{actual_mode_val} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+                \hlkwa{if} \hlstd{(freq_values[i]} \hlopt{>} \hlstd{actual_mode_val)\{}
+                        \hlstd{actual_mode_val} \hlkwb{=} \hlstd{freq_values[i]}
+                        \hlstd{actual_mode} \hlkwb{=} \hlstd{elements[i]}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{actual_mode}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Y extraemos la moda de nuestro conjunto de datos:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{moda} \hlkwb{=} \hlkwd{mode}\hlstd{(distancias)}
+\hlstd{moda}
+\end{alltt}
+\begin{verbatim}
+## [1] 30
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+		
+			Observamos que la moda del conjunto de distancias es 30. Podemos comprobar que está bien si nos fijamos en las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos el algoritmo devolverá el elemento de menor magnitud al iterar el algoritmo de menor a mayor elemento.
+			
+			El siguiente análisis que tendremos que hacer es el de la mediana, que ya hemos visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor tendremos que fijarnos en la paridad del número total de datos. Y es que si este es par o impar se calculará de una forma u otra. Para saber si un número es par o impar bastará con ver su módulo 2 (valor del resto del número dividido entre 2). Si este es 0 estamos ante un número par, en caso contrario ante uno impar.
+			
+			En caso de tener un número de elementos par tendremos que coger con la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos.
+			
+			En caso de tener un número de elementos impar directamente tendremos que coger el elemento $\frac{n+1}{2}$.
+			
+			Hemos englobado estos cálculos en una función, donde comprobamos si estamos ante un número de elementos par o impar y accedemos a los elementos correspondientes. La función es la siguiente:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{median} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlkwa{if} \hlstd{(n}\hlopt{%%}\hlnum{2} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                \hlstd{median} \hlkwb{=} \hlstd{(ordered_list[n}\hlopt{/}\hlnum{2}\hlstd{]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{/}\hlnum{2}\hlstd{)}\hlopt{+}\hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+        \hlstd{\}}
+        \hlkwa{else}\hlstd{\{}
+                \hlstd{median} \hlkwb{=} \hlstd{ordered_list[(n}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{/}\hlnum{2}\hlstd{]}
+        \hlstd{\}}
+        \hlstd{median}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Comprobamos el valor de la mediana de nuestro conjunto de datos:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{mediana} \hlkwb{=} \hlkwd{median}\hlstd{(distancias)}
+\hlstd{mediana}
+\end{alltt}
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Vemos que el valor medio es 20. Estamos en lo correcto, ya que si nos fijamos en el conjunto ordenado de los datos vemos que tenemos 73 elementos (número impar), luego la mediana será el elemento $\frac{73+1}{2}$; es decir, el elemento 37 que vemos que es el 20, el valor que nos ha salido como mediana.
+			
+			Vamos a hacer también los cuantiles. Para calcular los cuantiles tendremos que definir además de la lista de la que queremos calcular el valor de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de c. Así, si introducimos por parámetro un c que no es válido se nos devolverá NULL, ya que no se puede hacer un cálculo. En caso de haber introducido un c válido tendremos que observar dos casos.
+			
+			\begin{itemize}
+				\item Si $n \cdot c$ (siendo n el número total de elementos) es natural tendremos que coger los elementos $n \cdot c$ y $(n \cdot c) + 1$, los sumaremos y dividiremos entre 2.
+				\item Si $n \cdot c$ (siendo n el número total de elementos) no es natural, se deberá coger el elemento $\left[n \cdot c \right] + 1$, siendo $\left[ n \cdot c \right]$ la parte entera del producto.
+			\end{itemize}
+			
+			Con estos cálculos podemos codificarnos una función que nos da los cuantiles. La función es la siguiente:
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{quant} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{c}\hlstd{)\{}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlkwa{if} \hlstd{(c} \hlopt{<} \hlnum{0} \hlopt{|} \hlstd{c} \hlopt{>} \hlnum{1}\hlstd{)\{}
+                \hlstd{quant} \hlkwb{=} \hlkwa{NULL}
+        \hlstd{\}}
+        \hlkwa{else}\hlstd{\{}
+                \hlkwa{if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                        \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+                \hlstd{\}}
+                \hlkwa{else} \hlstd{\{}
+                        \hlstd{int_prod} \hlkwb{=} \hlkwd{floor}\hlstd{(n}\hlopt{*}\hlstd{c)}
+                        \hlstd{quant} \hlkwb{=} \hlstd{ordered_list[int_prod} \hlopt{+} \hlnum{1}\hlstd{]}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{quant}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Para poder comprobar si el producto de $n \cdot c$ es natural hacemos módulo 1 del resultado. Cualquier número entero dividido entre 1 nos va a dar de resto 0; en caso contrario dará otra cosa que no sea 0. Además, aseguramos que el producto, en caso de ser entero, nos va a dar un número natural ya que siempre va a ser positivo. Esto es por dos razones fundamentales:
+			
+			\begin{itemize}
+				\item El número total de elementos n siempre será mayor o igual a 0.
+				\item El valor de c está acotado entre 0 y 1
+			\end{itemize}
+			
+			En caso de estar ante un número que no es natural tendremos que acceder a la parte entera del producto. Para poder acceder a ella hemos hecho uso de la función \texttt{floor} perteneciente al paquete \textit{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si aplicamos esta función a 4.99 nos devolverá 4.
+			
+			Con esta función podremos calcular cuantiles, entre los que se incluyen cuartiles, deciles, percentiles... Para probar la función vamos a calcular los tres cuartiles $\frac{1}{4}, \frac{2}{4}$ y $\frac{3}{4}$.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{cuartil1} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.25}\hlstd{)}
+\hlstd{cuartil2} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.5}\hlstd{)}
+\hlstd{cuartil3} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.75}\hlstd{)}
+\hlstd{cuartilerr} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,} \hlopt{-}\hlnum{0.2}\hlstd{)}
+
+\hlstd{cuartil1}
+\end{alltt}
+\begin{verbatim}
+## [1] 8.1
+\end{verbatim}
+\begin{alltt}
+\hlstd{cuartil2}
+\end{alltt}
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+\begin{alltt}
+\hlstd{cuartil3}
+\end{alltt}
+\begin{verbatim}
+## [1] 28
+\end{verbatim}
+\begin{alltt}
+\hlstd{cuartilerr}
+\end{alltt}
+\begin{verbatim}
+## NULL
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Observamos que los valores de los cuartiles 1, 2 y 3 son 8.1, 20 y 28. Además hemos probado a meter un valor de c no válido y verificamos que efectivamente nos devuelve NULL ya que ese cálculo no sería lógicamente correcto. También comprobamos que el valor del segundo cuartil es igual al de la mediana que hemos calculado más arriba. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
 		\section{Asociación}
 		
 			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''
