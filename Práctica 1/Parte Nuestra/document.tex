@@ -449,11 +449,12 @@
 \begin{alltt}
 \hlstd{median} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
         \hlkwa{if} \hlstd{(n}\hlopt{%%}\hlnum{2} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                \hlstd{median} \hlkwb{=} \hlstd{(list[n}\hlopt{/}\hlnum{2}\hlstd{]} \hlopt{+} \hlstd{list[(n}\hlopt{/}\hlnum{2}\hlstd{)}\hlopt{+}\hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+                \hlstd{median} \hlkwb{=} \hlstd{(ordered_list[n}\hlopt{/}\hlnum{2}\hlstd{]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{/}\hlnum{2}\hlstd{)}\hlopt{+}\hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
         \hlstd{\}}
         \hlkwa{else}\hlstd{\{}
-                \hlstd{median} \hlkwb{=} \hlstd{list[(n}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{/}\hlnum{2}\hlstd{]}
+                \hlstd{median} \hlkwb{=} \hlstd{ordered_list[(n}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{/}\hlnum{2}\hlstd{]}
         \hlstd{\}}
         \hlstd{median}
 \hlstd{\}}
@@ -462,7 +463,7 @@
 \hlstd{mediana}
 \end{alltt}
 \begin{verbatim}
-## [1] 19
+## [1] 20
 \end{verbatim}
 \begin{alltt}
 \hlstd{standard_desv} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}

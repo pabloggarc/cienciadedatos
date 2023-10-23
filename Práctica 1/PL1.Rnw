@@ -648,7 +648,7 @@
 			Hemos englobado estos cálculos en una función, donde comprobamos si estamos ante un número de elementos par o impar y accedemos a los elementos correspondientes. La función es la siguiente:
 			
 			<<>>=
-			median = function(list){
+			median_value = function(list){
 				n = len(list)
 				ordered_list = bubble(list)
 				if (n%%2 == 0){
@@ -668,9 +668,56 @@
 			mediana
 			@
 			
-			Vemos que el valor medio es 20. Estamos en lo correcto, ya que si nos fijamos en el conjunto ordenado de los datos vemos que tenemos 73 elementos (número impar), luego la mediana será el elemento $\frac{73+1}{2}$; es decir, el elemento 37 que vemos que es el 20, el valor que nos ha salido como mediana.
+			Vemos que el valor medio es 20. Estamos en lo correcto, ya que si nos fijamos en el conjunto ordenado de los datos vemos que tenemos 73 elementos (número impar), luego la mediana será el elemento $\frac{73+1}{2}$; es decir, el elemento 37 que vemos que es el 20, el valor que nos ha salido como mediana. \\
 			
-			Vamos a hacer también los cuantiles. Para calcular los cuantiles tendremos que definir además de la lista de la que queremos calcular el valor de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de c. Así, si introducimos por parámetro un c que no es válido se nos devolverá NULL, ya que no se puede hacer un cálculo. En caso de haber introducido un c válido tendremos que observar dos casos.
+			Tras haber codificado las medidas de tendencia central, vamos a estudiar dos medidas de dispersión. \\
+			
+			La primera de las medidas que vamos a calcular es la desviación típica. Para ello hemos codificado la siguiente función:
+			
+			<<>>=
+			standard_desv = function(list){
+				mean = mean(list)
+				n = len(list)
+				add = 0
+				for (i in 1:n){
+					add = add + ((list[i] - mean)^2)
+				}
+				sqrt(add/n)
+			}
+
+			@
+			
+			Como se puede observar, la función consiste en ir sumando las diferencias entre cada dato y la media de todos ellos elevadas al cuadrado. El \texttt{for} de la función es el encargado de realizar esta tarea. Tras ello, se divide el resultado entre el número total de datos y se realiza la raíz cuadrada de la medida obtenida. La desviación típica, por tanto, obedece a la fórmula: \\
+			
+			$$
+			\sigma = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n}}
+			$$ \\
+			
+			La desviación típica de nuestro conjunto de datos será por tanto la siguiente:
+			
+			<<>>=
+			desviacion = standard_desv(distancias)
+			desviacion
+			@
+			
+			La segunda y última medida de dispersión que vamos a estudiar es la varianza, que en el fondo, no es más que elevar la desviación típica al cuadrado.
+			
+			<<>>=
+			variance = function(list){
+				desv = standard_desv(list)
+				var = desv^2
+				var
+			}
+			@
+			
+			Con esta función, calculamos la varianza en el conjunto de datos:
+			
+			<<>>=
+			varianza = variance(distancias)
+			varianza
+			@
+			
+			Terminadas las medidas de dispersión, vamos a proceder a calcular los cuantiles. Para calcular los cuantiles tendremos que definir además de la lista de la que queremos calcular el valor de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de c. Así, si introducimos por parámetro un c que no es válido se nos devolverá NULL, ya que no se puede hacer un cálculo. En caso de haber introducido un c válido tendremos que observar dos casos.
 			
 			\begin{itemize}
 				\item Si $n \cdot c$ (siendo n el número total de elementos) es natural tendremos que coger los elementos $n \cdot c$ y $(n \cdot c) + 1$, los sumaremos y dividiremos entre 2.
