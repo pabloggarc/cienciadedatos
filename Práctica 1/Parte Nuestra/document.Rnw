@@ -169,15 +169,15 @@ unionp
 
 
 intersect = function(c1, c2){
-if (len(c1) == 0){
-c()
-}
-else if (is.element(c1[1], c2)){
-append(intersect(c1[-1], c2), c1[1])
-}
-else{
-intersect(c1[-1], c2)
-}
+	if (len(c1) == 0){
+		c()
+	}
+	else if (is.element(c1[1], c2)){
+		append(intersect(c1[-1], c2), c1[1])
+	}
+	else{
+		intersect(c1[-1], c2)
+	}
 }
 
 intersectp = intersect(c("P","A", "L"), c("P","A", "C", "N"))
@@ -210,8 +210,46 @@ support_clasif = function(table, ocurrences, s){
 	valid_ocurrences	
 }
 
-soporte_clasif = support_clasif(tabla, c(c("Pan"),c("Agua"),c("Leche"),c("Café"),c("Naranjas")), 0.5)
-soporte_clasif
+possible_valid_occurrences = function(table, elemental_valid_occurences) {
+	occurrences = c(elemental_valid_occurences)
+	occurrences_ant = elemental_valid_occurences
+	k = 1
+	while (k <= len(tabla[1])) {
+		occurrences_act = c()
+		for (i in 1:len(occurrences_ant)) {
+			A = occurrences_ant[i]
+			for (j in (i+1):len(occurrences_ant)) {
+				B = occurrences_ant[j]
+				if (identical(A[1:(len(A)-1)], B[1:(len(B)-1)]) & A[len(A)] == B[len(B)]) {
+					occurrences_act = append(occurrences_act, union(A, B))
+				}
+			}
+		}
+		occurrences = append(occurrences, occurrences_act)
+		occurrences_ant = occurrences_act
+		k = k+1
+	}
+	occurrences
+}
+
+apriori = function(table) {
+	soporte_clasif = support_clasif(tabla, c(c("Pan"), c("Agua") ,c("Leche"), c("Café"), c("Naranjas")), 0.5) 
+	print(soporte_clasif)
+	p_v_o = possible_valid_occurrences(tabla, soporte_clasif)
+	p_v_o
+}
+
+tabla <- matrix(c(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=list(c("suceso1","suceso2","suceso3","suceso4","suceso5","suceso6"),c("Pan","Agua","Café","Leche","Naranjas")))
+
+tabla
+
+apriori(tabla)
+
+A = c("Naranjas, Agua")
+B = c("Leche")
+A[1:(len(A)-1)]
+B[1:(len(B)-1)]
+identical(A[1:(len(A)-1)], B[1:(len(B)-1)])
 @
 40 de soporte y 90 de confianza
 \end{document}          
