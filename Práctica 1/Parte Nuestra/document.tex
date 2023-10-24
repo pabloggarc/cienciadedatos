@@ -269,277 +269,86 @@
         \hlstd{\}}
         \hlkwd{rbind}\hlstd{(elements, frequencies)}
 \hlstd{\}}
-\hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_abs}
 \end{alltt}
-\begin{verbatim}
-##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
-## elements       1  2.1  2.7  3.1  3.2  3.4  3.7    4  4.4   4.5     5   5.1
-## frequencies    1  1.0  1.0  1.0  1.0  1.0  2.0    2  2.0   2.0     1   1.0
-##             [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23]
-## elements      5.5   6.2   8.1     9   9.4   9.7    10    11    12    13    15
-## frequencies   1.0   1.0   1.0     1   1.0   1.0     1     1     5     1     1
-##             [,24] [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34]
-## elements       16  16.5  17.2    19    20  20.7    21  21.6    22    24  24.1
-## frequencies     1   1.0   1.0     2     1   1.0     1   1.0     1     4   1.0
-##             [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45]
-## elements       25    26    27    28    29    30  31.4    32    33    34  34.8
-## frequencies     2     2     3     2     1     8   1.0     1     2     2   1.0
-##             [,46] [,47]
-## elements       38    46
-## frequencies     1     1
-\end{verbatim}
-\begin{alltt}
-\hlstd{relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
-        \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
-        \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
-        \hlkwd{rbind}\hlstd{(elements,abs_fvalues}\hlopt{/}\hlkwd{len}\hlstd{(list))}
-\hlstd{\}}
+\end{kframe}
+\end{knitrout}
 
-\hlstd{frecuencia_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_rel}
-\end{alltt}
-\begin{verbatim}
-##                [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
-## elements 1.00000000 2.10000000 2.70000000 3.10000000 3.20000000 3.40000000
-##          0.01369863 0.01369863 0.01369863 0.01369863 0.01369863 0.01369863
-##                [,7]       [,8]       [,9]      [,10]      [,11]      [,12]
-## elements 3.70000000 4.00000000 4.40000000 4.50000000 5.00000000 5.10000000
-##          0.02739726 0.02739726 0.02739726 0.02739726 0.01369863 0.01369863
-##               [,13]      [,14]      [,15]      [,16]      [,17]      [,18]
-## elements 5.50000000 6.20000000 8.10000000 9.00000000 9.40000000 9.70000000
-##          0.01369863 0.01369863 0.01369863 0.01369863 0.01369863 0.01369863
-##                [,19]       [,20]       [,21]       [,22]       [,23]
-## elements 10.00000000 11.00000000 12.00000000 13.00000000 15.00000000
-##           0.01369863  0.01369863  0.06849315  0.01369863  0.01369863
-##                [,24]       [,25]       [,26]       [,27]       [,28]
-## elements 16.00000000 16.50000000 17.20000000 19.00000000 20.00000000
-##           0.01369863  0.01369863  0.01369863  0.02739726  0.01369863
-##                [,29]       [,30]       [,31]       [,32]       [,33]
-## elements 20.70000000 21.00000000 21.60000000 22.00000000 24.00000000
-##           0.01369863  0.01369863  0.01369863  0.01369863  0.05479452
-##                [,34]       [,35]       [,36]       [,37]       [,38]
-## elements 24.10000000 25.00000000 26.00000000 27.00000000 28.00000000
-##           0.01369863  0.02739726  0.02739726  0.04109589  0.02739726
-##                [,39]     [,40]       [,41]       [,42]       [,43]       [,44]
-## elements 29.00000000 30.000000 31.40000000 32.00000000 33.00000000 34.00000000
-##           0.01369863  0.109589  0.01369863  0.01369863  0.02739726  0.02739726
-##                [,45]       [,46]       [,47]
-## elements 34.80000000 38.00000000 46.00000000
-##           0.01369863  0.01369863  0.01369863
-\end{verbatim}
-\begin{alltt}
-\hlstd{acum_absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
-        \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
-        \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
-        \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
-        \hlstd{acum} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
-                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{abs_fvalues[i]}
-                \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_abs_fvalues, acum)}
-        \hlstd{\}}
-        \hlkwd{rbind}\hlstd{(elements, acum_abs_fvalues)}
-\hlstd{\}}
-\hlstd{frecuencia_abs_acum} \hlkwb{=} \hlkwd{acum_absolute_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_abs_acum}
-\end{alltt}
-\begin{verbatim}
-##                  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
-## elements            1  2.1  2.7  3.1  3.2  3.4  3.7    4  4.4   4.5     5   5.1
-## acum_abs_fvalues    1  2.0  3.0  4.0  5.0  6.0  8.0   10 12.0  14.0    15  16.0
-##                  [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22]
-## elements           5.5   6.2   8.1     9   9.4   9.7    10    11    12    13
-## acum_abs_fvalues  17.0  18.0  19.0    20  21.0  22.0    23    24    29    30
-##                  [,23] [,24] [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32]
-## elements            15    16  16.5  17.2    19    20  20.7    21  21.6    22
-## acum_abs_fvalues    31    32  33.0  34.0    36    37  38.0    39  40.0    41
-##                  [,33] [,34] [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42]
-## elements            24  24.1    25    26    27    28    29    30  31.4    32
-## acum_abs_fvalues    45  46.0    48    50    53    55    56    64  65.0    66
-##                  [,43] [,44] [,45] [,46] [,47]
-## elements            33    34  34.8    38    46
-## acum_abs_fvalues    68    70  71.0    72    73
-\end{verbatim}
-\begin{alltt}
-\hlstd{acum_relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{f_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(list)}
-        \hlstd{elements} \hlkwb{=} \hlstd{f_rel[}\hlnum{1}\hlstd{,]}
-        \hlstd{rel_fvalues} \hlkwb{=} \hlstd{f_rel[}\hlnum{2}\hlstd{,]}
-        \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
-        \hlstd{acum} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
-                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{rel_fvalues[i]}
-                \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_rel_fvalues, acum)}
-        \hlstd{\}}
-        \hlkwd{rbind}\hlstd{(elements, acum_rel_fvalues)}
-\hlstd{\}}
-\hlstd{frecuencia_rel_acum} \hlkwb{=} \hlkwd{acum_relative_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_rel_acum}
-\end{alltt}
-\begin{verbatim}
-##                        [,1]       [,2]       [,3]       [,4]       [,5]
-## elements         1.00000000 2.10000000 2.70000000 3.10000000 3.20000000
-## acum_rel_fvalues 0.01369863 0.02739726 0.04109589 0.05479452 0.06849315
-##                        [,6]     [,7]      [,8]      [,9]     [,10]     [,11]
-## elements         3.40000000 3.700000 4.0000000 4.4000000 4.5000000 5.0000000
-## acum_rel_fvalues 0.08219178 0.109589 0.1369863 0.1643836 0.1917808 0.2054795
-##                      [,12]     [,13]     [,14]    [,15]     [,16]     [,17]
-## elements         5.1000000 5.5000000 6.2000000 8.100000 9.0000000 9.4000000
-## acum_rel_fvalues 0.2191781 0.2328767 0.2465753 0.260274 0.2739726 0.2876712
-##                      [,18]      [,19]      [,20]      [,21]      [,22]
-## elements         9.7000000 10.0000000 11.0000000 12.0000000 13.0000000
-## acum_rel_fvalues 0.3013699  0.3150685  0.3287671  0.3972603  0.4109589
-##                       [,23]      [,24]      [,25]      [,26]      [,27]
-## elements         15.0000000 16.0000000 16.5000000 17.2000000 19.0000000
-## acum_rel_fvalues  0.4246575  0.4383562  0.4520548  0.4657534  0.4931507
-##                       [,28]      [,29]      [,30]      [,31]      [,32]
-## elements         20.0000000 20.7000000 21.0000000 21.6000000 22.0000000
-## acum_rel_fvalues  0.5068493  0.5205479  0.5342466  0.5479452  0.5616438
-##                       [,33]     [,34]      [,35]      [,36]      [,37]
-## elements         24.0000000 24.100000 25.0000000 26.0000000 27.0000000
-## acum_rel_fvalues  0.6164384  0.630137  0.6575342  0.6849315  0.7260274
-##                       [,38]      [,39]      [,40]     [,41]      [,42]
-## elements         28.0000000 29.0000000 30.0000000 31.400000 32.0000000
-## acum_rel_fvalues  0.7534247  0.7671233  0.8767123  0.890411  0.9041096
-##                       [,43]      [,44]      [,45]      [,46] [,47]
-## elements         33.0000000 34.0000000 34.8000000 38.0000000    46
-## acum_rel_fvalues  0.9315068  0.9589041  0.9726027  0.9863014     1
-\end{verbatim}
-\begin{alltt}
-\hlstd{mean} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{total} \hlkwb{=} \hlnum{0}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
-                \hlstd{total} \hlkwb{=} \hlstd{total} \hlopt{+} \hlstd{list[i]}
-        \hlstd{\}}
-        \hlstd{mean} \hlkwb{=} \hlstd{total} \hlopt{/} \hlstd{n}
-        \hlstd{mean}
-\hlstd{\}}
+PARTE 2
 
-\hlstd{media} \hlkwb{=} \hlkwd{mean}\hlstd{(distancias)}
-\hlstd{media}
-\end{alltt}
-\begin{verbatim}
-## [1] 18.53425
-\end{verbatim}
-\begin{alltt}
-\hlstd{mode} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{frequencies} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
-        \hlstd{elements} \hlkwb{=} \hlstd{frequencies[}\hlnum{1}\hlstd{,]}
-        \hlstd{freq_values} \hlkwb{=} \hlstd{frequencies[}\hlnum{2}\hlstd{,]}
-        \hlstd{actual_mode} \hlkwb{=} \hlnum{0}
-        \hlstd{actual_mode_val} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
-                \hlkwa{if} \hlstd{(freq_values[i]} \hlopt{>} \hlstd{actual_mode_val)\{}
-                        \hlstd{actual_mode_val} \hlkwb{=} \hlstd{freq_values[i]}
-                        \hlstd{actual_mode} \hlkwb{=} \hlstd{elements[i]}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlstd{actual_mode}
-\hlstd{\}}
 
-\hlstd{moda} \hlkwb{=} \hlkwd{mode}\hlstd{(distancias)}
-\hlstd{moda}
-\end{alltt}
-\begin{verbatim}
-## [1] 30
-\end{verbatim}
+
+
+
+
+
+
+
+
+
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{median} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
-        \hlkwa{if} \hlstd{(n}\hlopt{%%}\hlnum{2} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                \hlstd{median} \hlkwb{=} \hlstd{(ordered_list[n}\hlopt{/}\hlnum{2}\hlstd{]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{/}\hlnum{2}\hlstd{)}\hlopt{+}\hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+tabla <- \hlkwd{matrix}(\hlkwd{c}(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=\hlkwd{list}(\hlkwd{c}(\hlstr{"suceso1"},\hlstr{"suceso2"},\hlstr{"suceso3"},\hlstr{"suceso4"},\hlstr{"suceso5"},\hlstr{"suceso6"}),\hlkwd{c}(\hlstr{"Pan"},\hlstr{"Agua"},\hlstr{"Café"},\hlstr{"Leche"},\hlstr{"Naranjas"})))
+
+tabla
+
+support = \hlkwd{function}(table, elements)\{
+	\hlkwd{for} (i=1:\hlkwd{len}(tabla[,1])\{
+		\hlkwd{print}(i) 
+	\}
+\hlcom{#	for (element in elements)\{}
+		
+\}
+
+soporte = \hlkwd{support}(table, 1)
+soporte
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: <text>:6:15: inesperado '='\\\#\# 5: support = function(table, elements)\{\\\#\# 6: \ \ \ \ \ \ \ \ for (i=\\\#\# \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textasciicircum{}}}\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{)\{}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                \hlstd{c2}
+        \hlstd{\}}
+        \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2))\{}
+                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
         \hlstd{\}}
         \hlkwa{else}\hlstd{\{}
-                \hlstd{median} \hlkwb{=} \hlstd{ordered_list[(n}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{/}\hlnum{2}\hlstd{]}
+                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
         \hlstd{\}}
-        \hlstd{median}
 \hlstd{\}}
 
-\hlstd{mediana} \hlkwb{=} \hlkwd{median}\hlstd{(distancias)}
-\hlstd{mediana}
+\hlstd{unionp} \hlkwb{=} \hlkwd{union}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"L"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"N"}\hlstd{))}
+\hlstd{unionp}
 \end{alltt}
 \begin{verbatim}
-## [1] 20
+## [1] "P" "A" "C" "N" "L"
 \end{verbatim}
 \begin{alltt}
-\hlstd{standard_desv} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{mean} \hlkwb{=} \hlkwd{mean}\hlstd{(list)}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlstd{add} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
-                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{((list[i]} \hlopt{-} \hlstd{mean)}\hlopt{^}\hlnum{2}\hlstd{)}
-        \hlstd{\}}
-        \hlkwd{sqrt}\hlstd{(add}\hlopt{/}\hlstd{n)}
+\hlstd{intersect} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{)\{}
+\hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{)\{}
+\hlkwd{c}\hlstd{()}
+\hlstd{\}}
+\hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2))\{}
+\hlkwd{append}\hlstd{(}\hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2), c1[}\hlnum{1}\hlstd{])}
+\hlstd{\}}
+\hlkwa{else}\hlstd{\{}
+\hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
+\hlstd{\}}
 \hlstd{\}}
 
-\hlstd{desviacion} \hlkwb{=} \hlkwd{standard_desv}\hlstd{(distancias)}
-\hlstd{desviacion}
+\hlstd{intersectp} \hlkwb{=} \hlkwd{intersect}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"L"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"N"}\hlstd{))}
+\hlstd{intersectp}
 \end{alltt}
 \begin{verbatim}
-## [1] 11.23204
-\end{verbatim}
-\begin{alltt}
-\hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{desv} \hlkwb{=} \hlkwd{standard_desv}\hlstd{(list)}
-        \hlstd{var} \hlkwb{=} \hlstd{desv}\hlopt{^}\hlnum{2}
-        \hlstd{var}
-\hlstd{\}}
-
-\hlstd{varianza} \hlkwb{=} \hlkwd{variance}\hlstd{(distancias)}
-\hlstd{varianza}
-\end{alltt}
-\begin{verbatim}
-## [1] 126.1587
-\end{verbatim}
-\begin{alltt}
-\hlstd{quant} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{c}\hlstd{)\{}
-        \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlkwa{if} \hlstd{(c} \hlopt{<} \hlnum{0}\hlstd{)\{}
-                \hlstd{quant} \hlkwb{=} \hlkwa{NULL}
-        \hlstd{\}}
-        \hlkwa{else}\hlstd{\{}
-                \hlkwa{if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                        \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
-                \hlstd{\}}
-                \hlkwa{else} \hlstd{\{}
-                        \hlstd{int_prod} \hlkwb{=} \hlkwd{floor}\hlstd{(n}\hlopt{*}\hlstd{c)}
-                        \hlstd{quant} \hlkwb{=} \hlstd{ordered_list[int_prod} \hlopt{+} \hlnum{1}\hlstd{]}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlstd{quant}
-\hlstd{\}}
-
-\hlstd{cuartil1} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.25}\hlstd{)}
-\hlstd{cuartil2} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.5}\hlstd{)}
-\hlstd{cuartil3} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.75}\hlstd{)}
-\hlstd{cuartiln} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,} \hlopt{-}\hlnum{0.2}\hlstd{)}
-\hlstd{cuartil1}
-\end{alltt}
-\begin{verbatim}
-## [1] 8.1
-\end{verbatim}
-\begin{alltt}
-\hlstd{cuartil2}
-\end{alltt}
-\begin{verbatim}
-## [1] 20
-\end{verbatim}
-\begin{alltt}
-\hlstd{cuartil3}
-\end{alltt}
-\begin{verbatim}
-## [1] 28
-\end{verbatim}
-\begin{alltt}
-\hlstd{cuartiln}
-\end{alltt}
-\begin{verbatim}
-## NULL
+## [1] "A" "P"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

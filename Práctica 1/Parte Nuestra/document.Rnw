@@ -124,143 +124,94 @@ absolute_freq = function(list){
 	}
 	rbind(elements, frequencies)
 }
-frecuencia_abs = absolute_freq(distancias)
-frecuencia_abs
 
-relative_freq = function(list){
-	f_abs = absolute_freq(list)
-	elements = f_abs[1,]
-	abs_fvalues = f_abs[2,]
-	rbind(elements,abs_fvalues/len(list))
-}
-
-frecuencia_rel = relative_freq(distancias)
-frecuencia_rel
-
-acum_absolute_freq = function(list){
-	f_abs = absolute_freq(list)
-	elements = f_abs[1,]
-	abs_fvalues = f_abs[2,]
-	acum_abs_fvalues = vector()
-	acum = 0
-	for (i in 1:len(elements)){
-		acum = acum + abs_fvalues[i]
-		acum_abs_fvalues = append(acum_abs_fvalues, acum)
-	}
-	rbind(elements, acum_abs_fvalues)
-}
-frecuencia_abs_acum = acum_absolute_freq(distancias)
-frecuencia_abs_acum
-
-acum_relative_freq = function(list){
-	f_rel = relative_freq(list)
-	elements = f_rel[1,]
-	rel_fvalues = f_rel[2,]
-	acum_rel_fvalues = vector()
-	acum = 0
-	for (i in 1:len(elements)){
-		acum = acum + rel_fvalues[i]
-		acum_rel_fvalues = append(acum_rel_fvalues, acum)
-	}
-	rbind(elements, acum_rel_fvalues)
-}
-frecuencia_rel_acum = acum_relative_freq(distancias)
-frecuencia_rel_acum
-
-mean = function(list){
-	total = 0
-	n = len(list)
-	for (i in 1:n){
-		total = total + list[i]
-	}
-	mean = total / n
-	mean
-}
-
-media = mean(distancias)
-media
-
-mode = function(list){
-	frequencies = absolute_freq(list)
-	elements = frequencies[1,]
-	freq_values = frequencies[2,]
-	actual_mode = 0
-	actual_mode_val = 0
-	for (i in 1:len(elements)){
-		if (freq_values[i] > actual_mode_val){
-			actual_mode_val = freq_values[i]
-			actual_mode = elements[i]
-		}
-	}
-	actual_mode
-}
-
-moda = mode(distancias)
-moda
 	
-median = function(list){
-	n = len(list)
-	ordered_list = bubble(list)
-	if (n%%2 == 0){
-		median = (ordered_list[n/2] + ordered_list[(n/2)+1]) / 2
-	}
-	else{
-		median = ordered_list[(n+1)/2]
-	}
-	median
-}
-
-mediana = median(distancias)
-mediana
-
-standard_desv = function(list){
-	mean = mean(list)
-	n = len(list)
-	add = 0
-	for (i in 1:n){
-		add = add + ((list[i] - mean)^2)
-	}
-	sqrt(add/n)
-}
-
-desviacion = standard_desv(distancias)
-desviacion
-
-variance = function(list){
-	desv = standard_desv(list)
-	var = desv^2
-	var
-}
-
-varianza = variance(distancias)
-varianza
-
-quant = function(list, c){
-	ordered_list = bubble(list)
-	n = len(list)
-	if (c < 0){
-		quant = NULL
-	}
-	else{
-		if((n*c)%%1 == 0){
-			quant = (ordered_list[(n*c)] + ordered_list[(n*c) + 1]) / 2
-		}
-		else {
-			int_prod = floor(n*c)
-			quant = ordered_list[int_prod + 1]
-		}
-	}
-	quant
-}	
-
-cuartil1 = quant(distancias,0.25)
-cuartil2 = quant(distancias,0.5)
-cuartil3 = quant(distancias,0.75)
-cuartiln = quant(distancias, -0.2)
-cuartil1
-cuartil2
-cuartil3
-cuartiln		
 
 @
+
+PARTE 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+<<>>=
+tabla <- matrix(c(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=list(c("suceso1","suceso2","suceso3","suceso4","suceso5","suceso6"),c("Pan","Agua","Café","Leche","Naranjas")))
+
+tabla
+
+
+@
+
+<<>>=
+union = function(c1, c2){
+	if (len(c1) == 0){
+		c2
+	}
+	else if (is.element(c1[1], c2)){
+		union(c1[-1], c2)
+	}
+	else{
+		union(c1[-1], append(c2, c1[1]))
+	}
+}
+
+unionp = union(c("P","A", "L"), c("P","A", "C", "N"))
+unionp
+
+
+intersect = function(c1, c2){
+if (len(c1) == 0){
+c()
+}
+else if (is.element(c1[1], c2)){
+append(intersect(c1[-1], c2), c1[1])
+}
+else{
+intersect(c1[-1], c2)
+}
+}
+
+intersectp = intersect(c("P","A", "L"), c("P","A", "C", "N"))
+intersectp
+	
+support = function(table, elements){
+	count_support = 0
+	for (i in 1:len(table[,1])){
+		acum = 1
+		for (element in elements){
+			acum = (table[i,element]) & acum
+		}
+		count_support = count_support + acum
+	}
+	count_support/len(table[,1])		
+}
+
+soporte = support(tabla, c("Pan","Agua"))
+soporte
+
+
+support_clasif = function(table, ocurrences, s){
+	valid_ocurrences = c()
+	for (ocurrence in ocurrences){
+		support_oc = support(table, ocurrence)
+		if (support_oc >= s){
+			valid_ocurrences = append(valid_ocurrences, ocurrence)
+		}
+	}
+	valid_ocurrences	
+}
+
+soporte_clasif = support_clasif(tabla, c(c("Pan"),c("Agua"),c("Leche"),c("Café"),c("Naranjas")), 0.5)
+soporte_clasif
+@
+40 de soporte y 90 de confianza
 \end{document}          
