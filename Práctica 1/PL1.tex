@@ -424,6 +424,7 @@
 			
 			Volviendo al estudio de nuestros datos, veamos cómo calcular las diferentes frecuencias. Como en R no existe una función para las frecuencias relativas, se definirá y guardará una propia. 
 			
+			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -458,6 +459,7 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+			}
 			
 			Otro valor que podemos calcular es la media aritmética de los datos, para ello se cuenta con la función \texttt{mean}. 
 			
@@ -597,15 +599,19 @@
 \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlnum{6}\hlstd{,} \hlnum{5}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
 \hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,} \hlstr{"suceso2"}\hlstd{,} \hlstr{"suceso3"}\hlstd{,} \hlstr{"suceso4"}\hlstd{,} \hlstr{"suceso5"}\hlstd{,} \hlstr{"suceso6"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in Matrix(c(1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, : no se pudo encontrar la función "{}Matrix"{}}}\begin{alltt}
 \hlstd{muestra}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "dgCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   1    1    .     1        1
+## suceso2   1    1    1     1        .
+## suceso3   1    1    .     1        .
+## suceso4   1    .    1     1        .
+## suceso5   1    1    .     .        .
+## suceso6   .    .    .     1        .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 				
 				A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
@@ -614,15 +620,19 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{muestrangCMatrix} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\begin{alltt}
 \hlstd{muestrangCMatrix}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "ngCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   |    |    .     |        |
+## suceso2   |    |    |     |        .
+## suceso3   |    |    .     |        .
+## suceso4   |    .    |     |        .
+## suceso5   |    |    .     .        .
+## suceso6   .    .    .     |        .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 				
 				Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
@@ -631,43 +641,123 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transpmuestrangCMatrix} \hlkwb{<-} \hlkwd{t}\hlstd{(muestrangCMatrix)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transpmuestrangCMatrix}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 5 x 6 sparse Matrix of class "ngCMatrix"
+##          suceso1 suceso2 suceso3 suceso4 suceso5 suceso6
+## Pan            |       |       |       |       |       .
+## Agua           |       |       |       .       |       .
+## Café           .       |       .       |       .       .
+## Leche          |       |       |       |       .       |
+## Naranjas       |       .       .       .       .       .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 				
-				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. 
+				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
 				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(transpmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transacciones}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\begin{alltt}
+\begin{verbatim}
+## transactions in sparse format with
+##  6 transactions (rows) and
+##  5 items (columns)
+\end{verbatim}
+\begin{alltt}
 \hlkwd{summary}\hlstd{(transacciones)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\begin{alltt}
-\hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{support}\hlstd{=}\hlnum{0.5}\hlstd{,}\hlkwc{confidence}\hlstd{=}\hlnum{0.8}\hlstd{))}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in apriori(transacciones, parameter = list(support = 0.5, confidence = 0.8)): no se pudo encontrar la función "{}apriori"{}}}\end{kframe}
+\begin{verbatim}
+## transactions as itemMatrix in sparse format with
+##  6 rows (elements/itemsets/transactions) and
+##  5 columns (items) and a density of 0.5666667 
+## 
+## most frequent items:
+##      Pan    Leche     Agua     Café Naranjas  (Other) 
+##        5        5        4        2        1        0 
+## 
+## element (itemset/transaction) length distribution:
+## sizes
+## 1 2 3 4 
+## 1 1 2 2 
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   2.250   3.000   2.833   3.750   4.000 
+## 
+## includes extended item information - examples:
+##   labels
+## 1    Pan
+## 2   Agua
+## 3   Café
+## 
+## includes extended transaction information - examples:
+##   itemsetID
+## 1   suceso1
+## 2   suceso2
+## 3   suceso3
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
+				
+				Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter} \hlstd{=}
+\hlkwd{list}\hlstd{(}\hlkwc{support} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{confidence} \hlstd{=} \hlnum{0.8}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5     0.5      1
+##  maxlen target  ext
+##      10  rules TRUE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 3 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[5 item(s), 6 transaction(s)] done [0.00s].
+## sorting and recoding items ... [3 item(s)] done [0.00s].
+## creating transaction tree ... done [0.00s].
+## checking subsets of size 1 2 3 done [0.00s].
+## writing ... [7 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.00s].
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+				
+				Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{inspect}\hlstd{(asociaciones)}
+\end{alltt}
+\begin{verbatim}
+##     lhs              rhs     support   confidence coverage  lift count
+## [1] {}            => {Leche} 0.8333333 0.8333333  1.0000000 1.00 5    
+## [2] {}            => {Pan}   0.8333333 0.8333333  1.0000000 1.00 5    
+## [3] {Agua}        => {Pan}   0.6666667 1.0000000  0.6666667 1.20 4    
+## [4] {Pan}         => {Agua}  0.6666667 0.8000000  0.8333333 1.20 4    
+## [5] {Leche}       => {Pan}   0.6666667 0.8000000  0.8333333 0.96 4    
+## [6] {Pan}         => {Leche} 0.6666667 0.8000000  0.8333333 0.96 4    
+## [7] {Agua, Leche} => {Pan}   0.5000000 1.0000000  0.5000000 1.20 3
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+				
+				Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
 			
 			\subsection{Segundo ejercicio}
 			
@@ -677,9 +767,9 @@
 	
 		\section{Descripción de los datos}
 		
-			``\textit{El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.}''
+			``\textit{El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.}''\\
 			
-			Para empezar, hemos introducido todos estos datos en un fichero CSV. Para realizar este fichero se ha abierto un Excel y hemos ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que hemos puesto \textit{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez hemos introducido todos los datos guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R hacemos uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \textit{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un data frame haciendo corresponder las filas y las columnas de la tabla. La función que hemos utilizado es \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma habría que haber usado \texttt{read.csv2}. Observamos en la siguiente línea de código cómo hemos creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura que hemos mencionado previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio habría que pasar por parámetro la ruta donde se encuentra el archivo.
+			Para empezar, hemos introducido todos estos datos en un fichero CSV. Para realizar este fichero se ha abierto un Excel y hemos ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que hemos puesto \texttt{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez hemos introducido todos los datos guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R hacemos uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un data frame haciendo corresponder las filas y las columnas de la tabla. La función que hemos utilizado es \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma habría que haber usado \texttt{read.csv2}. Observamos en la siguiente línea de código cómo hemos creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura que hemos mencionado previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio habría que pasar por parámetro la ruta donde se encuentra el archivo.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -766,9 +856,9 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como podemos observar se nos ha leído correctamente el fichero, creando el dataframe con los datos correctamente leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si lo separamos por comas se nos leerán dos datos en vez de uno. 
+			Como podemos observar se nos ha leído correctamente el fichero, creando el dataframe con los datos correctamente leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si lo separamos por comas se nos leerán dos datos en vez de uno.\\ 
 			
-			Como vamos a trabajar todo el rato con la columna \textit{Distancia} del dataframe, para no tener que estar accediendo todo el rato a esta podemos definirla en una variable nueva a la que llamaremos distancias, de tal forma que no tengamos que estar haciendo \texttt{fichero\$Distancia} todo el rato.
+			Como vamos a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que estar accediendo todo el rato a esta podemos definirla en una variable nueva a la que llamaremos distancias, de tal forma que no tengamos que estar haciendo \texttt{fichero\$Distancia} todo el rato.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -778,7 +868,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Para saber la longitud de \textit{distancias} hemos decidido elaborar nuestra propia función la cual nos dará un escalar con el número de elementos que haya en nuestra lista (distancias en este caso). 
+			Para saber la longitud de \texttt{distancias} hemos decidido elaborar nuestra propia función la cual nos dará un escalar con el número de elementos que haya en nuestra lista (distancias en este caso). 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -808,9 +898,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Observamos que tenemos 73 elementos, es decir, 73 distancias.
-			
-			La próxima utilidad que necesitamos es la ordenación de nuestra lista de distancias. Para ello hemos elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando para ello el método de la burbuja. 
+			Observamos que tenemos 73 elementos, es decir, 73 distancias. La próxima utilidad que necesitamos es la ordenación de nuestra lista de distancias. Para ello hemos elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando para ello el método de la burbuja. \\
 			
 			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. La función que realiza este método de ordenación es la siguiente:
 			
@@ -847,8 +935,9 @@
 \end{kframe}
 \end{knitrout}
 			
-			A esta función habrá que pasarle la lista que se quiere ordenar y TRUE o FALSE para indicar en el sentido que se quiere ordenar. En caso de ser TRUE se ordenará ascendentemente, y en caso de FALSE se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
+			A esta función habrá que pasarle la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser TRUE se ordenará ascendentemente, y en caso de \texttt{FALSE} se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
 			
+			{\small 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -875,6 +964,7 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+			}
 			
 			Con la lista ordenada se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, teníamos que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que nos resulta muy fácil crear una función rango.
 			
@@ -903,9 +993,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Ahora vamos a realizar el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente crearemos una función para cada una. 
-			
-			La primera que vamos a realizar y en la que se van a basar el resto será la frecuencia absoluta. El código de la función es el siguiente:
+			Ahora vamos a realizar el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente crearemos una función para cada una. La primera que vamos a realizar y en la que se van a basar el resto será la frecuencia absoluta. El código de la función es el siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -934,12 +1022,11 @@
 \end{kframe}
 \end{knitrout}
 			
-			El algoritmo consiste en iterar toda la lista. Tenemos dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que encontremos un elemento distinto del anterior, lo apuntaremos en la lista de elementos, y mientras continuamos iterando la lista vamos apuntando en un contador auxiliar las veces que va apareciendo es elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en l resto de la lista ya que previamente la hemos ordenado. De esta forma, encontramos un elemento, contamos las veces contiguas que aparece y cuando aparece otro elemento apuntamos las frecuencias del anteior e inciamos el mismo procedimiento con el siguiente elemento. Una vez completamos la iteración de la lista devolvemos con rbind una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.
+			El algoritmo consiste en iterar toda la lista. Tenemos dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que encontremos un elemento distinto del anterior, lo apuntaremos en la lista de elementos, y mientras continuamos iterando la lista vamos apuntando en un contador auxiliar las veces que va apareciendo es elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en l resto de la lista ya que previamente la hemos ordenado. De esta forma, encontramos un elemento, contamos las veces contiguas que aparece y cuando aparece otro elemento apuntamos las frecuencias del anteior e inciamos el mismo procedimiento con el siguiente elemento. Una vez completamos la iteración de la lista devolvemos con rbind una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.\\
 			
-			Para esta función hemos utilizado las funciones de append (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función rbind (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila.
+			Para esta función hemos utilizado las funciones de append (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función rbind (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
 			
-			Comprobamos las frecuencias absolutas:
-			
+			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -965,6 +1052,7 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+			}
 			
 			Una vez hemos hecho las frecuencias absolutas pasamos a hacer las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo disponemos de todas las herramientas, ya que tenemos la función \texttt{len} que nos dice cuántos elementos hay y la función de frecuencias absolutas que hemos visto ahora mismo. Podemos codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que hemos visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
 			
@@ -983,6 +1071,7 @@
 			
 			Y comprobamos las frecuencias relativas de la lista.
 			
+			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1020,6 +1109,7 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+			}
 			
 			Por último, vamos a elaborar dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada podemos iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando tendremos que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Iremos iterando cada elemento e iremos creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
 			
@@ -1063,6 +1153,7 @@
 			
 			Como se puede observar es el mismo código solo que en uno trabajamos con las frecuencias absolutas y en el otro con las relativas. Comprobamos su funcionamiento:
 			
+			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1121,11 +1212,13 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+			}
 			
-			Se puede comprobar que están bien ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.
+			Se puede comprobar que están bien ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
 			
 			Prosiguiendo con el análisis de datos, tenemos que obtener la moda del conjunto de datos. Para ello hemos elaborado una función que nos calculará este valor. Ayudándonos de las frecuencias absolutas, podemos iterar estas y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Así vamos iterando la frecuencia de cada elemento diferente de la lista y vamos comprobando si su frecuencia es la mayor hasta ahora. En caso de serlo, la moda temporal correspondera a ese elemento. Así observaremos todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
 			
+			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1146,6 +1239,7 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+			}
 			
 			Y extraemos la moda de nuestro conjunto de datos:
 			
@@ -1161,13 +1255,11 @@
 \end{kframe}
 \end{knitrout}
 		
-			Observamos que la moda del conjunto de distancias es 30. Podemos comprobar que está bien si nos fijamos en las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos el algoritmo devolverá el elemento de menor magnitud al iterar el algoritmo de menor a mayor elemento.
+			Observamos que la moda del conjunto de distancias es 30. Podemos comprobar que está bien si nos fijamos en las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos el algoritmo devolverá el elemento de menor magnitud al iterar el algoritmo de menor a mayor elemento.\\
 			
-			El siguiente análisis que tendremos que hacer es el de la mediana, que ya hemos visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor tendremos que fijarnos en la paridad del número total de datos. Y es que si este es par o impar se calculará de una forma u otra. Para saber si un número es par o impar bastará con ver su módulo 2 (valor del resto del número dividido entre 2). Si este es 0 estamos ante un número par, en caso contrario ante uno impar.
+			El siguiente análisis que tendremos que hacer es el de la mediana, que ya hemos visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor tendremos que fijarnos en la paridad del número total de datos. Y es que si este es par o impar se calculará de una forma u otra. Para saber si un número es par o impar bastará con ver su módulo 2 (valor del resto del número dividido entre 2). Si este es 0 estamos ante un número par, en caso contrario ante uno impar.\\
 			
-			En caso de tener un número de elementos par tendremos que coger con la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos.
-			
-			En caso de tener un número de elementos impar directamente tendremos que coger el elemento $\frac{n+1}{2}$.
+			En caso de tener un número de elementos par tendremos que coger con la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente tendremos que coger el elemento $\frac{n+1}{2}$.\\
 			
 			Hemos englobado estos cálculos en una función, donde comprobamos si estamos ante un número de elementos par o impar y accedemos a los elementos correspondientes. La función es la siguiente:
 			
@@ -1205,9 +1297,7 @@
 			
 			Vemos que el valor medio es 20. Estamos en lo correcto, ya que si nos fijamos en el conjunto ordenado de los datos vemos que tenemos 73 elementos (número impar), luego la mediana será el elemento $\frac{73+1}{2}$; es decir, el elemento 37 que vemos que es el 20, el valor que nos ha salido como mediana. \\
 			
-			Tras haber codificado las medidas de tendencia central, vamos a estudiar dos medidas de dispersión. \\
-			
-			La primera de las medidas que vamos a calcular es la desviación típica. Para ello hemos codificado la siguiente función:
+			Tras haber codificado las medidas de tendencia central, vamos a estudiar dos medidas de dispersión. La primera de las medidas que vamos a calcular es la desviación típica. Para ello hemos codificado la siguiente función:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1229,7 +1319,7 @@
 			
 			$$
 			\sigma = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n}}
-			$$ \\
+			$$
 			
 			La desviación típica de nuestro conjunto de datos será por tanto la siguiente:
 			
@@ -1273,14 +1363,14 @@
 \end{kframe}
 \end{knitrout}
 			
-			Terminadas las medidas de dispersión, vamos a proceder a calcular los cuantiles. Para calcular los cuantiles tendremos que definir además de la lista de la que queremos calcular el valor de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de c. Así, si introducimos por parámetro un c que no es válido se nos devolverá NULL, ya que no se puede hacer un cálculo. En caso de haber introducido un c válido tendremos que observar dos casos.
+			Terminadas las medidas de dispersión, vamos a proceder a calcular los cuantiles. Para calcular los cuantiles tendremos que definir además de la lista de la que queremos calcular el valor de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de c. Así, si introducimos por parámetro un c que no es válido se nos devolverá \texttt{NULL}, ya que no se puede hacer un cálculo. En caso de haber introducido un c válido tendremos que observar dos casos.
 			
 			\begin{itemize}
-				\item Si $n \cdot c$ (siendo n el número total de elementos) es natural tendremos que coger los elementos $n \cdot c$ y $(n \cdot c) + 1$, los sumaremos y dividiremos entre 2.
-				\item Si $n \cdot c$ (siendo n el número total de elementos) no es natural, se deberá coger el elemento $\left[n \cdot c \right] + 1$, siendo $\left[ n \cdot c \right]$ la parte entera del producto.
+				\item Si $n c$ (siendo n el número total de elementos) es natural tendremos que coger los elementos $n c$ y $n c + 1$, los sumaremos y dividiremos entre 2.
+				\item Si $n c$ (siendo n el número total de elementos) no es natural, se deberá coger el elemento $\left\lfloor nc \right\rfloor + 1$, siendo $\left\lfloor n c \right\rfloor$ la parte entera del producto.
 			\end{itemize}
 			
-			Con estos cálculos podemos codificarnos una función que nos da los cuantiles. La función es la siguiente:
+			Con estos cálculos podemos codificar una función que nos da los cuantiles. La función es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1293,7 +1383,8 @@
         \hlstd{\}}
         \hlkwa{else}\hlstd{\{}
                 \hlkwa{if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                        \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+                        \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+}
+                         \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
                 \hlstd{\}}
                 \hlkwa{else} \hlstd{\{}
                         \hlstd{int_prod} \hlkwb{=} \hlkwd{floor}\hlstd{(n}\hlopt{*}\hlstd{c)}
@@ -1306,14 +1397,14 @@
 \end{kframe}
 \end{knitrout}
 			
-			Para poder comprobar si el producto de $n \cdot c$ es natural hacemos módulo 1 del resultado. Cualquier número entero dividido entre 1 nos va a dar de resto 0; en caso contrario dará otra cosa que no sea 0. Además, aseguramos que el producto, en caso de ser entero, nos va a dar un número natural ya que siempre va a ser positivo. Esto es por dos razones fundamentales:
+			Para poder comprobar si $n c \in \mathbb{N}$,  calculamos $nc \pmod{1}$. Cualquier número entero dividido entre 1 nos va a dar de resto 0; en caso contrario dará otra cosa que no sea 0. Además, aseguramos que el producto, en caso de ser entero, nos va a dar un número natural ya que siempre va a ser positivo. Esto es por dos razones fundamentales:
 			
 			\begin{itemize}
-				\item El número total de elementos n siempre será mayor o igual a 0.
-				\item El valor de c está acotado entre 0 y 1
+				\item Siempre se cumplirá que $n \geq 0$. 
+				\item Siempre se cumplirá que $0 \leq c \leq 1$. 
 			\end{itemize}
 			
-			En caso de estar ante un número que no es natural tendremos que acceder a la parte entera del producto. Para poder acceder a ella hemos hecho uso de la función \texttt{floor} perteneciente al paquete \textit{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si aplicamos esta función a 4.99 nos devolverá 4.
+			En caso de estar ante un número que no es natural tendremos que acceder a la parte entera del producto. Para poder acceder a ella hemos hecho uso de la función \texttt{floor} perteneciente al paquete \texttt{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si aplicamos esta función a $4.99$ nos devolverá 4, pues $\lfloor4.99\rfloor = 4$.\\
 			
 			Con esta función podremos calcular cuantiles, entre los que se incluyen cuartiles, deciles, percentiles... Para probar la función vamos a calcular los tres cuartiles $\frac{1}{4}, \frac{2}{4}$ y $\frac{3}{4}$.
 			
@@ -1351,7 +1442,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Observamos que los valores de los cuartiles 1, 2 y 3 son 8.1, 20 y 28. Además hemos probado a meter un valor de c no válido y verificamos que efectivamente nos devuelve NULL ya que ese cálculo no sería lógicamente correcto. También comprobamos que el valor del segundo cuartil es igual al de la mediana que hemos calculado más arriba. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
+			Observamos que los valores de los cuartiles 1, 2 y 3 son 8.1, 20 y 28. Además hemos probado a meter un valor de $c$ no válido y verificamos que efectivamente nos devuelve \texttt{NULL} ya que ese cálculo no sería lógicamente correcto. También comprobamos que el valor del segundo cuartil es igual al de la mediana que hemos calculado más arriba. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
 		\section{Asociación}
 		
 			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''
