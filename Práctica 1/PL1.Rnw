@@ -499,7 +499,7 @@
 			}
 			@
 			
-			A esta función habrá que pasarle la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser TRUE se ordenará ascendentemente, y en caso de \texttt{FALSE} se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
+			A esta función habrá que pasarle la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará ascendentemente, y en caso de \texttt{FALSE} se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
 			
 			{\small 
 			<<>>=
