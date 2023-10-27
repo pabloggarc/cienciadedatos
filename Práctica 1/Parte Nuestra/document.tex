@@ -283,29 +283,6 @@ PARTE 2
 
 
 
-
-
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{tabla} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{),}\hlnum{6}\hlstd{,}\hlnum{5}\hlstd{,}\hlkwc{byrow}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,}\hlstr{"suceso2"}\hlstd{,}\hlstr{"suceso3"}\hlstd{,}\hlstr{"suceso4"}\hlstd{,}\hlstr{"suceso5"}\hlstd{,}\hlstr{"suceso6"}\hlstd{),}\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,}\hlstr{"Agua"}\hlstd{,}\hlstr{"Café"}\hlstd{,}\hlstr{"Leche"}\hlstd{,}\hlstr{"Naranjas"}\hlstd{)))}
-
-\hlstd{tabla}
-\end{alltt}
-\begin{verbatim}
-##         Pan Agua Café Leche Naranjas
-## suceso1   1    1    0     1        1
-## suceso2   1    1    1     1        0
-## suceso3   1    1    0     1        0
-## suceso4   1    0    1     1        0
-## suceso5   1    1    0     0        0
-## suceso6   0    0    0     1        0
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -347,6 +324,20 @@ PARTE 2
 ## [1] "A" "P"
 \end{verbatim}
 \begin{alltt}
+\hlstd{tabla} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{),}\hlnum{6}\hlstd{,}\hlnum{5}\hlstd{,}\hlkwc{byrow}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,}\hlstr{"suceso2"}\hlstd{,}\hlstr{"suceso3"}\hlstd{,}\hlstr{"suceso4"}\hlstd{,}\hlstr{"suceso5"}\hlstd{,}\hlstr{"suceso6"}\hlstd{),}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,}\hlstr{"C"}\hlstd{,}\hlstr{"L"}\hlstd{,}\hlstr{"N"}\hlstd{)))}
+
+\hlstd{tabla}
+\end{alltt}
+\begin{verbatim}
+##         P A C L N
+## suceso1 1 1 0 1 1
+## suceso2 1 1 1 1 0
+## suceso3 1 1 0 1 0
+## suceso4 1 0 1 1 0
+## suceso5 1 1 0 0 0
+## suceso6 0 0 0 1 0
+\end{verbatim}
+\begin{alltt}
 \hlstd{support} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{)\{}
         \hlstd{count_support} \hlkwb{=} \hlnum{0}
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{]))\{}
@@ -359,7 +350,7 @@ PARTE 2
         \hlstd{count_support}\hlopt{/}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{])}
 \hlstd{\}}
 
-\hlstd{soporte} \hlkwb{=} \hlkwd{support}\hlstd{(tabla,} \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,}\hlstr{"Agua"}\hlstd{))}
+\hlstd{soporte} \hlkwb{=} \hlkwd{support}\hlstd{(tabla,} \hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{))}
 \hlstd{soporte}
 \end{alltt}
 \begin{verbatim}
@@ -377,76 +368,62 @@ PARTE 2
         \hlstd{valid_ocurrences}
 \hlstd{\}}
 
-\hlstd{possible_valid_occurrences} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elemental_valid_occurences}\hlstd{) \{}
-        \hlstd{occurrences} \hlkwb{=} \hlkwd{c}\hlstd{(elemental_valid_occurences)}
-        \hlstd{occurrences_ant} \hlkwb{=} \hlstd{elemental_valid_occurences}
-        \hlstd{k} \hlkwb{=} \hlnum{1}
-        \hlkwa{while} \hlstd{(k} \hlopt{<=} \hlkwd{len}\hlstd{(tabla[}\hlnum{1}\hlstd{])) \{}
-                \hlstd{occurrences_act} \hlkwb{=} \hlkwd{c}\hlstd{()}
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(occurrences_ant)) \{}
-                        \hlstd{A} \hlkwb{=} \hlstd{occurrences_ant[i]}
-                        \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{(i}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{:}\hlkwd{len}\hlstd{(occurrences_ant)) \{}
-                                \hlstd{B} \hlkwb{=} \hlstd{occurrences_ant[j]}
-                                \hlkwa{if} \hlstd{(}\hlkwd{identical}\hlstd{(A[}\hlnum{1}\hlopt{:}\hlstd{(}\hlkwd{len}\hlstd{(A)}\hlopt{-}\hlnum{1}\hlstd{)], B[}\hlnum{1}\hlopt{:}\hlstd{(}\hlkwd{len}\hlstd{(B)}\hlopt{-}\hlnum{1}\hlstd{)])} \hlopt{&} \hlstd{A[}\hlkwd{len}\hlstd{(A)]} \hlopt{==} \hlstd{B[}\hlkwd{len}\hlstd{(B)]) \{}
-                                        \hlstd{occurrences_act} \hlkwb{=} \hlkwd{append}\hlstd{(occurrences_act,} \hlkwd{union}\hlstd{(A, B))}
-                                \hlstd{\}}
+\hlstd{create_comb} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{clasif}\hlstd{,} \hlkwc{s}\hlstd{) \{}
+        \hlstd{lista} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlkwd{len}\hlstd{(clasif)) \{}
+                \hlstd{comb} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{lapply}\hlstd{(i,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}\hlkwd{combn}\hlstd{(clasif,} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)\}),} \hlkwc{recursive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(comb),} \hlkwc{by}\hlstd{=i)) \{}
+                        \hlstd{add} \hlkwb{=} \hlkwd{c}\hlstd{()}
+                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlstd{j}\hlopt{:}\hlstd{(j}\hlopt{+}\hlstd{i}\hlopt{-}\hlnum{1}\hlstd{)) \{}
+                                \hlstd{add} \hlkwb{=} \hlkwd{append}\hlstd{(add, comb[k])}
+                        \hlstd{\}}
+                        \hlkwa{if} \hlstd{(}\hlkwd{support}\hlstd{(table, add)} \hlopt{>=} \hlstd{s) \{}
+                                \hlstd{lista} \hlkwb{=} \hlkwd{append}\hlstd{(lista,} \hlkwd{list}\hlstd{(add))}
                         \hlstd{\}}
                 \hlstd{\}}
-                \hlstd{occurrences} \hlkwb{=} \hlkwd{append}\hlstd{(occurrences, occurrences_act)}
-                \hlstd{occurrences_ant} \hlkwb{=} \hlstd{occurrences_act}
-                \hlstd{k} \hlkwb{=} \hlstd{k}\hlopt{+}\hlnum{1}
         \hlstd{\}}
-        \hlstd{occurrences}
+        \hlstd{lista}
 \hlstd{\}}
 
-\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{) \{}
-        \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(tabla,} \hlkwd{c}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"Agua"}\hlstd{) ,}\hlkwd{c}\hlstd{(}\hlstr{"Leche"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"Café"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"Naranjas"}\hlstd{)),} \hlnum{0.5}\hlstd{)}
+\hlstd{confidence} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{comb}\hlstd{)\{}
+
+\hlstd{\}}
+
+\hlstd{confidence_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{c}\hlstd{)\{}
+
+\hlstd{\}}
+
+\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+        \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(tabla,} \hlkwd{c}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{) ,}\hlkwd{c}\hlstd{(}\hlstr{"L"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"C"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{)), s)}
         \hlkwd{print}\hlstd{(soporte_clasif)}
-        \hlstd{p_v_o} \hlkwb{=} \hlkwd{possible_valid_occurrences}\hlstd{(tabla, soporte_clasif)}
-        \hlstd{p_v_o}
+        \hlstd{combinaciones} \hlkwb{=} \hlkwd{create_comb}\hlstd{(tabla, soporte_clasif, s)}
+        \hlkwd{print}\hlstd{(combinaciones)}
+        \hlstd{conf} \hlkwb{=} \hlkwd{check_conf}\hlstd{()}
 \hlstd{\}}
 
-\hlstd{tabla} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{),}\hlnum{6}\hlstd{,}\hlnum{5}\hlstd{,}\hlkwc{byrow}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,}\hlstr{"suceso2"}\hlstd{,}\hlstr{"suceso3"}\hlstd{,}\hlstr{"suceso4"}\hlstd{,}\hlstr{"suceso5"}\hlstd{,}\hlstr{"suceso6"}\hlstd{),}\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,}\hlstr{"Agua"}\hlstd{,}\hlstr{"Café"}\hlstd{,}\hlstr{"Leche"}\hlstd{,}\hlstr{"Naranjas"}\hlstd{)))}
 
-\hlstd{tabla}
+\hlkwd{apriori}\hlstd{(tabla,} \hlnum{0.5}\hlstd{,} \hlnum{0.8}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##         Pan Agua Café Leche Naranjas
-## suceso1   1    1    0     1        1
-## suceso2   1    1    1     1        0
-## suceso3   1    1    0     1        0
-## suceso4   1    0    1     1        0
-## suceso5   1    1    0     0        0
-## suceso6   0    0    0     1        0
+## [1] "P" "A" "L"
+## [[1]]
+## [1] "P" "A"
+## 
+## [[2]]
+## [1] "P" "L"
+## 
+## [[3]]
+## [1] "A" "L"
+## 
+## [[4]]
+## [1] "P" "A" "L"
 \end{verbatim}
-\begin{alltt}
-\hlkwd{apriori}\hlstd{(tabla)}
-\end{alltt}
-\begin{verbatim}
-## [1] "Pan"   "Agua"  "Leche"
-## [1] "Pan"   "Agua"  "Leche" "Leche"
-\end{verbatim}
-\begin{alltt}
-\hlstd{A} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"Naranjas, Agua"}\hlstd{)}
-\hlstd{B} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"Leche"}\hlstd{)}
-\hlstd{A[}\hlnum{1}\hlopt{:}\hlstd{(}\hlkwd{len}\hlstd{(A)}\hlopt{-}\hlnum{1}\hlstd{)]}
-\end{alltt}
-\begin{verbatim}
-## [1] "Naranjas, Agua"
-\end{verbatim}
-\begin{alltt}
-\hlstd{B[}\hlnum{1}\hlopt{:}\hlstd{(}\hlkwd{len}\hlstd{(B)}\hlopt{-}\hlnum{1}\hlstd{)]}
-\end{alltt}
-\begin{verbatim}
-## [1] "Leche"
-\end{verbatim}
-\begin{alltt}
-\hlkwd{identical}\hlstd{(A[}\hlnum{1}\hlopt{:}\hlstd{(}\hlkwd{len}\hlstd{(A)}\hlopt{-}\hlnum{1}\hlstd{)], B[}\hlnum{1}\hlopt{:}\hlstd{(}\hlkwd{len}\hlstd{(B)}\hlopt{-}\hlnum{1}\hlstd{)])}
-\end{alltt}
-\begin{verbatim}
-## [1] FALSE
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in check\_conf(): no se pudo encontrar la función "{}check\_conf"{}}}\end{kframe}
 \end{knitrout}
+
+
 40 de soporte y 90 de confianza
 \end{document}          
