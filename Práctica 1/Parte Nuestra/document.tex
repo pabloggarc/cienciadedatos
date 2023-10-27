@@ -377,24 +377,24 @@ create_comb = \hlkwd{function}(table, clasif, s) \{
 \}
 
 confidence = \hlkwd{function}(table, comb) \{
-	\hlkwd{for} (i in 2:\hlkwd{len}(table[1,])) \{ \hlcom{#itera dimensiones k}
+	kMax = \hlkwd{len}(comb[\hlkwd{len}(comb)][[1]])
+	
+	\hlkwd{for} (i in 2:kMax) \{ \hlcom{#itera dimensiones k}
+	
 		separar <- \hlkwd{Filter}(\hlkwd{function}(x) \hlkwd{length}(x)==i, comb)
 		
 		\hlkwd{for} (j in 1:\hlkwd{len}(separar)) \{ \hlcom{#itera elementos de dim k}
-		
-			\hlkwd{for} (k in 1:\hlkwd{len}(separar[j])) \{ \hlcom{#itera posibilidades que haya en el lado izquierdo}
-\hlcom{				#len(separar[j]) == i ?????}
 			
-				lado = \hlkwd{lapply}(k, \hlkwd{function}(m) \{\hlkwd{combn}(separar[j], m=m, simplify=TRUE)\})
+			\hlkwd{for} (k in 1:i) \{ \hlcom{#itera posibilidades que haya en el lado izquierdo}
+			
+				cosa = \hlkwd{lapply}(k, \hlkwd{function}(m) \{\hlkwd{combn}(separar[j][[1]], m=m, simplify=TRUE)\})
+\hlcom{				#lado = c(cosa[1,], cosa[,1])}
 				
-				
-				\hlkwd{for} (n in 1:\hlkwd{len}(lado[,1])) \{ \hlcom{#}
-				
-					otro_lado = \hlkwd{dif}(separar[j], lado[,n])
-					hola = \hlkwd{c}(lado[n], otro_lado)
-					\hlkwd{print}(hola)
-				\}
+				\hlkwd{print}(cosa)
+\hlcom{				#print(lado)}
+			
 			\}
+			\hlkwd{print}(\hlstr{"-------"})
 		\}
 	\}
 \}
