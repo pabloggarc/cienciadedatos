@@ -286,142 +286,136 @@ PARTE 2
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{)\{}
-        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                \hlstd{c2}
-        \hlstd{\}}
-        \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2))\{}
-                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
-        \hlstd{\}}
-        \hlkwa{else}\hlstd{\{}
-                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
-        \hlstd{\}}
-\hlstd{\}}
+union = \hlkwd{function}(c1, c2)\{
+	\hlkwd{if} (\hlkwd{len}(c1) == 0)\{
+		c2
+	\}
+	else \hlkwd{if} (\hlkwd{is.element}(c1[1], c2))\{
+		\hlkwd{union}(c1[-1], c2)
+	\}
+	else\{
+		\hlkwd{union}(c1[-1], \hlkwd{append}(c2, c1[1]))
+	\}
+\}
 
-\hlstd{unionp} \hlkwb{=} \hlkwd{union}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"L"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"N"}\hlstd{))}
-\hlstd{unionp}
+unionp = \hlkwd{union}(\hlkwd{c}(\hlstr{"P"},\hlstr{"A"}, \hlstr{"L"}), \hlkwd{c}(\hlstr{"P"},\hlstr{"A"}, \hlstr{"C"}, \hlstr{"N"}))
+unionp
+
+
+intersect = \hlkwd{function}(c1, c2)\{
+	\hlkwd{if} (\hlkwd{len}(c1) == 0)\{
+		\hlkwd{c}()
+	\}
+	else \hlkwd{if} (\hlkwd{is.element}(c1[1], c2))\{
+		\hlkwd{append}(\hlkwd{intersect}(c1[-1], c2), c1[1])
+	\}
+	else\{
+		\hlkwd{intersect}(c1[-1], c2)
+	\}
+\}
+
+intersectp = \hlkwd{intersect}(\hlkwd{c}(\hlstr{"P"},\hlstr{"A"}, \hlstr{"L"}), \hlkwd{c}(\hlstr{"P"},\hlstr{"A"}, \hlstr{"C"}, \hlstr{"N"}))
+intersectp
+
+dif = \hlkwd{function}(c1, c2) \{
+	res = \hlkwd{c}()
+	\hlkwd{for} (element in c1) \{
+		\hlkwd{if} (!(element in c2)) \{
+			res = \hlkwd{append}(res, element)
+		\}
+	\}
+	res
+\}
+
+tabla <- \hlkwd{matrix}(\hlkwd{c}(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=\hlkwd{list}(\hlkwd{c}(\hlstr{"suceso1"},\hlstr{"suceso2"},\hlstr{"suceso3"},\hlstr{"suceso4"},\hlstr{"suceso5"},\hlstr{"suceso6"}),\hlkwd{c}(\hlstr{"P"},\hlstr{"A"},\hlstr{"C"},\hlstr{"L"},\hlstr{"N"})))
+
+tabla
+
+support = \hlkwd{function}(table, elements)\{
+	count_support = 0
+	\hlkwd{for} (i in 1:\hlkwd{len}(table[,1]))\{
+		acum = 1
+		\hlkwd{for} (element in elements)\{
+			acum = (table[i,element]) & acum
+		\}
+		count_support = count_support + acum
+	\}
+	count_support/\hlkwd{len}(table[,1])		
+\}
+
+soporte = \hlkwd{support}(tabla, \hlkwd{c}(\hlstr{"P"},\hlstr{"A"}))
+soporte
+
+
+support_clasif = \hlkwd{function}(table, ocurrences, s)\{
+	valid_ocurrences = \hlkwd{c}()
+	\hlkwd{for} (ocurrence in ocurrences)\{
+		support_oc = \hlkwd{support}(table, ocurrence)
+		\hlkwd{if} (support_oc >= s)\{
+			valid_ocurrences = \hlkwd{append}(valid_ocurrences, ocurrence)
+		\}
+	\}
+	valid_ocurrences	
+\}
+
+create_comb = \hlkwd{function}(table, clasif, s) \{
+	lista = \hlkwd{c}()
+	\hlkwd{for} (i in 2:\hlkwd{len}(clasif)) \{
+		comb = \hlkwd{unlist}(\hlkwd{lapply}(i, \hlkwd{function}(m) \{\hlkwd{combn}(clasif, m=m, simplify=TRUE)\}), recursive=FALSE)
+		
+		\hlkwd{for} (j in \hlkwd{seq}(1, \hlkwd{len}(comb), by=i)) \{
+			add = \hlkwd{c}()
+			\hlkwd{for} (k in j:(j+i-1)) \{
+				add = \hlkwd{append}(add, comb[k])
+			\}
+			\hlkwd{if} (\hlkwd{support}(table, add) >= s) \{
+				lista = \hlkwd{append}(lista, \hlkwd{list}(add))
+			\}
+		\}
+	\}
+	lista
+\}
+
+confidence = \hlkwd{function}(table, comb) \{
+	\hlkwd{for} (i in 2:\hlkwd{len}(table[1,])) \{ \hlcom{#itera dimensiones k}
+		separar <- \hlkwd{Filter}(\hlkwd{function}(x) \hlkwd{length}(x)==i, comb)
+		
+		\hlkwd{for} (j in 1:\hlkwd{len}(separar)) \{ \hlcom{#itera elementos de dim k}
+		
+			\hlkwd{for} (k in 1:\hlkwd{len}(separar[j])) \{ \hlcom{#itera posibilidades que haya en el lado izquierdo}
+\hlcom{				#len(separar[j]) == i ?????}
+			
+				lado = \hlkwd{lapply}(k, \hlkwd{function}(m) \{\hlkwd{combn}(separar[j], m=m, simplify=TRUE)\})
+				
+				
+				\hlkwd{for} (n in 1:\hlkwd{len}(lado[,1])) \{ \hlcom{#}
+				
+					otro_lado = \hlkwd{dif}(separar[j], lado[,n])
+					hola = \hlkwd{c}(lado[n], otro_lado)
+					\hlkwd{print}(hola)
+				\}
+			\}
+		\}
+	\}
+\}
+
+apriori = \hlkwd{function}(table, s, c) \{
+	soporte_clasif = \hlkwd{support_clasif}(tabla, \hlkwd{c}(\hlkwd{c}(\hlstr{"P"}), \hlkwd{c}(\hlstr{"A"}) ,\hlkwd{c}(\hlstr{"L"}), \hlkwd{c}(\hlstr{"C"}), \hlkwd{c}(\hlstr{"N"})), s)
+	\hlkwd{print}(soporte_clasif)
+	combinaciones = \hlkwd{create_comb}(tabla, soporte_clasif, s)
+	\hlkwd{print}(combinaciones)
+	conf = \hlkwd{check_conf}()
+\}
+
+
+\hlkwd{apriori}(tabla, 0.5, 0.8)
+
+
+
 \end{alltt}
-\begin{verbatim}
-## [1] "P" "A" "C" "N" "L"
-\end{verbatim}
-\begin{alltt}
-\hlstd{intersect} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{)\{}
-        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                \hlkwd{c}\hlstd{()}
-        \hlstd{\}}
-        \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2))\{}
-                \hlkwd{append}\hlstd{(}\hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2), c1[}\hlnum{1}\hlstd{])}
-        \hlstd{\}}
-        \hlkwa{else}\hlstd{\{}
-                \hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
-        \hlstd{\}}
-\hlstd{\}}
-
-\hlstd{intersectp} \hlkwb{=} \hlkwd{intersect}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"L"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"N"}\hlstd{))}
-\hlstd{intersectp}
-\end{alltt}
-\begin{verbatim}
-## [1] "A" "P"
-\end{verbatim}
-\begin{alltt}
-\hlstd{tabla} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{),}\hlnum{6}\hlstd{,}\hlnum{5}\hlstd{,}\hlkwc{byrow}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,}\hlstr{"suceso2"}\hlstd{,}\hlstr{"suceso3"}\hlstd{,}\hlstr{"suceso4"}\hlstd{,}\hlstr{"suceso5"}\hlstd{,}\hlstr{"suceso6"}\hlstd{),}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{,}\hlstr{"C"}\hlstd{,}\hlstr{"L"}\hlstd{,}\hlstr{"N"}\hlstd{)))}
-
-\hlstd{tabla}
-\end{alltt}
-\begin{verbatim}
-##         P A C L N
-## suceso1 1 1 0 1 1
-## suceso2 1 1 1 1 0
-## suceso3 1 1 0 1 0
-## suceso4 1 0 1 1 0
-## suceso5 1 1 0 0 0
-## suceso6 0 0 0 1 0
-\end{verbatim}
-\begin{alltt}
-\hlstd{support} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{)\{}
-        \hlstd{count_support} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{]))\{}
-                \hlstd{acum} \hlkwb{=} \hlnum{1}
-                \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{elements)\{}
-                        \hlstd{acum} \hlkwb{=} \hlstd{(table[i,element])} \hlopt{&} \hlstd{acum}
-                \hlstd{\}}
-                \hlstd{count_support} \hlkwb{=} \hlstd{count_support} \hlopt{+} \hlstd{acum}
-        \hlstd{\}}
-        \hlstd{count_support}\hlopt{/}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{])}
-\hlstd{\}}
-
-\hlstd{soporte} \hlkwb{=} \hlkwd{support}\hlstd{(tabla,} \hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{,}\hlstr{"A"}\hlstd{))}
-\hlstd{soporte}
-\end{alltt}
-\begin{verbatim}
-## [1] 0.6666667
-\end{verbatim}
-\begin{alltt}
-\hlstd{support_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{s}\hlstd{)\{}
-        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences)\{}
-                \hlstd{support_oc} \hlkwb{=} \hlkwd{support}\hlstd{(table, ocurrence)}
-                \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s)\{}
-                        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocurrences, ocurrence)}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlstd{valid_ocurrences}
-\hlstd{\}}
-
-\hlstd{create_comb} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{clasif}\hlstd{,} \hlkwc{s}\hlstd{) \{}
-        \hlstd{lista} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlkwd{len}\hlstd{(clasif)) \{}
-                \hlstd{comb} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{lapply}\hlstd{(i,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}\hlkwd{combn}\hlstd{(clasif,} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)\}),} \hlkwc{recursive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(comb),} \hlkwc{by}\hlstd{=i)) \{}
-                        \hlstd{add} \hlkwb{=} \hlkwd{c}\hlstd{()}
-                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlstd{j}\hlopt{:}\hlstd{(j}\hlopt{+}\hlstd{i}\hlopt{-}\hlnum{1}\hlstd{)) \{}
-                                \hlstd{add} \hlkwb{=} \hlkwd{append}\hlstd{(add, comb[k])}
-                        \hlstd{\}}
-                        \hlkwa{if} \hlstd{(}\hlkwd{support}\hlstd{(table, add)} \hlopt{>=} \hlstd{s) \{}
-                                \hlstd{lista} \hlkwb{=} \hlkwd{append}\hlstd{(lista,} \hlkwd{list}\hlstd{(add))}
-                        \hlstd{\}}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlstd{lista}
-\hlstd{\}}
-
-\hlstd{confidence} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{comb}\hlstd{)\{}
-
-\hlstd{\}}
-
-\hlstd{confidence_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{c}\hlstd{)\{}
-
-\hlstd{\}}
-
-\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
-        \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(tabla,} \hlkwd{c}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"P"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{) ,}\hlkwd{c}\hlstd{(}\hlstr{"L"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"C"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{)), s)}
-        \hlkwd{print}\hlstd{(soporte_clasif)}
-        \hlstd{combinaciones} \hlkwb{=} \hlkwd{create_comb}\hlstd{(tabla, soporte_clasif, s)}
-        \hlkwd{print}\hlstd{(combinaciones)}
-        \hlstd{conf} \hlkwb{=} \hlkwd{check_conf}\hlstd{()}
-\hlstd{\}}
 
 
-\hlkwd{apriori}\hlstd{(tabla,} \hlnum{0.5}\hlstd{,} \hlnum{0.8}\hlstd{)}
-\end{alltt}
-\begin{verbatim}
-## [1] "P" "A" "L"
-## [[1]]
-## [1] "P" "A"
-## 
-## [[2]]
-## [1] "P" "L"
-## 
-## [[3]]
-## [1] "A" "L"
-## 
-## [[4]]
-## [1] "P" "A" "L"
-\end{verbatim}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in check\_conf(): no se pudo encontrar la función "{}check\_conf"{}}}\end{kframe}
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: <text>:35:31: inesperado 'in'\\\#\# 34: \ \ \ \ \ \ \ \ for (element in c1) \{\\\#\# 35: \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if (!(element in\\\#\# \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textasciicircum{}}}\end{kframe}
 \end{knitrout}
 
 

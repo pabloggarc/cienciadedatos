@@ -171,6 +171,15 @@ intersect = function(c1, c2){
 intersectp = intersect(c("P","A", "L"), c("P","A", "C", "N"))
 intersectp
 
+dif = function(c1, c2) {
+	res = c()
+	for (element in c1) {
+		if (!(element in c2)) {
+			res = append(res, element)
+		}
+	}
+	res
+}
 
 tabla <- matrix(c(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=list(c("suceso1","suceso2","suceso3","suceso4","suceso5","suceso6"),c("P","A","C","L","N")))
 
@@ -221,12 +230,27 @@ create_comb = function(table, clasif, s) {
 	lista
 }
 
-confidence = function(table, comb){
-
-}
-
-confidence_clasif = function(table, ocurrences, c){
-
+confidence = function(table, comb) {
+	for (i in 2:len(table[1,])) { #itera dimensiones k
+		separar <- Filter(function(x) length(x)==i, comb)
+		
+		for (j in 1:len(separar)) { #itera elementos de dim k
+		
+			for (k in 1:len(separar[j])) { #itera posibilidades que haya en el lado izquierdo
+				#len(separar[j]) == i ?????
+			
+				lado = lapply(k, function(m) {combn(separar[j], m=m, simplify=TRUE)})
+				
+				
+				for (n in 1:len(lado[,1])) { #
+				
+					otro_lado = dif(separar[j], lado[,n])
+					hola = c(lado[n], otro_lado)
+					print(hola)
+				}
+			}
+		}
+	}
 }
 
 apriori = function(table, s, c) {
