@@ -126,6 +126,90 @@ asociaciones = apriori(transacciones, parameter=list(support= 0.5, confidence=0.
 inspect(asociaciones)
 
 
+*******************************************************
+
+
+K-vecinos
+LOF
+Caja y bigotes
+Desv tipica
+
+=========
+K.vecinos
+=========
+
+(muestra=matrix(c(4,4,4,3,5,5,1,1,5,4),2,5))
+
+(muestra=t(muestra))
+
+(distancias=as.matrix(dist(muestra)))
+
+(distancias=matrix(distancias,5,5))
+
+for (i in 1:5) {distancias[,i]=sort(distancias[,i])};
+
+(distanciasordenadas=distancias)
+
+for (i in 1:5) {if (distanciasordenadas[4,i]>2.5) {print(i); print("es un suceso anómalo o outlier")}}
+
+for (i in 1:5) {distancias[,i]=sort(distancias[,i])
+if (distancias[4,i]>2.5) {print(i)
+print("es un suceso anómalo o outlier")}}
+
+
+===
+LOF
+===
+
+(distanciasM=as.matrix(dist(muestra, method="manhattan")))
+
+Rlof, DDoutlier, DMwR
+
+
+==============
+Caja y Bigotes
+==============
+
+(muestra=t(matrix(c(3,2,3.5,12,4.7,4.1,5.2,4.9,7.1,6.1,6.2,5.2,14,5.3),2,7,dimnames=list(c("r","d")))))
+
+(muestra=data.frame(muestra))
+
+(boxplot(muestra$r, range=1.5, plot=FALSE))
+
+(cuar1r=quantile(muestra$r, 0.25))
+
+(cuar3r=quantile(muestra$r, 0.75))
+
+(int=c(cuar1r-1.5*(cuar3r-cuar1r), cuar3r+1.5*(cuar3r-cuar1r)))
+
+for (i in 1:length(muestra$r)){
+if (muestra$r[i]<int[1] || muestra$r[i]>int[2]){
+print("el suceso"); print(i); print("es un suceso anómalo o outlier")}}
+
+==========
+Desviacion
+==========
+
+(media = mean(muestra$d))
+
+(desv = sd(muestra$d))
+
+(int=c(media-2*desv, media+2*desv))
+
+for (i in 1:length(muestra$d)){
+if (muestra$d[i]<int[1] || muestra$d[i]>int[2]){
+print("el suceso"); print(i); print("es un suceso anómalo o outlier")}}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

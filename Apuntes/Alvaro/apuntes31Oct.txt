@@ -1,0 +1,67 @@
+Metemos la muestra en matrix 
+(muestra = matrix(c(4,4,4,3,5,5,1,1,5,4),2,5))
+trasponemos la matriz de tal forma que tengamos en cada columna las notas de teoría y laboratorio respectuvamente
+(muestra=t(muestra))
+
+K-VECINOS
+------------------------------
+me calculo una matriz distancias de las distancias de todos los valores con cada uno de los valores. si pongo dist muestra  lo bestia me va a calcular una matriz triangular solo, pero yo quiero una matriz completa, por eso le pongo as.matrix
+(distancias=as.matrix(dist(muestra)))
+en el paso anterior tengo una medio matriz, con esta línea siguiente la convierto en matriz matriz
+(distancias=matrix(distancias,5,5))
+ahora buscaremos los outliers. para ello una vez tenemos las distancias hay que ordenarlas de tal forma que podreos escoger los k-esimos vecinos
+
+El bucle for va de 1 a 5 que son todos los valores que tengo. Me refiero a cada columna de la matriz con [,i], las ordeno con la función sort. Y luego pongo el punto y coma para poner otra instrucción detrás y lo llamo di
+for (i in 1:5){distancias[,i]=sort(distancias[,i])}; (distanciasordenadas=distancias)
+
+Una vez hecho busco los k-esimos vecinos. Tnego que empezar en k+1 porque el primer valor corresponde con la distancia a si mismo (que es 0 y no nos interesa)
+for(i in 1:5) {if (distanciasordenadas[4,i]>2.5) { print(i); print("es un suceso anómalo o outlier")}}
+
+una optimizacion
+> for (i in 1:5) {distancias[,i] = sort(distancias[,i])
++ if (distancias[4,i] > 2.5){print(i)
++ print("es un suceso anómalo o outlier")}}
+
+LOF
+---------------------------------------
+aplico la función distancias con matrix pa que no sea triangular y ahora en vez de la euclidea hago la manhattan
+(distanciasM=as.matrix(dist(muestra, method="manhattan")))
+paquetes que implementan lof:RLof, DDoutlier, DMwR
+Estos van a implementar el lof no simplificado, pero nosotros vamos a hacer el simplificado porque lo vamos a programar
+
+CAJA Y BIGOTES
+--------------------------------------
+Hacemos la matriz
+(muestra = t(matrix(c(3,2,3.5,12,4.7,4.1,5.2,4.9,7.1,6.1,6.2,5.2,14,5.3),2,7,dimnames=list(c("r","d")))))
+pasamos a dataframe
+(muestra = data.frame(muestra))
+la función que se utiliza es la siguiente, pensada para dibujar caja y bigotes. Lo aplicamos sobre la resistencia, el rango es 1.5 que es el que hemos escogido en clase y pongo plot false para que no me lo dibuje
+(boxplot(muestra$r, range = 1.5, plot=FALSE))
+En la salida me da, con el rango que hemos puesto, me dice los limites del intervalo debajo de conf (no son los de clase). Hace una distribución, ajustándola, y metiendo unos porcentajes de probabilidad y los saca así. Lo vamos a hacer vía cuantiles
+> (cuar1r<-quantile(muestra$r, 0.25))
+25% 
+4.1 
+> (cuar1r<-quantile(muestra$r, 0.75))
+ 75% 
+6.65 
+Obtengo el primer y tercer cuartil, pero con quantile sigo teniendo el mismo problema, que no lo calcula como en clase
+Ahora voy a quitar lo que no esté dentro del intervalo
+> (int = c(cuar1r-1.5*(cuar3r-cuar1r),cuar3r+1.5*(cuar3r-cuar1r)))
+   25%    75% 
+ 0.275 10.475 
+ Los limites no son los de clase porque no estamos calculando de igual manera. Ahora voy a ver quien está fuera y quien está dentro.
+ 
+ > for (i in 1:length(muestra$r)){
++ if(muestra$r[i]<int[1] || muestra$r[i]>int[2]){
++ print("el suceso");print(i);print("es un suceso anómalo o outlier")}}
+
+Y me sale que el suceso 7 es un suceso anómalo o outlier
+
+MEDIA Y DESV
+------------------------------
+> media = mean(muestra$d)
+> desv = sd(muestra$d)
+> int2 = c(media-(2*desv),media+(2*desv))
+> for (i in 1:length(muestra$d)){
++ if(muestra$d[i]<int2[1] || muestra$d[i]>int2[2]){
++ print("el suceso");print(i);print("es un suceso anómalo o outlier")}}
