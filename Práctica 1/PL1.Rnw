@@ -691,7 +691,7 @@
 			Tras haber codificado las medidas de tendencia central, vamos a estudiar dos medidas de dispersión. La primera de las medidas que vamos a calcular es la desviación típica. Para ello hemos codificado la siguiente función:
 			
 			<<>>=
-			standard_desv = function(list){
+			standard_dev = function(list){
 				mean = mean(list)
 				n = len(list)
 				add = 0
@@ -712,7 +712,7 @@
 			La desviación típica de nuestro conjunto de datos será por tanto la siguiente:
 			
 			<<>>=
-			desviacion = standard_desv(distancias)
+			desviacion = standard_dev(distancias)
 			desviacion
 			@
 			
@@ -720,8 +720,8 @@
 			
 			<<>>=
 			variance = function(list){
-				desv = standard_desv(list)
-				var = desv^2
+				dev = standard_dev(list)
+				var = dev^2
 				var
 			}
 			@

@@ -1,0 +1,28 @@
+(muestra=matrix(c(4,4,4,3,5,5,1,1,5,4),2,5)) -> dos filas 5 columnas -> Entre paréntesis se muestra
+(muestra=t(muestra)) -> Trasponemos
+(distancias=as.matrix(dist(muestra))) -> Dist calucula las distancias, pero matriz triangular. Con el as.matrix es la matriz completa.
+(distancias=matrix(distancias, 5, 5)) -> Para convertirlo en una matriz real en R. Se puede hacer de una manera mejor.
+
+for (i in 1:5) {
+	distancias[,i]=sort(distancias[,i])
+};
+(distanciasordenadas=distancias);	Ordena Las distancias en la matriz
+
+for (i in 1:5) {
+	if (distanciasordenadas[4, i] > 2.5) {
+		print(i)
+		print("es un suceso anómalo o outlier")
+	}
+}		Imprime si es un suceso anómalo. Se puede optimizar mucho
+
+for (i in 1:5) {
+	distancias[,i]=sort(distancias[,i])
+	if (distancias[4,i]>2.5) {
+		print(i);
+		print("es un suceso anómalo o outlier");
+	}
+}		Optimización
+
+El LOF que se usa ahora está simplificado. Los de los paquetes serán más complejos (Buscan el más alto y se carga el valor)
+
+(distanciasM=as.matrix(dist(muestra, method="manhattan")))
