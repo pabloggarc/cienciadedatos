@@ -566,28 +566,22 @@
 		
 		\section{Asociación}
 		
-			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.}''
-		
-		\section{Detección de datos anómalos}
-		
-			\subsection{Primer ejercicio}
+			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.}''\\
+				
+			Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente:
+			$$
+			\begin{pmatrix}
+				1 & 1 & 0 & 1 & 1\\
+				1 & 1 & 1 & 1 & 0\\
+				1 & 1 & 0 & 1 & 0\\
+				1 & 0 & 1 & 1 & 0\\
+				1 & 1 & 0 & 0 & 0\\
+				0 & 0 & 0 & 1 & 0
+			\end{pmatrix}
+			$$
 			
-				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''\\
-				
-				Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente: 
-				$$
-				\begin{pmatrix}
-					1 & 1 & 0 & 1 & 1\\
-					1 & 1 & 1 & 1 & 0\\
-					1 & 1 & 0 & 1 & 0\\
-					1 & 0 & 1 & 1 & 0\\
-					1 & 1 & 0 & 0 & 0\\
-					0 & 0 & 0 & 1 & 0
-				\end{pmatrix}
-				$$
-				
-				Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
-				
+			Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -613,9 +607,9 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
-				
+			
+			A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -634,9 +628,9 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
-				
+			
+			Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -654,9 +648,9 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
-				
+			
+			Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -702,9 +696,9 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
-				
+			
+			Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -736,9 +730,9 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
-				
+			
+			Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -756,12 +750,319 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
 			
+			Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
+			
+			
+		\section{Detección de datos anómalos}
+			
+			\subsection{Primer ejercicio}
+			
+				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''\\
+				
+				\begin{itemize}
+					
+					\item \textbf{Caja y Bigotes}
+				
+					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers.
+					
+					Para realizar el cálculo de los outliers en clase, se introdujeron los datos en una matriz mediante \texttt{matrix}, luego se transpuso y se paso a un \texttt{dataframe}. Para esta primera técnica vamos a usar la primera columna (\textit{resistencia}).
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{muestra}\hlkwb{=}\hlkwd{t}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,}\hlnum{2}\hlstd{,}\hlnum{3.5}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{4.7}\hlstd{,}\hlnum{4.1}\hlstd{,}\hlnum{5.2}\hlstd{,}\hlnum{4.9}\hlstd{,}\hlnum{7.1}\hlstd{,}\hlnum{6.1}\hlstd{,}\hlnum{6.2}\hlstd{,}\hlnum{5.2}\hlstd{,}\hlnum{14}\hlstd{,}\hlnum{5.3}\hlstd{),}
+        \hlnum{2}\hlstd{,}\hlnum{7}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"resistencia"}\hlstd{,}\hlstr{"densidad"}\hlstd{))))}
+
+\hlstd{(muestra}\hlkwb{=}\hlkwd{data.frame}\hlstd{(muestra))}
+\end{alltt}
+\begin{verbatim}
+##   resistencia densidad
+## 1         3.0      2.0
+## 2         3.5     12.0
+## 3         4.7      4.1
+## 4         5.2      4.9
+## 5         7.1      6.1
+## 6         6.2      5.2
+## 7        14.0      5.3
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Una forma de obtener los outliers es mediante la función \texttt{boxplot}, pasándole la columna de los datos, el grado de outlier (\texttt{range}) o distancia a la que el suceso se considera outlier, y por último \texttt{plot=FALSE}, que se usa para no mostrar el gráfico como tal y solo sacar la información por el terminal.
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(}\hlkwd{boxplot}\hlstd{(muestra}\hlopt{$}\hlstd{r,} \hlkwc{range}\hlstd{=}\hlnum{1.5}\hlstd{,} \hlkwc{plot}\hlstd{=}\hlnum{FALSE}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## $stats
+##      [,1]
+## [1,] 3.00
+## [2,] 4.10
+## [3,] 5.20
+## [4,] 6.65
+## [5,] 7.10
+## 
+## $n
+## [1] 7
+## 
+## $conf
+##          [,1]
+## [1,] 3.677181
+## [2,] 6.722819
+## 
+## $out
+## [1] 14
+## 
+## $group
+## [1] 1
+## 
+## $names
+## [1] "1"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Como podemos ver en \texttt{\$out}, saca que el suceso outlier es el 14, lo cual como vimos en el ejercicio de la clase de teoría es correcto, pero, si nos fijamos en \texttt{\$conf}, podemos ver los límites del intervalo, pero estos no coinciden con los que vimos en clase, esto se debe a que, al igual que ocurría al usar la función \texttt{sd} para el cálculo de la desviación, R hace una distribución, ajustándola con unos porcentajes de probabilidad. Por lo que no son los valores exactos.
+					
+					Ahora vamos a hacerlo mediante el cálculo de los cuartiles como vimos en los ejercicios anteriores. Además, hemos calculado los límites del intervalo mediante la siguiente ecuación.
+					
+					$$
+					(Q_1 - d \cdot (Q_3 - Q_1),\;Q_3 + d \cdot (Q_3 - Q_1))
+					$$
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(cuar1r}\hlkwb{=}\hlkwd{quantile}\hlstd{(muestra}\hlopt{$}\hlstd{r,} \hlnum{0.25}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## 25% 
+## 4.1
+\end{verbatim}
+\begin{alltt}
+\hlstd{(cuar3r}\hlkwb{=}\hlkwd{quantile}\hlstd{(muestra}\hlopt{$}\hlstd{r,} \hlnum{0.75}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##  75% 
+## 6.65
+\end{verbatim}
+\begin{alltt}
+\hlstd{(int}\hlkwb{=}\hlkwd{c}\hlstd{(cuar1r}\hlopt{-}\hlnum{1.5}\hlopt{*}\hlstd{(cuar3r}\hlopt{-}\hlstd{cuar1r), cuar3r}\hlopt{+}\hlnum{1.5}\hlopt{*}\hlstd{(cuar3r}\hlopt{-}\hlstd{cuar1r)))}
+\end{alltt}
+\begin{verbatim}
+##    25%    75% 
+##  0.275 10.475
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Por último, iteramos los elementos de la muestra y comprobamos para cada uno si es menor que el límite inferior del intervalo o si es mayor que el límite superior.
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(muestra}\hlopt{$}\hlstd{r)) \{}
+        \hlkwa{if} \hlstd{(muestra}\hlopt{$}\hlstd{r[i]} \hlopt{<} \hlstd{int[}\hlnum{1}\hlstd{]} \hlopt{||} \hlstd{muestra}\hlopt{$}\hlstd{r[i]} \hlopt{>} \hlstd{int[}\hlnum{2}\hlstd{]) \{}
+                \hlkwd{print}\hlstd{(}\hlstr{"el suceso"}\hlstd{)}
+                \hlkwd{print}\hlstd{(i)}
+                \hlkwd{print}\hlstd{(}\hlstr{"es un suceso anómalo o outlier"}\hlstd{)}
+        \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\begin{verbatim}
+## [1] "el suceso"
+## [1] 7
+## [1] "es un suceso anómalo o outlier"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					En este ejercicio, al igual que vimos en clase, el suceso outlier es el que está en la posición número 7, es decir el elemento 14.\\
+					
+					\item \textbf{Media y Desviación}
+					
+					Otra manera de buscar sucesos outliers usando técnicas con base estadística es mediante el uso de la media y la desviación típica. Aquí vamos a usar la otra columna del dataframe (\textit{densidad}), mediante el uso de las funciones \texttt{mean} y \texttt{sd} sacamos ambos valores, que unimos en los límites del intervalo mediante la siguiente ecuación.
+					
+					$$
+					\bar{X_a} - d \cdot S_a,\;\bar{X_a} + d \cdot S_a
+					$$
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(media} \hlkwb{=} \hlkwd{mean}\hlstd{(muestra}\hlopt{$}\hlstd{d))}
+\end{alltt}
+\begin{verbatim}
+## [1] 5.657143
+\end{verbatim}
+\begin{alltt}
+\hlstd{(desv} \hlkwb{=} \hlkwd{sd}\hlstd{(muestra}\hlopt{$}\hlstd{d))}
+\end{alltt}
+\begin{verbatim}
+## [1] 3.085913
+\end{verbatim}
+\begin{alltt}
+\hlstd{(int}\hlkwb{=}\hlkwd{c}\hlstd{(media}\hlopt{-}\hlnum{2}\hlopt{*}\hlstd{desv, media}\hlopt{+}\hlnum{2}\hlopt{*}\hlstd{desv))}
+\end{alltt}
+\begin{verbatim}
+## [1] -0.5146825 11.8289682
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Podemos ver que los valores inferior y superior del intervalo no son iguales que en el ejercicio que calculamos en clase, esto se debe a que, como ya vimos, la desviación típica se calcula mediante una distribución probabilistica, por lo que arreglando el cálculo de la desviación quedaría así.
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(desv} \hlkwb{=} \hlkwd{sqrt}\hlstd{(}\hlkwd{sd}\hlstd{(muestra}\hlopt{$}\hlstd{d)}\hlopt{^}\hlnum{2} \hlopt{*}
+        \hlstd{(}\hlkwd{length}\hlstd{(muestra}\hlopt{$}\hlstd{d)}\hlopt{-}\hlnum{1}\hlstd{)} \hlopt{/} \hlkwd{length}\hlstd{(muestra}\hlopt{$}\hlstd{d)))}
+\end{alltt}
+\begin{verbatim}
+## [1] 2.857
+\end{verbatim}
+\begin{alltt}
+\hlstd{(int}\hlkwb{=}\hlkwd{c}\hlstd{(media}\hlopt{-}\hlnum{2}\hlopt{*}\hlstd{desv, media}\hlopt{+}\hlnum{2}\hlopt{*}\hlstd{desv))}
+\end{alltt}
+\begin{verbatim}
+## [1] -0.05685714 11.37114285
+\end{verbatim}
+\begin{alltt}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(muestra}\hlopt{$}\hlstd{d)) \{}
+        \hlkwa{if} \hlstd{(muestra}\hlopt{$}\hlstd{d[i]} \hlopt{<} \hlstd{int[}\hlnum{1}\hlstd{]} \hlopt{||} \hlstd{muestra}\hlopt{$}\hlstd{d[i]} \hlopt{>} \hlstd{int[}\hlnum{2}\hlstd{]) \{}
+                \hlkwd{print}\hlstd{(}\hlstr{"el suceso"}\hlstd{)}
+                \hlkwd{print}\hlstd{(i)}
+                \hlkwd{print}\hlstd{(}\hlstr{"es un suceso anómalo o outlier"}\hlstd{)}
+        \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\begin{verbatim}
+## [1] "el suceso"
+## [1] 2
+## [1] "es un suceso anómalo o outlier"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Como resultado, obtenemos los valores del intervalo correctos y podemos ver que el suceso anómalo es el que se encuentra en la posición 2, es decir el elemento 12.
+					
+				\end{itemize}
+				
 			\subsection{Segundo ejercicio}
 			
 				``\textit{El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por las siguientes 5 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{4, 3\}; 3. \{5, 5\}; 4. \{1, 1\}; 5. \{5, 4\} donde las características de las calificaciones son: (Teoría, Laboratorio).}''
+				
+				\begin{itemize}
+					
+					\item \textbf{K-Vecinos}
+					
+					El algoritmo k-vecinos para identificar outliers basado en distancias consiste en calcular la distancia de un punto a sus k vecinos más cercanos y considerar los puntos con distancias mayores a un cierto valor (grado de outlier) como anómalos.
+					
+					En clase añadimos todos los datos de la nueva muestra a una matriz, que luego transpusimos para tener los datos dispuestos como nos requería el cálculo de distancias. Calculamos las distancias \textit{euclídeas} mediante la función \texttt{dist} y lo guardamos en una matriz de $5 \times 5$, para poder visualizar la distancia de cada punto hacia el resto. El cálculo de esta distancia se realiza de la siguiente manera.
+					
+					$$
+					d(A, B) = \sqrt{(X_B - X_A)^2 + (Y_B - Y_A)^2}
+					$$
+				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{muestra}\hlkwb{=}\hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,}\hlnum{4}\hlstd{,}\hlnum{4}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{4}\hlstd{),}\hlnum{2}\hlstd{,}\hlnum{5}\hlstd{)}
+
+\hlstd{muestra}\hlkwb{=}\hlkwd{t}\hlstd{(muestra)}
+
+\hlstd{distancias}\hlkwb{=}\hlkwd{as.matrix}\hlstd{(}\hlkwd{dist}\hlstd{(muestra))}
+
+\hlstd{(distancias}\hlkwb{=}\hlkwd{matrix}\hlstd{(distancias,}\hlnum{5}\hlstd{,}\hlnum{5}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##          [,1]     [,2]     [,3]     [,4]     [,5]
+## [1,] 0.000000 1.000000 1.414214 4.242641 1.000000
+## [2,] 1.000000 0.000000 2.236068 3.605551 1.414214
+## [3,] 1.414214 2.236068 0.000000 5.656854 1.000000
+## [4,] 4.242641 3.605551 5.656854 0.000000 5.000000
+## [5,] 1.000000 1.414214 1.000000 5.000000 0.000000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Mediante el siguiente bucle, iteramos cada punto y ordenamos de menor a mayor las distancias hacia los demás puntos.
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{5}\hlstd{) \{}
+        \hlstd{distancias[,i]} \hlkwb{=} \hlkwd{sort}\hlstd{(distancias[,i])}
+\hlstd{\}}
+
+\hlstd{(distanciasordenadas}\hlkwb{=}\hlstd{distancias)}
+\end{alltt}
+\begin{verbatim}
+##          [,1]     [,2]     [,3]     [,4]     [,5]
+## [1,] 0.000000 0.000000 0.000000 0.000000 0.000000
+## [2,] 1.000000 1.000000 1.000000 3.605551 1.000000
+## [3,] 1.000000 1.414214 1.414214 4.242641 1.000000
+## [4,] 1.414214 2.236068 2.236068 5.000000 1.414214
+## [5,] 4.242641 3.605551 5.656854 5.656854 5.000000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Y por último, iteramos cada punto de la matriz de distancias ordenadas y comprobamos si el elemento k-éismo está a una distancia mayor de 2.5 (elegido arbitrariamente), donde el punto se consideraría outlier.
+					
+					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{K} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{K} elementos.
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{5}\hlstd{) \{}
+        \hlkwa{if} \hlstd{(distanciasordenadas[}\hlnum{4}\hlstd{,i]} \hlopt{>} \hlnum{2.5}\hlstd{) \{}
+                \hlkwd{print}\hlstd{(i)}
+                \hlkwd{print}\hlstd{(}\hlstr{"es un suceso anómalo o outlier"}\hlstd{)}
+        \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\begin{verbatim}
+## [1] 4
+## [1] "es un suceso anómalo o outlier"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Podemos ver que como salida obtenemos que el punto 4 es un suceso anómalo o outlier, al igual que ocurría en el ejercicio resuelto en teoría.\\
+					
+					\item \textbf{LOF (Local Outlier Factor)}
+					
+					Como último ejercicio realizado en clase, se ha empleado el algoritmo LOF para identificar outliers basado en distancias, que evalúa la densidad local de puntos en relación con sus vecinos, identificando valores anómalos en regiones menos densas que el entorno circundante.
+					
+					Obtenemos una matriz de distancias haciendo uso igual que antes de la función \texttt{dist}, pero en este caso pasándole como parámetro el método que queremos que use para calcular la distancia (\texttt{method="manhattan"}), en este caso el método \textit{Manhattan}, que se calcula de la siguiente manera.
+					
+					$$
+					d(A, B) = |X_B - X_A| + |Y_B - Y_A|
+					$$
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(distanciasM}\hlkwb{=}\hlkwd{as.matrix}\hlstd{(}\hlkwd{dist}\hlstd{(muestra,} \hlkwc{method}\hlstd{=}\hlstr{"manhattan"}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+##   1 2 3 4 5
+## 1 0 1 2 6 1
+## 2 1 0 3 5 2
+## 3 2 3 0 8 1
+## 4 6 5 8 0 7
+## 5 1 2 1 7 0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+					
+					Para finalizar, el profesor nombró algunos paquetes que realizaban una implementación no simplificada del algoritmo, estos son \texttt{RLof}, \texttt{DDoutlier} y \texttt{DMwR}, pero nosostros en el segundo ejercicio autónomo de detección de datos anómalos, sí vamos a implementar un código propio, que realice las simplificaciones oportunas.
+				
+				\end{itemize}
 	
 	\chapter{Ejercicios autónomos}
 	
@@ -1302,7 +1603,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{standard_desv} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{standard_dev} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
         \hlstd{mean} \hlkwb{=} \hlkwd{mean}\hlstd{(list)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlstd{add} \hlkwb{=} \hlnum{0}
@@ -1326,7 +1627,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{desviacion} \hlkwb{=} \hlkwd{standard_desv}\hlstd{(distancias)}
+\hlstd{desviacion} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(distancias)}
 \hlstd{desviacion}
 \end{alltt}
 \begin{verbatim}
@@ -1341,8 +1642,8 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
-        \hlstd{desv} \hlkwb{=} \hlkwd{standard_desv}\hlstd{(list)}
-        \hlstd{var} \hlkwb{=} \hlstd{desv}\hlopt{^}\hlnum{2}
+        \hlstd{dev} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(list)}
+        \hlstd{var} \hlkwb{=} \hlstd{dev}\hlopt{^}\hlnum{2}
         \hlstd{var}
 \hlstd{\}}
 \end{alltt}
@@ -1443,9 +1744,236 @@
 \end{knitrout}
 			
 			Observamos que los valores de los cuartiles 1, 2 y 3 son 8.1, 20 y 28. Además hemos probado a meter un valor de $c$ no válido y verificamos que efectivamente nos devuelve \texttt{NULL} ya que ese cálculo no sería lógicamente correcto. También comprobamos que el valor del segundo cuartil es igual al de la mediana que hemos calculado más arriba. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
+			
 		\section{Asociación}
 		
 			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
+                \hlstd{c2}
+        \hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
+                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
+        \hlstd{\}}
+\hlstd{\}}
+
+\hlstd{intersect} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{)\{}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
+                \hlkwd{c}\hlstd{()}
+        \hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
+                \hlkwd{append}\hlstd{(}\hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2), c1[}\hlnum{1}\hlstd{])}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
+        \hlstd{\}}
+\hlstd{\}}
+
+\hlstd{dif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
+        \hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{c1) \{}
+                \hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(element} \hlopt{%in%} \hlstd{c2)) \{}
+                        \hlstd{res} \hlkwb{=} \hlkwd{append}\hlstd{(res, element)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{res}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{count_appearance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{)\{}
+        \hlstd{count} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{]))\{}
+                \hlstd{acum} \hlkwb{=} \hlnum{1}
+                \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{elements)\{}
+                        \hlstd{acum} \hlkwb{=} \hlstd{(table[i,element])} \hlopt{&} \hlstd{acum}
+                \hlstd{\}}
+                \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlstd{acum}
+        \hlstd{\}}
+        \hlstd{count}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{support} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{) \{}
+        \hlkwd{count_appearance}\hlstd{(table, elements)} \hlopt{/} \hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{])}
+\hlstd{\}}
+
+\hlstd{support_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{s}\hlstd{)\{}
+        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences)\{}
+                \hlstd{support_oc} \hlkwb{=} \hlkwd{support}\hlstd{(table, ocurrence)}
+                \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s)\{}
+                        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocurrences, ocurrence)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{valid_ocurrences}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{create_comb} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{clasif}\hlstd{,} \hlkwc{s}\hlstd{) \{}
+        \hlstd{combinations} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlstd{dim} \hlkwb{=} \hlnum{2}
+        \hlstd{next_dim} \hlkwb{=} \hlnum{TRUE}
+        \hlkwa{while} \hlstd{(dim} \hlopt{<=} \hlkwd{len}\hlstd{(clasif)} \hlopt{&} \hlstd{next_dim} \hlopt{==} \hlnum{TRUE}\hlstd{) \{}
+                \hlstd{next_dim} \hlkwb{=} \hlnum{FALSE}
+                \hlstd{comb} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{lapply}\hlstd{(dim,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}
+                        \hlkwd{combn}\hlstd{(clasif,} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+                        \hlstd{\}),} \hlkwc{recursive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(comb),} \hlkwc{by}\hlstd{=dim)) \{}
+                        \hlstd{add} \hlkwb{=} \hlkwd{c}\hlstd{()}
+                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlstd{j}\hlopt{:}\hlstd{(j}\hlopt{+}\hlstd{dim}\hlopt{-}\hlnum{1}\hlstd{)) \{}
+                                \hlstd{add} \hlkwb{=} \hlkwd{append}\hlstd{(add, comb[k])}
+                        \hlstd{\}}
+                        \hlkwa{if} \hlstd{(}\hlkwd{support}\hlstd{(table, add)} \hlopt{>=} \hlstd{s) \{}
+                                \hlstd{next_dim} \hlkwb{=} \hlnum{TRUE}
+                                \hlstd{combinations} \hlkwb{=} \hlkwd{append}\hlstd{(combinations,} \hlkwd{list}\hlstd{(add))}
+                        \hlstd{\}}
+                \hlstd{\}}
+                \hlstd{dim} \hlkwb{=} \hlstd{dim}\hlopt{+}\hlnum{1}
+        \hlstd{\}}
+        \hlstd{combinations}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{confidence} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{left}\hlstd{,} \hlkwc{right}\hlstd{) \{}
+        \hlkwd{count_appearance}\hlstd{(table,} \hlkwd{union}\hlstd{(left, right))} \hlopt{/}
+                \hlkwd{count_appearance}\hlstd{(table, left)}
+\hlstd{\}}
+
+\hlstd{get_asotiations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{comb}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+        \hlstd{kMax} \hlkwb{=} \hlkwd{len}\hlstd{(comb[}\hlkwd{len}\hlstd{(comb)][[}\hlnum{1}\hlstd{]])}
+        \hlstd{listLeft} \hlkwb{=} \hlkwd{list}\hlstd{()}
+        \hlstd{listRight} \hlkwb{=} \hlkwd{list}\hlstd{()}
+
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{kMax) \{}
+
+                \hlstd{split} \hlkwb{=} \hlkwd{Filter}\hlstd{(}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{length}\hlstd{(x)}\hlopt{==}\hlstd{i, comb)}
+
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(split)) \{}
+
+                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(i}\hlopt{-}\hlnum{1}\hlstd{)) \{}
+
+                                \hlstd{leftSides} \hlkwb{=} \hlkwd{lapply}\hlstd{(k,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}
+                                        \hlkwd{combn}\hlstd{(split[j][[}\hlnum{1}\hlstd{]],} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)\})}
+
+                                \hlstd{df} \hlkwb{=} \hlkwd{do.call}\hlstd{(rbind.data.frame, leftSides)}
+
+                                \hlkwa{for} \hlstd{(n} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[}\hlnum{1}\hlstd{,])) \{}
+
+                                        \hlstd{all} \hlkwb{=} \hlstd{split[j][[}\hlnum{1}\hlstd{]]}
+
+                                        \hlstd{left} \hlkwb{=} \hlstd{df[,n]}
+
+                                        \hlstd{right} \hlkwb{=} \hlkwd{dif}\hlstd{(split[j][[}\hlnum{1}\hlstd{]], df[,n])}
+
+                                        \hlkwa{if} \hlstd{(}\hlkwd{confidence}\hlstd{(table, left, right)} \hlopt{>=} \hlstd{c) \{}
+
+                                                \hlstd{listLeft} \hlkwb{=} \hlkwd{append}\hlstd{(listLeft ,} \hlkwd{list}\hlstd{(left))}
+                                                \hlstd{listRight} \hlkwb{=} \hlkwd{append}\hlstd{(listRight ,} \hlkwd{list}\hlstd{(right))}
+
+                                        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                                                \hlkwd{print}\hlstd{(}\hlstr{"Mejora posible"}\hlstd{)}
+                                        \hlstd{\}}
+                                \hlstd{\}}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{asoc} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(listLeft),} \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(listRight))}
+        \hlstd{asoc}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+        \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(tabla, elements, s)}
+
+        \hlstd{combinaciones} \hlkwb{=} \hlkwd{create_comb}\hlstd{(tabla, soporte_clasif, s)}
+
+        \hlstd{conf} \hlkwb{=} \hlkwd{get_asotiations}\hlstd{(tabla, combinaciones, c)}
+
+        \hlkwd{print}\hlstd{(conf)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{) ,}\hlkwd{c}\hlstd{(}\hlstr{"T"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"B"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"C"}\hlstd{))}
+
+\hlstd{tabla} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}
+        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
+        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
+        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}
+        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}
+        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
+        \hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}
+        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
+        \hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{),}\hlnum{8}\hlstd{,}\hlnum{6}\hlstd{,}\hlkwc{byrow}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}
+\hlkwd{c}\hlstd{(}\hlstr{"occu1"}\hlstd{,}\hlstr{"occu2"}\hlstd{,}\hlstr{"occu3"}\hlstd{,}\hlstr{"occu4"}\hlstd{,}\hlstr{"occu5"}\hlstd{,}\hlstr{"occu6"}\hlstd{,}\hlstr{"occu7"}\hlstd{,}\hlstr{"occu8"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"A"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"N"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{)))}
+
+\hlkwd{apriori}\hlstd{(tabla, elements,} \hlnum{0.5}\hlstd{,} \hlnum{0.8}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "Mejora posible"
+##    left right
+## 1     X     B
+## 2     B     X
+## 3     X     C
+## 4     C     X
+## 5     B     C
+## 6     C     B
+## 7     B  X, C
+## 8     C  X, B
+## 9  X, B     C
+## 10 X, C     B
+## 11 B, C     X
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			
 		
 		\section{Detección de datos anómalos}
 		

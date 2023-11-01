@@ -351,80 +351,234 @@
 		
 		\section{Asociación}
 		
-			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.}''
-		
+			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.}''\\
+				
+			Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente:
+			$$
+			\begin{pmatrix}
+				1 & 1 & 0 & 1 & 1\\
+				1 & 1 & 1 & 1 & 0\\
+				1 & 1 & 0 & 1 & 0\\
+				1 & 0 & 1 & 1 & 0\\
+				1 & 1 & 0 & 0 & 0\\
+				0 & 0 & 0 & 1 & 0
+			\end{pmatrix}
+			$$
+			
+			Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
+			
+			<<>>=
+			muestra <- Matrix(c(1, 1, 0, 1, 1,  
+			1, 1, 1, 1, 0,  
+			1, 1, 0, 1, 0,  
+			1, 0, 1, 1, 0,  
+			1, 1, 0, 0, 0,  
+			0, 0, 0, 1, 0), 6, 5, byrow = TRUE, dimnames = list(
+			c("suceso1", "suceso2", "suceso3", "suceso4", "suceso5", "suceso6"), 
+			c("Pan", "Agua", "Café", "Leche", "Naranjas")), sparse=TRUE)
+			muestra
+			@
+			
+			A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
+			
+			<<>>=
+			muestrangCMatrix <- as(muestra, "nsparseMatrix")
+			muestrangCMatrix
+			@
+			
+			Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
+			
+			<<>>=
+			transpmuestrangCMatrix <- t(muestrangCMatrix)
+			transpmuestrangCMatrix
+			@
+			
+			Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
+			
+			<<>>=
+			transacciones = as(transpmuestrangCMatrix, "transactions")
+			transacciones
+			summary(transacciones)
+			@
+			
+			Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
+			
+			<<>>=
+			asociaciones = apriori(transacciones, parameter = 
+			list(support = 0.5, confidence = 0.8))
+			@
+			
+			Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
+			
+			<<>>=
+			inspect(asociaciones)
+			@
+			
+			Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
+			
+			
 		\section{Detección de datos anómalos}
-		
+			
 			\subsection{Primer ejercicio}
 			
 				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''\\
 				
-				Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente: 
-				$$
-				\begin{pmatrix}
-					1 & 1 & 0 & 1 & 1\\
-					1 & 1 & 1 & 1 & 0\\
-					1 & 1 & 0 & 1 & 0\\
-					1 & 0 & 1 & 1 & 0\\
-					1 & 1 & 0 & 0 & 0\\
-					0 & 0 & 0 & 1 & 0
-				\end{pmatrix}
-				$$
+				\begin{itemize}
+					
+					\item \textbf{Caja y Bigotes}
 				
-				Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
+					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers.
+					
+					Para realizar el cálculo de los outliers en clase, se introdujeron los datos en una matriz mediante \texttt{matrix}, luego se transpuso y se paso a un \texttt{dataframe}. Para esta primera técnica vamos a usar la primera columna (\textit{resistencia}).
+					
+					<<>>=
+					muestra=t(matrix(c(3,2,3.5,12,4.7,4.1,5.2,4.9,7.1,6.1,6.2,5.2,14,5.3),
+						2,7,dimnames=list(c("resistencia","densidad"))))
+					
+					(muestra=data.frame(muestra))
+					@
+					
+					Una forma de obtener los outliers es mediante la función \texttt{boxplot}, pasándole la columna de los datos, el grado de outlier (\texttt{range}) o distancia a la que el suceso se considera outlier, y por último \texttt{plot=FALSE}, que se usa para no mostrar el gráfico como tal y solo sacar la información por el terminal.
+					
+					<<>>=
+					(boxplot(muestra$r, range=1.5, plot=FALSE))
+					@
+					
+					Como podemos ver en \texttt{\$out}, saca que el suceso outlier es el 14, lo cual como vimos en el ejercicio de la clase de teoría es correcto, pero, si nos fijamos en \texttt{\$conf}, podemos ver los límites del intervalo, pero estos no coinciden con los que vimos en clase, esto se debe a que, al igual que ocurría al usar la función \texttt{sd} para el cálculo de la desviación, R hace una distribución, ajustándola con unos porcentajes de probabilidad. Por lo que no son los valores exactos.
+					
+					Ahora vamos a hacerlo mediante el cálculo de los cuartiles como vimos en los ejercicios anteriores. Además, hemos calculado los límites del intervalo mediante la siguiente ecuación.
+					
+					$$
+					(Q_1 - d \cdot (Q_3 - Q_1),\;Q_3 + d \cdot (Q_3 - Q_1))
+					$$
+					
+					<<>>=
+					(cuar1r=quantile(muestra$r, 0.25))
+					
+					(cuar3r=quantile(muestra$r, 0.75))
+					
+					(int=c(cuar1r-1.5*(cuar3r-cuar1r), cuar3r+1.5*(cuar3r-cuar1r)))
+					@
+					
+					Por último, iteramos los elementos de la muestra y comprobamos para cada uno si es menor que el límite inferior del intervalo o si es mayor que el límite superior.
+					
+					<<>>=
+					for (i in 1:length(muestra$r)) {
+						if (muestra$r[i] < int[1] || muestra$r[i] > int[2]) {
+							print("el suceso")
+							print(i)
+							print("es un suceso anómalo o outlier")
+						}
+					}
+					@
+					
+					En este ejercicio, al igual que vimos en clase, el suceso outlier es el que está en la posición número 7, es decir el elemento 14.\\
+					
+					\item \textbf{Media y Desviación}
+					
+					Otra manera de buscar sucesos outliers usando técnicas con base estadística es mediante el uso de la media y la desviación típica. Aquí vamos a usar la otra columna del dataframe (\textit{densidad}), mediante el uso de las funciones \texttt{mean} y \texttt{sd} sacamos ambos valores, que unimos en los límites del intervalo mediante la siguiente ecuación.
+					
+					$$
+					\bar{X_a} - d \cdot S_a,\;\bar{X_a} + d \cdot S_a
+					$$
+					
+					<<>>=
+					(media = mean(muestra$d))
+					
+					(desv = sd(muestra$d))
+					
+					(int=c(media-2*desv, media+2*desv))
+					@
+					
+					Podemos ver que los valores inferior y superior del intervalo no son iguales que en el ejercicio que calculamos en clase, esto se debe a que, como ya vimos, la desviación típica se calcula mediante una distribución probabilistica, por lo que arreglando el cálculo de la desviación quedaría así.
+					
+					<<>>=
+					(desv = sqrt(sd(muestra$d)^2 *
+						(length(muestra$d)-1) / length(muestra$d)))
+					
+					(int=c(media-2*desv, media+2*desv))
+					
+					for (i in 1:length(muestra$d)) {
+						if (muestra$d[i] < int[1] || muestra$d[i] > int[2]) {
+							print("el suceso")
+							print(i)
+							print("es un suceso anómalo o outlier")
+						}
+					}
+					@
+					
+					Como resultado, obtenemos los valores del intervalo correctos y podemos ver que el suceso anómalo es el que se encuentra en la posición 2, es decir el elemento 12.
+					
+				\end{itemize}
 				
-				<<>>=
-				muestra <- Matrix(c(1, 1, 0, 1, 1,  
-				1, 1, 1, 1, 0,  
-				1, 1, 0, 1, 0,  
-				1, 0, 1, 1, 0,  
-				1, 1, 0, 0, 0,  
-				0, 0, 0, 1, 0), 6, 5, byrow = TRUE, dimnames = list(
-				c("suceso1", "suceso2", "suceso3", "suceso4", "suceso5", "suceso6"), 
-				c("Pan", "Agua", "Café", "Leche", "Naranjas")), sparse=TRUE)
-				muestra
-				@
-				
-				A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
-				
-				<<>>=
-				muestrangCMatrix <- as(muestra, "nsparseMatrix")
-				muestrangCMatrix
-				@
-				
-				Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
-				
-				<<>>=
-				transpmuestrangCMatrix <- t(muestrangCMatrix)
-				transpmuestrangCMatrix
-				@
-				
-				Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
-				
-				<<>>=
-				transacciones = as(transpmuestrangCMatrix, "transactions")
-				transacciones
-				summary(transacciones)
-				@
-				
-				Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
-				
-				<<>>=
-				asociaciones = apriori(transacciones, parameter = 
-				list(support = 0.5, confidence = 0.8))
-				@
-				
-				Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
-				
-				<<>>=
-				inspect(asociaciones)
-				@
-				
-				Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
-			
 			\subsection{Segundo ejercicio}
 			
 				``\textit{El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por las siguientes 5 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{4, 3\}; 3. \{5, 5\}; 4. \{1, 1\}; 5. \{5, 4\} donde las características de las calificaciones son: (Teoría, Laboratorio).}''
+				
+				\begin{itemize}
+					
+					\item \textbf{K-Vecinos}
+					
+					El algoritmo k-vecinos para identificar outliers basado en distancias consiste en calcular la distancia de un punto a sus k vecinos más cercanos y considerar los puntos con distancias mayores a un cierto valor (grado de outlier) como anómalos.
+					
+					En clase añadimos todos los datos de la nueva muestra a una matriz, que luego transpusimos para tener los datos dispuestos como nos requería el cálculo de distancias. Calculamos las distancias \textit{euclídeas} mediante la función \texttt{dist} y lo guardamos en una matriz de $5 \times 5$, para poder visualizar la distancia de cada punto hacia el resto. El cálculo de esta distancia se realiza de la siguiente manera.
+					
+					$$
+					d(A, B) = \sqrt{(X_B - X_A)^2 + (Y_B - Y_A)^2}
+					$$
+				
+					<<>>=
+					muestra=matrix(c(4,4,4,3,5,5,1,1,5,4),2,5)
+					
+					muestra=t(muestra)
+	
+					distancias=as.matrix(dist(muestra))
+					
+					(distancias=matrix(distancias,5,5))
+					@
+					
+					Mediante el siguiente bucle, iteramos cada punto y ordenamos de menor a mayor las distancias hacia los demás puntos.
+					
+					<<>>=
+					for (i in 1:5) {
+						distancias[,i] = sort(distancias[,i])
+					}
+					
+					(distanciasordenadas=distancias)
+					@
+					
+					Y por último, iteramos cada punto de la matriz de distancias ordenadas y comprobamos si el elemento k-éismo está a una distancia mayor de 2.5 (elegido arbitrariamente), donde el punto se consideraría outlier.
+					
+					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{K} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{K} elementos.
+					
+					<<>>=
+					for (i in 1:5) {
+						if (distanciasordenadas[4,i] > 2.5) {
+							print(i)
+							print("es un suceso anómalo o outlier")
+						}
+					}
+					@
+					
+					Podemos ver que como salida obtenemos que el punto 4 es un suceso anómalo o outlier, al igual que ocurría en el ejercicio resuelto en teoría.\\
+					
+					\item \textbf{LOF (Local Outlier Factor)}
+					
+					Como último ejercicio realizado en clase, se ha empleado el algoritmo LOF para identificar outliers basado en distancias, que evalúa la densidad local de puntos en relación con sus vecinos, identificando valores anómalos en regiones menos densas que el entorno circundante.
+					
+					Obtenemos una matriz de distancias haciendo uso igual que antes de la función \texttt{dist}, pero en este caso pasándole como parámetro el método que queremos que use para calcular la distancia (\texttt{method="manhattan"}), en este caso el método \textit{Manhattan}, que se calcula de la siguiente manera.
+					
+					$$
+					d(A, B) = |X_B - X_A| + |Y_B - Y_A|
+					$$
+					
+					<<>>=
+					(distanciasM=as.matrix(dist(muestra, method="manhattan")))
+					@
+					
+					Para finalizar, el profesor nombró algunos paquetes que realizaban una implementación no simplificada del algoritmo, estos son \texttt{RLof}, \texttt{DDoutlier} y \texttt{DMwR}, pero nosostros en el segundo ejercicio autónomo de detección de datos anómalos, sí vamos a implementar un código propio, que realice las simplificaciones oportunas.
+				
+				\end{itemize}
 	
 	\chapter{Ejercicios autónomos}
 	
@@ -788,9 +942,193 @@
 			@
 			
 			Observamos que los valores de los cuartiles 1, 2 y 3 son 8.1, 20 y 28. Además hemos probado a meter un valor de $c$ no válido y verificamos que efectivamente nos devuelve \texttt{NULL} ya que ese cálculo no sería lógicamente correcto. También comprobamos que el valor del segundo cuartil es igual al de la mediana que hemos calculado más arriba. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
+			
 		\section{Asociación}
 		
 			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''
+			
+			<<>>=
+			union = function(c1, c2) {
+				if (len(c1) == 0) {
+					c2
+				} else if (is.element(c1[1], c2)) {
+					union(c1[-1], c2)
+				} else {
+					union(c1[-1], append(c2, c1[1]))
+				}
+			}
+			
+			intersect = function(c1, c2){
+				if (len(c1) == 0) {
+					c()
+				} else if (is.element(c1[1], c2)) {
+					append(intersect(c1[-1], c2), c1[1])
+				} else {
+					intersect(c1[-1], c2)
+				}
+			}
+			
+			dif = function(c1, c2) {
+				res = c()
+				for (element in c1) {
+					if (!(element %in% c2)) {
+						res = append(res, element)
+					}
+				}
+				res
+			}
+			@
+			
+			
+			
+			<<>>=
+			count_appearance = function(table, elements){
+				count = 0
+				for (i in 1:len(table[,1])){
+					acum = 1
+					for (element in elements){
+						acum = (table[i,element]) & acum
+					}
+					count = count + acum
+				}
+				count
+			}
+			@
+			
+			
+			
+			<<>>=
+			support = function(table, elements) {
+				count_appearance(table, elements) / len(table[,1])
+			}
+			
+			support_clasif = function(table, ocurrences, s){
+				valid_ocurrences = c()
+				for (ocurrence in ocurrences){
+					support_oc = support(table, ocurrence)
+					if (support_oc >= s){
+						valid_ocurrences = append(valid_ocurrences, ocurrence)
+					}
+				}
+				valid_ocurrences	
+			}
+			@
+			
+			
+			
+			<<>>=
+			create_comb = function(table, clasif, s) {
+				combinations = c()
+				dim = 2
+				next_dim = TRUE
+				while (dim <= len(clasif) & next_dim == TRUE) {
+					next_dim = FALSE
+					comb = unlist(lapply(dim, function(m) {
+						combn(clasif, m=m, simplify=TRUE)
+						}), recursive=FALSE)
+					
+					for (j in seq(1, len(comb), by=dim)) {
+						add = c()
+						for (k in j:(j+dim-1)) {
+							add = append(add, comb[k])
+						}
+						if (support(table, add) >= s) {
+							next_dim = TRUE
+							combinations = append(combinations, list(add))
+						}
+					}
+					dim = dim+1
+				}
+				combinations
+			}
+			@
+			
+			
+			
+			<<>>=
+			confidence = function(table, left, right) {
+				count_appearance(table, union(left, right)) /
+					count_appearance(table, left)
+			}
+			
+			get_asotiations = function(table, comb, c) {
+				kMax = len(comb[len(comb)][[1]])
+				listLeft = list()
+				listRight = list()
+				
+				for (i in 2:kMax) {
+				
+					split = Filter(function(x) length(x)==i, comb)
+					
+					for (j in 1:len(split)) {
+					
+						for (k in 1:(i-1)) {
+						
+							leftSides = lapply(k, function(m) {
+								combn(split[j][[1]], m=m, simplify=TRUE)})
+							
+							df = do.call(rbind.data.frame, leftSides)
+							
+							for (n in 1:len(df[1,])) {
+							
+								all = split[j][[1]]
+								
+								left = df[,n]
+								
+								right = dif(split[j][[1]], df[,n])
+								
+								if (confidence(table, left, right) >= c) {
+								
+									listLeft = append(listLeft , list(left))
+									listRight = append(listRight , list(right))
+								
+								} else {
+									print("Mejora posible")
+								}
+							}
+						}
+					}
+				}
+				asoc = data.frame(left = I(listLeft), right = I(listRight))
+				asoc
+			}
+			@
+			
+			
+			
+			<<>>=
+			apriori = function(table, elements, s, c) {
+				soporte_clasif = support_clasif(tabla, elements, s)
+				
+				combinaciones = create_comb(tabla, soporte_clasif, s)
+				
+				conf = get_asotiations(tabla, combinaciones, c)
+				
+				print(conf)
+			}
+			@
+			
+			
+			
+			<<>>=
+			elements = c(c("X"), c("A") ,c("T"), c("N"), c("B"), c("C"))
+			
+			tabla = matrix(c(
+				1,0,0,1,1,1,
+				1,0,1,0,1,1,
+				1,0,0,1,0,1,
+				1,0,1,1,1,0,
+				1,0,0,0,1,1,
+				0,0,0,1,0,0,
+				1,0,0,0,1,1,
+				0,1,1,0,0,0),8,6,byrow=TRUE,dimnames=list(
+			c("occu1","occu2","occu3","occu4","occu5","occu6","occu7","occu8"),
+			c("X", "A", "T", "N", "B", "C")))
+			
+			apriori(tabla, elements, 0.5, 0.8)
+			@
+			
+			
 		
 		\section{Detección de datos anómalos}
 		
