@@ -1082,8 +1082,6 @@
 									listLeft = append(listLeft , list(left))
 									listRight = append(listRight , list(right))
 								
-								} else {
-									print("Mejora posible")
 								}
 							}
 						}
@@ -1098,13 +1096,18 @@
 			
 			<<>>=
 			apriori = function(table, elements, s, c) {
-				soporte_clasif = support_clasif(tabla, elements, s)
+				soporte_clasif = support_clasif(table, elements, s)
 				
-				combinaciones = create_comb(tabla, soporte_clasif, s)
+				combinations = create_comb(table, soporte_clasif, s)
 				
-				conf = get_asotiations(tabla, combinaciones, c)
+				if (len(combinations) > 0) {
 				
-				print(conf)
+					conf = get_asotiations(table, combinations, c)
+					print(conf)
+				
+				} else {
+					print("No hay ninguna combinación que pase el soporte")
+				}
 			}
 			@
 			

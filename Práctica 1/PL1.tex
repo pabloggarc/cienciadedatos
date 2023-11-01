@@ -1902,8 +1902,6 @@
                                                 \hlstd{listLeft} \hlkwb{=} \hlkwd{append}\hlstd{(listLeft ,} \hlkwd{list}\hlstd{(left))}
                                                 \hlstd{listRight} \hlkwb{=} \hlkwd{append}\hlstd{(listRight ,} \hlkwd{list}\hlstd{(right))}
 
-                                        \hlstd{\}} \hlkwa{else} \hlstd{\{}
-                                                \hlkwd{print}\hlstd{(}\hlstr{"Mejora posible"}\hlstd{)}
                                         \hlstd{\}}
                                 \hlstd{\}}
                         \hlstd{\}}
@@ -1922,13 +1920,18 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
-        \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(tabla, elements, s)}
+        \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, elements, s)}
 
-        \hlstd{combinaciones} \hlkwb{=} \hlkwd{create_comb}\hlstd{(tabla, soporte_clasif, s)}
+        \hlstd{combinations} \hlkwb{=} \hlkwd{create_comb}\hlstd{(table, soporte_clasif, s)}
 
-        \hlstd{conf} \hlkwb{=} \hlkwd{get_asotiations}\hlstd{(tabla, combinaciones, c)}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(combinations)} \hlopt{>} \hlnum{0}\hlstd{) \{}
 
-        \hlkwd{print}\hlstd{(conf)}
+                \hlstd{conf} \hlkwb{=} \hlkwd{get_asotiations}\hlstd{(table, combinations, c)}
+                \hlkwd{print}\hlstd{(conf)}
+
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que pase el soporte"}\hlstd{)}
+        \hlstd{\}}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1956,7 +1959,6 @@
 \hlkwd{apriori}\hlstd{(tabla, elements,} \hlnum{0.5}\hlstd{,} \hlnum{0.8}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "Mejora posible"
 ##    left right
 ## 1     X     B
 ## 2     B     X
