@@ -63,29 +63,40 @@ distance_matrix = function(df){
 	distances			
 }
 
-detect_outliers = function(distance_matrix,k,n){
+detect_outliers = function(sample, distance_matrix, k, d, details){
+	if(details){
+		print("->PASO 3: IDENTIFICACIÓN DE LOS OUTLIERS")
+	}	
 	outliers = c()
 	for (column in 1:len(distance_matrix[1,])){
 		ordered_column = bubble(distance_matrix[column,])
-		if (ordered_column[k+1] > n){
+		if (ordered_column[k+1] > d){
 			outliers = append(outliers,column)
+			if(details){
+				cat("El punto ", column, " es un outlier\n")
+			}
 		}
 	}
 	outliers
 }
 
-k_neighbors = function(sample, k, n){
+k_neighbors = function(sample, k, d, details = FALSE){
+	if(details){
+		print("->PASO 1: DETERMINACIÓN DE GRADO DE OUTLIER  Y K-VECINO MÁS PRÓXIMO")
+		cat("Grado de outlier: d =",d,"\n")
+		cat("K-Vecino más próximo: k =",k,"\n\n")
+	}
 	d_matrix = distance_matrix(sample)
-	detect_outliers(d_matrix, k, n)
+	if(details){
+		print("->PASO 2: MATRIZ DE DISTANCIAS ENTRE PUNTOS:\n")
+		print(d_matrix)
+	}
+	cat("\n")
+	detect_outliers(sample, d_matrix, k, d, details)
 }
 
 
 
 muestra = data.frame("teoría" = c(4,4,5,1,5), "lab" = c(4,3,5,1,4))
-a = k_neighbors(muestra,3,2.5)
+a = k_neighbors(muestra,3,2.5,TRUE)
 a
-distancias = distance_matrix(muestra)
-a=rbind(muestra,c(1,2))
-a
-
-(empty_matrix = matrix(ncol = 5, nrow = 5))
