@@ -55,14 +55,17 @@
 }
 
 \hypersetup{
-	pdftitle={Práctica 1}, 
-	pdfauthor={Pablo García García, Abel López Martínez, Álvaro Jesús Martínez Parra, Raúl Moratilla Núñez}, 
-	pdfsubject={Fundamentos de la Ciencia de Datos}, 
+	pdftitle = {Práctica 1}, 
+	pdfauthor = {Pablo García García, Abel López Martínez, Álvaro Jesús Martínez Parra, Raúl Moratilla Núñez}, 
+	pdfsubject = {Fundamentos de la Ciencia de Datos}, 
 	pdfcenterwindow, 
-	pdfnewwindow=true, 
-	pdfkeywords={Entrega de la PL1 de laboratorio correspondiente al Curso 2023-2024}, 
-	bookmarksopen=true 
+	pdfnewwindow = true, 
+	pdfkeywords = {Entrega de la PL1 de laboratorio correspondiente al Curso 2023-2024}, 
+	bookmarksopen = true 
 }
+
+\newtheorem{exercise}{Ejercicio}[section]
+\newcommand{\dt}{\text{dist}}
 
 \begin{document}
 	
@@ -72,6 +75,7 @@
 	
 	\newpage
 	
+	\setcounter{tocdepth}{3}
 	\tableofcontents
 	\listoffigures
 	
@@ -201,7 +205,9 @@
 	
 		\section{Descripción de los datos}
 		
-			``\textit{El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cualitativa, nombre, y otra cuantitativa, radio, de los satélites menores de Urano, es decir, aquellos que tienen un radio menor de 50 Km, dichos datos, los primeros cualitativos nominales, y los segundos cuantitativos continuos, son: (Nombre, radio en Km): Cordelia, 13; Ofelia, 16; Bianca, 22; Crésida, 33; Desdémona, 29; Julieta, 42; Rosalinda, 27; Belinda, 34; Luna-1986U10, 20; Calíbano, 30; Luna-999U1, 20; Luna 1999U2, 15.}''\\
+			\begin{exercise}
+				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cualitativa, nombre, y otra cuantitativa, radio, de los satélites menores de Urano, es decir, aquellos que tienen un radio menor de 50 Km, dichos datos, los primeros cualitativos nominales, y los segundos cuantitativos continuos, son: (Nombre, radio en Km): Cordelia, 13; Ofelia, 16; Bianca, 22; Crésida, 33; Desdémona, 29; Julieta, 42; Rosalinda, 27; Belinda, 34; Luna-1986U10, 20; Calíbano, 30; Luna-999U1, 20; Luna 1999U2, 15.
+			\end{exercise}
 			
 			Para comenzar con la resolución de este ejercicio, deberemos escribir los datos en un fichero \texttt{.txt}, cumpliendo las siguientes normas: 
 			
@@ -305,7 +311,7 @@
 			
 			Sin embargo, el resultado obtenido no es el esperado. Esto se debe a que esta función realiza el siguiente cálculo
 			$$
-			\sigma = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n-1}}
+			s = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n-1}}
 			$$
 			que es más utilizado en inferencia estadística, porque hace que se parezca más a una campana de Gauss (menos sesgo), mientras que la fórmula vista en clase utiliza un factor de $n$ en vez de $n-1$ en el denominador (dentro de la raíz). Para ello, el profesor lo corrigió de la siguiente manera: 
 			
@@ -316,7 +322,7 @@
 			
 			En realidad lo que se está realizando es el siguiente ``ajuste'': 
 			$$
-			\sigma' = \sqrt{\sigma^2\cdot\frac{n-1}{n}}
+			s' = \sqrt{s^2\cdot\frac{n-1}{n}}
 			$$
 			
 			Una vez hemos visto cómo se calcula la desviación típica, podremos ver cómo calcular la varianza. Como sabemos que es el cuadrado de la desviación típica, bastaría con elevar al cuadrado si no fuera por el ``fallo'' de $n-1$ visto previamente. En este caso, el profesor lo arregló para el caso particular de la siguiente manera: 
@@ -351,7 +357,9 @@
 		
 		\section{Asociación}
 		
-			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.}''\\
+			\begin{exercise}
+				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.
+			\end{exercise}
 				
 			Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente:
 			$$
@@ -419,21 +427,19 @@
 			
 		\section{Detección de datos anómalos}
 			
-			\subsection{Primer ejercicio}
+			\subsection{Técnicas estadísticas}
 			
-				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.}''\\
+				\begin{exercise}
+					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.
+				\end{exercise}
 				
-				\begin{itemize}
-					
-					\item \textbf{Caja y Bigotes}
+				\subsubsection{Caja y Bigotes}
 				
-					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers.
-					
-					Para realizar el cálculo de los outliers en clase, se introdujeron los datos en una matriz mediante \texttt{matrix}, luego se transpuso y se paso a un \texttt{dataframe}. Para esta primera técnica vamos a usar la primera columna (\textit{resistencia}).
+					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers. Para realizar el cálculo de los outliers en clase, se introdujeron los datos en una matriz mediante \texttt{matrix}, luego se transpuso y se pasó a un \texttt{dataframe}. Para esta primera técnica vamos a usar la primera columna (\texttt{resistencia}).
 					
 					<<>>=
 					muestra=t(matrix(c(3,2,3.5,12,4.7,4.1,5.2,4.9,7.1,6.1,6.2,5.2,14,5.3),
-						2,7,dimnames=list(c("resistencia","densidad"))))
+					2,7,dimnames=list(c("resistencia","densidad"))))
 					
 					(muestra=data.frame(muestra))
 					@
@@ -444,12 +450,12 @@
 					(boxplot(muestra$r, range=1.5, plot=FALSE))
 					@
 					
-					Como podemos ver en \texttt{\$out}, saca que el suceso outlier es el 14, lo cual como vimos en el ejercicio de la clase de teoría es correcto, pero, si nos fijamos en \texttt{\$conf}, podemos ver los límites del intervalo, pero estos no coinciden con los que vimos en clase, esto se debe a que, al igual que ocurría al usar la función \texttt{sd} para el cálculo de la desviación, R hace una distribución, ajustándola con unos porcentajes de probabilidad. Por lo que no son los valores exactos.
+					Como podemos ver en \texttt{\$out}, se obtiene que el suceso outlier es el 14, que como se vio en el ejercicio de la clase de teoría es correcto, pero, si nos fijamos en \texttt{\$conf}, se pueden ver los límites del intervalo, pero estos no coinciden con los vistos en clase. Esto se debe a que al igual que ocurría al usar la función \texttt{sd} para el cálculo de la desviación, R utiliza un factor de $n-1$ en vez de $n$, por lo que no son los valores exactos. \\
 					
-					Ahora vamos a hacerlo mediante el cálculo de los cuartiles como vimos en los ejercicios anteriores. Además, hemos calculado los límites del intervalo mediante la siguiente ecuación.
+					Ahora vamos a hacerlo mediante el cálculo de los cuartiles como se vio en ejercicios anteriores. Además, se han calculado los límites del intervalo mediante la siguiente ecuación.
 					
 					$$
-					(Q_1 - d \cdot (Q_3 - Q_1),\;Q_3 + d \cdot (Q_3 - Q_1))
+					(Q_1 - d(Q_3 - Q_1), Q_3 + d(Q_3 - Q_1))
 					$$
 					
 					<<>>=
@@ -460,7 +466,7 @@
 					(int=c(cuar1r-1.5*(cuar3r-cuar1r), cuar3r+1.5*(cuar3r-cuar1r)))
 					@
 					
-					Por último, iteramos los elementos de la muestra y comprobamos para cada uno si es menor que el límite inferior del intervalo o si es mayor que el límite superior.
+					Por último, se iteran los elementos de la muestra y se comprueba para cada uno si es menor que el límite inferior del intervalo o si es mayor que el límite superior.
 					
 					<<>>=
 					for (i in 1:length(muestra$r)) {
@@ -472,14 +478,14 @@
 					}
 					@
 					
-					En este ejercicio, al igual que vimos en clase, el suceso outlier es el que está en la posición número 7, es decir el elemento 14.\\
-					
-					\item \textbf{Media y Desviación}
-					
-					Otra manera de buscar sucesos outliers usando técnicas con base estadística es mediante el uso de la media y la desviación típica. Aquí vamos a usar la otra columna del dataframe (\textit{densidad}), mediante el uso de las funciones \texttt{mean} y \texttt{sd} sacamos ambos valores, que unimos en los límites del intervalo mediante la siguiente ecuación.
+					En este ejercicio, al igual que se vio en clase, el suceso outlier es el que está en la posición número 7, es decir el elemento 14.
+				
+				\subsubsection{Media y Desviación}
+				
+					Otra manera de buscar sucesos outliers usando técnicas con base estadística es mediante el uso de la media y la desviación típica. Aquí vamos a usar la otra columna del dataframe (\texttt{densidad}), mediante el uso de las funciones \texttt{mean} y \texttt{sd} sacamos ambos valores, que unimos en los límites del intervalo mediante la siguiente ecuación.
 					
 					$$
-					\bar{X_a} - d \cdot S_a,\;\bar{X_a} + d \cdot S_a
+					(\bar{x}_a - d\cdot s_a, \bar{x}_a + d\cdot s_a)
 					$$
 					
 					<<>>=
@@ -490,11 +496,11 @@
 					(int=c(media-2*desv, media+2*desv))
 					@
 					
-					Podemos ver que los valores inferior y superior del intervalo no son iguales que en el ejercicio que calculamos en clase, esto se debe a que, como ya vimos, la desviación típica se calcula mediante una distribución probabilistica, por lo que arreglando el cálculo de la desviación quedaría así.
+					Se puede ver que los valores inferior y superior del intervalo no son iguales que en el ejercicio que realizado en clase, esto se debe a que, como ya se vio, la desviación típica se calcula con un factor de $n-1$ en vez de $n$, por lo que arreglando el cálculo de la desviación quedaría así.
 					
 					<<>>=
 					(desv = sqrt(sd(muestra$d)^2 *
-						(length(muestra$d)-1) / length(muestra$d)))
+					(length(muestra$d)-1) / length(muestra$d)))
 					
 					(int=c(media-2*desv, media+2*desv))
 					
@@ -507,37 +513,32 @@
 					}
 					@
 					
-					Como resultado, obtenemos los valores del intervalo correctos y podemos ver que el suceso anómalo es el que se encuentra en la posición 2, es decir el elemento 12.
-					
-				\end{itemize}
+					Como resultado, se obtienen los valores del intervalo correctos y se puede ver que el suceso anómalo es el que se encuentra en la posición 2, es decir el elemento 12.
 				
-			\subsection{Segundo ejercicio}
+			\subsection{Proximidad y densidad}
 			
-				``\textit{El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por las siguientes 5 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{4, 3\}; 3. \{5, 5\}; 4. \{1, 1\}; 5. \{5, 4\} donde las características de las calificaciones son: (Teoría, Laboratorio).}''
+				\begin{exercise}
+					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por las siguientes 5 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{4, 3\}; 3. \{5, 5\}; 4. \{1, 1\}; 5. \{5, 4\} donde las características de las calificaciones son: (Teoría, Laboratorio).
+				\end{exercise}
 				
-				\begin{itemize}
+				\subsubsection{Algoritmo $k-$vecinos}
+				
+					El algoritmo $k-$vecinos utilizado para identificar outliers basado en distancias, consiste en calcular la distancia de un punto a sus $k$ vecinos más cercanos y considerar los puntos con distancias mayores a un cierto valor (grado de outlier) como anómalos.\\
 					
-					\item \textbf{K-Vecinos}
-					
-					El algoritmo k-vecinos para identificar outliers basado en distancias consiste en calcular la distancia de un punto a sus k vecinos más cercanos y considerar los puntos con distancias mayores a un cierto valor (grado de outlier) como anómalos.
-					
-					En clase añadimos todos los datos de la nueva muestra a una matriz, que luego transpusimos para tener los datos dispuestos como nos requería el cálculo de distancias. Calculamos las distancias \textit{euclídeas} mediante la función \texttt{dist} y lo guardamos en una matriz de $5 \times 5$, para poder visualizar la distancia de cada punto hacia el resto. El cálculo de esta distancia se realiza de la siguiente manera.
+					En clase se añadieron todos los datos de la nueva muestra a una matriz, que luego fue transpuesta para tener los datos dispuestos como requería el cálculo de distancias. Se calcularon las distancias euclídeas mediante la función \texttt{dist} y se guardó en una matriz de $5 \times 5$, para poder visualizar la distancia de cada punto hacia el resto. El cálculo de esta distancia se realiza de la siguiente manera.
 					
 					$$
-					d(A, B) = \sqrt{(X_B - X_A)^2 + (Y_B - Y_A)^2}
+					\dt(p, q) = \sqrt{\sum_{i=1}^n(p_i-q_i)^2}
 					$$
-				
+					
 					<<>>=
 					muestra=matrix(c(4,4,4,3,5,5,1,1,5,4),2,5)
-					
 					muestra=t(muestra)
-	
 					distancias=as.matrix(dist(muestra))
-					
 					(distancias=matrix(distancias,5,5))
 					@
 					
-					Mediante el siguiente bucle, iteramos cada punto y ordenamos de menor a mayor las distancias hacia los demás puntos.
+					Mediante el siguiente bucle, se itera cada punto y ordena de menor a mayor las distancias hacia los demás puntos.
 					
 					<<>>=
 					for (i in 1:5) {
@@ -547,9 +548,9 @@
 					(distanciasordenadas=distancias)
 					@
 					
-					Y por último, iteramos cada punto de la matriz de distancias ordenadas y comprobamos si el elemento k-éismo está a una distancia mayor de 2.5 (elegido arbitrariamente), donde el punto se consideraría outlier.
+					Por último, se itera cada punto de la matriz de distancias ordenadas y comprobamos si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.
 					
-					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{K} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{K} elementos.
+					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{k} elementos.
 					
 					<<>>=
 					for (i in 1:5) {
@@ -560,48 +561,48 @@
 					}
 					@
 					
-					Podemos ver que como salida obtenemos que el punto 4 es un suceso anómalo o outlier, al igual que ocurría en el ejercicio resuelto en teoría.\\
+					Podemos ver que como salida se obtiene que el punto 4 es un suceso anómalo o outlier, al igual que ocurría en el ejercicio resuelto en teoría.
+				
+				\subsubsection{Algoritmo LOF}
+				
+					Como último ejercicio realizado en clase, se ha empleado el algoritmo LOF (Local Outlier Factor) para identificar outliers basado en distancias, que evalúa la densidad local de puntos en relación con sus vecinos, identificando valores anómalos en regiones menos densas que el entorno circundante.\\
 					
-					\item \textbf{LOF (Local Outlier Factor)}
-					
-					Como último ejercicio realizado en clase, se ha empleado el algoritmo LOF para identificar outliers basado en distancias, que evalúa la densidad local de puntos en relación con sus vecinos, identificando valores anómalos en regiones menos densas que el entorno circundante.
-					
-					Obtenemos una matriz de distancias haciendo uso igual que antes de la función \texttt{dist}, pero en este caso pasándole como parámetro el método que queremos que use para calcular la distancia (\texttt{method="manhattan"}), en este caso el método \textit{Manhattan}, que se calcula de la siguiente manera.
+					Se obtiene una matriz de distancias haciendo uso de la función \texttt{dist}, pero en este caso se pasa como parámetro el método que queremos que sea usado para calcular la distancia (\texttt{method="manhattan"}), en este caso el método \textit{Manhattan}, que se calcula de la siguiente manera.
 					
 					$$
-					d(A, B) = |X_B - X_A| + |Y_B - Y_A|
+					\dt(x_i, x_j) = |x_{i_1} - x_{j_1}| + |x_{i_2} - x_{j_2}|
 					$$
 					
 					<<>>=
 					(distanciasM=as.matrix(dist(muestra, method="manhattan")))
 					@
 					
-					Para finalizar, el profesor nombró algunos paquetes que realizaban una implementación no simplificada del algoritmo, estos son \texttt{RLof}, \texttt{DDoutlier} y \texttt{DMwR}, pero nosostros en el segundo ejercicio autónomo de detección de datos anómalos, sí vamos a implementar un código propio, que realice las simplificaciones oportunas.
-				
-				\end{itemize}
+					Para finalizar, el profesor nombró algunos paquetes que realizaban una implementación no simplificada del algoritmo, estos son \texttt{RLof}, \texttt{DDoutlier} y \texttt{DMwR}, pero en el segundo ejercicio autónomo de detección de datos anómalos, se implementará un código propio, que realice las simplificaciones oportunas.
 	
 	\chapter{Ejercicios autónomos}
 	
 		\section{Descripción de los datos}
 		
-			``\textit{El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.}''\\
+			\begin{exercise}
+				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.
+			\end{exercise}
 			
-			Para empezar, hemos introducido todos estos datos en un fichero CSV. Para realizar este fichero se ha abierto un Excel y hemos ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que hemos puesto \texttt{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez hemos introducido todos los datos guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R hacemos uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un data frame haciendo corresponder las filas y las columnas de la tabla. La función que hemos utilizado es \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma habría que haber usado \texttt{read.csv2}. Observamos en la siguiente línea de código cómo hemos creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura que hemos mencionado previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio habría que pasar por parámetro la ruta donde se encuentra el archivo.
+			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla. La función empleada ha sido \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma se debería haber usado \texttt{read.csv2}. Se observa en la siguiente línea de código cómo se ha creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura mencionada previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio, habría que pasar por parámetro la ruta donde se encuentra dicho archivo.
 			
 			<<>>=
 			fichero = read.csv("data/distancia_universitarios.csv")
 			fichero
 			@
 			
-			Como podemos observar se nos ha leído correctamente el fichero, creando el dataframe con los datos correctamente leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si lo separamos por comas se nos leerán dos datos en vez de uno.\\ 
+			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se leerán dos datos en vez de uno.\\ 
 			
-			Como vamos a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que estar accediendo todo el rato a esta podemos definirla en una variable nueva a la que llamaremos distancias, de tal forma que no tengamos que estar haciendo \texttt{fichero\$Distancia} todo el rato.
+			Como se v a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, podemos definirla en una variable nueva a la que llamaremos \texttt{distancias}, de tal forma que no se tenga que estar haciendo \texttt{fichero\$Distancia} repetidamente.
 			
 			<<>>=
 			distancias = fichero$Distancia
 			@
 			
-			Para saber la longitud de \texttt{distancias} hemos decidido elaborar nuestra propia función la cual nos dará un escalar con el número de elementos que haya en nuestra lista (distancias en este caso). 
+			Para conocer la longitud de \texttt{distancias}, se ha decidido elaborar una función propia, la cual nos devolverá un escalar con el número de elementos que contenga nuestra lista (distancias en este caso). 
 			
 			<<>>=
 			len = function(list){
@@ -613,16 +614,15 @@
 			}
 			@
 			
-			Nuestra función len se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como veremos más adelante. Vamos a ver cuántas distancias tenemos:
+			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como veremos más adelante. Veamos cuántas distancias se tienen:
 			
 			<<>>=
-			longitud = len(distancias)
-			longitud
+			(longitud = len(distancias))
 			@
 			
-			Observamos que tenemos 73 elementos, es decir, 73 distancias. La próxima utilidad que necesitamos es la ordenación de nuestra lista de distancias. Para ello hemos elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando para ello el método de la burbuja. \\
+			Observamos se tienen 73 elementos, es decir, 73 distancias. La próxima utilidad que se necesita es la ordenación de la lista de distancias. Para ello se ha elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando el método de la burbuja. \\
 			
-			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. La función que realiza este método de ordenación es la siguiente:
+			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. Esto se consigue en un tiempo $\mathcal{O}(n^2)$. La función que realiza este método de ordenación es la siguiente:
 			
 			<<>>=
 			bubble = function(list, asc = TRUE){
@@ -653,7 +653,7 @@
 			}
 			@
 			
-			A esta función habrá que pasarle la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará ascendentemente, y en caso de \texttt{FALSE} se ordenará descendentemente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Vamos a hacer la prueba con nuestra lista de distancias:
+			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Hagamos la prueba con la lista de distancias:
 			
 			{\small 
 			<<>>=
@@ -665,7 +665,7 @@
 			@
 			}
 			
-			Con la lista ordenada se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, teníamos que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que nos resulta muy fácil crear una función rango.
+			Con la lista ordenada, se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
 			
 			<<>>=
 			rank = function(list){
@@ -674,14 +674,14 @@
 			}
 			@
 			
-			Primeramente hemos ordenado la lista en orden ascendente, de tal forma que el valor máximo se encontrará en el último índice y el valor mínimo en el primero. Lo que hacemos para calcular el rango es restar el elemento del último índice menos el del primero. Comprobamos nuestra función y observamos que nos sale un rango de 45.
+			Primeramente, se ha ordenado la lista en orden ascendente, de tal forma que el valor máximo se encontrará en el último índice y el valor mínimo en el primero. Para calcular el rango se resta al elemento del último índice, el del primero. Se comprueba la función y se observa que se obtiene un rango de 45.
 			
 			<<>>=
 			rango_dist = rank(distancias)
 			rango_dist
 			@
 			
-			Ahora vamos a realizar el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente crearemos una función para cada una. La primera que vamos a realizar y en la que se van a basar el resto será la frecuencia absoluta. El código de la función es el siguiente:
+			Ahora se realizará el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente se crea una función para cada una. La primera que realizaremos y en la que se basará el resto, será la frecuencia absoluta. El código de la función es el siguiente:
 			
 			<<>>=
 			absolute_freq = function(list){
@@ -706,9 +706,9 @@
 			}
 			@
 			
-			El algoritmo consiste en iterar toda la lista. Tenemos dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que encontremos un elemento distinto del anterior, lo apuntaremos en la lista de elementos, y mientras continuamos iterando la lista vamos apuntando en un contador auxiliar las veces que va apareciendo es elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en l resto de la lista ya que previamente la hemos ordenado. De esta forma, encontramos un elemento, contamos las veces contiguas que aparece y cuando aparece otro elemento apuntamos las frecuencias del anteior e inciamos el mismo procedimiento con el siguiente elemento. Una vez completamos la iteración de la lista devolvemos con rbind una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.\\
+			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, lo se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.\\
 			
-			Para esta función hemos utilizado las funciones de append (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función rbind (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
+			Para esta función se han utilizado las funciones de \texttt{append} (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
 			
 			{\small
 			<<>>=
@@ -716,8 +716,8 @@
 			frecuencia_abs
 			@
 			}
-			
-			Una vez hemos hecho las frecuencias absolutas pasamos a hacer las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo disponemos de todas las herramientas, ya que tenemos la función \texttt{len} que nos dice cuántos elementos hay y la función de frecuencias absolutas que hemos visto ahora mismo. Podemos codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que hemos visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
+		
+			Una vez realizadas las frecuencias absolutas pasaremos a realizar las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo se disponen de todas las herramientas, ya que se tiene la función \texttt{len}, que dice cuántos elementos hay, y la función de frecuencias absolutas que acabamos de realizar. Se puede codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que se ha visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
 			
 			<<>>=
 			relative_freq = function(list){
@@ -728,7 +728,7 @@
 			}
 			@
 			
-			Y comprobamos las frecuencias relativas de la lista.
+			Se comprueban las frecuencias relativas de la lista.
 			
 			{\small
 			<<>>=
@@ -737,7 +737,7 @@
 			@
 			}
 			
-			Por último, vamos a elaborar dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada podemos iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando tendremos que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Iremos iterando cada elemento e iremos creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
+			Por último, elaboraremos dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
 			
 			<<>>=
 			acum_absolute_freq = function(list){
@@ -769,7 +769,7 @@
 			}
 			@ 
 			
-			Como se puede observar es el mismo código solo que en uno trabajamos con las frecuencias absolutas y en el otro con las relativas. Comprobamos su funcionamiento:
+			Como se puede observar es el mismo código solo que en uno se trabajan con las frecuencias absolutas y en el otro con las relativas. Comprobamos su funcionamiento:
 			
 			{\small
 			<<>>=
@@ -781,9 +781,9 @@
 			@
 			}
 			
-			Se puede comprobar que están bien ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
+			Se puede comprobar que son correctos, ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
 			
-			Prosiguiendo con el análisis de datos, tenemos que obtener la moda del conjunto de datos. Para ello hemos elaborado una función que nos calculará este valor. Ayudándonos de las frecuencias absolutas, podemos iterar estas y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Así vamos iterando la frecuencia de cada elemento diferente de la lista y vamos comprobando si su frecuencia es la mayor hasta ahora. En caso de serlo, la moda temporal correspondera a ese elemento. Así observaremos todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
+			Prosiguiendo con el análisis de datos, se tiene que obtener la moda del conjunto de datos. Para ello se ha elaborado una función que nos calculará este valor. Ayudándonos de las frecuencias absolutas, se pueden iterar y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Se va iterando la frecuencia de cada elemento diferente de la lista y se comprueba si su frecuencia es la mayor hasta el momento. En caso de serlo, la moda temporal corresponderá a ese elemento. Así observaremos todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
 			
 			{\small
 			<<>>=
@@ -804,14 +804,16 @@
 			@
 			}
 			
-			Y extraemos la moda de nuestro conjunto de datos:
+			Se extrae la moda del conjunto de datos proporcionado:
 			
 			<<>>=
 			moda = mode(distancias)
 			moda
 			@
 		
-			Observamos que la moda del conjunto de distancias es 30. Podemos comprobar que está bien si nos fijamos en las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos el algoritmo devolverá el elemento de menor magnitud al iterar el algoritmo de menor a mayor elemento.\\
+			Se observa que la moda del conjunto de distancias es 30. Se puede comprobar que es correcto si observamos las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos, el algoritmo devolverá el elemento de menor magnitud al iterar de menor a mayor elemento.\\
+			
+			%%%%%%REVISAR A PARTIR DE AQUI%%%%%%%%%%%
 			
 			El siguiente análisis que tendremos que hacer es el de la mediana, que ya hemos visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor tendremos que fijarnos en la paridad del número total de datos. Y es que si este es par o impar se calculará de una forma u otra. Para saber si un número es par o impar bastará con ver su módulo 2 (valor del resto del número dividido entre 2). Si este es 0 estamos ante un número par, en caso contrario ante uno impar.\\
 			
@@ -945,7 +947,9 @@
 			
 		\section{Asociación}
 		
-			``\textit{El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.}''
+			\begin{exercise}
+				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
+			\end{exercise}
 			
 			<<>>=
 			union = function(c1, c2) {
@@ -1135,9 +1139,11 @@
 		
 		\section{Detección de datos anómalos}
 		
-			\subsection{Primer ejercicio}
+			\subsection{Técnicas estadísticas}
 			
-				``\textit{El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.}''\\
+				\begin{exercise}
+					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.
+				\end{exercise}
 				
 				Como hemos visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporciona los mismos resultados que nos salían en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) que están realizados de forma diferente a como hemos visto; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la sección 2.1 (correspondiente a los ejercicios autónomos de descripción de los datos) hemos hecho nuestras propias funciones que nos proporcionan los resultados correctos a los cálculos de todo lo que necesitamos. Es por ello que, en base a estas funciones, vamos a realizar los algoritmos correspondientes:\\
 				
@@ -1304,8 +1310,10 @@
 				
 				Y efectivamente tenemos una lista con un 3, el punto que hemos visto que era un \textit{outlier}.\\
 					
-			\subsection{Segundo ejercicio}
+			\subsection{Proximidad y densidad}
 			
-				``\textit{El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por el número de Mujeres y Hombres inscritos en una serie de cinco seminarios que se han impartido sobre biología. Los datos son: \{Mujeres, Hombres\}: 1. \{9, 9\}; 2. \{9, 7\}; 3. \{11, 11\}; 4. \{2, 1\}; 5. \{11, 9\}.}''
+				\begin{exercise}
+					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por el número de Mujeres y Hombres inscritos en una serie de cinco seminarios que se han impartido sobre biología. Los datos son: \{Mujeres, Hombres\}: 1. \{9, 9\}; 2. \{9, 7\}; 3. \{11, 11\}; 4. \{2, 1\}; 5. \{11, 9\}.
+				\end{exercise}
 	
 \end{document}          
