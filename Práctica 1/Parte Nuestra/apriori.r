@@ -1,31 +1,27 @@
-len = function(list){
+len = function(list) {
 	count = 0
-	for (element in list){
+	for (element in list) {
 		count = count + 1
 	}
 	count
 }
 
-union = function(c1, c2){
-	if (len(c1) == 0){
+union = function(c1, c2) {
+	if (len(c1) == 0) {
 		c2
-	}
-	else if (is.element(c1[1], c2)){
+	} else if (is.element(c1[1], c2)) {
 		union(c1[-1], c2)
-	}
-	else{
+	} else {
 		union(c1[-1], append(c2, c1[1]))
 	}
 }
 
-intersect = function(c1, c2){
-	if (len(c1) == 0){
+intersect = function(c1, c2) {
+	if (len(c1) == 0) {
 		c()
-	}
-	else if (is.element(c1[1], c2)){
+	} else if (is.element(c1[1], c2) ) {
 		append(intersect(c1[-1], c2), c1[1])
-	}
-	else{
+	} else {
 		intersect(c1[-1], c2)
 	}
 }
@@ -40,11 +36,11 @@ dif = function(c1, c2) {
 	res
 }
 
-count_appearance = function(table, elements){
+count_appearance = function(table, elements) {
 	count = 0
-	for (i in 1:len(table[,1])){
+	for (i in 1:len(table[,1])) {
 		acum = 1
-		for (element in elements){
+		for (element in elements) {
 			acum = (table[i,element]) & acum
 		}
 		count = count + acum
@@ -56,11 +52,11 @@ support = function(table, elements) {
 	count_appearance(table, elements) / len(table[,1])
 }
 
-support_clasif = function(table, ocurrences, s){
+support_clasif = function(table, ocurrences, s) {
 	valid_ocurrences = c()
-	for (ocurrence in ocurrences){
+	for (ocurrence in ocurrences) {
 		support_oc = support(table, ocurrence)
-		if (support_oc >= s){
+		if (support_oc >= s) {
 			valid_ocurrences = append(valid_ocurrences, ocurrence)
 		}
 	}
@@ -129,11 +125,36 @@ get_asotiations = function(table, comb, c) {
 			}
 		}
 	}
-	asoc = data.frame(left = I(listLeft), right = I(listRight))
-	asoc
+	data.frame(left = I(listLeft), right = I(listRight))
 }
 
-apriori = function(table, elements, s, c) {
+getElements = function(data) {
+  elements = c()
+  for (i in 1:len(data)) {
+    elements = union(elements, data[[i]])
+  }
+  elements
+}
+
+getTable = function(data, elements) {
+  nCol = len(elements)
+  nRow = len(data)
+  table = data.frame(matrix(0, ncol = nCol, nrow = nRow, dimnames = list(1:nRow, elements)))
+
+  for (i in 1:nRow) {
+    for (j in 1:len(data[[i]])) {
+      table[i, data[[i]][j]] = 1
+    }
+  }
+  table
+}
+
+apriori = function(data, s, c) {
+
+  elements = getElements(data)
+
+  table = getTable(data, elements)
+
   soporte_clasif = support_clasif(table, elements, s)
   
   combinations = create_comb(table, soporte_clasif, s)
@@ -148,28 +169,7 @@ apriori = function(table, elements, s, c) {
   }
 }
 
-elements = c(c("P"), c("A") ,c("L"), c("C"), c("N"))
-table = matrix(c(1,1,0,1,1, 1,1,1,1,0, 1,1,0,1,0, 1,0,1,1,0, 1,1,0,0,0, 0,0,0,1,0),6,5,byrow=TRUE,dimnames=list(c("suceso1","suceso2","suceso3","suceso4","suceso5","suceso6"),c("P","A","C","L","N")))
+data2 = list(c("Pan", "Agua", "Leche", "Naranjas"), c("Pan", "Agua", "Café", "Leche"), c("Pan", "Agua", "Leche"), c("Pan", "Café", "Leche"), c("Pan", "Agua"), c("Leche"))
+data = list(c("X", "C", "N", "B"), c("X", "T", "B", "C"), c("N", "C", "X"), c("N", "T", "X", "B"), c("X", "C", "B"), c("N"), c("X", "B", "C"), c("T", "A"))
 
-elements = c(c("A"), c("B"), c("C"), c("D"), c("E"))
-table = matrix(c(0,0,0,0,1, 0,0,0,1,0, 0,1,1,0,1, 1,0,0,1,0, 0,0,0,0,1, 0,0,1,0,0), 6, 5, byrow=TRUE, dimnames=list(c("suceso1", "suceso2", "suceso3", "suceso4", "suceso5", "suceso6"), c("A", "B", "C", "D", "E")))  
-
-apriori(table, elements, 0.5, 0.8)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+apriori(data, 0.4, 0.9)
