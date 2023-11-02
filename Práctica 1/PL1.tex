@@ -1687,10 +1687,9 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
 			\end{exercise}
 			
-			Para realizar el algoritmo $apriori$ es necesario programar algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones que necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no estén en $A$. Por otro lado, la diferencia de dos conjuntos $A - B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.
+			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones que necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no estén en $A$. Por otro lado, la diferencia de dos conjuntos $A - B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.\\
 			
-			Como función auxiliar también ser hará uso de la función "len", programada en el apartado 2.1.
-			
+			Como función auxiliar también ser hará uso de la función $len$, programada en el apartado 2.1.
 			
 			
 \begin{knitrout}
@@ -1703,16 +1702,6 @@
                 \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
                 \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
-        \hlstd{\}}
-\hlstd{\}}
-
-\hlstd{intersect} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{)\{}
-        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
-                \hlkwd{c}\hlstd{()}
-        \hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
-                \hlkwd{append}\hlstd{(}\hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2), c1[}\hlnum{1}\hlstd{])}
-        \hlstd{\}} \hlkwa{else} \hlstd{\{}
-                \hlkwd{intersect}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
         \hlstd{\}}
 \hlstd{\}}
 
@@ -1729,16 +1718,16 @@
 \end{kframe}
 \end{knitrout}
 			
-			
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero que se va a realizar es la creación de una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{count_appearance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{)\{}
+\hlstd{count_appearance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{) \{}
         \hlstd{count} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{]))\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{])) \{}
                 \hlstd{acum} \hlkwb{=} \hlnum{1}
-                \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{elements)\{}
+                \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{elements) \{}
                         \hlstd{acum} \hlkwb{=} \hlstd{(table[i,element])} \hlopt{&} \hlstd{acum}
                 \hlstd{\}}
                 \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlstd{acum}
@@ -1749,6 +1738,8 @@
 \end{kframe}
 \end{knitrout}
 			
+			Como se puede observar, el código consiste en iterar cada uno de los sucesos, y para cada uno de ellos, se va realizando la operación lógica $and$ entre los 
+			
 			
 			
 \begin{knitrout}
@@ -1758,11 +1749,11 @@
         \hlkwd{count_appearance}\hlstd{(table, elements)} \hlopt{/} \hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{])}
 \hlstd{\}}
 
-\hlstd{support_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{s}\hlstd{)\{}
+\hlstd{support_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{s}\hlstd{) \{}
         \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences)\{}
+        \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences) \{}
                 \hlstd{support_oc} \hlkwb{=} \hlkwd{support}\hlstd{(table, ocurrence)}
-                \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s)\{}
+                \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s) \{}
                         \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocurrences, ocurrence)}
                 \hlstd{\}}
         \hlstd{\}}
@@ -1851,8 +1842,7 @@
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\}}
-        \hlstd{asoc} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(listLeft),} \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(listRight))}
-        \hlstd{asoc}
+        \hlkwd{data.frame}\hlstd{(}\hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(listLeft),} \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(listRight))}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1863,7 +1853,41 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+\hlstd{getElements} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{) \{}
+        \hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data)) \{}
+                \hlstd{elements} \hlkwb{=} \hlkwd{union}\hlstd{(elements, data[[i]])}
+        \hlstd{\}}
+        \hlstd{elements}
+\hlstd{\}}
+
+\hlstd{getTable} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{elements}\hlstd{) \{}
+        \hlstd{nCol} \hlkwb{=} \hlkwd{len}\hlstd{(elements)}
+        \hlstd{nRow} \hlkwb{=} \hlkwd{len}\hlstd{(data)}
+        \hlstd{table} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= nCol,} \hlkwc{nrow} \hlstd{= nRow,}
+        \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{nRow, elements)))}
+
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{nRow) \{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data[[i]])) \{}
+                        \hlstd{table[i, data[[i]][j]]} \hlkwb{=} \hlnum{1}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{table}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+
+        \hlstd{elements} \hlkwb{=} \hlkwd{getElements}\hlstd{(data)}
+
+        \hlstd{table} \hlkwb{=} \hlkwd{getTable}\hlstd{(data, elements)}
+
         \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, elements, s)}
 
         \hlstd{combinations} \hlkwb{=} \hlkwd{create_comb}\hlstd{(table, soporte_clasif, s)}
@@ -1877,30 +1901,26 @@
                 \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que pase el soporte"}\hlstd{)}
         \hlstd{\}}
 \hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-			
-			
-			
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{) ,}\hlkwd{c}\hlstd{(}\hlstr{"T"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"B"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"C"}\hlstd{))}
 
-\hlstd{tabla} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}
-        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
-        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
-        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}
-        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}
-        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
-        \hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}
-        \hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}
-        \hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{),}\hlnum{8}\hlstd{,}\hlnum{6}\hlstd{,}\hlkwc{byrow}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}
-\hlkwd{c}\hlstd{(}\hlstr{"occu1"}\hlstd{,}\hlstr{"occu2"}\hlstd{,}\hlstr{"occu3"}\hlstd{,}\hlstr{"occu4"}\hlstd{,}\hlstr{"occu5"}\hlstd{,}\hlstr{"occu6"}\hlstd{,}\hlstr{"occu7"}\hlstd{,}\hlstr{"occu8"}\hlstd{),}
-\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"A"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"N"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{)))}
+\hlstd{data} \hlkwb{=} \hlkwd{list}\hlstd{(}
+\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"N"}\hlstd{,} \hlstr{"B"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"X"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"X"}\hlstd{,} \hlstr{"B"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"B"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"N"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"T"}\hlstd{,} \hlstr{"A"}\hlstd{))}
 
-\hlkwd{apriori}\hlstd{(tabla, elements,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
+\hlstd{data2} \hlkwb{=} \hlkwd{list}\hlstd{(}
+\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Leche"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"Leche"}\hlstd{))}
+
+\hlkwd{apriori}\hlstd{(data,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ##   left right
@@ -1910,7 +1930,6 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-			
 			
 		
 		\section{Detección de datos anómalos}
