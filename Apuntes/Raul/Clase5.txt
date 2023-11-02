@@ -6,6 +6,7 @@
 for (i in 1:5) {
 	distancias[,i]=sort(distancias[,i])
 };
+
 (distanciasordenadas=distancias);	Ordena Las distancias en la matriz
 
 for (i in 1:5) {
@@ -26,3 +27,46 @@ for (i in 1:5) {
 El LOF que se usa ahora está simplificado. Los de los paquetes serán más complejos (Buscan el más alto y se carga el valor)
 
 (distanciasM=as.matrix(dist(muestra, method="manhattan")))
+
+Paquetes que implementan LOF: RLof, DDoutlier, DMwR...
+
+Caja y Bigotes: 
+
+(muestra=t(matrix(c(3,2,3.5,12,4.7,4.1,5.2,4.9,7.1,6.1,6.2,5.2,14,5.3), 2, 7, dimnames=list(c("r", "d")))))
+(muestra = data.frame(muestra)) -> Crea data frame -> Permite distintos tipos de datos.
+(boxplot(muestra$r, range=1.5, plot=FALSE)) -> Es una mierda porque lo representa y se ve a ojirri. Además lo hace "mal" porque calcula los cuartiles de forma distinta
+
+Lo vamos a hacer vía cuantiles:
+
+(cuar1r<-quantile(muestra$r,0.25))
+
+(cuar3r<-quantile(muestra$r,0.75))
+
+Pero R calcula mal los cuartiles :(
+
+(int=c(cuar1r-1.5*(cuar3r-cuar1r), cuar3r+1.5*(cuar3r-cuar1r))) -> La función de clase
+
+for (i in 1:length(muestra$r)) {
+	if (muestra$r[i]<int[1] || muestra$r[i]>int[2]) {
+		print("el suceso"); 
+		print(i);
+		print("es un suceso anómalo o outlier");
+	}
+}
+
+Media y desviación típica con la densidad
+
+d = 2
+media = mean(muestra$d)	-> Esto hay que hacerlo con las funciones bien hechas.
+dt = sd(muestra$d)
+
+int2 = c(media-d*dt, media+d*dt)
+
+for (i in 1:length(muestra$d)) {
+	if (muestra$d[i]<int2[1] || muestra$d[i]>int2[2]) {
+		print("el suceso"); 
+		print(i);
+		print(muestra$d[i]);
+		print("es un suceso anómalo o outlier");
+	}
+}

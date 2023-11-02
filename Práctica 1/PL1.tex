@@ -601,19 +601,15 @@
 \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlnum{6}\hlstd{,} \hlnum{5}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
 \hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,} \hlstr{"suceso2"}\hlstd{,} \hlstr{"suceso3"}\hlstd{,} \hlstr{"suceso4"}\hlstd{,} \hlstr{"suceso5"}\hlstd{,} \hlstr{"suceso6"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in Matrix(c(1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, : no se pudo encontrar la función "{}Matrix"{}}}\begin{alltt}
 \hlstd{muestra}
 \end{alltt}
-\begin{verbatim}
-## 6 x 5 sparse Matrix of class "dgCMatrix"
-##         Pan Agua Café Leche Naranjas
-## suceso1   1    1    .     1        1
-## suceso2   1    1    1     1        .
-## suceso3   1    1    .     1        .
-## suceso4   1    .    1     1        .
-## suceso5   1    1    .     .        .
-## suceso6   .    .    .     1        .
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\end{kframe}
 \end{knitrout}
 			
 			A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
@@ -622,19 +618,15 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{muestrangCMatrix} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\begin{alltt}
 \hlstd{muestrangCMatrix}
 \end{alltt}
-\begin{verbatim}
-## 6 x 5 sparse Matrix of class "ngCMatrix"
-##         Pan Agua Café Leche Naranjas
-## suceso1   |    |    .     |        |
-## suceso2   |    |    |     |        .
-## suceso3   |    |    .     |        .
-## suceso4   |    .    |     |        .
-## suceso5   |    |    .     .        .
-## suceso6   .    .    .     |        .
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\end{kframe}
 \end{knitrout}
 			
 			Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
@@ -643,18 +635,15 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transpmuestrangCMatrix} \hlkwb{<-} \hlkwd{t}\hlstd{(muestrangCMatrix)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transpmuestrangCMatrix}
 \end{alltt}
-\begin{verbatim}
-## 5 x 6 sparse Matrix of class "ngCMatrix"
-##          suceso1 suceso2 suceso3 suceso4 suceso5 suceso6
-## Pan            |       |       |       |       |       .
-## Agua           |       |       |       .       |       .
-## Café           .       |       .       |       .       .
-## Leche          |       |       |       |       .       |
-## Naranjas       |       .       .       .       .       .
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\end{kframe}
 \end{knitrout}
 			
 			Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
@@ -663,46 +652,20 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(transpmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transacciones}
 \end{alltt}
-\begin{verbatim}
-## transactions in sparse format with
-##  6 transactions (rows) and
-##  5 items (columns)
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\begin{alltt}
 \hlkwd{summary}\hlstd{(transacciones)}
 \end{alltt}
-\begin{verbatim}
-## transactions as itemMatrix in sparse format with
-##  6 rows (elements/itemsets/transactions) and
-##  5 columns (items) and a density of 0.5666667 
-## 
-## most frequent items:
-##      Pan    Leche     Agua     Café Naranjas  (Other) 
-##        5        5        4        2        1        0 
-## 
-## element (itemset/transaction) length distribution:
-## sizes
-## 1 2 3 4 
-## 1 1 2 2 
-## 
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   1.000   2.250   3.000   2.833   3.750   4.000 
-## 
-## includes extended item information - examples:
-##   labels
-## 1    Pan
-## 2   Agua
-## 3   Café
-## 
-## includes extended transaction information - examples:
-##   itemsetID
-## 1   suceso1
-## 2   suceso2
-## 3   suceso3
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\end{kframe}
 \end{knitrout}
 			
 			Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
@@ -713,30 +676,9 @@
 \hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter} \hlstd{=}
 \hlkwd{list}\hlstd{(}\hlkwc{support} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{confidence} \hlstd{=} \hlnum{0.8}\hlstd{))}
 \end{alltt}
-\begin{verbatim}
-## Apriori
-## 
-## Parameter specification:
-##  confidence minval smax arem  aval originalSupport maxtime support minlen
-##         0.8    0.1    1 none FALSE            TRUE       5     0.5      1
-##  maxlen target  ext
-##      10  rules TRUE
-## 
-## Algorithmic control:
-##  filter tree heap memopt load sort verbose
-##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-## 
-## Absolute minimum support count: 3 
-## 
-## set item appearances ...[0 item(s)] done [0.00s].
-## set transactions ...[5 item(s), 6 transaction(s)] done [0.00s].
-## sorting and recoding items ... [3 item(s)] done [0.00s].
-## creating transaction tree ... done [0.00s].
-## checking subsets of size 1 2 3 done [0.00s].
-## writing ... [7 rule(s)] done [0.00s].
-## creating S4 object  ... done [0.00s].
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in apriori(transacciones, parameter = list(support = 0.5, confidence = 0.8)): no se pudo encontrar la función "{}apriori"{}}}\end{kframe}
 \end{knitrout}
 			
 			Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
@@ -746,17 +688,9 @@
 \begin{alltt}
 \hlkwd{inspect}\hlstd{(asociaciones)}
 \end{alltt}
-\begin{verbatim}
-##     lhs              rhs     support   confidence coverage  lift count
-## [1] {}            => {Leche} 0.8333333 0.8333333  1.0000000 1.00 5    
-## [2] {}            => {Pan}   0.8333333 0.8333333  1.0000000 1.00 5    
-## [3] {Agua}        => {Pan}   0.6666667 1.0000000  0.6666667 1.20 4    
-## [4] {Pan}         => {Agua}  0.6666667 0.8000000  0.8333333 1.20 4    
-## [5] {Leche}       => {Pan}   0.6666667 0.8000000  0.8333333 0.96 4    
-## [6] {Pan}         => {Leche} 0.6666667 0.8000000  0.8333333 0.96 4    
-## [7] {Agua, Leche} => {Pan}   0.5000000 1.0000000  0.5000000 1.20 3
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in inspect(asociaciones): no se pudo encontrar la función "{}inspect"{}}}\end{kframe}
 \end{knitrout}
 			
 			Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
@@ -1753,6 +1687,12 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
 			\end{exercise}
 			
+			Para realizar el algoritmo $apriori$ es necesario programar algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones que necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no estén en $A$. Por otro lado, la diferencia de dos conjuntos $A - B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.
+			
+			Como función auxiliar también ser hará uso de la función "len", programada en el apartado 2.1.
+			
+			
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1960,21 +1900,13 @@
 \hlkwd{c}\hlstd{(}\hlstr{"occu1"}\hlstd{,}\hlstr{"occu2"}\hlstd{,}\hlstr{"occu3"}\hlstd{,}\hlstr{"occu4"}\hlstd{,}\hlstr{"occu5"}\hlstd{,}\hlstr{"occu6"}\hlstd{,}\hlstr{"occu7"}\hlstd{,}\hlstr{"occu8"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"A"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"N"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{)))}
 
-\hlkwd{apriori}\hlstd{(tabla, elements,} \hlnum{0.5}\hlstd{,} \hlnum{0.8}\hlstd{)}
+\hlkwd{apriori}\hlstd{(tabla, elements,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##    left right
-## 1     X     B
-## 2     B     X
-## 3     X     C
-## 4     C     X
-## 5     B     C
-## 6     C     B
-## 7     B  X, C
-## 8     C  X, B
-## 9  X, B     C
-## 10 X, C     B
-## 11 B, C     X
+##   left right
+## 1    B     X
+## 2    C     X
+## 3 B, C     X
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

@@ -951,6 +951,11 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
 			\end{exercise}
 			
+			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones que necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no estén en $A$. Por otro lado, la diferencia de dos conjuntos $A - B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.\\
+			
+			Como función auxiliar también ser hará uso de la función $len$, programada en el apartado 2.1.
+			
+			
 			<<>>=
 			union = function(c1, c2) {
 				if (len(c1) == 0) {
@@ -959,16 +964,6 @@
 					union(c1[-1], c2)
 				} else {
 					union(c1[-1], append(c2, c1[1]))
-				}
-			}
-			
-			intersect = function(c1, c2){
-				if (len(c1) == 0) {
-					c()
-				} else if (is.element(c1[1], c2)) {
-					append(intersect(c1[-1], c2), c1[1])
-				} else {
-					intersect(c1[-1], c2)
 				}
 			}
 			
@@ -983,7 +978,7 @@
 			}
 			@
 			
-			
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero que se va a realizar es la creación de una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
 			
 			<<>>=
 			count_appearance = function(table, elements){
@@ -998,6 +993,8 @@
 				count
 			}
 			@
+			
+			Como se puede observar, el código consiste en iterar cada uno de los sucesos, y para cada uno de ellos, se va realizando la operación lógica $and$ entre los 
 			
 			
 			
@@ -1132,7 +1129,7 @@
 			c("occu1","occu2","occu3","occu4","occu5","occu6","occu7","occu8"),
 			c("X", "A", "T", "N", "B", "C")))
 			
-			apriori(tabla, elements, 0.5, 0.8)
+			apriori(tabla, elements, 0.4, 0.9)
 			@
 			
 			
