@@ -48,7 +48,7 @@ euc_distance = function(p1,p2){
 }
 
 
-distance_matrix = function(df){
+create_distance_matrix = function(df){
 	empty_matrix = matrix(ncol = len(df[,1]), nrow = len(df[,1]))
 	distances = data.frame(empty_matrix)
 	for (i in 1:len(df[,1])){
@@ -86,7 +86,7 @@ k_neighbors = function(sample, k, d, details = FALSE){
 		cat("Grado de outlier: d =",d,"\n")
 		cat("K-Vecino más próximo: k =",k,"\n\n")
 	}
-	d_matrix = distance_matrix(sample)
+	d_matrix = create_distance_matrix(sample)
 	if(details){
 		print("->PASO 2: MATRIZ DE DISTANCIAS ENTRE PUNTOS:\n")
 		print(d_matrix)
