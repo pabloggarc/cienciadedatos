@@ -76,6 +76,7 @@
 	captionpos = b
 }
 \crefname{listing}{Código}{Códigos}
+\crefname{section}{Sección}{Secciones}
 
 \title{
 	\huge
@@ -601,15 +602,19 @@
 \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlnum{6}\hlstd{,} \hlnum{5}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
 \hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,} \hlstr{"suceso2"}\hlstd{,} \hlstr{"suceso3"}\hlstd{,} \hlstr{"suceso4"}\hlstd{,} \hlstr{"suceso5"}\hlstd{,} \hlstr{"suceso6"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in Matrix(c(1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, : no se pudo encontrar la función "{}Matrix"{}}}\begin{alltt}
 \hlstd{muestra}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "dgCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   1    1    .     1        1
+## suceso2   1    1    1     1        .
+## suceso3   1    1    .     1        .
+## suceso4   1    .    1     1        .
+## suceso5   1    1    .     .        .
+## suceso6   .    .    .     1        .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
@@ -618,15 +623,19 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{muestrangCMatrix} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\begin{alltt}
 \hlstd{muestrangCMatrix}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "ngCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   |    |    .     |        |
+## suceso2   |    |    |     |        .
+## suceso3   |    |    .     |        .
+## suceso4   |    .    |     |        .
+## suceso5   |    |    .     .        .
+## suceso6   .    .    .     |        .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
@@ -635,15 +644,18 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transpmuestrangCMatrix} \hlkwb{<-} \hlkwd{t}\hlstd{(muestrangCMatrix)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transpmuestrangCMatrix}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 5 x 6 sparse Matrix of class "ngCMatrix"
+##          suceso1 suceso2 suceso3 suceso4 suceso5 suceso6
+## Pan            |       |       |       |       |       .
+## Agua           |       |       |       .       |       .
+## Café           .       |       .       |       .       .
+## Leche          |       |       |       |       .       |
+## Naranjas       |       .       .       .       .       .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
@@ -652,20 +664,46 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(transpmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transacciones}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\begin{alltt}
+\begin{verbatim}
+## transactions in sparse format with
+##  6 transactions (rows) and
+##  5 items (columns)
+\end{verbatim}
+\begin{alltt}
 \hlkwd{summary}\hlstd{(transacciones)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\end{kframe}
+\begin{verbatim}
+## transactions as itemMatrix in sparse format with
+##  6 rows (elements/itemsets/transactions) and
+##  5 columns (items) and a density of 0.5666667 
+## 
+## most frequent items:
+##      Pan    Leche     Agua     Café Naranjas  (Other) 
+##        5        5        4        2        1        0 
+## 
+## element (itemset/transaction) length distribution:
+## sizes
+## 1 2 3 4 
+## 1 1 2 2 
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   2.250   3.000   2.833   3.750   4.000 
+## 
+## includes extended item information - examples:
+##   labels
+## 1    Pan
+## 2   Agua
+## 3   Café
+## 
+## includes extended transaction information - examples:
+##   itemsetID
+## 1   suceso1
+## 2   suceso2
+## 3   suceso3
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
@@ -676,9 +714,30 @@
 \hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter} \hlstd{=}
 \hlkwd{list}\hlstd{(}\hlkwc{support} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{confidence} \hlstd{=} \hlnum{0.8}\hlstd{))}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in apriori(transacciones, parameter = list(support = 0.5, confidence = 0.8)): no se pudo encontrar la función "{}apriori"{}}}\end{kframe}
+\begin{verbatim}
+## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5     0.5      1
+##  maxlen target  ext
+##      10  rules TRUE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 3 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[5 item(s), 6 transaction(s)] done [0.00s].
+## sorting and recoding items ... [3 item(s)] done [0.00s].
+## creating transaction tree ... done [0.00s].
+## checking subsets of size 1 2 3 done [0.00s].
+## writing ... [7 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.00s].
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
@@ -688,9 +747,17 @@
 \begin{alltt}
 \hlkwd{inspect}\hlstd{(asociaciones)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in inspect(asociaciones): no se pudo encontrar la función "{}inspect"{}}}\end{kframe}
+\begin{verbatim}
+##     lhs              rhs     support   confidence coverage  lift count
+## [1] {}            => {Leche} 0.8333333 0.8333333  1.0000000 1.00 5    
+## [2] {}            => {Pan}   0.8333333 0.8333333  1.0000000 1.00 5    
+## [3] {Agua}        => {Pan}   0.6666667 1.0000000  0.6666667 1.20 4    
+## [4] {Pan}         => {Agua}  0.6666667 0.8000000  0.8333333 1.20 4    
+## [5] {Leche}       => {Pan}   0.6666667 0.8000000  0.8333333 0.96 4    
+## [6] {Pan}         => {Leche} 0.6666667 0.8000000  0.8333333 0.96 4    
+## [7] {Agua, Leche} => {Pan}   0.5000000 1.0000000  0.5000000 1.20 3
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
@@ -704,7 +771,7 @@
 					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 7 valores de resistencia y densidad para diferentes tipos de hormigón \{Resistencia, Densidad\}: \{3, 2; 3.5, 12; 4.7, 4.1; 5.2, 4.9; 7.1, 6.1; 6.2, 5.2; 14, 5.3\}. Aplicar las medidas de ordenación a la resistencia y las de dispersión a la densidad.
 				\end{exercise}
 				
-				\subsubsection{Caja y Bigotes}
+				\subsubsection{Caja y Bigotes}\label{subsub:caja_bigotes}
 				
 					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers. Para realizar el cálculo de los outliers en clase, se introdujeron los datos en una matriz mediante \texttt{matrix}, luego se transpuso y se pasó a un \texttt{dataframe}. Para esta primera técnica vamos a usar la primera columna (\texttt{resistencia}).
 					
@@ -999,7 +1066,7 @@
 	
 	\chapter{Ejercicios autónomos}
 	
-		\section{Descripción de los datos}
+		\section{Descripción de los datos}\label{sec:descrip_auto}
 		
 			\begin{exercise}
 				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.
@@ -1492,13 +1559,11 @@
 		
 			Se observa que la moda del conjunto de distancias es 30. Se puede comprobar que es correcto si observamos las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos, el algoritmo devolverá el elemento de menor magnitud al iterar de menor a mayor elemento.\\
 			
-			%%%%%%REVISAR A PARTIR DE AQUI%%%%%%%%%%%
+			El siguiente análisis que se hará es el de la mediana, que se ha visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor se tendrá que observar la paridad del número total de datos. Para saber si $n$ es par, basta con calcular $n\pmod{2}$. Si $n \equiv 0 \pmod{2}$ será par, y si $n\pmod{2} \equiv 1$, será impar. \\
 			
-			El siguiente análisis que tendremos que hacer es el de la mediana, que ya hemos visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor tendremos que fijarnos en la paridad del número total de datos. Y es que si este es par o impar se calculará de una forma u otra. Para saber si un número es par o impar bastará con ver su módulo 2 (valor del resto del número dividido entre 2). Si este es 0 estamos ante un número par, en caso contrario ante uno impar.\\
+			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente tendremos que coger el elemento $\frac{n+1}{2}$.\\
 			
-			En caso de tener un número de elementos par tendremos que coger con la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente tendremos que coger el elemento $\frac{n+1}{2}$.\\
-			
-			Hemos englobado estos cálculos en una función, donde comprobamos si estamos ante un número de elementos par o impar y accedemos a los elementos correspondientes. La función es la siguiente:
+			Se han englobado estos cálculos en una función, donde se comprueba si se está ante un número de elementos par o impar, y se accede a los elementos correspondientes. La función es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1518,7 +1583,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Comprobamos el valor de la mediana de nuestro conjunto de datos:
+			Comprobación del valor de la mediana del conjunto de datos:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1532,9 +1597,9 @@
 \end{kframe}
 \end{knitrout}
 			
-			Vemos que el valor medio es 20. Estamos en lo correcto, ya que si nos fijamos en el conjunto ordenado de los datos vemos que tenemos 73 elementos (número impar), luego la mediana será el elemento $\frac{73+1}{2}$; es decir, el elemento 37 que vemos que es el 20, el valor que nos ha salido como mediana. \\
+			Se observa que el valor medio es 20. Esto es correcto, ya que si se observa el conjunto ordenado, se ve que existen 73 datos, luego $\tilde{x}$ será el elemento $x_{\frac{73+1}{2}} = x_{37} = 20$, el valor obtenido como mediana. \\
 			
-			Tras haber codificado las medidas de tendencia central, vamos a estudiar dos medidas de dispersión. La primera de las medidas que vamos a calcular es la desviación típica. Para ello hemos codificado la siguiente función:
+			Tras haber codificado las medidas de tendencia central, se estudiarán dos medidas de dispersión. La primera de las medidas que se van a calcular es la desviación típica. Para ello se ha codificado la siguiente función:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1552,13 +1617,13 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como se puede observar, la función consiste en ir sumando las diferencias entre cada dato y la media de todos ellos elevadas al cuadrado. El \texttt{for} de la función es el encargado de realizar esta tarea. Tras ello, se divide el resultado entre el número total de datos y se realiza la raíz cuadrada de la medida obtenida. La desviación típica, por tanto, obedece a la fórmula: \\
+			Como se puede observar, la función consiste en ir sumando las diferencias entre cada dato y la media de todos ellos elevadas al cuadrado, $(x_i - \bar{x})$. El bucle \texttt{for} de la función es el encargado de realizar esta tarea. Tras ello, se divide el resultado entre el número total de datos $n$, y se realiza la raíz cuadrada de la medida obtenida. La desviación típica, por tanto, obedece a la fórmula: 
 			
 			$$
-			\sigma = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n}}
+			s = \sqrt{\frac{\displaystyle\sum_{i=1}^n (x_i-\bar{x})^2}{n}}
 			$$
 			
-			La desviación típica de nuestro conjunto de datos será por tanto la siguiente:
+			La desviación típica del conjunto de datos será la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1572,7 +1637,11 @@
 \end{kframe}
 \end{knitrout}
 			
-			La segunda y última medida de dispersión que vamos a estudiar es la varianza, que en el fondo, no es más que elevar la desviación típica al cuadrado.
+			La segunda y última medida de dispersión que se estudiará es la varianza, que en el fondo, no es más que elevar la desviación típica al cuadrado.
+			
+			$$
+			s^2 = \frac{\displaystyle\sum_{i=1}^n (x_i-\bar{x})^2}{n}
+			$$
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1586,7 +1655,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Con esta función, calculamos la varianza en el conjunto de datos:
+			Con esta función, se calcula la varianza del conjunto de datos:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1600,14 +1669,14 @@
 \end{kframe}
 \end{knitrout}
 			
-			Terminadas las medidas de dispersión, vamos a proceder a calcular los cuantiles. Para calcular los cuantiles tendremos que definir además de la lista de la que queremos calcular el valor de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de c. Así, si introducimos por parámetro un c que no es válido se nos devolverá \texttt{NULL}, ya que no se puede hacer un cálculo. En caso de haber introducido un c válido tendremos que observar dos casos.
+			Terminadas las medidas de dispersión, se procede a calcular los cuantiles. Para calcular los cuantiles se tendrá que definir, además de la lista de la que se quiere calcular el valor, de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de $c$. Así, si se introduce por parámetro un $c$ que no es válido se devolverá \texttt{NULL}, ya que no se puede hacer el cálculo. En caso de haber introducido un $c$ válido se observan dos casos.
 			
 			\begin{itemize}
-				\item Si $n c$ (siendo n el número total de elementos) es natural tendremos que coger los elementos $n c$ y $n c + 1$, los sumaremos y dividiremos entre 2.
-				\item Si $n c$ (siendo n el número total de elementos) no es natural, se deberá coger el elemento $\left\lfloor nc \right\rfloor + 1$, siendo $\left\lfloor n c \right\rfloor$ la parte entera del producto.
+				\item Si $nc \in \mathbb{N}$ (siendo $n$ el número total de elementos), se calculará $\frac{x_{nc}+x_{nc+1}}{2}$. 
+				\item Si $nc \not \in \mathbb{N}$ (siendo $n$ el número total de elementos), se deberá coger el elemento $\left\lfloor nc \right\rfloor + 1 $ o $ \left\lceil nc \right\rceil$. 
 			\end{itemize}
 			
-			Con estos cálculos podemos codificar una función que nos da los cuantiles. La función es la siguiente:
+			Con estos cálculos se codifica una función que calcula los cuantiles. La función es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1634,16 +1703,16 @@
 \end{kframe}
 \end{knitrout}
 			
-			Para poder comprobar si $n c \in \mathbb{N}$,  calculamos $nc \pmod{1}$. Cualquier número entero dividido entre 1 nos va a dar de resto 0; en caso contrario dará otra cosa que no sea 0. Además, aseguramos que el producto, en caso de ser entero, nos va a dar un número natural ya que siempre va a ser positivo. Esto es por dos razones fundamentales:
+			Para poder comprobar si $nc \in \mathbb{N}$,  se calcula $nc \pmod{1}$, pues $\forall a \in \mathbb{Z}, a \equiv 0 \pmod{1}$. Además, se garantiza que $nc \in \mathbb{Z} \rightarrow nc \in \mathbb{N}$. Esto es por dos razones fundamentales:
 			
 			\begin{itemize}
-				\item Siempre se cumplirá que $n \geq 0$. 
-				\item Siempre se cumplirá que $0 \leq c \leq 1$. 
+				\item Siempre se cumplirá que $n > 0$. 
+				\item Siempre se cumplirá que $0 < c < 1$. 
 			\end{itemize}
 			
-			En caso de estar ante un número que no es natural tendremos que acceder a la parte entera del producto. Para poder acceder a ella hemos hecho uso de la función \texttt{floor} perteneciente al paquete \texttt{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si aplicamos esta función a $4.99$ nos devolverá 4, pues $\lfloor4.99\rfloor = 4$.\\
+			En caso de que $nc \not \in \mathbb{N}$ se trabajará con $\left\lfloor nc \right\rfloor$. Para calcularla se ha hecho uso de la función \texttt{floor} perteneciente al paquete \texttt{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si aplicamos esta función a $4.99$, devolverá 4, pues $\left\lfloor4.99\right\rfloor = 4$.\\
 			
-			Con esta función podremos calcular cuantiles, entre los que se incluyen cuartiles, deciles, percentiles... Para probar la función vamos a calcular los tres cuartiles $\frac{1}{4}, \frac{2}{4}$ y $\frac{3}{4}$.
+			Con esta función se podrán calcular cuantiles, entre los que se incluyen cuartiles, deciles, percentiles, etc. Para probar la función se calculan los tres cuartiles $\frac{1}{4}, \frac{2}{4}$ y $\frac{3}{4}$.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1679,7 +1748,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Observamos que los valores de los cuartiles 1, 2 y 3 son 8.1, 20 y 28. Además hemos probado a meter un valor de $c$ no válido y verificamos que efectivamente nos devuelve \texttt{NULL} ya que ese cálculo no sería lógicamente correcto. También comprobamos que el valor del segundo cuartil es igual al de la mediana que hemos calculado más arriba. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
+			Se observa que los valores de $\tilde{x}_{\frac{1}{4}}, \tilde{x}_{\frac{2}{4}}, \tilde{x}_{\frac{3}{4}}$ son $8.1, 20$ y $28$. Además, se ha probado a meter un valor de $c$ no válido y verificamos que efectivamente se devuelve \texttt{NULL}, ya que ese cálculo no sería lógicamente correcto. También se comprueba que $\tilde{x}_{\frac{2}{4}} = \tilde{x}$ que se ha calculado previamente. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
 			
 		\section{Asociación}
 		
@@ -1687,10 +1756,7 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
 			\end{exercise}
 			
-			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones que necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no estén en $A$. Por otro lado, la diferencia de dos conjuntos $A - B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.\\
-			
-			Como función auxiliar también ser hará uso de la función $len$, programada en el apartado 2.1.
-			
+			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$. Por otro lado, la diferencia de dos conjuntos $A \backslash B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$. Como función auxiliar también ser hará uso de la función \texttt{len}, explicada en la \Cref{sec:descrip_auto}.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1738,9 +1804,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como se puede observar, el código consiste en iterar cada uno de los sucesos, y para cada uno de ellos, se va realizando la operación lógica $and$ entre los 
-			
-			
+			Como se puede observar, el código consiste en iterar cada uno de los sucesos, y para cada uno de ellos, se va realizando la operación lógica $and$
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1940,9 +2004,9 @@
 					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.
 				\end{exercise}
 				
-				Como hemos visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporciona los mismos resultados que nos salían en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) que están realizados de forma diferente a como hemos visto; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la sección 2.1 (correspondiente a los ejercicios autónomos de descripción de los datos) hemos hecho nuestras propias funciones que nos proporcionan los resultados correctos a los cálculos de todo lo que necesitamos. Es por ello que, en base a estas funciones, vamos a realizar los algoritmos correspondientes:\\
+				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la \Cref{sec:descrip_auto}, se han realizado nuestras propias funciones que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes:\\
 				
-				En primer lugar vamos a introducir los datos. Para ello lo vamos a hacer tal y como hemos visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para velocidad y otra para temperatura) y tantas filas como entradas de datos tenemos. Tras ello, pasamos esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es algo así:\\
+				En primer lugar se van a introducir los datos. Para ello se hará tal y se ha visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para \texttt{velocidad} y otra para \texttt{temperatura}) y tantas filas como entradas de datos se tengan. Tras ello, se pasa esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es el siguiente: 
 				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1971,12 +2035,12 @@
 \end{kframe}
 \end{knitrout}
 				
-				Observamos que tenemos los datos dispuestos en dos columnas, una para \textit{velocidad} y otra para \textit{temperatura}. También tenemos 11 filas, que corresponde con el número total de parejas \textit(velocidad, temperatura) entrantes al conjunto de datos.\\
+				Se observa que se tienen los datos dispuestos en dos columnas, una para \texttt{velocidad} y otra para \texttt{temperatura}. También se tienen 11 filas, que corresponde con el número total de parejas (\texttt{velocidad}, \texttt{temperatura}) entrantes al conjunto de datos. 
 				
-				\textbf{\large{Medidas de ordenación (caja y bigotes)}}\\
+				\subsubsection{Medidas de ordenación (caja y bigotes)}
 				
-				Con los datos organizados podemos empezar a trabajar. Lo primero de todo será aplicar las medidas de ordenación a la velocidad. Esto quiere decir aplicar el algoritmo de caja y bigotes que hemos visto en la sección 1.3. Primeramente, vamos a centrar nuestra atención en la columna \textit{velocidad}, que es la que nos interesa:\\
-				
+					Con los datos organizados se puede empezar a trabajar. Lo primero de todo será aplicar las medidas de ordenación a la velocidad. Esto quiere decir aplicar el algoritmo de caja y bigotes que hemos visto en la \Cref{subsub:caja_bigotes}. Primeramente, centraremos nuestra atención en la columna \texttt{velocidad}, que es la que interesa ahora:
+					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -1984,9 +2048,10 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-				
-				Con esta línea de código guardamos la columna de velocidad, y podremos llamar a nuestra función que implementa el algoritmo directamente con \texttt{muestra\_velocidad}. Una vez tenemos todo listo vamos a ver el código de nuestro algoritmo.\\
-				
+					
+					Con esta línea de código se guarda la columna de velocidad, y se podrá llamar a la función que implementa el algoritmo directamente con \texttt{muestra\_velocidad}. Una vez tenemos está todo listo veamos el código del algoritmo.
+					
+					{\tiny
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2029,29 +2094,30 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-				
-				Para empezar, nuestra función recibe los siguientes parámetros:\\
-				
-				\begin{itemize}
-					\item \texttt{sample}: El data frame con los datos correspondientes. En nuestro caso sería \texttt{muestra\_velocidad}
-					\item \texttt{d}: El grado de \textit{outlier} a partir del cual un dato se considera anómalo. Servirá para calcular el intervalo para valores atípicos.
-					\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
-				\end{itemize}
-				
-				Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.\\
-				
-				\begin{itemize}
-					\item \texttt{Paso 1}: En este paso determinamos el grado de outlier el cual es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, hacemos uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En nuestro caso, queremos imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, usamos esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
+					}
 					
-					\item \texttt{Paso 2}: En este paso vamos a calcular los cuartiles 1 y 3 (0.25 y 0.75) para posteriormente utilizarlos en el cálculo del intervalo para valores atípicos. Observamos que hacemos uso de la función \texttt{quant} que habíamos definido en la sección 2.1. Además, si el usuario lo desea, se imprime por pantalla el valor de ambos.
+					Para comenzar, la función recibe los siguientes parámetros:
+					%REVISADO HASTA AQUÍ%
+					\begin{itemize}
+						\item \texttt{sample}: El data frame con los datos correspondientes. En este caso, \texttt{muestra\_velocidad}. 
+						\item \texttt{d}: El grado de \textit{outlier} a partir del cual un dato se considera anómalo. Servirá para calcular el intervalo para valores atípicos.
+						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
+					\end{itemize}
 					
-					\item \texttt{Paso 3}: Una vez calculados los cuartiles vamos a calcular el intervalo que nos permitirá clasificar los \textit{outliers}. Para ello calculamos \texttt{lim\_inf} y \texttt{lim\_sup} que serán los límites inferior y superior respectivamente, ambos mediante la fórmula que hemos visto en la sección 1.3. El hecho de haber utilizado nuestra función \texttt{quant} para el cálculo de los cuartiles permite que el intervalo sea ahora el que nos salió en clase de teoría.
+					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.\\
 					
-					\texttt{Paso 4}: Por último, recorremos todos los datos y buscamos aquellos que estén por debajo del límite inferior o por encima del límite superior, ya que al no estar comprendido en el intervalo se consideran datos anómalos. Además, añadimos a una lista \texttt{outliers} (previamente vacía) estas anomalías para posteriormente devolverlas.\\
-				\end{itemize}
-				
-				Con este algoritmo vamos a resolver el ejercicio. Vamos a llamar a la función \texttt{boxNmustaches} con \texttt{muestra\_velocidad} y un valor $d = 1.5$.\\
-				
+					\begin{itemize}
+						\item \texttt{Paso 1}: En este paso determinamos el grado de outlier el cual es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, hacemos uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En nuestro caso, queremos imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, usamos esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
+						
+						\item \texttt{Paso 2}: En este paso vamos a calcular los cuartiles 1 y 3 (0.25 y 0.75) para posteriormente utilizarlos en el cálculo del intervalo para valores atípicos. Observamos que hacemos uso de la función \texttt{quant} que habíamos definido en la sección 2.1. Además, si el usuario lo desea, se imprime por pantalla el valor de ambos.
+						
+						\item \texttt{Paso 3}: Una vez calculados los cuartiles vamos a calcular el intervalo que nos permitirá clasificar los \textit{outliers}. Para ello calculamos \texttt{lim\_inf} y \texttt{lim\_sup} que serán los límites inferior y superior respectivamente, ambos mediante la fórmula que hemos visto en la sección 1.3. El hecho de haber utilizado nuestra función \texttt{quant} para el cálculo de los cuartiles permite que el intervalo sea ahora el que nos salió en clase de teoría.
+						
+						\texttt{Paso 4}: Por último, recorremos todos los datos y buscamos aquellos que estén por debajo del límite inferior o por encima del límite superior, ya que al no estar comprendido en el intervalo se consideran datos anómalos. Además, añadimos a una lista \texttt{outliers} (previamente vacía) estas anomalías para posteriormente devolverlas.\\
+					\end{itemize}
+					
+					Con este algoritmo vamos a resolver el ejercicio. Vamos a llamar a la función \texttt{boxNmustaches} con \texttt{muestra\_velocidad} y un valor $d = 1.5$.\\
+					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2074,13 +2140,13 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Observamos cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.\\
-				
-				\textbf{\large{Medidas de dispersión}}\\
-				
-				En este segundo apartado del ejercicio vamos a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente que el que hemos visto en teoría. Por ello, podemos aplicar la función \texttt{standard\_dev} que hemos elaborado en la sección 1.3 y que nos da el valor que hemos visto en clase de teoría. Primeramente vamos a guardarnos la columna de temperaturas para luego trabajar mejor sobre ella.
-				
+					
+					Observamos cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.\\
+					
+					\textbf{\large{Medidas de dispersión}}\\
+					
+					En este segundo apartado del ejercicio vamos a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente que el que hemos visto en teoría. Por ello, podemos aplicar la función \texttt{standard\_dev} que hemos elaborado en la sección 1.3 y que nos da el valor que hemos visto en clase de teoría. Primeramente vamos a guardarnos la columna de temperaturas para luego trabajar mejor sobre ella.
+					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2088,9 +2154,9 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-				
-				Ya tenemos los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles calculamos la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como hemos visto en la sección 1.3. La función que implementa el algoritmo es la siguiente:
-				
+					
+					Ya tenemos los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles calculamos la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como hemos visto en la sección 1.3. La función que implementa el algoritmo es la siguiente:
+					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2137,13 +2203,13 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-				
-				Como podemos ver el código es prácticamente igual. Se pasan los mismos parámetros que en el algoritmo anterior. El primer paso recuerda al usuario el grado de dispersión que ha introducido y el segundo  y tercer paso calculan la media y la desviación típica con nuestras funciones que lo hacen como hemos visto en teoría. El cuarto paso calcula los límites del intervalo para valores atípicos haciendo uso de la media y la desviación típica previamente calculadas y con la fórmula que vimos en la sección 1.3, y finalmente se recorren todos los datos en busca de los valores que no están dentro del intervalo calculado.\\
-				
-				Al igual que en el algoritmo anterior, se devolverá una lista con los puntos que son \textit{outliers} y se podrá elegir entre una salida detallada con mensajes por pantalla del proceso o una salida limitada a la devolución de la lista de \textit{outliers}.\\
-				
-				Vamos a probar nuestro algoritmo con la temperatura y un grado de dispersión $d=2$:
-				
+					
+					Como podemos ver el código es prácticamente igual. Se pasan los mismos parámetros que en el algoritmo anterior. El primer paso recuerda al usuario el grado de dispersión que ha introducido y el segundo  y tercer paso calculan la media y la desviación típica con nuestras funciones que lo hacen como hemos visto en teoría. El cuarto paso calcula los límites del intervalo para valores atípicos haciendo uso de la media y la desviación típica previamente calculadas y con la fórmula que vimos en la sección 1.3, y finalmente se recorren todos los datos en busca de los valores que no están dentro del intervalo calculado.\\
+					
+					Al igual que en el algoritmo anterior, se devolverá una lista con los puntos que son \textit{outliers} y se podrá elegir entre una salida detallada con mensajes por pantalla del proceso o una salida limitada a la devolución de la lista de \textit{outliers}.\\
+					
+					Vamos a probar nuestro algoritmo con la temperatura y un grado de dispersión $d=2$:
+					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2169,11 +2235,11 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Observamos cómo se ha ido haciendo todo el proceso (porque hemos puesto que queremos una salida detallada) y vemos que al final se ha encontrado una anomalía en el punto 3 cuyo valor es 12.74, el cual se encuentra fuera del intervalo, por lo que es considerado un \textit{outlier}.\\
-				
-				Si quisiéramos acceder a la lista de los puntos que son \textit{outliers} bastaría con acceder a la variable a la que hemos igualado la llamada de la función. En este caso habría que acceder a \texttt{anomalias\_temp}.
-				
+					
+					Observamos cómo se ha ido haciendo todo el proceso (porque hemos puesto que queremos una salida detallada) y vemos que al final se ha encontrado una anomalía en el punto 3 cuyo valor es 12.74, el cual se encuentra fuera del intervalo, por lo que es considerado un \textit{outlier}.\\
+					
+					Si quisiéramos acceder a la lista de los puntos que son \textit{outliers} bastaría con acceder a la variable a la que hemos igualado la llamada de la función. En este caso habría que acceder a \texttt{anomalias\_temp}.
+					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2184,8 +2250,8 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-				
-				Y efectivamente tenemos una lista con un 3, el punto que hemos visto que era un \textit{outlier}.\\
+					
+					Y efectivamente tenemos una lista con un 3, el punto que hemos visto que era un \textit{outlier}.\\
 					
 			\subsection{Proximidad y densidad}
 			
