@@ -67,6 +67,8 @@
 
 \newtheorem{exercise}{Ejercicio}[section]
 \newcommand{\dt}{\text{dist}}
+\newcommand{\ds}{\text{dens}}
+\newcommand{\drm}{\text{drm}}
 
 \begin{document}
 	
@@ -1333,5 +1335,184 @@
 				\begin{exercise}
 					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por el número de Mujeres y Hombres inscritos en una serie de cinco seminarios que se han impartido sobre biología. Los datos son: \{Mujeres, Hombres\}: 1. \{9, 9\}; 2. \{9, 7\}; 3. \{11, 11\}; 4. \{2, 1\}; 5. \{11, 9\}.
 				\end{exercise}
+					
+					Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o Local Outlier Factor. Este se basa en la densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
+					
+					$$
+					\dt(x_i, x_j) = |x_{i_1}-x_{j_1}| + |x_{i_2}-x_{j_2}|
+					$$
+					
+					Esta distancia se calcula en R mediante la función observada a continuación. Para ello se itera sobre las diferentes componentes de los puntos y se calcula su diferencia en valor absoluto, es decir, se generaliza de la siguiente manera: 
+					
+					$$
+					\dt(x_i, x_j) = \sum_{i=1}^n |x_i-x_j|
+					$$
+					
+					<<>>=
+					manhattan_distance = function(p1, p2) {
+						add = 0
+						for(i in 1:len(p1)){
+							add = add + abs(p1[i] - p2[i])
+						}
+						add
+					}
+					@
+					
+					Como se necesita calcular la distancia entre cada posible par de puntos, se organizan estos datos en una matriz (representada por un dataframe) haciendo uso de la función anterior. Se tiene en cuenta que $\dt(x_i, x_j) = \dt(x_j, x_i)$ y se recoge en la siguiente función. 
+					
+					<<>>=
+					create_distance_matrix = function(df){
+						empty_matrix = matrix(ncol = len(df[,1]), nrow = len(df[,1]))
+						distances = data.frame(empty_matrix)
+						for (i in 1:len(df[,1])){
+							p_dists = c()
+							for (j in i:len(df[,1])){
+								dist = manhattan_distance(df[i,], df[j,])
+								distances[i,j] = dist
+								distances[j,i] = dist
+							}
+							distances = rbind(distances, p_dists)
+						}
+						distances
+					}
+					@
+					
+					Ahora se necesitará ordenar las distancias a los puntos para construir el conjunto $N(x_i, k)$. Para ello se hará uso del algoritmo de ordenación de la burbuja explicado en ejercicios anteriores, pero se le realizarán una serie de modificaciones para adaptarlo a este caso. Esto se realiza con la función que se presenta a continuación. 
+					
+					<<>>=
+					bubble_LOF = function(d_list, p_list){
+						n = len(d_list)
+						for (i in 2:n){
+							for (j in 1:(n-1)){
+								if (d_list[j] > d_list[j+1]){
+									temp = d_list[j]
+									d_list[j] = d_list[j+1]
+									d_list[j+1] = temp
+									
+									temp = p_list[j]
+									p_list[j] = p_list[j+1]
+									p_list[j+1] = temp
+								}
+							}
+						}
+						data.frame("dis"=d_list, "poi"=p_list)
+					}
+					@
+					
+					Esta función recibe los parámetros \texttt{d\_list} y \texttt{p\_list}, que representan las listas de las distancias y de los punto, respectivamente. En realidad, realiza lo mismo que el algoritmo visto en otros ejercicios, ordenando la lista \texttt{d\_list}, pero aplica los cambios en las sucesivas iteraciones también en la lista \texttt{p\_list}. Se devolverán dos columnas, una con listas de puntos, y otra con listas a las distancias a dichos puntos, ordenadas de forma ascendente. Estas listas serán paralelas (compartirán índices), y representarán al mismo elemento. \\
+					
+					Una vez ordenadas las distancias y los puntos, deberán ser calculados los conjuntos $N(x_i, k)$. Por su propia definición debemos mirar (al menos) hasta el $k-$vecino más cercano al punto, y añadir estos, y en caso de que los sucesivos $k+\alpha$ compartan distancia con el $k$, entonces también deberán ser añadidos. Esto se recoge en la siguiente función: 
+					
+					{\small
+					<<>>=
+					get_n_set = function(df, k) {
+						d_list = list()
+						p_list = list()
+						
+						distance_matrix = create_distance_matrix(df)
+						
+						for (column in 1:len(distance_matrix[1,])){
+							ordered_column = tail(bubble_LOF(distance_matrix[,column],
+							 1:ncol(distance_matrix)), ncol(distance_matrix)-1)
+							
+							k_aux = k
+							
+							while(k_aux < nrow(ordered_column) & 
+							ordered_column[k_aux, "dis"] == ordered_column[k_aux+1, "dis"]) {
+								k_aux = k_aux + 1
+							}
+							
+							d_list = append(d_list, list(head(ordered_column[,"dis"], k_aux)))
+							p_list = append(p_list, list(head(ordered_column[,"poi"], k_aux)))
+						}
+						data.frame(dis = I(d_list), poi = I(p_list))
+					}
+					@
+					}
+					
+					En esta función se seleccionan los primeros $k-$vecinos. Obviamente, en primer lugar se eliminan los elementos $\dt(x_i, x_i)$, pues siempre será igual a 0. Esto se logra con la función \texttt{tail} del paquete \texttt{utils} y que permite conservar el resto de distancias. Una vez seleccionados los $k$ más cercanos, se va avanzado sobre el resto de vecinos y se revisa si el siguiente al último debe añadirse debido a que sean iguales, y así sucesivamente hasta encontrar una pareja de distancias diferentes, o no tener más vecinos. Se utiliza la función \texttt{head} del paquete \texttt{utils} para obtener el conjunto $N(x_i, k)$ y se devuelven en un dataframe. \\
+					
+					El siguiente paso es calcular la densidad de cada punto. Esta se realiza mediante la siguiente expresión: 
+					
+					$$
+					\ds(x_i, K) = \frac{|N(x_i, K)|}{\displaystyle\sum_{x_j \in N(x_i, K)}\dt(x_i, x_j)}
+					$$
+					
+					En el código queda representado mediante la siguiente función. Basta con acceder a los datos correctos del dataframe devuelto por la función \texttt{get\_n\_set}. Esta función devuelve una columna con las densidades de cada punto, la fila $i-$ésima almacena $\ds(x_i, k)$. 
+					
+					<<>>=
+					add_list = function(l) {
+						add = 0
+						for (i in 1:len(l)) {
+							add = add + l[i]
+						}
+						add
+					}
+					@
+					
+					{\small
+					<<>>=
+					get_densities = function(n_set) {
+						densities = c()
+						for (i in 1:len(n_set[,1])) {
+							densities = append(densities, len(n_set[i,1][[1]]) /
+							 add_list(n_set[i,1][[1]]))
+						}
+						densities
+					}
+					@
+					}
+					
+					Se hace uso de la función auxiliar \texttt{add\_list}, que devuelve la suma de los elementos de una lista. En este caso $\sum_{j=1}^{|N|} \dt(x_i, x_j)$. \\
+					
+					A continuación, deberán calcularse las densidades relativas medias de cada punto, pudiendo identificar mediante estas los outliers. Esta se calcula mediante la siguiente expresión. 
+					
+					$$
+					\drm(x_i, K) = \frac{\ds(x_i, K) \cdot |N(x_i, K)|}{\displaystyle\sum_{x_j \in N(x_i, K)}\ds(x_j, K)}
+					$$
+					
+					En el código se calcula mediante la siguiente función, que representa la ecuación mostrada, pero adaptada a las estructuras de datos utilizadas durante el resto del algoritmo. Al igual que hacía \texttt{get\_densities}, se devuelve una columna con los valores de $\drm(x_i, k)$. 
+					
+					<<>>=
+					get_drm = function(n_set) {
+						drms = c()
+						for (i in 1:len(n_set[,1])) {
+							add_densities = 0
+							
+							points = n_set[i, "poi"][[1]]
+							for (j in 1:len(points)) {
+								add_densities = add_densities + 
+									n_set[points[j], "densities"]
+							}
+						
+							drm = n_set[i, "densities"] * len(points) / add_densities
+							drms = append(drms, drm)
+						}
+						drms
+					}
+					@
+					
+					Finalmente, se unen todos los pasos comentados en la función \texttt{lof}. Esta muestra un dataframe con los parámetros que se han ido calculando. Para ello se emplea la función \texttt{cbind} para ir construyendo dicho dataframe. 
+					
+					<<>>=
+					lof = function(muestra, k) {
+						n_set = get_n_set(muestra, k)
+						
+						densities = get_densities(n_set)
+						n_set = cbind(n_set, densities)
+						
+						drms = get_drm(n_set)
+						
+						n_set = cbind(n_set, drms)
+						n_set
+					}
+					@
+					
+					Se comprueban los resultados obtenidos, dejando a juicio del analista el valor de $k$ y la selección de outlier en función de la drm. 
+					
+					<<>>=
+					muestra = data.frame("mujeres" = c(9,9,11,2,11), "hombres" = c(9,7,11,1,9))
+					(lof(muestra, 3))
+					@
 	
 \end{document}          

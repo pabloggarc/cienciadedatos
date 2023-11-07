@@ -117,6 +117,8 @@
 
 \newtheorem{exercise}{Ejercicio}[section]
 \newcommand{\dt}{\text{dist}}
+\newcommand{\ds}{\text{dens}}
+\newcommand{\drm}{\text{drm}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 	
@@ -2149,6 +2151,7 @@
 					
 					Ya tenemos los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles calculamos la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como hemos visto en la sección 1.3. La función que implementa el algoritmo es la siguiente:
 					
+					{\footnotesize
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2195,6 +2198,7 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+					}
 					
 					Como podemos ver el código es prácticamente igual. Se pasan los mismos parámetros que en el algoritmo anterior. El primer paso recuerda al usuario el grado de dispersión que ha introducido y el segundo  y tercer paso calculan la media y la desviación típica con nuestras funciones que lo hacen como hemos visto en teoría. El cuarto paso calcula los límites del intervalo para valores atípicos haciendo uso de la media y la desviación típica previamente calculadas y con la fórmula que vimos en la sección 1.3, y finalmente se recorren todos los datos en busca de los valores que no están dentro del intervalo calculado.\\
 					
@@ -2250,5 +2254,228 @@
 				\begin{exercise}
 					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por el número de Mujeres y Hombres inscritos en una serie de cinco seminarios que se han impartido sobre biología. Los datos son: \{Mujeres, Hombres\}: 1. \{9, 9\}; 2. \{9, 7\}; 3. \{11, 11\}; 4. \{2, 1\}; 5. \{11, 9\}.
 				\end{exercise}
+					
+					Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o Local Outlier Factor. Este se basa en la densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
+					
+					$$
+					\dt(x_i, x_j) = |x_{i_1}-x_{j_1}| + |x_{i_2}-x_{j_2}|
+					$$
+					
+					Esta distancia se calcula en R mediante la función observada a continuación. Para ello se itera sobre las diferentes componentes de los puntos y se calcula su diferencia en valor absoluto, es decir, se generaliza de la siguiente manera: 
+					
+					$$
+					\dt(x_i, x_j) = \sum_{i=1}^n |x_i-x_j|
+					$$
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{manhattan_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,} \hlkwc{p2}\hlstd{) \{}
+        \hlstd{add} \hlkwb{=} \hlnum{0}
+        \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1))\{}
+                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlkwd{abs}\hlstd{(p1[i]} \hlopt{-} \hlstd{p2[i])}
+        \hlstd{\}}
+        \hlstd{add}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					
+					Como se necesita calcular la distancia entre cada posible par de puntos, se organizan estos datos en una matriz (representada por un dataframe) haciendo uso de la función anterior. Se tiene en cuenta que $\dt(x_i, x_j) = \dt(x_j, x_i)$ y se recoge en la siguiente función. 
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{create_distance_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{)\{}
+        \hlstd{empty_matrix} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwc{ncol} \hlstd{=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]),} \hlkwc{nrow} \hlstd{=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))}
+        \hlstd{distances} \hlkwb{=} \hlkwd{data.frame}\hlstd{(empty_matrix)}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))\{}
+                \hlstd{p_dists} \hlkwb{=} \hlkwd{c}\hlstd{()}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{i}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))\{}
+                        \hlstd{dist} \hlkwb{=} \hlkwd{manhattan_distance}\hlstd{(df[i,], df[j,])}
+                        \hlstd{distances[i,j]} \hlkwb{=} \hlstd{dist}
+                        \hlstd{distances[j,i]} \hlkwb{=} \hlstd{dist}
+                \hlstd{\}}
+                \hlstd{distances} \hlkwb{=} \hlkwd{rbind}\hlstd{(distances, p_dists)}
+        \hlstd{\}}
+        \hlstd{distances}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					
+					Ahora se necesitará ordenar las distancias a los puntos para construir el conjunto $N(x_i, k)$. Para ello se hará uso del algoritmo de ordenación de la burbuja explicado en ejercicios anteriores, pero se le realizarán una serie de modificaciones para adaptarlo a este caso. Esto se realiza con la función que se presenta a continuación. 
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{bubble_LOF} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{d_list}\hlstd{,} \hlkwc{p_list}\hlstd{)\{}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(d_list)}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
+                        \hlkwa{if} \hlstd{(d_list[j]} \hlopt{>} \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
+                                \hlstd{temp} \hlkwb{=} \hlstd{d_list[j]}
+                                \hlstd{d_list[j]} \hlkwb{=} \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{]}
+                                \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
+
+                                \hlstd{temp} \hlkwb{=} \hlstd{p_list[j]}
+                                \hlstd{p_list[j]} \hlkwb{=} \hlstd{p_list[j}\hlopt{+}\hlnum{1}\hlstd{]}
+                                \hlstd{p_list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlkwd{data.frame}\hlstd{(}\hlstr{"dis"}\hlstd{=d_list,} \hlstr{"poi"}\hlstd{=p_list)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					
+					Esta función recibe los parámetros \texttt{d\_list} y \texttt{p\_list}, que representan las listas de las distancias y de los punto, respectivamente. En realidad, realiza lo mismo que el algoritmo visto en otros ejercicios, ordenando la lista \texttt{d\_list}, pero aplica los cambios en las sucesivas iteraciones también en la lista \texttt{p\_list}. Se devolverán dos columnas, una con listas de puntos, y otra con listas a las distancias a dichos puntos, ordenadas de forma ascendente. Estas listas serán paralelas (compartirán índices), y representarán al mismo elemento. \\
+					
+					Una vez ordenadas las distancias y los puntos, deberán ser calculados los conjuntos $N(x_i, k)$. Por su propia definición debemos mirar (al menos) hasta el $k-$vecino más cercano al punto, y añadir estos, y en caso de que los sucesivos $k+\alpha$ compartan distancia con el $k$, entonces también deberán ser añadidos. Esto se recoge en la siguiente función: 
+					
+					{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_n_set} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{,} \hlkwc{k}\hlstd{) \{}
+        \hlstd{d_list} \hlkwb{=} \hlkwd{list}\hlstd{()}
+        \hlstd{p_list} \hlkwb{=} \hlkwd{list}\hlstd{()}
+
+        \hlstd{distance_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df)}
+
+        \hlkwa{for} \hlstd{(column} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(distance_matrix[}\hlnum{1}\hlstd{,]))\{}
+                \hlstd{ordered_column} \hlkwb{=} \hlkwd{tail}\hlstd{(}\hlkwd{bubble_LOF}\hlstd{(distance_matrix[,column],}
+                 \hlnum{1}\hlopt{:}\hlkwd{ncol}\hlstd{(distance_matrix)),} \hlkwd{ncol}\hlstd{(distance_matrix)}\hlopt{-}\hlnum{1}\hlstd{)}
+
+                \hlstd{k_aux} \hlkwb{=} \hlstd{k}
+
+                \hlkwa{while}\hlstd{(k_aux} \hlopt{<} \hlkwd{nrow}\hlstd{(ordered_column)} \hlopt{&}
+                \hlstd{ordered_column[k_aux,} \hlstr{"dis"}\hlstd{]} \hlopt{==} \hlstd{ordered_column[k_aux}\hlopt{+}\hlnum{1}\hlstd{,} \hlstr{"dis"}\hlstd{]) \{}
+                        \hlstd{k_aux} \hlkwb{=} \hlstd{k_aux} \hlopt{+} \hlnum{1}
+                \hlstd{\}}
+
+                \hlstd{d_list} \hlkwb{=} \hlkwd{append}\hlstd{(d_list,} \hlkwd{list}\hlstd{(}\hlkwd{head}\hlstd{(ordered_column[,}\hlstr{"dis"}\hlstd{], k_aux)))}
+                \hlstd{p_list} \hlkwb{=} \hlkwd{append}\hlstd{(p_list,} \hlkwd{list}\hlstd{(}\hlkwd{head}\hlstd{(ordered_column[,}\hlstr{"poi"}\hlstd{], k_aux)))}
+        \hlstd{\}}
+        \hlkwd{data.frame}\hlstd{(}\hlkwc{dis} \hlstd{=} \hlkwd{I}\hlstd{(d_list),} \hlkwc{poi} \hlstd{=} \hlkwd{I}\hlstd{(p_list))}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					}
+					
+					En esta función se seleccionan los primeros $k-$vecinos. Obviamente, en primer lugar se eliminan los elementos $\dt(x_i, x_i)$, pues siempre será igual a 0. Esto se logra con la función \texttt{tail} del paquete \texttt{utils} y que permite conservar el resto de distancias. Una vez seleccionados los $k$ más cercanos, se va avanzado sobre el resto de vecinos y se revisa si el siguiente al último debe añadirse debido a que sean iguales, y así sucesivamente hasta encontrar una pareja de distancias diferentes, o no tener más vecinos. Se utiliza la función \texttt{head} del paquete \texttt{utils} para obtener el conjunto $N(x_i, k)$ y se devuelven en un dataframe. \\
+					
+					El siguiente paso es calcular la densidad de cada punto. Esta se realiza mediante la siguiente expresión: 
+					
+					$$
+					\ds(x_i, K) = \frac{|N(x_i, K)|}{\displaystyle\sum_{x_j \in N(x_i, K)}\dt(x_i, x_j)}
+					$$
+					
+					En el código queda representado mediante la siguiente función. Basta con acceder a los datos correctos del dataframe devuelto por la función \texttt{get\_n\_set}. Esta función devuelve una columna con las densidades de cada punto, la fila $i-$ésima almacena $\ds(x_i, k)$. 
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{add_list} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{l}\hlstd{) \{}
+        \hlstd{add} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(l)) \{}
+                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{l[i]}
+        \hlstd{\}}
+        \hlstd{add}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					
+					{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_densities} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{n_set}\hlstd{) \{}
+        \hlstd{densities} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(n_set[,}\hlnum{1}\hlstd{])) \{}
+                \hlstd{densities} \hlkwb{=} \hlkwd{append}\hlstd{(densities,} \hlkwd{len}\hlstd{(n_set[i,}\hlnum{1}\hlstd{][[}\hlnum{1}\hlstd{]])} \hlopt{/}
+                 \hlkwd{add_list}\hlstd{(n_set[i,}\hlnum{1}\hlstd{][[}\hlnum{1}\hlstd{]]))}
+        \hlstd{\}}
+        \hlstd{densities}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					}
+					
+					Se hace uso de la función auxiliar \texttt{add\_list}, que devuelve la suma de los elementos de una lista. En este caso $\sum_{j=1}^{|N|} \dt(x_i, x_j)$. \\
+					
+					A continuación, deberán calcularse las densidades relativas medias de cada punto, pudiendo identificar mediante estas los outliers. Esta se calcula mediante la siguiente expresión. 
+					
+					$$
+					\drm(x_i, K) = \frac{\ds(x_i, K) \cdot |N(x_i, K)|}{\displaystyle\sum_{x_j \in N(x_i, K)}\ds(x_j, K)}
+					$$
+					
+					En el código se calcula mediante la siguiente función, que representa la ecuación mostrada, pero adaptada a las estructuras de datos utilizadas durante el resto del algoritmo. Al igual que hacía \texttt{get\_densities}, se devuelve una columna con los valores de $\drm(x_i, k)$. 
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_drm} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{n_set}\hlstd{) \{}
+        \hlstd{drms} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(n_set[,}\hlnum{1}\hlstd{])) \{}
+                \hlstd{add_densities} \hlkwb{=} \hlnum{0}
+
+                \hlstd{points} \hlkwb{=} \hlstd{n_set[i,} \hlstr{"poi"}\hlstd{][[}\hlnum{1}\hlstd{]]}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(points)) \{}
+                        \hlstd{add_densities} \hlkwb{=} \hlstd{add_densities} \hlopt{+}
+                                \hlstd{n_set[points[j],} \hlstr{"densities"}\hlstd{]}
+                \hlstd{\}}
+
+                \hlstd{drm} \hlkwb{=} \hlstd{n_set[i,} \hlstr{"densities"}\hlstd{]} \hlopt{*} \hlkwd{len}\hlstd{(points)} \hlopt{/} \hlstd{add_densities}
+                \hlstd{drms} \hlkwb{=} \hlkwd{append}\hlstd{(drms, drm)}
+        \hlstd{\}}
+        \hlstd{drms}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					
+					Finalmente, se unen todos los pasos comentados en la función \texttt{lof}. Esta muestra un dataframe con los parámetros que se han ido calculando. Para ello se emplea la función \texttt{cbind} para ir construyendo dicho dataframe. 
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{lof} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{muestra}\hlstd{,} \hlkwc{k}\hlstd{) \{}
+        \hlstd{n_set} \hlkwb{=} \hlkwd{get_n_set}\hlstd{(muestra, k)}
+
+        \hlstd{densities} \hlkwb{=} \hlkwd{get_densities}\hlstd{(n_set)}
+        \hlstd{n_set} \hlkwb{=} \hlkwd{cbind}\hlstd{(n_set, densities)}
+
+        \hlstd{drms} \hlkwb{=} \hlkwd{get_drm}\hlstd{(n_set)}
+
+        \hlstd{n_set} \hlkwb{=} \hlkwd{cbind}\hlstd{(n_set, drms)}
+        \hlstd{n_set}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+					
+					Se comprueban los resultados obtenidos, dejando a juicio del analista el valor de $k$ y la selección de outlier en función de la drm. 
+					
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{muestra} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlstr{"mujeres"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{9}\hlstd{,}\hlnum{9}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{2}\hlstd{,}\hlnum{11}\hlstd{),} \hlstr{"hombres"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{9}\hlstd{,}\hlnum{7}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{9}\hlstd{))}
+\hlstd{(}\hlkwd{lof}\hlstd{(muestra,} \hlnum{3}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##          dis     poi  densities     drms
+## 1    2, 2, 4 2, 5, 3 0.37500000 1.285714
+## 2    2, 4, 6 1, 5, 3 0.25000000 0.750000
+## 3    2, 4, 6 5, 1, 2 0.25000000 0.750000
+## 4 13, 15, 17 2, 1, 5 0.06666667 0.200000
+## 5    2, 2, 4 1, 3, 2 0.37500000 1.285714
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 	
 \end{document}          
