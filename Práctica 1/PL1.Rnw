@@ -1063,7 +1063,7 @@
 				for (ocurrence in ocurrences) {
 					support_oc = support(table, ocurrence)
 					if (support_oc >= s) {
-						valid_ocur = append(valid_ocurrences, ocurrence)
+						valid_ocur = append(valid_ocur, ocurrence)
 					}
 				}
 				valid_ocur	
@@ -1158,6 +1158,18 @@
 			}
 			@
 			
+			<<>>=
+			print_asotiations = function(left_list, right_list){
+				left_side = paste(left_list[[1]], collapse = ",")
+				right_side = paste(right_list[[1]], collapse = ",")
+				cat("{")
+				cat(left_side)
+				cat("} --> {")
+				cat(right_side)
+				cat("}\n")
+			}
+			@
+			
 			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 			<<>>=
@@ -1169,7 +1181,9 @@
 				
 				if (len(combinations) > 0) {
 					conf = get_asotiations(table, combinations, c)
-					print(conf)
+					for (i in 1:len(conf[,1])){
+						print_asotiations(conf[i,1], conf[i,2])
+					}
 				
 				} else {
 					print("No hay ninguna combinación que supere el umbral de soporte")

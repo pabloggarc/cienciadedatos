@@ -149,6 +149,17 @@ getTable = function(data, elements) {
   table
 }
 
+print_asotiations = function(left_list, right_list){
+	left_side = paste(left_list[[1]], collapse = ",")
+	right_side = paste(right_list[[1]], collapse = ",")
+	cat("{")
+	cat(left_side)
+	cat("} --> {")
+	cat(right_side)
+	cat("}\n")
+}
+
+
 apriori = function(data, s, c) {
 
   elements = getElements(data)
@@ -162,7 +173,9 @@ apriori = function(data, s, c) {
   if (len(combinations) > 0) {
     
     conf = get_asotiations(table, combinations, c)
-    print(conf)
+    for (i in 1:len(conf[,1])){
+		print_asotiations(conf[i,1], conf[i,2])
+	}
     
   } else {
     print("No hay ninguna combinación que pase el soporte")

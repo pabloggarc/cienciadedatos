@@ -1893,7 +1893,7 @@
         \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences) \{}
                 \hlstd{support_oc} \hlkwb{=} \hlkwd{support}\hlstd{(table, ocurrence)}
                 \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s) \{}
-                        \hlstd{valid_ocur} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocurrences, ocurrence)}
+                        \hlstd{valid_ocur} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocur, ocurrence)}
                 \hlstd{\}}
         \hlstd{\}}
         \hlstd{valid_ocur}
@@ -2002,6 +2002,22 @@
 \end{kframe}
 \end{knitrout}
 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{print_asotiations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{left_list}\hlstd{,} \hlkwc{right_list}\hlstd{)\{}
+        \hlstd{left_side} \hlkwb{=} \hlkwd{paste}\hlstd{(left_list[[}\hlnum{1}\hlstd{]],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{)}
+        \hlstd{right_side} \hlkwb{=} \hlkwd{paste}\hlstd{(right_list[[}\hlnum{1}\hlstd{]],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"\{"}\hlstd{)}
+        \hlkwd{cat}\hlstd{(left_side)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"\} --> \{"}\hlstd{)}
+        \hlkwd{cat}\hlstd{(right_side)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"\}\textbackslash{}n"}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
 			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 \begin{knitrout}
@@ -2015,7 +2031,9 @@
 
         \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(combinations)} \hlopt{>} \hlnum{0}\hlstd{) \{}
                 \hlstd{conf} \hlkwb{=} \hlkwd{get_asotiations}\hlstd{(table, combinations, c)}
-                \hlkwd{print}\hlstd{(conf)}
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(conf[,}\hlnum{1}\hlstd{]))\{}
+                        \hlkwd{print_asotiations}\hlstd{(conf[i,}\hlnum{1}\hlstd{], conf[i,}\hlnum{2}\hlstd{])}
+                \hlstd{\}}
 
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
                 \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que supere el umbral de soporte"}\hlstd{)}
@@ -2048,9 +2066,12 @@
 
 \hlkwd{apriori}\hlstd{(data,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in support\_clasif(table, elements, s): objeto 'valid\_ocurrences' no encontrado}}\end{kframe}
+\begin{verbatim}
+## {B} --> {X}
+## {C} --> {X}
+## {B,C} --> {X}
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 		
