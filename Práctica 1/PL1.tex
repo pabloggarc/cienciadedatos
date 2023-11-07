@@ -1778,7 +1778,65 @@
 \end{kframe}
 \end{knitrout}
 			
-			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero que se va a realizar es la creación de una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Para ello se utilizan las funciones \texttt{get\_elements} y \texttt{get\_table}. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_elements} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{) \{}
+        \hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data)) \{}
+                \hlstd{elements} \hlkwb{=} \hlkwd{union}\hlstd{(elements, data[[i]])}
+        \hlstd{\}}
+        \hlstd{elements}
+\hlstd{\}}
+
+\hlstd{get_table} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{elements}\hlstd{) \{}
+        \hlstd{nCol} \hlkwb{=} \hlkwd{len}\hlstd{(elements)}
+        \hlstd{nRow} \hlkwb{=} \hlkwd{len}\hlstd{(data)}
+        \hlstd{table} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= nCol,} \hlkwc{nrow} \hlstd{= nRow,}
+        \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{nRow, elements)))}
+
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{nRow) \{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data[[i]])) \{}
+                        \hlstd{table[i, data[[i]][j]]} \hlkwb{=} \hlnum{1}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{table}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			La primera de ellas, recibe una serie de listas que representa la muestra, por ejemplo $[\{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \{\alpha_{n+1}, \alpha_{n+2}, \ldots, \alpha_{n+m}\}]$, de forma que se calcula $\bigcup_{i=1}^{n+m} \alpha_i$ para calcular el espacio muestral. Supongamos que tenemos \{Pan, Agua, Leche\}, \{Pan, Agua\}, y \{Pan, Leche\}. Calculando la unión se obtiene $E = \{$Pan, Agua, Leche\}. \\
+			
+			La segunda de ellas crea una matriz (codificado por un dataframe) que representa por filas los sucesos de la muestra, y por columnas los sucesos elementales, encontrándose en la entrada $a_{ij}$ un valor binario representando si dicho suceso elemental se encuentra en el suceso de la muestra. Retomando el ejemplo anterior se tendría la siguiente matriz. 
+			
+			$$
+			\begin{pmatrix}
+				1 & 1 & 1\\
+				1 & 0 & 1\\
+				1 & 1 & 0
+			\end{pmatrix}
+			$$
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{m} \hlkwb{=} \hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Leche"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{),} \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Leche"}\hlstd{))}
+\hlstd{eltos} \hlkwb{=} \hlkwd{get_elements}\hlstd{(m)}
+\hlstd{(}\hlkwd{get_table}\hlstd{(m, eltos))}
+\end{alltt}
+\begin{verbatim}
+##   Pan Leche Agua
+## 1   1     1    1
+## 2   1     0    1
+## 3   1     1    0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			A continuación se va a realizar una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1798,7 +1856,22 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como se puede observar, el código consiste en iterar cada uno de los sucesos, y para cada uno de ellos, se va realizando la operación lógica $and$
+			El objetivo de esta función, es dado un conjunto $\{\alpha_1, \alpha_2, \ldots, \alpha_n\}$, contar cuántas veces es subconjunto de sucesos de la muestra. Para ello, siendo $\beta_{i_m}$ el elemento $m-$ésimo del suceso de la muestra $i-$ésimo, se realiza la siguiente operación: 
+			
+			$$
+			\sum_{i=1}^\texttt{nrows}\bigwedge_{m=1}^\texttt{ncol}\beta_{i_m}
+			$$
+			
+			La siguiente herramienta que se necesita en el algoritmo apriori es el soporte, que queda definido de la siguiente manera. 
+			
+			$$
+			\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j,
+			$$
+			$$
+			s: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \,\, \text{que} \, s(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_T}
+			$$
+			
+			Como podemos observar, la función \texttt{count\_appereance} que se había codificado previamente, será de ayuda para calcular el soporte, de forma que ahora basta dividir el resultado de esta por el número de sucesos de la muestra tal y como se hace en la función \texttt{support}. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1806,16 +1879,24 @@
 \hlstd{support} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{elements}\hlstd{) \{}
         \hlkwd{count_appearance}\hlstd{(table, elements)} \hlopt{/} \hlkwd{len}\hlstd{(table[,}\hlnum{1}\hlstd{])}
 \hlstd{\}}
-
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Siendo el primer paso del algoritmo el descarte de los sucesos elementales que no superan el umbral de soporte, esto se logra con la función \texttt{support\_clasif} iterando cada suceso elemental y calculando su soporte mediante las funciones ya explicadas. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{support_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{s}\hlstd{) \{}
-        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlstd{valid_ocur} \hlkwb{=} \hlkwd{c}\hlstd{()}
         \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences) \{}
                 \hlstd{support_oc} \hlkwb{=} \hlkwd{support}\hlstd{(table, ocurrence)}
                 \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s) \{}
-                        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocurrences, ocurrence)}
+                        \hlstd{valid_ocur} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocurrences, ocurrence)}
                 \hlstd{\}}
         \hlstd{\}}
-        \hlstd{valid_ocurrences}
+        \hlstd{valid_ocur}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1863,7 +1944,22 @@
         \hlkwd{count_appearance}\hlstd{(table,} \hlkwd{union}\hlstd{(left, right))} \hlopt{/}
                 \hlkwd{count_appearance}\hlstd{(table, left)}
 \hlstd{\}}
-
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la siguiente ecuación, se implementa con la función previamente mostrada \texttt{confidence}. 
+			
+			$$
+			\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j,
+			$$
+			$$
+			c: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \, \text{que} \,\, c(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_{A_i}}
+			$$
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{get_asotiations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{comb}\hlstd{,} \hlkwc{c}\hlstd{) \{}
         \hlstd{kMax} \hlkwb{=} \hlkwd{len}\hlstd{(comb[}\hlkwd{len}\hlstd{(comb)][[}\hlnum{1}\hlstd{]])}
         \hlstd{listLeft} \hlkwb{=} \hlkwd{list}\hlstd{()}
@@ -1906,60 +2002,32 @@
 \end{kframe}
 \end{knitrout}
 			
-			
-			
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{getElements} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{) \{}
-        \hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data)) \{}
-                \hlstd{elements} \hlkwb{=} \hlkwd{union}\hlstd{(elements, data[[i]])}
-        \hlstd{\}}
-        \hlstd{elements}
-\hlstd{\}}
-
-\hlstd{getTable} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{elements}\hlstd{) \{}
-        \hlstd{nCol} \hlkwb{=} \hlkwd{len}\hlstd{(elements)}
-        \hlstd{nRow} \hlkwb{=} \hlkwd{len}\hlstd{(data)}
-        \hlstd{table} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= nCol,} \hlkwc{nrow} \hlstd{= nRow,}
-        \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{nRow, elements)))}
-
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{nRow) \{}
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data[[i]])) \{}
-                        \hlstd{table[i, data[[i]][j]]} \hlkwb{=} \hlnum{1}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlstd{table}
-\hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-			
+			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
-
-        \hlstd{elements} \hlkwb{=} \hlkwd{getElements}\hlstd{(data)}
-
-        \hlstd{table} \hlkwb{=} \hlkwd{getTable}\hlstd{(data, elements)}
-
+        \hlstd{elements} \hlkwb{=} \hlkwd{get_elements}\hlstd{(data)}
+        \hlstd{table} \hlkwb{=} \hlkwd{get_table}\hlstd{(data, elements)}
         \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, elements, s)}
-
         \hlstd{combinations} \hlkwb{=} \hlkwd{create_comb}\hlstd{(table, soporte_clasif, s)}
 
         \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(combinations)} \hlopt{>} \hlnum{0}\hlstd{) \{}
-
                 \hlstd{conf} \hlkwb{=} \hlkwd{get_asotiations}\hlstd{(table, combinations, c)}
                 \hlkwd{print}\hlstd{(conf)}
 
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
-                \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que pase el soporte"}\hlstd{)}
+                \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que supere el umbral de soporte"}\hlstd{)}
         \hlstd{\}}
 \hlstd{\}}
-
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlstd{data} \hlkwb{=} \hlkwd{list}\hlstd{(}
 \hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"C"}\hlstd{,} \hlstr{"N"}\hlstd{,} \hlstr{"B"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{),}
@@ -1980,13 +2048,9 @@
 
 \hlkwd{apriori}\hlstd{(data,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
 \end{alltt}
-\begin{verbatim}
-##   left right
-## 1    B     X
-## 2    C     X
-## 3 B, C     X
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in support\_clasif(table, elements, s): objeto 'valid\_ocurrences' no encontrado}}\end{kframe}
 \end{knitrout}
 			
 		
@@ -2151,7 +2215,6 @@
 					
 					Ya tenemos los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles calculamos la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como hemos visto en la sección 1.3. La función que implementa el algoritmo es la siguiente:
 					
-					{\footnotesize
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2198,7 +2261,6 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-					}
 					
 					Como podemos ver el código es prácticamente igual. Se pasan los mismos parámetros que en el algoritmo anterior. El primer paso recuerda al usuario el grado de dispersión que ha introducido y el segundo  y tercer paso calculan la media y la desviación típica con nuestras funciones que lo hacen como hemos visto en teoría. El cuarto paso calcula los límites del intervalo para valores atípicos haciendo uso de la media y la desviación típica previamente calculadas y con la fórmula que vimos en la sección 1.3, y finalmente se recorren todos los datos en busca de los valores que no están dentro del intervalo calculado.\\
 					

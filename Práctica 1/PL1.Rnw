@@ -972,7 +972,51 @@
 			}
 			@
 			
-			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero que se va a realizar es la creación de una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Para ello se utilizan las funciones \texttt{get\_elements} y \texttt{get\_table}. 
+			
+			<<>>=
+			get_elements = function(data) {
+				elements = c()
+				for (i in 1:len(data)) {
+					elements = union(elements, data[[i]])
+				}
+				elements
+			}
+			
+			get_table = function(data, elements) {
+				nCol = len(elements)
+				nRow = len(data)
+				table = data.frame(matrix(0, ncol = nCol, nrow = nRow,
+				dimnames = list(1:nRow, elements)))
+				
+				for (i in 1:nRow) {
+					for (j in 1:len(data[[i]])) {
+						table[i, data[[i]][j]] = 1
+					}
+				}
+				table
+			}
+			@
+			
+			La primera de ellas, recibe una serie de listas que representa la muestra, por ejemplo $[\{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \{\alpha_{n+1}, \alpha_{n+2}, \ldots, \alpha_{n+m}\}]$, de forma que se calcula $\bigcup_{i=1}^{n+m} \alpha_i$ para calcular el espacio muestral. Supongamos que tenemos \{Pan, Agua, Leche\}, \{Pan, Agua\}, y \{Pan, Leche\}. Calculando la unión se obtiene $E = \{$Pan, Agua, Leche\}. \\
+			
+			La segunda de ellas crea una matriz (codificado por un dataframe) que representa por filas los sucesos de la muestra, y por columnas los sucesos elementales, encontrándose en la entrada $a_{ij}$ un valor binario representando si dicho suceso elemental se encuentra en el suceso de la muestra. Retomando el ejemplo anterior se tendría la siguiente matriz. 
+			
+			$$
+			\begin{pmatrix}
+				1 & 1 & 1\\
+				1 & 0 & 1\\
+				1 & 1 & 0
+			\end{pmatrix}
+			$$
+			
+			<<>>=
+			m = list(c("Pan", "Agua", "Leche"), c("Pan", "Agua"), c("Pan", "Leche"))
+			eltos = get_elements(m)
+			(get_table(m, eltos))
+			@
+			
+			A continuación se va a realizar una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
 			
 			<<>>=
 			count_appearance = function(table, elements) {
@@ -988,22 +1032,41 @@
 			}
 			@
 			
-			Como se puede observar, el código consiste en iterar cada uno de los sucesos, y para cada uno de ellos, se va realizando la operación lógica $and$
+			El objetivo de esta función, es dado un conjunto $\{\alpha_1, \alpha_2, \ldots, \alpha_n\}$, contar cuántas veces es subconjunto de sucesos de la muestra. Para ello, siendo $\beta_{i_m}$ el elemento $m-$ésimo del suceso de la muestra $i-$ésimo, se realiza la siguiente operación: 
+			
+			$$
+			\sum_{i=1}^\texttt{nrows}\bigwedge_{m=1}^\texttt{ncol}\beta_{i_m}
+			$$
+			
+			La siguiente herramienta que se necesita en el algoritmo apriori es el soporte, que queda definido de la siguiente manera. 
+			
+			$$
+			\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j,
+			$$
+			$$
+			s: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \,\, \text{que} \, s(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_T}
+			$$
+			
+			Como podemos observar, la función \texttt{count\_appereance} que se había codificado previamente, será de ayuda para calcular el soporte, de forma que ahora basta dividir el resultado de esta por el número de sucesos de la muestra tal y como se hace en la función \texttt{support}. 
 			
 			<<>>=
 			support = function(table, elements) {
 				count_appearance(table, elements) / len(table[,1])
 			}
+			@
 			
+			Siendo el primer paso del algoritmo el descarte de los sucesos elementales que no superan el umbral de soporte, esto se logra con la función \texttt{support\_clasif} iterando cada suceso elemental y calculando su soporte mediante las funciones ya explicadas. 
+			
+			<<>>=
 			support_clasif = function(table, ocurrences, s) {
-				valid_ocurrences = c()
+				valid_ocur = c()
 				for (ocurrence in ocurrences) {
 					support_oc = support(table, ocurrence)
 					if (support_oc >= s) {
-						valid_ocurrences = append(valid_ocurrences, ocurrence)
+						valid_ocur = append(valid_ocurrences, ocurrence)
 					}
 				}
-				valid_ocurrences	
+				valid_ocur	
 			}
 			@
 			
@@ -1043,7 +1106,18 @@
 				count_appearance(table, union(left, right)) /
 					count_appearance(table, left)
 			}
+			@
 			
+			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la siguiente ecuación, se implementa con la función previamente mostrada \texttt{confidence}. 
+			
+			$$
+			\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j,
+			$$
+			$$
+			c: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \, \text{que} \,\, c(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_{A_i}}
+			$$
+			
+			<<>>=
 			get_asotiations = function(table, comb, c) {
 				kMax = len(comb[len(comb)][[1]])
 				listLeft = list()
@@ -1084,54 +1158,26 @@
 			}
 			@
 			
-			
-			
-			<<>>=
-			getElements = function(data) {
-				elements = c()
-				for (i in 1:len(data)) {
-					elements = union(elements, data[[i]])
-				}
-				elements
-			}
-			
-			getTable = function(data, elements) {
-				nCol = len(elements)
-				nRow = len(data)
-				table = data.frame(matrix(0, ncol = nCol, nrow = nRow,
-				dimnames = list(1:nRow, elements)))
-				
-				for (i in 1:nRow) {
-					for (j in 1:len(data[[i]])) {
-						table[i, data[[i]][j]] = 1
-					}
-				}
-				table
-			}
-			@
-			
+			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 			<<>>=
 			apriori = function(data, s, c) {
-			
-				elements = getElements(data)
-				
-				table = getTable(data, elements)
-				
+				elements = get_elements(data)
+				table = get_table(data, elements)
 				soporte_clasif = support_clasif(table, elements, s)
-				
 				combinations = create_comb(table, soporte_clasif, s)
 				
 				if (len(combinations) > 0) {
-				
 					conf = get_asotiations(table, combinations, c)
 					print(conf)
 				
 				} else {
-					print("No hay ninguna combinación que pase el soporte")
+					print("No hay ninguna combinación que supere el umbral de soporte")
 				}
 			}
+			@
 			
+			<<>>=
 			data = list(
 			c("X", "C", "N", "B"),
 			c("X", "T", "B", "C"),
@@ -1151,7 +1197,6 @@
 			c("Leche"))
 			
 			apriori(data, 0.4, 0.9)
-			
 			@
 			
 		
