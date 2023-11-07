@@ -1209,25 +1209,13 @@
 \begin{alltt}
 \hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{asc} \hlstd{=} \hlnum{TRUE}\hlstd{)\{}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlkwa{if}\hlstd{(asc)\{}
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
-                        \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
-                                \hlkwa{if} \hlstd{(list[j]} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
-                                        \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
-                                        \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
-                                        \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
-                                \hlstd{\}}
-                        \hlstd{\}}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlkwa{else} \hlstd{\{}
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
-                        \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
-                                \hlkwa{if} \hlstd{(list[j]} \hlopt{<} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
-                                        \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
-                                        \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
-                                        \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
-                                \hlstd{\}}
+        \hlstd{direccion} \hlkwb{=} \hlkwd{ifelse}\hlstd{(asc,} \hlnum{1}\hlstd{,} \hlopt{-}\hlnum{1}\hlstd{)}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
+                        \hlkwa{if} \hlstd{(list[j]} \hlopt{*} \hlstd{direccion} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlopt{*} \hlstd{direccion)\{}
+                                \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
+                                \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
+                                \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\}}
@@ -1237,7 +1225,11 @@
 \end{kframe}
 \end{knitrout}
 			
-			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente. Hagamos la prueba con la lista de distancias:
+			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente.\\
+			
+			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable\texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
+			
+			Hagamos la prueba con la lista de distancias:
 			
 			{\small 
 \begin{knitrout}
