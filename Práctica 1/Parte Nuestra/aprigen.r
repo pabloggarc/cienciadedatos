@@ -1,4 +1,3 @@
-
 len = function(list) {
 	count = 0
 	for (element in list) {
@@ -7,21 +6,19 @@ len = function(list) {
 	count
 }
 
-generar_combinaciones = function(lista) {
-  comb = list()
-
-  for (longitud in 1:length(lista)) {
-    combinaciones_longitud = combn(lista, longitud, simplify = FALSE)
-    
-    comb = c(comb, combinaciones_longitud)
+binom = function(n, k) {
+  temp = matrix(0, nrow = n + 1, ncol = k + 1)
+  for (i in 0:n) {
+	for (j in 0:min(i, k)) {
+		if (j == 0 || j == i) {
+			temp[i + 1, j + 1] = 1
+		} 
+		else {
+			temp[i + 1, j + 1] = temp[i, j] + temp[i, j + 1]
+		}
+	}
   }
-  
-  tail(comb, len(comb)-len(lista))
-}
-
-factorial = function(n) {
-	if (n <= 1) return(1)
-	n * factorial(n-1)
+  temp[n + 1, k + 1]
 }
 
 equals = function(l1, l2) {
@@ -44,7 +41,7 @@ cola = function(l, n) {
 	tail(l, n)
 }
 
-apri_gen = function(clasif) {
+fk_1 = function(clasif) {
 	comb = lapply(clasif, c)
 	n = len(clasif)
 	n_comb = n
@@ -67,11 +64,11 @@ apri_gen = function(clasif) {
 			}
 		}
 		inicio = n_comb + 1
-		n_comb = n_comb + factorial(n) / (factorial(k) * factorial(n-k))
+		n_comb = n_comb + binom(n, k)
 	}
 	cola(comb, n_comb-n)
 }
 
 l = c("A", "B", "C", "D")
 
-apri_gen(l)
+fk_1(l)
