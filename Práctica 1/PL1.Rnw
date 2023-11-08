@@ -1395,6 +1395,128 @@
 					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por el número de Mujeres y Hombres inscritos en una serie de cinco seminarios que se han impartido sobre biología. Los datos son: \{Mujeres, Hombres\}: 1. \{9, 9\}; 2. \{9, 7\}; 3. \{11, 11\}; 4. \{2, 1\}; 5. \{11, 9\}.
 				\end{exercise}
 					
+					\textbf{Técnicas basadas en la proximidad}\\
+					
+					En primer lugar se va a resolver el ejercicio con técnicas basadas en proximidad (algoritmo \texttt{k-vecinos}). Para ello se programará una función principal y funciones auxiliares que vaya necesitando esta primera, con el objetivo de devolver aquellos datos que se consideran anomalías. El funcionamiento del algoritmo es el siguiente: \\
+					
+					Para empezar, a partir de ahora cada suceso de la muestra se considerará como un punto en el plano, cuya componente $x$ será el número de mujeres y cuya componente $y$ será el número de hombres. Así se deberá determinar el grado de \textit{outlier} o distancia \texttt{d} a partir de la cual un punto es considerado como un dato anómalo. Además se deberá determinar el número de orden o $k$-vecino más próximo. Ambos parámetros se eligen arbitrariamente, por lo que quedarán a juicio del analista. La programación del algoritmo facilitará la posibilidad de introducir ambos parámetros.\\
+					
+					Una vez determinados \texttt{d} y \texttt{k} se deberán calcular las distancias euclídeas de cada punto al resto de puntos. La distancia euclídea en nuestro problema es definida mediante la siguiente fórmula:
+					
+					$$
+					\dt(x_i, x_j) = \sqrt{(x_{i_1}-x_{j_1})^2 + (x_{i_2}-x_{j_2})^2}
+					$$
+					
+					Es por ello que se necesita una función que permita obtener el valor de la distancia euclídea entre dos puntos. Se propone la siguiente:
+					
+					<<>>=
+					euc_distance = function(p1,p2){
+						if(len(p1) == len(p2)){
+							add = 0
+							for(i in 1:len(p1)){
+								add = add + ((p1[i] - p2[i])^2)
+							}
+							sqrt(add)
+						} 
+						else {
+							print("No se puede calcular la distancia euclídea")
+						}
+					}
+					@
+					
+					Los parámetros \texttt{p1} y \texttt{p2} que recibe la función representan dos listas; ambas contienen los valores de las componentes de cada punto. Ambos puntos deberán tener el mismo número de componentes para poder calcularse la distancia euclídea. De esta forma se restan los valores de cada componente y se eleva al cuadrado, añadiéndose este valor a un acumulador de todas las diferencias cuadráticas de las componentes, al cual posteriormente se le aplicará la raíz cuadrada. La distancia euclídea generalizada se puede expresar de esta forma:
+					
+					$$
+					\dt(x_i, x_j) = \sqrt{\sum_{i=1}^n (x_i-x_j)^2}
+					$$
+					
+					Una vez se tiene una función capaz de calcular las distancias euclídeas se ha de elaborar una estructura que pueda recoger la distancia de cada punto al resto de puntos. Es por ello que se propone una matriz de distancias, donde la posición $(i,j)$ representará la distancia euclídea del punto $i$ al punto $j$.
+					Para ello se ha realizado la siguiente función:
+					
+					<<>>=
+					create_distance_matrix = function(df){
+						empty_matrix = matrix(ncol = len(df[,1]), nrow = len(df[,1]))
+						distances = data.frame(empty_matrix)
+						for (i in 1:len(df[,1])){
+							for (j in i:len(df[,1])){
+								dist = euc_distance(df[i,], df[j,])
+								distances[i,j] = dist
+								distances[j,i] = dist
+							}
+						}
+						distances			
+					}
+					@
+					
+					La función \texttt{create\_distance\_matrix} recibe un dataframe (que como se verá más adelante corresponde con la entrada del algoritmo). A partir de ello crea otro dataframe con tantas filas y columnas como puntos haya en la muestra. Así se recorren todos los puntos y se calcula para cada uno su distancia al resto. Teniendo un punto $i$ y un punto $j$, se rellenan las posiciones $[i,j]$ y $[j,i]$ del nuevo dataframe. La razón que motiva esta doble asignación es que puede optimizar el algoritmo, ya que la distancia de dos puntos es la misma en un sentido o en otro, por lo que no hace falta volver a calcular la misma distancia en el sentido opuesto.\\
+					
+					Con las distancias de todos los puntos ya calculadas el siguiente paso es ordenar y detectar si la \texttt{k} distancia más próxima sobrepasa o no el grado de \textit{outlier} \texttt{d}, ambos definidos por el analista. En caso de sobrepasar \texttt{d}, el punto es un \textit{outlier} y viceversa. La función que detecta las anomalías de esta forma es la siguiente:
+					
+					<<>>=
+					detect_outliers = function(sample, distance_matrix, k, d, details){
+						if(details){
+							print("->PASO 3: IDENTIFICACIÓN DE LOS OUTLIERS")
+						}	
+						outliers = c()
+						for (column in 1:len(distance_matrix[1,])){
+							ordered_column = bubble(distance_matrix[column,])
+							if (ordered_column[k+1] > d){
+								outliers = append(outliers,column)
+								if(details){
+									cat("El punto", column, "(",
+									paste(sample[column,], collapse = ","),
+									") es un outlier\n")
+								}
+							}
+						}
+						outliers
+					}
+					@
+					
+					En el dataframe que había quedado antes se tiene en cada columna $i$-ésima las distancias del punto $i$-ésimo, por lo que se irá ordenando columna por columna gracias a la función \texttt{bubble} que realizada en ejercicios anteriores. De esa ordenación bastará con fijarse en la posición $k+1$ (ya que la primera posición corresponde a la distancia del punto a sí mismo que es 0 y no es considerada un $k$-vecino). Si esta es mayor que $d$ se clasifica al punto como anomalía, en caso contrario no lo será. Se devuelve de esta forma una lista con los puntos que son considerados anomalías.\\ 
+					
+					Una característica de esta función es que si el parámetro \texttt{details} (que se verá ahora en más detalle) está a \texttt{TRUE}, imprime con \texttt{cat} que el punto $x$ es un \textit{outlier}. Además de imprimir el número $x$ del punto imprime las componentes que lo forman con la función \texttt{paste} que hemos visto en el ejercicio autónomo de asociación, y que pasa la lista con las componentes del punto a cadena, separando cada una con comas gracias al parámetro \texttt{collapse = ","}; de tal forma que también se puedan imprimir las componentes del punto.\\
+					
+					Por último, se han de unir todos los módulos en una función que encapsule toda esta funcionalidad. Para ello se ha creado la siguiente función, que será a la que llame el usuario cuando quiera ejecutar el algoritmo \texttt{k-vecinos}:
+					
+					<<>>=
+					k_neighbors = function(sample, k, d, details = FALSE){
+						if(details){
+							print("->PASO 1: DETERMINACIÓN DE d Y k")
+							cat("Grado de outlier: d =",d,"\n")
+							cat("K-Vecino más próximo: k =",k,"\n\n")
+						}
+						d_matrix = create_distance_matrix(sample)
+						if(details){
+							print("->PASO 2: MATRIZ DE DISTANCIAS ENTRE PUNTOS:\n")
+							print(d_matrix)
+							cat("\n")
+						}
+						detect_outliers(sample, d_matrix, k, d, details)
+					}
+					@
+					
+					La función recibirá cuatro parámetros que se detallan a continuación:
+					
+					\begin{itemize}
+						\item \texttt{sample}: La entrada del algoritmo en formato dataframe. Al introducirse en este formato el algoritmo se asegura de que está trabajando con una muestra bien construida, ya que el número de filas y columnas tiene que ser el mismo; en otras palabras, tendremos el mismo número de componentes para cada suceso de la muestra.
+						\item \texttt{k}: K-vecino más próximo elegido para la ejecución del algoritmo.
+						\item \texttt{d}: Distancia o grado de outlier elegido para la ejecución del algoritmo.
+						\item \texttt{details}: Por defecto a \texttt{FALSE}. Permite mostrar una ejecución detallada de los pasos del algoritmo. Si se pone a \texttt{TRUE} imprime por pantalla el valor de los dos parámetros anteriores, la matriz de distancias y todos los puntos que son considerados \textit{outliers} (por eso \texttt{details} también se encuentra presente en la función \texttt{detect\_outliers}. Además devuelve una lista con todos estos puntos. En caso de estar a \texttt{FALSE}, se entiende que el usuario no quiere una ejecución detallada, así que solo se devuelve la lista de \textit{outliers}.
+					\end{itemize}
+					
+					La función llama de esta forma a \texttt{create\_distance\_matrix} para crear la matriz de distancias y a \texttt{detect\_outliers} para clasificar según el algoritmo \texttt{k-vecinos}.\\
+					
+					Se procede a probar la función \texttt{k\_neighbors} con la muestra del ejercicio. En este caso se opta por realizar una ejecución detallada de la misma.
+					
+					<<>>=
+					muestra = data.frame("mujeres" = c(9,9,11,2,11), "hombres" = c(9,7,11,1,9))
+					k_neighbors(muestra,3,3.5,TRUE)
+					@
+					
+					%AQUÍ FALTA EXPLICAR QUE K Y D SE HA INTRODUCIDO Y LA SALIDA%
+					\textbf{Técnicas basadas en la densidad}\\
+					
 					Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o Local Outlier Factor. Este se basa en la densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
 					
 					$$
