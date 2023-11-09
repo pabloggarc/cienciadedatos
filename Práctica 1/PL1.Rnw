@@ -518,7 +518,7 @@
 					
 					Como resultado, se obtienen los valores del intervalo correctos y se puede ver que el suceso anómalo es el que se encuentra en la posición 2, es decir el elemento 12.
 				
-			\subsection{Proximidad y densidad}
+			\subsection{Técnicas de proximidad y densidad}
 			
 				\begin{exercise}
 					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por las siguientes 5 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{4, 3\}; 3. \{5, 5\}; 4. \{1, 1\}; 5. \{5, 4\} donde las características de las calificaciones son: (Teoría, Laboratorio).
@@ -1080,11 +1080,6 @@
 			Para implementar este algoritmo se necesitarán algunas funciones auxiliares que se presentan a continuación. La primera de ellas será \texttt{equals}, que será la encargada de verificar si para dos listas $L_1$ y $L_2$, se cumple que $\forall i \, L_{1_i} = L_{2_i}$. 
 
 			<<>>=
-			factorial = function(n) {
-			if (n <= 1) return(1)
-			n * factorial(n-1)
-			}
-			
 			equals = function(l1, l2) {
 				n = len(l1)
 				
@@ -1096,7 +1091,7 @@
 			}
 			@
 			
-			Las dos siguientes son \texttt{cabeza} y \texttt{cola}. Dada una lista y un valor natural, \texttt{cabeza} devuelve otra lista que es una partición de la original hasta el índice del valor indicado. De la misma forma, \texttt{cola} devuelve la lista que contiene los últimos valores indicados. 
+			Las dos siguientes son \texttt{cabeza} y \texttt{cola}. Dada una lista y un valor natural, \texttt{cabeza} devuelve otra lista que es una partición de la original hasta el índice del valor indicado. De la misma forma, \texttt{cola} devuelve la lista que contiene los últimos valores indicados. Ambas funciones hacen uso de las funciones \texttt{head} y \texttt{tail} respectivamente, pero devolviendo \texttt{NULL} si el numero de elementos a seleccionar es menor o igual a 0.
 			
 			<<>>=
 			cabeza = function(l, n) {
@@ -1134,7 +1129,6 @@
 			
 			En el código que se muestra, se aplica esta relación de recurrencia rellenando una matriz, de forma que se calcula sin aplicar recursividad, ya que tendría una complejidad superior, lo que empeoraría aún más el tiempo de ejecución del algoritmo apriori. 
 			
-			{\small
 			<<>>=
 			binom = function(n, k) {
 				temp = matrix(0, nrow = n + 1, ncol = k + 1)
@@ -1142,16 +1136,16 @@
 					for (j in 0:min(i, k)) {
 						if (j == 0 || j == i) {
 							temp[i + 1, j + 1] = 1
-						} 
-						else {
-							temp[i + 1, j + 1] = temp[i, j] + temp[i, j + 1]
+							
+						} else {
+							temp[i + 1, j + 1] =
+								temp[i, j] + temp[i, j + 1]
 						}
 					}
 				}
 				temp[n + 1, k + 1]
 			}
 			@
-			}
 			
 			Finalmente, la función \texttt{fk\_1} representa el algoritmo al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y por ejemplo, en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{cabeza} y \texttt{cola}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
 			
@@ -1184,7 +1178,7 @@
 						}
 					}
 					inicio = n_comb + 1
-					n_comb = n_comb + factorial(n) / (factorial(k) * factorial(n-k))
+					n_comb = n_comb + binom(n, k)
 				}
 				cola(comb, n_comb-n)
 			}
@@ -1327,7 +1321,7 @@
 				
 				Se observa que se tienen los datos dispuestos en dos columnas, una para \texttt{velocidad} y otra para \texttt{temperatura}. También se tienen 11 filas, que corresponde con el número total de parejas (\texttt{velocidad}, \texttt{temperatura}) entrantes al conjunto de datos. 
 				
-				\subsubsection{Medidas de ordenación (caja y bigotes)}
+				\subsubsection{Caja y Bigotes}
 				
 					Con los datos organizados se puede empezar a trabajar. Lo primero de todo será aplicar las medidas de ordenación a la velocidad. Esto quiere decir aplicar el algoritmo de caja y bigotes que hemos visto en la \Cref{subsub:caja_bigotes}. Primeramente, centraremos nuestra atención en la columna \texttt{velocidad}, que es la que interesa ahora:
 					
@@ -1406,7 +1400,7 @@
 					
 					Observamos cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.\\
 					
-					\textbf{\large{Medidas de dispersión}}\\
+				\subsubsection{Media y Desviación}
 					
 					En este segundo apartado del ejercicio vamos a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente que el que hemos visto en teoría. Por ello, podemos aplicar la función \texttt{standard\_dev} que hemos elaborado en la sección 1.3 y que nos da el valor que hemos visto en clase de teoría. Primeramente vamos a guardarnos la columna de temperaturas para luego trabajar mejor sobre ella.
 					
@@ -1479,13 +1473,13 @@
 					
 					Y efectivamente tenemos una lista con un 3, el punto que hemos visto que era un \textit{outlier}.\\
 					
-			\subsection{Proximidad y densidad}
+			\subsection{Técnicas de proximidad y densidad}
 			
 				\begin{exercise}
 					El cuarto conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas basadas en la proximidad y en la densidad, estará formado por el número de Mujeres y Hombres inscritos en una serie de cinco seminarios que se han impartido sobre biología. Los datos son: \{Mujeres, Hombres\}: 1. \{9, 9\}; 2. \{9, 7\}; 3. \{11, 11\}; 4. \{2, 1\}; 5. \{11, 9\}.
 				\end{exercise}
 					
-					\textbf{Técnicas basadas en la proximidad}\\
+				\subsubsection{Algoritmo k-vecinos}
 					
 					En primer lugar se va a resolver el ejercicio con técnicas basadas en proximidad (algoritmo \texttt{k-vecinos}). Para ello se programará una función principal y funciones auxiliares que vaya necesitando esta primera, con el objetivo de devolver aquellos datos que se consideran anomalías. El funcionamiento del algoritmo es el siguiente: \\
 					
@@ -1605,7 +1599,8 @@
 					@
 					
 					%AQUÍ FALTA EXPLICAR QUE K Y D SE HA INTRODUCIDO Y LA SALIDA%
-					\textbf{Técnicas basadas en la densidad}\\
+					
+					\subsubsection{Algoritmo LOF}
 					
 					Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o Local Outlier Factor. Este se basa en la densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
 					
