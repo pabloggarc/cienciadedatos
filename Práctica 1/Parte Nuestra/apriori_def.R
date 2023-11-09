@@ -1,6 +1,6 @@
-len = function(list) {
+len = function(l1) {
 	count = 0
-	for (element in list) {
+	for (element in l1) {
 		count = count + 1
 	}
 	count
@@ -53,42 +53,30 @@ support = function(table, elements) {
 }
 
 support_clasif = function(table, ocurrences, s) {
-	valid_ocurrences = c()
+	valid_ocurrences = list()
 	for (ocurrence in ocurrences) {
 		support_oc = support(table, ocurrence)
 		if (support_oc >= s) {
-			valid_ocurrences = append(valid_ocurrences, ocurrence)
+			valid_ocurrences = append(valid_ocurrences, list(ocurrence))
 		}
 	}
 	valid_ocurrences	
 }
 
-create_comb = function(table, clasif, s) {
-    lista = c()
-    dim = 2
-    next_dim = TRUE
-    while (dim <= len(clasif) & next_dim == TRUE) {
-        next_dim = FALSE
-        comb = unlist(lapply(dim, function(m) {combn(clasif, m=m, simplify=TRUE)}), recursive=FALSE)
 
-        for (j in seq(1, len(comb), by=dim)) {
-            add = c()
-            for (k in j:(j+dim-1)) {
-                add = append(add, comb[k])
-            }
-            if (support(table, add) >= s) {
-                next_dim = TRUE
-                lista = append(lista, list(add))
-            }
-        }
-        dim = dim+1
-    }
-    lista
-}
-
-factorial = function(n) {
-	if (n <= 1) return(1)
-	n * factorial(n-1)
+binom = function(n, k) {
+  temp = matrix(0, nrow = n + 1, ncol = k + 1)
+  for (i in 0:n) {
+	for (j in 0:min(i, k)) {
+		if (j == 0 || j == i) {
+			temp[i + 1, j + 1] = 1
+		} 
+		else {
+			temp[i + 1, j + 1] = temp[i, j] + temp[i, j + 1]
+		}
+	}
+  }
+  temp[n + 1, k + 1]
 }
 
 equals = function(l1, l2) {
@@ -111,7 +99,7 @@ cola = function(l, n) {
 	tail(l, n)
 }
 
-apri_gen = function(clasif) {
+fk_1 = function(clasif) {
 	comb = lapply(clasif, c)
 	n = len(clasif)
 	n_comb = n
@@ -134,7 +122,7 @@ apri_gen = function(clasif) {
 			}
 		}
 		inicio = n_comb + 1
-		n_comb = n_comb + factorial(n) / (factorial(k) * factorial(n-k))
+		n_comb = n_comb + binom(n, k)
 	}
 	cola(comb, n_comb-n)
 }
@@ -143,39 +131,21 @@ confidence = function(table, left, right) {
 	count_appearance(table, union(left, right)) / count_appearance(table, left)
 }
 
-get_asotiations = function(table, comb, c) {
-	kMax = len(comb[len(comb)][[1]])
-	listLeft = list()
-	listRight = list()
-	
-	for (i in 2:kMax) {
-	
-		split = Filter(function(x) length(x)==i, comb)
-		
-		for (j in 1:len(split)) {
-			
-			for (k in 1:(i-1)) {
-			  
-				leftSides = lapply(k, function(m) {combn(split[j][[1]], m=m, simplify=TRUE)})
-				
-				df = do.call(rbind.data.frame, leftSides)
-
-				for (n in 1:len(df[1,])) {
-
-					all = split[j][[1]]
-
-					left = df[,n]
-
-					right = dif(split[j][[1]], df[,n])
-
-					listLeft = append(listLeft , list(left))
-					listRight = append(listRight , list(right))
-
-				}
+get_asotiations = function(table, candidates) {
+	asotiations = data.frame()
+	final_asotiations = lapply(candidates, function(x){
+		k = len(x)
+		for (dim in 1:(k - 1)){
+			left_sides = combn(x, m=dim, simplify=TRUE)
+			for (col in 1:len(left_sides[1,])){
+				left_side = left_sides[, col]
+				right_side = dif(x, left_side)
+				new_asoc = data.frame(left = I(list(left_side)), right = I(list(right_side)))
+				asotiations <<- rbind(asotiations, new_asoc)
 			}
-		}
-	}
-	data.frame(left = I(listLeft), right = I(listRight))
+		} 
+	})
+	asotiations
 }
 
 getElements = function(data) {
@@ -210,56 +180,57 @@ print_asotiations = function(left_list, right_list){
 }
 
 ap_genrules = function(table, asoc, c) {
-	discard = data.frame(left = list(), right = list())		# Lista de descartados
-	valid_asoc = data.frame(left = list(), right = list())	# Lista de validos. Pasan confianza
-	for (i in len(asoc$left):1) {		# Empieza por el mas largo
-		A = asoc$left[[i]]		# Conjunto A (izquierdo) de la asociacion
-		right = asoc$right[[i]]		# Lado derecho de la asociacion
+	asoc = cbind(asoc, data.frame(matrix(1, ncol = 1, nrow = len(asoc[,1]), dimnames = list(1:len(asoc[,1]), "valid"))))
+	#valid_asoc = data.frame(left = list(), right = list())	# Lista de validos. Pasan confianza
+	for (i in len(asoc[,"left"]):1) {		# Empieza por el mas largo
+		A = asoc[i, "left"][[1]]		# Conjunto A (izquierdo) de la asociacion
+		right = asoc[i, "right"][[1]]		# Lado derecho de la asociacion
 		B = union(A, right)		# Conjunto B de la asociacion
 
-		# TODO: COMPROBAR SI ESTA EN DISCARD Y METER TODO EL CODIGO DE ABAJO EN EL IF
-		
-		conf = confidence(table, A, right)	
-		if (conf < c) {
-			discard_iter = data.frame(left=list(), right=list()) # Las que se descartan en una iteracion
-			# Lo que hay dentro de este for es buscar todos los subconjuntos A', calcular su lado derecho (B-A') y anadirlos a discard_iter
-			for (j in 1:len(A)) {	# j son las "dimensiones" de A'
-				A_primes = unlist(lapply(j, function(m) {combn(A, m=m, simplify=TRUE)}), recursive=FALSE) # Subconjuntos de A de dimension j
-				for (k in seq(1, len(A_primes), by=j)) {	# Indice en el que empieza A' en la lista A_primes
-					new_left = A_primes[k:(k+j-1)]
-					new_right = dif(B, new_left)
-					discard_iter = rbind(discard_iter, data.frame(left = I(list(new_left)), right = I(list(new_right))))
+		if(asoc[i, "valid"]) {
+			conf = confidence(table, A, right)	
+			if (conf < c) {
+				# Lo que hay dentro de este for es buscar todos los subconjuntos A', calcular su lado derecho (B-A') y anadirlos a discard_iter
+				for (j in 1:len(A)) {	# j son las "dimensiones" de A'
+					A_primes = unlist(lapply(j, function(m) {combn(A, m=m, simplify=TRUE)}), recursive=FALSE) # Subconjuntos de A de dimension j
+					for (k in seq(1, len(A_primes), by=j)) {	# Indice en el que empieza A' en la lista A_primes
+						new_left = A_primes[k:(k+j-1)]
+						new_right = dif(B, new_left)
+						index = indexOf_asoc(asoc, new_left, new_right) #Indice de la asociación que se va a descartar
+						asoc[index, "valid"] = 0
+					}
 				}
 			}
-			discard = rbind(discard, discard_iter)
-		} else {
-			valid_asoc = rbind(valid_asoc, data.frame(left = I(list(A)), right = I(list(right))))
 		}
 	}
-	print(valid_asoc)
-	print(discard)
-	valid_asoc
+	subset(asoc, asoc$valid == 1)
+}
+
+indexOf_asoc = function(df, left_side, right_side) {
+	encontrado = FALSE
+	i = 1
+	while(!encontrado & i <= len(df[,1])){
+		encontrado = equals(df[i, "left"][[1]], left_side) & equals(df[i, "right"][[1]], right_side)
+		i = i + 1
+	}
+	i-1
 }
 
 apriori = function(data, s, c) {
 
   elements = getElements(data)
-	
-  print(elements)
 
   table = getTable(data, elements)
 
   soporte_clasif = support_clasif(table, elements, s)
   
   # PARA CUANDO ESTÉN SOLUCIONADAS LAS ESTRUCTURAS DE DATOS
-  # combinations = apri_gen(soporte_clasif) 
-  # valid_support = support_clasif(table, combinations, s)
-
-  combinations = create_comb(table, soporte_clasif, s)	
+  combinations = fk_1(soporte_clasif) 
+  valid_support = support_clasif(table, combinations, s)
   
-  if (len(combinations) > 0) {
+  if (len(valid_support) > 0) {
     
-    conf = get_asotiations(table, combinations, c)
+    conf = get_asotiations(table, valid_support)
     valid_asoc = ap_genrules(table, conf, c)
     for (i in 1:len(valid_asoc[,1])){
 		print_asotiations(valid_asoc[i,1], valid_asoc[i,2])
