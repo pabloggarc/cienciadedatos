@@ -987,7 +987,7 @@
 				nCol = len(elements)
 				nRow = len(data)
 				table = data.frame(matrix(0, ncol = nCol, nrow = nRow,
-				dimnames = list(1:nRow, elements)))
+					dimnames = list(1:nRow, elements)))
 				
 				for (i in 1:nRow) {
 					for (j in 1:len(data[[i]])) {
@@ -1059,14 +1059,15 @@
 			
 			<<>>=
 			support_clasif = function(table, ocurrences, s) {
-				valid_ocur = c()
+				valid_ocurrences = list()
 				for (ocurrence in ocurrences) {
 					support_oc = support(table, ocurrence)
 					if (support_oc >= s) {
-						valid_ocur = append(valid_ocur, ocurrence)
+						valid_ocurrences = append(
+							valid_ocurrences, list(ocurrence))
 					}
 				}
-				valid_ocur	
+				valid_ocurrences	
 			}
 			@
 			
@@ -1091,15 +1092,15 @@
 			}
 			@
 			
-			Las dos siguientes son \texttt{cabeza} y \texttt{cola}. Dada una lista y un valor natural, \texttt{cabeza} devuelve otra lista que es una partición de la original hasta el índice del valor indicado. De la misma forma, \texttt{cola} devuelve la lista que contiene los últimos valores indicados. Ambas funciones hacen uso de las funciones \texttt{head} y \texttt{tail} respectivamente, pero devolviendo \texttt{NULL} si el numero de elementos a seleccionar es menor o igual a 0.
+			Las dos siguientes son \texttt{front} y \texttt{back}. Dada una lista y un valor natural, \texttt{front} devuelve otra lista que es una partición de la original hasta el índice del valor indicado. De la misma forma, \texttt{back} devuelve la lista que contiene los últimos valores indicados. Ambas funciones hacen uso de las funciones \texttt{head} y \texttt{tail} (del paquete \texttt{utils}) respectivamente, pero devolviendo \texttt{NULL} si el numero de elementos a seleccionar es menor o igual a 0.
 			
 			<<>>=
-			cabeza = function(l, n) {
+			front = function(l, n) {
 				if (n <= 0) return(NULL)
 				head(l, n)
 			}
 			
-			cola = function(l, n) {
+			back = function(l, n) {
 				if (n <= 0) return(NULL)
 				tail(l, n)
 			}
@@ -1153,37 +1154,35 @@
 			
 			Finalmente, se devuelve el vector sobre el que se ha trabajado pero recortándolo de forma que no aparezcan los sucesos de dimensión 1, pues al formar asociaciones con estos, uno de los dos sucesos que la formarían sería $\varnothing$, cosa que no tiene sentido. 
 			
-			{\small
 			<<>>=
 			fk_1 = function(clasif) {
 				comb = lapply(clasif, c)
 				n = len(clasif)
 				n_comb = n
-				inicio = 1
+				start = 1
 				
 				for (k in 2:n) {
-					for (i in inicio:(n_comb-1)) {
+					for (i in start:(n_comb-1)) {
 						for (j in (i+1):n_comb) {
 						
-							cab1 = cabeza(comb[[i]], len(comb[[i]])-1)
-							cab2 = cabeza(comb[[j]], len(comb[[j]])-1)
+							hd1 = front(comb[[i]], len(comb[[i]])-1)
+							hd2 = front(comb[[j]], len(comb[[j]])-1)
 							
-							col1 = cola(comb[[i]], 1)
-							col2 = cola(comb[[j]], 1)
+							tl1 = back(comb[[i]], 1)
+							tl2 = back(comb[[j]], 1)
 							
-							if (equals(cab1, cab2) & !equals(col1, col2)) {
-								new = c(cab1, col1, col2)
+							if (equals(hd1, hd2) & !equals(tl1, tl2)) {
+								new = c(hd1, tl1, tl2)
 								comb = c(comb, list(new))
 							}
 						}
 					}
-					inicio = n_comb + 1
+					start = n_comb + 1
 					n_comb = n_comb + binom(n, k)
 				}
-				cola(comb, n_comb-n)
+				back(comb, n_comb-n)
 			}
 			@
-			}
 			
 			<<>>=
 			confidence = function(table, left, right) {
@@ -1202,48 +1201,30 @@
 			$$
 			
 			<<>>=
-			get_asotiations = function(table, comb, c) {
-				kMax = len(comb[len(comb)][[1]])
-				listLeft = list()
-				listRight = list()
-				
-				for (i in 2:kMax) {
-				
-					split = Filter(function(x) length(x)==i, comb)
-					
-					for (j in 1:len(split)) {
-					
-						for (k in 1:(i-1)) {
-						
-							leftSides = lapply(k, function(m) {
-								combn(split[j][[1]], m=m, simplify=TRUE)})
-							
-							df = do.call(rbind.data.frame, leftSides)
-							
-							for (n in 1:len(df[1,])) {
-							
-								all = split[j][[1]]
-								
-								left = df[,n]
-								
-								right = dif(split[j][[1]], df[,n])
-								
-								if (confidence(table, left, right) >= c) {
-								
-									listLeft = append(listLeft , list(left))
-									listRight = append(listRight , list(right))
-								
-								}
-							}
+			get_associations = function(table, candidates) {
+				associations = data.frame()
+				final_associations = lapply(candidates, function(x){
+					k = len(x)
+					for (dim in 1:(k - 1)){
+						left_sides = combn(x, m=dim, simplify=TRUE)
+						for (col in 1:len(left_sides[1,])){
+							left_side = left_sides[, col]
+							right_side = dif(x, left_side)
+							new_asoc = data.frame(
+								left = I(list(left_side)),
+								right = I(list(right_side)))
+							associations <<- rbind(associations, new_asoc)
 						}
 					}
-				}
-				data.frame(left = I(listLeft), right = I(listRight))
+				})
+				associations
 			}
 			@
 			
+			EXPLICAR GET ASSOCIATIONS
+			
 			<<>>=
-			print_asotiations = function(left_list, right_list){
+			print_associations = function(left_list, right_list){
 				left_side = paste(left_list[[1]], collapse = ",")
 				right_side = paste(right_list[[1]], collapse = ",")
 				cat("{")
@@ -1254,6 +1235,55 @@
 			}
 			@
 			
+			Mediante la función \texttt{print\_associations} se le pasan la parte izquierda y derecha de la asociación y esta imprime todos los elementos entre llaves y con una flecha en medio.
+			
+			{\footnotesize
+			<<>>=
+			ap_genrules = function(table, asoc, c) {
+				asoc = cbind(asoc, data.frame(matrix(1, ncol = 1,
+					nrow = len(asoc[,1]), dimnames = list(1:len(asoc[,1]), "valid"))))
+				for (i in len(asoc[,"left"]):1) {
+					A = asoc[i, "left"][[1]]
+					right = asoc[i, "right"][[1]]
+					B = union(A, right)
+					
+					if(asoc[i, "valid"]) {
+						conf = confidence(table, A, right)	
+						if (conf < c) {
+							for (j in 1:len(A)) {
+								A_primes = unlist(lapply(j, function(m) {
+										combn(A, m=m, simplify=TRUE)
+										}
+									), recursive=FALSE)
+								for (k in seq(1, len(A_primes), by=j)) {
+									new_left = A_primes[k:(k+j-1)]
+									new_right = dif(B, new_left)
+									index = indexOf_asoc(
+										asoc, new_left, new_right)
+									asoc[index, "valid"] = 0
+								}
+							}
+						}
+					}
+				}
+				subset(asoc, asoc$valid == 1)
+			}
+			@
+			}
+			
+			<<>>=
+			indexOf_asoc = function(df, left_side, right_side) {
+				found = FALSE
+				i = 1
+				while(!found & i <= len(df[,1])) {
+					found = equals(df[i, "left"][[1]], left_side) &
+						equals(df[i, "right"][[1]], right_side)
+					i = i + 1
+				}
+				i-1
+			}
+			@
+			
 			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 			<<>>=
@@ -1261,16 +1291,20 @@
 				elements = get_elements(data)
 				table = get_table(data, elements)
 				soporte_clasif = support_clasif(table, elements, s)
-				combinations = create_comb(table, soporte_clasif, s)
+				combinations = fk_1(soporte_clasif) 
+				valid_support = support_clasif(table, combinations, s)
 				
-				if (len(combinations) > 0) {
-					conf = get_asotiations(table, combinations, c)
-					for (i in 1:len(conf[,1])){
-						print_asotiations(conf[i,1], conf[i,2])
+				if (len(valid_support) > 0) {
+				
+					conf = get_associations(table, valid_support)
+					valid_asoc = ap_genrules(table, conf, c)
+				
+					for (i in 1:len(valid_asoc[,1])){
+						print_associations(valid_asoc[i,1], valid_asoc[i,2])
 					}
 				
 				} else {
-					print("No hay ninguna combinación que supere el umbral de soporte")
+					print("No hay ninguna combinación que pase el soporte")
 				}
 			}
 			@
@@ -1286,17 +1320,10 @@
 			c("X", "B", "C"),
 			c("T", "A"))
 			
-			data2 = list(
-			c("Pan", "Agua", "Leche", "Naranjas"),
-			c("Pan", "Agua", "Café", "Leche"),
-			c("Pan", "Agua", "Leche"),
-			c("Pan", "Café", "Leche"),
-			c("Pan", "Agua"),
-			c("Leche"))
-			
 			apriori(data, 0.4, 0.9)
 			@
 			
+			Finalmente, se observan una lista de las asociaciones que han superado los umbrales de soporte y confianza.
 		
 		\section{Detección de datos anómalos}
 		
@@ -1380,7 +1407,7 @@
 						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
 					\end{itemize}
 					
-					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.\\
+					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.
 					
 					\begin{itemize}
 						\item \texttt{Paso 1}: En este paso determinamos el grado de outlier el cual es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, hacemos uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En nuestro caso, queremos imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, usamos esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
@@ -1410,6 +1437,7 @@
 					
 					Ya tenemos los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles calculamos la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como hemos visto en la sección 1.3. La función que implementa el algoritmo es la siguiente:
 					
+					{\tiny
 					<<>>=
 					dispersed_outliers = function(sample, d, details = FALSE){
 						outliers = c()
@@ -1452,6 +1480,7 @@
 						outliers
 					}
 					@
+					}
 					
 					Como podemos ver el código es prácticamente igual. Se pasan los mismos parámetros que en el algoritmo anterior. El primer paso recuerda al usuario el grado de dispersión que ha introducido y el segundo  y tercer paso calculan la media y la desviación típica con nuestras funciones que lo hacen como hemos visto en teoría. El cuarto paso calcula los límites del intervalo para valores atípicos haciendo uso de la media y la desviación típica previamente calculadas y con la fórmula que vimos en la sección 1.3, y finalmente se recorren todos los datos en busca de los valores que no están dentro del intervalo calculado.\\
 					
@@ -1488,7 +1517,7 @@
 					Una vez determinados \texttt{d} y \texttt{k} se deberán calcular las distancias euclídeas de cada punto al resto de puntos. La distancia euclídea en nuestro problema es definida mediante la siguiente fórmula:
 					
 					$$
-					\dt(x_i, x_j) = \sqrt{(x_{i_1}-x_{j_1})^2 + (x_{i_2}-x_{j_2})^2}
+					\dt(p_i, p_j) = \sqrt{(p_{i_1}-p_{j_1})^2 + (p_{i_2}-p_{j_2})^2}
 					$$
 					
 					Es por ello que se necesita una función que permita obtener el valor de la distancia euclídea entre dos puntos. Se propone la siguiente:
@@ -1511,7 +1540,7 @@
 					Los parámetros \texttt{p1} y \texttt{p2} que recibe la función representan dos listas; ambas contienen los valores de las componentes de cada punto. Ambos puntos deberán tener el mismo número de componentes para poder calcularse la distancia euclídea. De esta forma se restan los valores de cada componente y se eleva al cuadrado, añadiéndose este valor a un acumulador de todas las diferencias cuadráticas de las componentes, al cual posteriormente se le aplicará la raíz cuadrada. La distancia euclídea generalizada se puede expresar de esta forma:
 					
 					$$
-					\dt(x_i, x_j) = \sqrt{\sum_{i=1}^n (x_i-x_j)^2}
+					\dt(p_i, p_j) = \sqrt{\sum_{i=1}^n (p_i-p_j)^2}
 					$$
 					
 					Una vez se tiene una función capaz de calcular las distancias euclídeas se ha de elaborar una estructura que pueda recoger la distancia de cada punto al resto de puntos. Es por ello que se propone una matriz de distancias, donde la posición $(i,j)$ representará la distancia euclídea del punto $i$ al punto $j$.
@@ -1605,13 +1634,13 @@
 					Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o Local Outlier Factor. Este se basa en la densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
 					
 					$$
-					\dt(x_i, x_j) = |x_{i_1}-x_{j_1}| + |x_{i_2}-x_{j_2}|
+					\dt(p_i, p_j) = |p_{i_1}-p_{j_1}| + |p_{i_2}-p_{j_2}|
 					$$
 					
 					Esta distancia se calcula en R mediante la función observada a continuación. Para ello se itera sobre las diferentes componentes de los puntos y se calcula su diferencia en valor absoluto, es decir, se generaliza de la siguiente manera: 
 					
 					$$
-					\dt(x_i, x_j) = \sum_{i=1}^n |x_i-x_j|
+					\dt(p_i, p_j) = \sum_{i=1}^n |p_i-p_j|
 					$$
 					
 					<<>>=

@@ -232,6 +232,7 @@ apriori = function(data, s, c) {
     
     conf = get_asotiations(table, valid_support)
     valid_asoc = ap_genrules(table, conf, c)
+	
     for (i in 1:len(valid_asoc[,1])){
 		print_asotiations(valid_asoc[i,1], valid_asoc[i,2])
 	}

@@ -1795,7 +1795,7 @@
         \hlstd{nCol} \hlkwb{=} \hlkwd{len}\hlstd{(elements)}
         \hlstd{nRow} \hlkwb{=} \hlkwd{len}\hlstd{(data)}
         \hlstd{table} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= nCol,} \hlkwc{nrow} \hlstd{= nRow,}
-        \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{nRow, elements)))}
+                \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{nRow, elements)))}
 
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{nRow) \{}
                 \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(data[[i]])) \{}
@@ -1889,14 +1889,15 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{support_clasif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{ocurrences}\hlstd{,} \hlkwc{s}\hlstd{) \{}
-        \hlstd{valid_ocur} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{list}\hlstd{()}
         \hlkwa{for} \hlstd{(ocurrence} \hlkwa{in} \hlstd{ocurrences) \{}
                 \hlstd{support_oc} \hlkwb{=} \hlkwd{support}\hlstd{(table, ocurrence)}
                 \hlkwa{if} \hlstd{(support_oc} \hlopt{>=} \hlstd{s) \{}
-                        \hlstd{valid_ocur} \hlkwb{=} \hlkwd{append}\hlstd{(valid_ocur, ocurrence)}
+                        \hlstd{valid_ocurrences} \hlkwb{=} \hlkwd{append}\hlstd{(}
+                                \hlstd{valid_ocurrences,} \hlkwd{list}\hlstd{(ocurrence))}
                 \hlstd{\}}
         \hlstd{\}}
-        \hlstd{valid_ocur}
+        \hlstd{valid_ocurrences}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1927,17 +1928,17 @@
 \end{kframe}
 \end{knitrout}
 			
-			Las dos siguientes son \texttt{cabeza} y \texttt{cola}. Dada una lista y un valor natural, \texttt{cabeza} devuelve otra lista que es una partición de la original hasta el índice del valor indicado. De la misma forma, \texttt{cola} devuelve la lista que contiene los últimos valores indicados. Ambas funciones hacen uso de las funciones \texttt{head} y \texttt{tail} respectivamente, pero devolviendo \texttt{NULL} si el numero de elementos a seleccionar es menor o igual a 0.
+			Las dos siguientes son \texttt{front} y \texttt{back}. Dada una lista y un valor natural, \texttt{front} devuelve otra lista que es una partición de la original hasta el índice del valor indicado. De la misma forma, \texttt{back} devuelve la lista que contiene los últimos valores indicados. Ambas funciones hacen uso de las funciones \texttt{head} y \texttt{tail} (del paquete \texttt{utils}) respectivamente, pero devolviendo \texttt{NULL} si el numero de elementos a seleccionar es menor o igual a 0.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{cabeza} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{l}\hlstd{,} \hlkwc{n}\hlstd{) \{}
+\hlstd{front} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{l}\hlstd{,} \hlkwc{n}\hlstd{) \{}
         \hlkwa{if} \hlstd{(n} \hlopt{<=} \hlnum{0}\hlstd{)} \hlkwd{return}\hlstd{(}\hlkwa{NULL}\hlstd{)}
         \hlkwd{head}\hlstd{(l, n)}
 \hlstd{\}}
 
-\hlstd{cola} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{l}\hlstd{,} \hlkwc{n}\hlstd{) \{}
+\hlstd{back} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{l}\hlstd{,} \hlkwc{n}\hlstd{) \{}
         \hlkwa{if} \hlstd{(n} \hlopt{<=} \hlnum{0}\hlstd{)} \hlkwd{return}\hlstd{(}\hlkwa{NULL}\hlstd{)}
         \hlkwd{tail}\hlstd{(l, n)}
 \hlstd{\}}
@@ -1997,7 +1998,6 @@
 			
 			Finalmente, se devuelve el vector sobre el que se ha trabajado pero recortándolo de forma que no aparezcan los sucesos de dimensión 1, pues al formar asociaciones con estos, uno de los dos sucesos que la formarían sería $\varnothing$, cosa que no tiene sentido. 
 			
-			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2005,33 +2005,32 @@
         \hlstd{comb} \hlkwb{=} \hlkwd{lapply}\hlstd{(clasif, c)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(clasif)}
         \hlstd{n_comb} \hlkwb{=} \hlstd{n}
-        \hlstd{inicio} \hlkwb{=} \hlnum{1}
+        \hlstd{start} \hlkwb{=} \hlnum{1}
 
         \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n) \{}
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlstd{inicio}\hlopt{:}\hlstd{(n_comb}\hlopt{-}\hlnum{1}\hlstd{)) \{}
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlstd{start}\hlopt{:}\hlstd{(n_comb}\hlopt{-}\hlnum{1}\hlstd{)) \{}
                         \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{(i}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{:}\hlstd{n_comb) \{}
 
-                                \hlstd{cab1} \hlkwb{=} \hlkwd{cabeza}\hlstd{(comb[[i]],} \hlkwd{len}\hlstd{(comb[[i]])}\hlopt{-}\hlnum{1}\hlstd{)}
-                                \hlstd{cab2} \hlkwb{=} \hlkwd{cabeza}\hlstd{(comb[[j]],} \hlkwd{len}\hlstd{(comb[[j]])}\hlopt{-}\hlnum{1}\hlstd{)}
+                                \hlstd{hd1} \hlkwb{=} \hlkwd{front}\hlstd{(comb[[i]],} \hlkwd{len}\hlstd{(comb[[i]])}\hlopt{-}\hlnum{1}\hlstd{)}
+                                \hlstd{hd2} \hlkwb{=} \hlkwd{front}\hlstd{(comb[[j]],} \hlkwd{len}\hlstd{(comb[[j]])}\hlopt{-}\hlnum{1}\hlstd{)}
 
-                                \hlstd{col1} \hlkwb{=} \hlkwd{cola}\hlstd{(comb[[i]],} \hlnum{1}\hlstd{)}
-                                \hlstd{col2} \hlkwb{=} \hlkwd{cola}\hlstd{(comb[[j]],} \hlnum{1}\hlstd{)}
+                                \hlstd{tl1} \hlkwb{=} \hlkwd{back}\hlstd{(comb[[i]],} \hlnum{1}\hlstd{)}
+                                \hlstd{tl2} \hlkwb{=} \hlkwd{back}\hlstd{(comb[[j]],} \hlnum{1}\hlstd{)}
 
-                                \hlkwa{if} \hlstd{(}\hlkwd{equals}\hlstd{(cab1, cab2)} \hlopt{& !}\hlkwd{equals}\hlstd{(col1, col2)) \{}
-                                        \hlstd{new} \hlkwb{=} \hlkwd{c}\hlstd{(cab1, col1, col2)}
+                                \hlkwa{if} \hlstd{(}\hlkwd{equals}\hlstd{(hd1, hd2)} \hlopt{& !}\hlkwd{equals}\hlstd{(tl1, tl2)) \{}
+                                        \hlstd{new} \hlkwb{=} \hlkwd{c}\hlstd{(hd1, tl1, tl2)}
                                         \hlstd{comb} \hlkwb{=} \hlkwd{c}\hlstd{(comb,} \hlkwd{list}\hlstd{(new))}
                                 \hlstd{\}}
                         \hlstd{\}}
                 \hlstd{\}}
-                \hlstd{inicio} \hlkwb{=} \hlstd{n_comb} \hlopt{+} \hlnum{1}
+                \hlstd{start} \hlkwb{=} \hlstd{n_comb} \hlopt{+} \hlnum{1}
                 \hlstd{n_comb} \hlkwb{=} \hlstd{n_comb} \hlopt{+} \hlkwd{binom}\hlstd{(n, k)}
         \hlstd{\}}
-        \hlkwd{cola}\hlstd{(comb, n_comb}\hlopt{-}\hlstd{n)}
+        \hlkwd{back}\hlstd{(comb, n_comb}\hlopt{-}\hlstd{n)}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-			}
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2056,52 +2055,34 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{get_asotiations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{comb}\hlstd{,} \hlkwc{c}\hlstd{) \{}
-        \hlstd{kMax} \hlkwb{=} \hlkwd{len}\hlstd{(comb[}\hlkwd{len}\hlstd{(comb)][[}\hlnum{1}\hlstd{]])}
-        \hlstd{listLeft} \hlkwb{=} \hlkwd{list}\hlstd{()}
-        \hlstd{listRight} \hlkwb{=} \hlkwd{list}\hlstd{()}
-
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{kMax) \{}
-
-                \hlstd{split} \hlkwb{=} \hlkwd{Filter}\hlstd{(}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{length}\hlstd{(x)}\hlopt{==}\hlstd{i, comb)}
-
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(split)) \{}
-
-                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(i}\hlopt{-}\hlnum{1}\hlstd{)) \{}
-
-                                \hlstd{leftSides} \hlkwb{=} \hlkwd{lapply}\hlstd{(k,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}
-                                        \hlkwd{combn}\hlstd{(split[j][[}\hlnum{1}\hlstd{]],} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)\})}
-
-                                \hlstd{df} \hlkwb{=} \hlkwd{do.call}\hlstd{(rbind.data.frame, leftSides)}
-
-                                \hlkwa{for} \hlstd{(n} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[}\hlnum{1}\hlstd{,])) \{}
-
-                                        \hlstd{all} \hlkwb{=} \hlstd{split[j][[}\hlnum{1}\hlstd{]]}
-
-                                        \hlstd{left} \hlkwb{=} \hlstd{df[,n]}
-
-                                        \hlstd{right} \hlkwb{=} \hlkwd{dif}\hlstd{(split[j][[}\hlnum{1}\hlstd{]], df[,n])}
-
-                                        \hlkwa{if} \hlstd{(}\hlkwd{confidence}\hlstd{(table, left, right)} \hlopt{>=} \hlstd{c) \{}
-
-                                                \hlstd{listLeft} \hlkwb{=} \hlkwd{append}\hlstd{(listLeft ,} \hlkwd{list}\hlstd{(left))}
-                                                \hlstd{listRight} \hlkwb{=} \hlkwd{append}\hlstd{(listRight ,} \hlkwd{list}\hlstd{(right))}
-
-                                        \hlstd{\}}
-                                \hlstd{\}}
+\hlstd{get_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{candidates}\hlstd{) \{}
+        \hlstd{associations} \hlkwb{=} \hlkwd{data.frame}\hlstd{()}
+        \hlstd{final_associations} \hlkwb{=} \hlkwd{lapply}\hlstd{(candidates,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{}
+                \hlstd{k} \hlkwb{=} \hlkwd{len}\hlstd{(x)}
+                \hlkwa{for} \hlstd{(dim} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(k} \hlopt{-} \hlnum{1}\hlstd{))\{}
+                        \hlstd{left_sides} \hlkwb{=} \hlkwd{combn}\hlstd{(x,} \hlkwc{m}\hlstd{=dim,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+                        \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(left_sides[}\hlnum{1}\hlstd{,]))\{}
+                                \hlstd{left_side} \hlkwb{=} \hlstd{left_sides[, col]}
+                                \hlstd{right_side} \hlkwb{=} \hlkwd{dif}\hlstd{(x, left_side)}
+                                \hlstd{new_asoc} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}
+                                        \hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(left_side)),}
+                                        \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(right_side)))}
+                                \hlstd{associations} \hlkwb{<<-} \hlkwd{rbind}\hlstd{(associations, new_asoc)}
                         \hlstd{\}}
                 \hlstd{\}}
-        \hlstd{\}}
-        \hlkwd{data.frame}\hlstd{(}\hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(listLeft),} \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(listRight))}
+        \hlstd{\})}
+        \hlstd{associations}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 			
+			EXPLICAR GET ASSOCIATIONS
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{print_asotiations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{left_list}\hlstd{,} \hlkwc{right_list}\hlstd{)\{}
+\hlstd{print_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{left_list}\hlstd{,} \hlkwc{right_list}\hlstd{)\{}
         \hlstd{left_side} \hlkwb{=} \hlkwd{paste}\hlstd{(left_list[[}\hlnum{1}\hlstd{]],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{)}
         \hlstd{right_side} \hlkwb{=} \hlkwd{paste}\hlstd{(right_list[[}\hlnum{1}\hlstd{]],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{)}
         \hlkwd{cat}\hlstd{(}\hlstr{"\{"}\hlstd{)}
@@ -2109,6 +2090,63 @@
         \hlkwd{cat}\hlstd{(}\hlstr{"\} --> \{"}\hlstd{)}
         \hlkwd{cat}\hlstd{(right_side)}
         \hlkwd{cat}\hlstd{(}\hlstr{"\}\textbackslash{}n"}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Mediante la función \texttt{print\_associations} se le pasan la parte izquierda y derecha de la asociación y esta imprime todos los elementos entre llaves y con una flecha en medio.
+			
+			{\footnotesize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ap_genrules} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{asoc}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+        \hlstd{asoc} \hlkwb{=} \hlkwd{cbind}\hlstd{(asoc,} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{ncol} \hlstd{=} \hlnum{1}\hlstd{,}
+                \hlkwc{nrow} \hlstd{=} \hlkwd{len}\hlstd{(asoc[,}\hlnum{1}\hlstd{]),} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(asoc[,}\hlnum{1}\hlstd{]),} \hlstr{"valid"}\hlstd{))))}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlkwd{len}\hlstd{(asoc[,}\hlstr{"left"}\hlstd{])}\hlopt{:}\hlnum{1}\hlstd{) \{}
+                \hlstd{A} \hlkwb{=} \hlstd{asoc[i,} \hlstr{"left"}\hlstd{][[}\hlnum{1}\hlstd{]]}
+                \hlstd{right} \hlkwb{=} \hlstd{asoc[i,} \hlstr{"right"}\hlstd{][[}\hlnum{1}\hlstd{]]}
+                \hlstd{B} \hlkwb{=} \hlkwd{union}\hlstd{(A, right)}
+
+                \hlkwa{if}\hlstd{(asoc[i,} \hlstr{"valid"}\hlstd{]) \{}
+                        \hlstd{conf} \hlkwb{=} \hlkwd{confidence}\hlstd{(table, A, right)}
+                        \hlkwa{if} \hlstd{(conf} \hlopt{<} \hlstd{c) \{}
+                                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(A)) \{}
+                                        \hlstd{A_primes} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{lapply}\hlstd{(j,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}
+                                                        \hlkwd{combn}\hlstd{(A,} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+                                                        \hlstd{\}}
+                                                \hlstd{),} \hlkwc{recursive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+                                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(A_primes),} \hlkwc{by}\hlstd{=j)) \{}
+                                                \hlstd{new_left} \hlkwb{=} \hlstd{A_primes[k}\hlopt{:}\hlstd{(k}\hlopt{+}\hlstd{j}\hlopt{-}\hlnum{1}\hlstd{)]}
+                                                \hlstd{new_right} \hlkwb{=} \hlkwd{dif}\hlstd{(B, new_left)}
+                                                \hlstd{index} \hlkwb{=} \hlkwd{indexOf_asoc}\hlstd{(}
+                                                        \hlstd{asoc, new_left, new_right)}
+                                                \hlstd{asoc[index,} \hlstr{"valid"}\hlstd{]} \hlkwb{=} \hlnum{0}
+                                        \hlstd{\}}
+                                \hlstd{\}}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlkwd{subset}\hlstd{(asoc, asoc}\hlopt{$}\hlstd{valid} \hlopt{==} \hlnum{1}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			}
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{indexOf_asoc} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{,} \hlkwc{left_side}\hlstd{,} \hlkwc{right_side}\hlstd{) \{}
+        \hlstd{found} \hlkwb{=} \hlnum{FALSE}
+        \hlstd{i} \hlkwb{=} \hlnum{1}
+        \hlkwa{while}\hlstd{(}\hlopt{!}\hlstd{found} \hlopt{&} \hlstd{i} \hlopt{<=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
+                \hlstd{found} \hlkwb{=} \hlkwd{equals}\hlstd{(df[i,} \hlstr{"left"}\hlstd{][[}\hlnum{1}\hlstd{]], left_side)} \hlopt{&}
+                        \hlkwd{equals}\hlstd{(df[i,} \hlstr{"right"}\hlstd{][[}\hlnum{1}\hlstd{]], right_side)}
+                \hlstd{i} \hlkwb{=} \hlstd{i} \hlopt{+} \hlnum{1}
+        \hlstd{\}}
+        \hlstd{i}\hlopt{-}\hlnum{1}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -2123,16 +2161,20 @@
         \hlstd{elements} \hlkwb{=} \hlkwd{get_elements}\hlstd{(data)}
         \hlstd{table} \hlkwb{=} \hlkwd{get_table}\hlstd{(data, elements)}
         \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, elements, s)}
-        \hlstd{combinations} \hlkwb{=} \hlkwd{create_comb}\hlstd{(table, soporte_clasif, s)}
+        \hlstd{combinations} \hlkwb{=} \hlkwd{fk_1}\hlstd{(soporte_clasif)}
+        \hlstd{valid_support} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, combinations, s)}
 
-        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(combinations)} \hlopt{>} \hlnum{0}\hlstd{) \{}
-                \hlstd{conf} \hlkwb{=} \hlkwd{get_asotiations}\hlstd{(table, combinations, c)}
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(conf[,}\hlnum{1}\hlstd{]))\{}
-                        \hlkwd{print_asotiations}\hlstd{(conf[i,}\hlnum{1}\hlstd{], conf[i,}\hlnum{2}\hlstd{])}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(valid_support)} \hlopt{>} \hlnum{0}\hlstd{) \{}
+
+                \hlstd{conf} \hlkwb{=} \hlkwd{get_associations}\hlstd{(table, valid_support)}
+                \hlstd{valid_asoc} \hlkwb{=} \hlkwd{ap_genrules}\hlstd{(table, conf, c)}
+
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(valid_asoc[,}\hlnum{1}\hlstd{]))\{}
+                        \hlkwd{print_associations}\hlstd{(valid_asoc[i,}\hlnum{1}\hlstd{], valid_asoc[i,}\hlnum{2}\hlstd{])}
                 \hlstd{\}}
 
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
-                \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que supere el umbral de soporte"}\hlstd{)}
+                \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que pase el soporte"}\hlstd{)}
         \hlstd{\}}
 \hlstd{\}}
 \end{alltt}
@@ -2152,21 +2194,16 @@
 \hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"T"}\hlstd{,} \hlstr{"A"}\hlstd{))}
 
-\hlstd{data2} \hlkwb{=} \hlkwd{list}\hlstd{(}
-\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{),}
-\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{),}
-\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Leche"}\hlstd{),}
-\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{),}
-\hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{),}
-\hlkwd{c}\hlstd{(}\hlstr{"Leche"}\hlstd{))}
-
 \hlkwd{apriori}\hlstd{(data,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in create\_comb(table, soporte\_clasif, s): no se pudo encontrar la función "{}create\_comb"{}}}\end{kframe}
+\begin{verbatim}
+## {B} --> {X}
+## {C} --> {X}
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
+			Finalmente, se observan una lista de las asociaciones que han superado los umbrales de soporte y confianza.
 		
 		\section{Detección de datos anómalos}
 		
@@ -2276,7 +2313,7 @@
 						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
 					\end{itemize}
 					
-					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.\\
+					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.
 					
 					\begin{itemize}
 						\item \texttt{Paso 1}: En este paso determinamos el grado de outlier el cual es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, hacemos uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En nuestro caso, queremos imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, usamos esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
@@ -2329,6 +2366,7 @@
 					
 					Ya tenemos los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles calculamos la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como hemos visto en la sección 1.3. La función que implementa el algoritmo es la siguiente:
 					
+					{\tiny
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2375,6 +2413,7 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+					}
 					
 					Como podemos ver el código es prácticamente igual. Se pasan los mismos parámetros que en el algoritmo anterior. El primer paso recuerda al usuario el grado de dispersión que ha introducido y el segundo  y tercer paso calculan la media y la desviación típica con nuestras funciones que lo hacen como hemos visto en teoría. El cuarto paso calcula los límites del intervalo para valores atípicos haciendo uso de la media y la desviación típica previamente calculadas y con la fórmula que vimos en la sección 1.3, y finalmente se recorren todos los datos en busca de los valores que no están dentro del intervalo calculado.\\
 					
@@ -2440,7 +2479,7 @@
 					Una vez determinados \texttt{d} y \texttt{k} se deberán calcular las distancias euclídeas de cada punto al resto de puntos. La distancia euclídea en nuestro problema es definida mediante la siguiente fórmula:
 					
 					$$
-					\dt(x_i, x_j) = \sqrt{(x_{i_1}-x_{j_1})^2 + (x_{i_2}-x_{j_2})^2}
+					\dt(p_i, p_j) = \sqrt{(p_{i_1}-p_{j_1})^2 + (p_{i_2}-p_{j_2})^2}
 					$$
 					
 					Es por ello que se necesita una función que permita obtener el valor de la distancia euclídea entre dos puntos. Se propone la siguiente:
@@ -2467,7 +2506,7 @@
 					Los parámetros \texttt{p1} y \texttt{p2} que recibe la función representan dos listas; ambas contienen los valores de las componentes de cada punto. Ambos puntos deberán tener el mismo número de componentes para poder calcularse la distancia euclídea. De esta forma se restan los valores de cada componente y se eleva al cuadrado, añadiéndose este valor a un acumulador de todas las diferencias cuadráticas de las componentes, al cual posteriormente se le aplicará la raíz cuadrada. La distancia euclídea generalizada se puede expresar de esta forma:
 					
 					$$
-					\dt(x_i, x_j) = \sqrt{\sum_{i=1}^n (x_i-x_j)^2}
+					\dt(p_i, p_j) = \sqrt{\sum_{i=1}^n (p_i-p_j)^2}
 					$$
 					
 					Una vez se tiene una función capaz de calcular las distancias euclídeas se ha de elaborar una estructura que pueda recoger la distancia de cada punto al resto de puntos. Es por ello que se propone una matriz de distancias, donde la posición $(i,j)$ representará la distancia euclídea del punto $i$ al punto $j$.
@@ -2596,13 +2635,13 @@
 					Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o Local Outlier Factor. Este se basa en la densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
 					
 					$$
-					\dt(x_i, x_j) = |x_{i_1}-x_{j_1}| + |x_{i_2}-x_{j_2}|
+					\dt(p_i, p_j) = |p_{i_1}-p_{j_1}| + |p_{i_2}-p_{j_2}|
 					$$
 					
 					Esta distancia se calcula en R mediante la función observada a continuación. Para ello se itera sobre las diferentes componentes de los puntos y se calcula su diferencia en valor absoluto, es decir, se generaliza de la siguiente manera: 
 					
 					$$
-					\dt(x_i, x_j) = \sum_{i=1}^n |x_i-x_j|
+					\dt(p_i, p_j) = \sum_{i=1}^n |p_i-p_j|
 					$$
 					
 \begin{knitrout}
