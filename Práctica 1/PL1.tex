@@ -51,9 +51,9 @@
 \usepackage{alltt}
 
 \usepackage[spanish]{babel}
-\usepackage[margin=2.54cm]{geometry}
+\usepackage[margin = 2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{array, amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, tikz, tikz-cd}
+\usepackage{amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
 \pagestyle{fancy}
@@ -92,7 +92,7 @@
 	
 	\vspace{1cm}
 	
-	\includegraphics[scale=0.075]{img/logo}
+	\includegraphics[scale = 0.075]{img/logo}
 }
 
 \author{
@@ -582,6 +582,7 @@
 			\end{exercise}
 				
 			Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente:
+			
 			$$
 			\begin{pmatrix}
 				1 & 1 & 0 & 1 & 1\\
@@ -1868,12 +1869,12 @@
 			
 			La siguiente herramienta que se necesita en el algoritmo apriori es el soporte, que queda definido de la siguiente manera. 
 			
-			$$
-			\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j,
-			$$
-			$$
-			s: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \,\, \text{que} \, s(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_T}
-			$$
+			\begin{equation*}
+				\begin{gathered}
+					\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
+					s: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \,\, \text{que} \, s(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_T}
+				\end{gathered}
+			\end{equation*}
 			
 			Como podemos observar, la función \texttt{count\_appereance} que se había codificado previamente, será de ayuda para calcular el soporte, de forma que ahora basta dividir el resultado de esta por el número de sucesos de la muestra tal y como se hace en la función \texttt{support}. 
 			
@@ -2049,12 +2050,12 @@
 			
 			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la siguiente ecuación, se implementa con la función previamente mostrada \texttt{confidence}. 
 			
-			$$
-			\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j,
-			$$
-			$$
-			c: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \, \text{que} \,\, c(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_{A_i}}
-			$$
+			\begin{equation*}
+				\begin{gathered}
+					\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
+					c: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \, \text{que} \,\, c(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_{A_i}}
+				\end{gathered}
+			\end{equation*}
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
