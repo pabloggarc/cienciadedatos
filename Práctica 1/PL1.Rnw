@@ -130,8 +130,8 @@
 					\item \texttt{install.packages("nombre\_del\_paquete")}\\
 					A esta función se le debe pasar por parámetro el nombre del paquete que se desea instalar.
 					
-					\item \texttt{install.packages("ubicacion\_del\_paquete", rep=NULL)}\\
-					A la función también se le puede pasar por parámetros la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``c:/'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
+					\item \texttt{install.packages(``ubicacion\_del\_paquete'', rep=NULL)}\\
+					A la función también se le puede pasar por parámetros la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``\texttt{c:/}'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
 					
 					\item \texttt{utils:::menuInstallPkgs()}\\
 					Tras la ejecución de este comando aparecerá una ventana donde se podrá elegir el mirror desde el que se va a descargar el paquete, y tras elegir el mirror (Spain (Madrid) en nuestro caso), aparece otra ventana donde se puede elegir el paquete que se quiere instalar, tras hacer doble click, este se instalará automáticamente.
@@ -157,7 +157,7 @@
 
 			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado dando una mayor flexibilidad, aunque no sea su objetivo principal. Veremos ahora los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que necesitaremos es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que estamos trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
 			
-			Una vez hemos tratado ambos lenguajes, necesitamos entender con qué tipos de extensiones se suelen trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo queremos almacenar nuestro documento, o cómo están almacenadas dependencias de estos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
+			Una vez hemos tratado ambos lenguajes, necesitamos entender con qué tipos de extensiones se suelen trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo queremos almacenar nuestro documento, o cómo están almacenadas las dependencias de estos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
 			
 			Para ello nos fijaremos en la \Cref{fig:extensiones}. Por ahora nos quedaremos con las extensiones que trabajaremos más a menudo, que serán \texttt{.Rnw}, \texttt{.tex}, y \texttt{.pdf}. La primera de ellas representan los archivos que tienen código \LaTeX{} y R ``mezclado'', la segunda aquellos que contienen código \LaTeX{} puro, y la última nuestro documento final. \\
 			
@@ -173,7 +173,7 @@
 				\label{fig:extensiones}
 			\end{figure}
 			
-			Existen dos herramientas que nos permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, optaremos por la segunda, pues existieron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr nos ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages('knitr')} en una consola de R. Sweave viene ya por defecto con \texttt{utils}. \\
+			Existen dos herramientas que nos permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, optaremos por la segunda, pues existieron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr nos ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages("knitr")} en una consola de R. Sweave viene ya por defecto con \texttt{utils}. \\
 			
 			Por último, se explicará cómo hemos agilizado el proceso de trabajo con Knitr y \TeX{}Studio. Lo primero será hacer que R cargue por defecto Knitr, para ello modificaremos el archivo \texttt{Rprofile} en \texttt{libray/base/R} dentro de la carpeta de instalación de R, añadiendo \texttt{knitr} al resto de paquetes que carga por defecto. Una vez hecho esto, iremos a la configuración de \TeX{}Studio, y aquí a \textit{Compilar}. En la zona \textit{Órdenes de usuario}, crearemos una nueva tal y como se ve en la \Cref{fig:orden}, de manera que le digamos dónde están los binarios de R, para que pueda crear un fichero \texttt{.tex}, y posteriormente invocar a nuestro compilador, para obtener nuestro documento en \texttt{.pdf}. \TeX{}Studio se encargará de reemplazar el símbolo \% por el nombre del archivo que le ordenamos compilar. 
 			
@@ -556,7 +556,7 @@
 					(distanciasordenadas=distancias)
 					@
 					
-					Por último, se itera cada punto de la matriz de distancias ordenadas y comprobamos si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.
+					Por último, se itera cada punto de la matriz de distancias ordenadas y comprobamos si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
 					
 					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{k} elementos.
 					
@@ -595,7 +595,9 @@
 				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.
 			\end{exercise}
 			
-			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla. La función empleada ha sido \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma se debería haber usado \texttt{read.csv2}. Se observa en la siguiente línea de código cómo se ha creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura mencionada previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio, habría que pasar por parámetro la ruta donde se encuentra dicho archivo.
+			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia} (km) para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla.\\
+			
+			La función empleada ha sido \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma se debería haber usado \texttt{read.csv2}. Se observa en la siguiente línea de código cómo se ha creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura mencionada previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio, habría que pasar por parámetro la ruta donde se encuentra dicho archivo.
 			
 			<<>>=
 			fichero = read.csv("data/distancia_universitarios.csv")
@@ -604,7 +606,7 @@
 			
 			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se leerán dos datos en vez de uno.\\ 
 			
-			Como se v a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, podemos definirla en una variable nueva a la que llamaremos \texttt{distancias}, de tal forma que no se tenga que estar haciendo \texttt{fichero\$Distancia} repetidamente.
+			Como se va a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, podemos definirla en una variable nueva a la que llamaremos \texttt{distancias}, de tal forma que no se tenga que estar pasando \texttt{fichero\$Distancia} repetidamente.
 			
 			<<>>=
 			distancias = fichero$Distancia
@@ -613,9 +615,9 @@
 			Para conocer la longitud de \texttt{distancias}, se ha decidido elaborar una función propia, la cual nos devolverá un escalar con el número de elementos que contenga nuestra lista (distancias en este caso). 
 			
 			<<>>=
-			len = function(list){
+			len = function(list) {
 				count = 0
-				for (element in list){
+				for (element in list) {
 					count = count + 1
 				}
 				count
@@ -633,12 +635,12 @@
 			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. Esto se consigue en un tiempo $\mathcal{O}(n^2)$. La función que realiza este método de ordenación es la siguiente:
 			
 			<<>>=
-			bubble = function(list, asc = TRUE){
+			bubble = function(list, asc = TRUE) {
 				n = len(list)
 				direccion = ifelse(asc, 1, -1)
-				for (i in 2:n){
-					for (j in 1:(n-1)){
-						if (list[j] * direccion > list[j+1] * direccion){
+				for (i in 2:n) {
+					for (j in 1:(n-1)) {
+						if (list[j] * direccion > list[j+1] * direccion) {
 							temp = list[j]
 							list[j] = list[j+1]
 							list[j+1] = temp
@@ -651,7 +653,7 @@
 			
 			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente.\\
 			
-			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable\texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
+			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
 			
 			Hagamos la prueba con la lista de distancias:
 			
@@ -668,7 +670,7 @@
 			Con la lista ordenada, se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
 			
 			<<>>=
-			rank = function(list){
+			rank = function(list) {
 				ordered_list = bubble(list)
 				ordered_list[len(ordered_list)] - ordered_list[1]
 			}
@@ -684,18 +686,18 @@
 			Ahora se realizará el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente se crea una función para cada una. La primera que realizaremos y en la que se basará el resto, será la frecuencia absoluta. El código de la función es el siguiente:
 			
 			<<>>=
-			absolute_freq = function(list){
+			absolute_freq = function(list) {
 				ordered_list = bubble(list)
 				n = len(ordered_list)
 				elements = vector()
 				frequencies = vector()
 				i = 1
-				while (i <= n){
+				while (i <= n) {
 					actual_element = ordered_list[i]
 					elements = append(elements, actual_element)
 					actual_freq = 0
 					j = i
-					while(j <= n & actual_element == ordered_list[j]){
+					while(j <= n & actual_element == ordered_list[j]) {
 						actual_freq = actual_freq + 1
 						j = j+1
 					}
@@ -720,11 +722,11 @@
 			Una vez realizadas las frecuencias absolutas pasaremos a realizar las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo se disponen de todas las herramientas, ya que se tiene la función \texttt{len}, que dice cuántos elementos hay, y la función de frecuencias absolutas que acabamos de realizar. Se puede codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que se ha visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
 			
 			<<>>=
-			relative_freq = function(list){
+			relative_freq = function(list) {
 				f_abs = absolute_freq(list)
 				elements = f_abs[1,]
 				abs_fvalues = f_abs[2,]
-				rbind(elements,abs_fvalues/len(list))
+				rbind(elements, abs_fvalues/len(list))
 			}
 			@
 			
@@ -737,31 +739,29 @@
 			@
 			}
 			
-			Por último, elaboraremos dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
+			Por último, elaboraremos dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acumulada y la frecuencia relativa acumulada son respectivamente los siguientes:
 			
 			<<>>=
-			acum_absolute_freq = function(list){
+			acum_absolute_freq = function(list) {
 				f_abs = absolute_freq(list)
 				elements = f_abs[1,]
 				abs_fvalues = f_abs[2,]
 				acum_abs_fvalues = vector()
 				acum = 0
-				for (i in 1:len(elements)){
+				for (i in 1:len(elements)) {
 					acum = acum + abs_fvalues[i]
 					acum_abs_fvalues = append(acum_abs_fvalues, acum)
 				}
 				rbind(elements, acum_abs_fvalues)
 			}
-			@
 			
-			<<>>=
-			acum_relative_freq = function(list){
+			acum_relative_freq = function(list) {
 				f_rel = relative_freq(list)
 				elements = f_rel[1,]
 				rel_fvalues = f_rel[2,]
 				acum_rel_fvalues = vector()
 				acum = 0
-				for (i in 1:len(elements)){
+				for (i in 1:len(elements)) {
 					acum = acum + rel_fvalues[i]
 					acum_rel_fvalues = append(acum_rel_fvalues, acum)
 				}
@@ -787,14 +787,14 @@
 			
 			{\small
 			<<>>=
-			mode = function(list){
+			mode = function(list) {
 				frequencies = absolute_freq(list)
 				elements = frequencies[1,]
 				freq_values = frequencies[2,]
 				actual_mode = 0
 				actual_mode_val = 0
-				for (i in 1:len(elements)){
-					if (freq_values[i] > actual_mode_val){
+				for (i in 1:len(elements)) {
+					if (freq_values[i] > actual_mode_val) {
 						actual_mode_val = freq_values[i]
 						actual_mode = elements[i]
 					}
@@ -820,13 +820,12 @@
 			Se han englobado estos cálculos en una función, donde se comprueba si se está ante un número de elementos par o impar, y se accede a los elementos correspondientes. La función es la siguiente:
 			
 			<<>>=
-			median_value = function(list){
+			median_value = function(list) {
 				n = len(list)
 				ordered_list = bubble(list)
-				if (n%%2 == 0){
+				if (n%%2 == 0) {
 					median = (ordered_list[n/2] + ordered_list[(n/2)+1]) / 2
-				}
-				else{
+				} else {
 					median = ordered_list[(n+1)/2]
 				}
 				median
@@ -845,11 +844,11 @@
 			Tras haber codificado las medidas de tendencia central, se estudiarán dos medidas de dispersión. La primera de las medidas que se van a calcular es la desviación típica. Para ello se ha codificado la siguiente función:
 			
 			<<>>=
-			standard_dev = function(list){
+			standard_dev = function(list) {
 				mean = mean(list)
 				n = len(list)
 				add = 0
-				for (i in 1:n){
+				for (i in 1:n) {
 					add = add + ((list[i] - mean)^2)
 				}
 				sqrt(add/n)
@@ -877,7 +876,7 @@
 			$$
 			
 			<<>>=
-			variance = function(list){
+			variance = function(list) {
 				dev = standard_dev(list)
 				var = dev^2
 				var
@@ -891,7 +890,7 @@
 			varianza
 			@
 			
-			Terminadas las medidas de dispersión, se procede a calcular los cuantiles. Para calcular los cuantiles se tendrá que definir, además de la lista de la que se quiere calcular el valor, de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de $c$. Así, si se introduce por parámetro un $c$ que no es válido se devolverá \texttt{NULL}, ya que no se puede hacer el cálculo. En caso de haber introducido un $c$ válido se observan dos casos.
+			Terminadas las medidas de dispersión, se procede a calcular los cuantiles. Para calcular los cuantiles se tendrá que definir, la lista de la que se quiere calcular el valor, además de c, que es la porción de valores que se busca. Esto último tendrá que corresponder a un valor entre 0 y 1 en función de $c$. Así, si se introduce por parámetro un $c$ que no es válido se devolverá \texttt{NULL}, ya que no se puede hacer el cálculo. En caso de haber introducido un $c$ válido se observan dos casos.
 			
 			\begin{itemize}
 				\item Si $nc \in \mathbb{N}$ (siendo $n$ el número total de elementos), se calculará $\frac{x_{nc}+x_{nc+1}}{2}$. 
@@ -901,21 +900,18 @@
 			Con estos cálculos se codifica una función que calcula los cuantiles. La función es la siguiente:
 			
 			<<>>=
-			quant = function(list, c){
+			quant = function(list, c) {
 				ordered_list = bubble(list)
 				n = len(list)
-				if (c < 0 | c > 1){
+				if (c < 0 | c > 1) {
 					quant = NULL
-				}
-				else{
-					if((n*c)%%1 == 0){
-						quant = (ordered_list[(n*c)] +
-						 ordered_list[(n*c) + 1]) / 2
-					}
-					else {
-						int_prod = floor(n*c)
-						quant = ordered_list[int_prod + 1]
-					}
+					
+				} else if((n*c)%%1 == 0) {
+					quant = (ordered_list[(n*c)] + ordered_list[(n*c) + 1]) / 2
+					
+				} else {
+					int_prod = floor(n*c)
+					quant = ordered_list[int_prod + 1]
 				}
 				quant
 			}	
@@ -977,7 +973,7 @@
 			}
 			@
 			
-			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Para ello se utilizan las funciones \texttt{get\_elements} y \texttt{get\_table}. 
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos, se hará uso de las funciones \texttt{get\_elements} y \texttt{get\_table}. 
 			
 			<<>>=
 			get_elements = function(data) {
@@ -1153,7 +1149,7 @@
 			}
 			@
 			
-			Finalmente, la función \texttt{fk\_1} representa el algoritmo al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y por ejemplo, en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{cabeza} y \texttt{cola}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
+			Finalmente, la función \texttt{fk\_1} representa el algoritmo al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{front} y \texttt{back}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
 			
 			En cada iteración será necesario saber en qué posición del vector inicia y finalizan los sucesos candidatos de dimensión $k-1$. Suponiendo que se tienen $n$ sucesos elementales, la posición del primer suceso de dimensión $k$, viene dada por sumar a la posición del primer suceso de dimensión $k-1$, el número combinatorio $\binom{n}{k}$, pues $F_{k-1} \times F_{k-1}$ irá añadiendo los posibles subconjuntos. \\
 			
@@ -1187,9 +1183,7 @@
 				}
 				back(comb, n_comb-n)
 			}
-			@
 			
-			<<>>=
 			confidence = function(table, left, right) {
 				count_appearance(table, union(left, right)) /
 					count_appearance(table, left)
@@ -1208,17 +1202,18 @@
 			<<>>=
 			get_associations = function(table, candidates) {
 				associations = data.frame()
-				final_associations = lapply(candidates, function(x){
+				final_associations = lapply(candidates, function(x) {
 					k = len(x)
-					for (dim in 1:(k - 1)){
+					for (dim in 1:(k - 1)) {
 						left_sides = combn(x, m=dim, simplify=TRUE)
-						for (col in 1:len(left_sides[1,])){
+						for (col in 1:len(left_sides[1,])) {
 							left_side = left_sides[, col]
 							right_side = dif(x, left_side)
 							new_asoc = data.frame(
 								left = I(list(left_side)),
 								right = I(list(right_side)))
-							associations <<- rbind(associations, new_asoc)
+							associations <<- rbind(
+								associations, new_asoc)
 						}
 					}
 				})
@@ -1229,7 +1224,7 @@
 			EXPLICAR GET ASSOCIATIONS
 			
 			<<>>=
-			print_associations = function(left_list, right_list){
+			print_associations = function(left_list, right_list) {
 				left_side = paste(left_list[[1]], collapse = ",")
 				right_side = paste(right_list[[1]], collapse = ",")
 				cat("{")
@@ -1276,6 +1271,8 @@
 			@
 			}
 			
+			EXPLICAR AP-GENRULES (se escribe associations por si quieres cambiar el nombre de las variables)
+			
 			<<>>=
 			indexOf_asoc = function(df, left_side, right_side) {
 				found = FALSE
@@ -1288,6 +1285,8 @@
 				i-1
 			}
 			@
+			
+			EXPLICAR INDEXOF\_ASSOC\\
 			
 			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
@@ -1304,10 +1303,9 @@
 					conf = get_associations(table, valid_support)
 					valid_asoc = ap_genrules(table, conf, c)
 				
-					for (i in 1:len(valid_asoc[,1])){
+					for (i in 1:len(valid_asoc[,1])) {
 						print_associations(valid_asoc[i,1], valid_asoc[i,2])
 					}
-				
 				} else {
 					print("No hay ninguna combinación que pase el soporte")
 				}
@@ -1338,7 +1336,7 @@
 					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.
 				\end{exercise}
 				
-				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la \Cref{sec:descrip_auto}, se han realizado nuestras propias funciones que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes:\\
+				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la \Cref{sec:descrip_auto}, se han realizado nuestras propias funciones que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes.\\
 				
 				En primer lugar se van a introducir los datos. Para ello se hará tal y se ha visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para \texttt{velocidad} y otra para \texttt{temperatura}) y tantas filas como entradas de datos se tengan. Tras ello, se pasa esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es el siguiente: 
 				
@@ -1365,38 +1363,38 @@
 					
 					{\tiny
 					<<>>=
-					boxNmustaches = function(sample, d, details = FALSE){
+					boxNmustaches = function(sample, d, details = FALSE) {
 						outliers = c()
-						if(details){
+						if(details) {
 							print("->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER")
 							cat("Se ha introducido un grado de outlier d = ",d,"\n\n")
 						}
 						cuart1 = quant(sample, 0.25)
 						cuart3 = quant(sample, 0.75)
-						if (details){
+						if (details) {
 							print("->PASO 2: CÁLCULO DE LOS CUARTILES 1 Y 3")
 							cat("El cuartil 1 es ",cuart1, " y el cuartil 3 es ", cuart3,"\n\n")
 						}
 						lim_inf = cuart1 - (d*(cuart3-cuart1))
 						lim_sup = cuart3 + (d*(cuart3-cuart1))
-						if (details){
+						if (details) {
 							print("->PASO 3: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS")
 							cat("Fórmula -> (Q1 - d*(Q3-Q1), Q3 + d*(Q3-Q1))\n")
 							cat("El intervalo para los valores atípicos es: (",lim_inf,", ",lim_sup,")\n\n")
 						}
-						if(details){
+						if(details) {
 							print("->PASO 4: IDENTIFICACIÓN DE OUTLIERS")
 							cat("Los outliers serán aquellos valores que no están en el intervalo anterior\n")
 						}
-						for (i in 1:len(sample)){
-							if(sample[i] < lim_inf || sample[i] > lim_sup){
+						for (i in 1:len(sample)) {
+							if(sample[i] < lim_inf || sample[i] > lim_sup) {
 								outliers = append(outliers, i)
-								if(details){
+								if(details) {
 									cat("El punto ",i," con valor ",sample[i]," es un outlier\n")
 								}
 							}
 						}
-						if(len(outliers) == 0){
+						if(len(outliers) == 0) {
 							cat("No hay outliers")
 						}
 					outliers
@@ -1411,7 +1409,7 @@
 						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
 					\end{itemize}
 					
-					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.
+					A partir de la salida detallada se irá explicando poco a poco el algoritmo.
 					
 					\begin{enumerate}[label = \textbf{\arabic*. }]
 						\item En este paso se determina el grado de outlier, que es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
@@ -1429,11 +1427,11 @@
 					anomalias_vel = boxNmustaches(muestra_velocidad, 1.5, TRUE)
 					@
 					
-					Se observa cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.\\
+					Se observa cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.
 					
 				\subsubsection{Media y desviación}
 					
-					En este segundo apartado del ejercicio se van a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos se ha ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente al visto en teoría. Por ello, se puede aplicar la función \texttt{standard\_dev} que elaborada en la \Cref{sec:descrip_auto} y que da el valor que visto en clase de teoría. Primeramente se guarda la columna de temperaturas para luego trabajar mejor sobre ella.
+					En este segundo apartado del ejercicio se van a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos se ha ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente al visto en teoría. Por ello, se puede aplicar la función \texttt{standard\_dev} que elaborada en la \Cref{sec:descrip_auto} y que da el valor visto en clase de teoría. Primeramente se guarda la columna de temperaturas para luego trabajar mejor sobre ella.
 					
 					<<>>=
 					muestra_temp = muestra$temperatura
@@ -1443,42 +1441,42 @@
 					
 					{\tiny
 					<<>>=
-					dispersed_outliers = function(sample, d, details = FALSE){
+					dispersed_outliers = function(sample, d, details = FALSE) {
 						outliers = c()
-						if(details){
+						if (details) {
 							print("->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER")
 							cat("Se ha introducido un grado de outlier d = ",d,"\n\n")
 						}
 						mean_sample = mean(sample)
-						if (details){
+						if (details) {
 							print("->PASO 2: CÁLCULO DE LA MEDIA ARITMÉTICA")
 							cat("La media aritmética es ", mean_sample, "\n\n")
 						}
 						dev_sample = standard_dev(sample)
-						if (details){
+						if (details) {
 							print("->PASO 3: CÁLCULO DE LA DESVIACIÓN TÍPICA")
 							cat("La desviación típica es ", dev_sample, "\n\n")
 						}
 						lim_inf = mean_sample - (d*dev_sample)
 						lim_sup = mean_sample + (d*dev_sample)
-						if (details){
+						if (details) {
 							print("->PASO 4: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS")
 							cat("Fórmula -> (Media - d*DesviaciónTípica, Media + d*DesviaciónTípica)\n")
 							cat("El intervalo para los valores atípicos es: (",lim_inf,", ",lim_sup,")\n\n")
 						}
-						if(details){
+						if(details) {
 							print("->PASO 5: IDENTIFICACIÓN DE OUTLIERS")
 							cat("Los outliers serán aquellos valores que no están en el intervalo anterior\n")
 						}
-						for (i in 1:len(sample)){
-							if(sample[i] < lim_inf || sample[i] > lim_sup){
+						for (i in 1:len(sample)) {
+							if(sample[i] < lim_inf || sample[i] > lim_sup) {
 								outliers = append(outliers, i)
-								if(details){
+								if(details) {
 									cat("El punto ",i," con valor ",sample[i]," es un outlier\n")
 								}
 							}
 						}
-						if(len(outliers) == 0){
+						if(len(outliers) == 0) {
 							cat("No hay outliers")
 						}
 						outliers
@@ -1491,7 +1489,7 @@
 					Al igual que en el algoritmo anterior, se devolverá una lista con los puntos que son \textit{outliers} y se podrá elegir entre una salida detallada con mensajes por pantalla del proceso o una salida limitada a la devolución de la lista de \textit{outliers}. Se comprueba el algoritmo con la temperatura y un grado de dispersión $d=2$:
 					
 					<<>>=
-					anomalias_temp = dispersed_outliers(muestra_temp,2,TRUE)
+					anomalias_temp = dispersed_outliers(muestra_temp, 2, TRUE)
 					@
 					
 					Se observa cómo se ha ido haciendo todo el proceso (pues se ha elegido una salida detallada) y se ve que al final se ha encontrado una anomalía en el punto 3 cuyo valor es $12.74$, el cual se encuentra fuera del intervalo, por lo que es considerado un \textit{outlier}.\\
@@ -1525,15 +1523,14 @@
 					Es por ello que se necesita una función que permita obtener el valor de la distancia euclídea entre dos puntos. Se propone la siguiente:
 					
 					<<>>=
-					euc_distance = function(p1,p2){
-						if(len(p1) == len(p2)){
+					euc_distance = function(p1,p2) {
+						if(len(p1) == len(p2)) {
 							add = 0
-							for(i in 1:len(p1)){
+							for(i in 1:len(p1)) {
 								add = add + ((p1[i] - p2[i])^2)
 							}
 							sqrt(add)
-						} 
-						else {
+						} else {
 							print("No se puede calcular la distancia euclídea")
 						}
 					}
@@ -1549,11 +1546,11 @@
 					Para ello se ha realizado la siguiente función:
 					
 					<<>>=
-					create_distance_matrix = function(df){
+					create_distance_matrix = function(df) {
 						empty_matrix = matrix(ncol = len(df[,1]), nrow = len(df[,1]))
 						distances = data.frame(empty_matrix)
-						for (i in 1:len(df[,1])){
-							for (j in i:len(df[,1])){
+						for (i in 1:len(df[,1])) {
+							for (j in i:len(df[,1])) {
 								dist = euc_distance(df[i,], df[j,])
 								distances[i,j] = dist
 								distances[j,i] = dist
@@ -1568,16 +1565,16 @@
 					Con las distancias de todos los puntos ya calculadas, el siguiente paso es ordenar y detectar si la $k$ distancia más próxima sobrepasa o no el grado de \textit{outlier} $d$, ambos definidos por el analista. En caso de sobrepasar $d$, el punto es un \textit{outlier} y viceversa. La función que detecta las anomalías de esta forma es la siguiente:
 					
 					<<>>=
-					detect_outliers = function(sample, distance_matrix, k, d, details){
-						if(details){
+					detect_outliers = function(sample, distance_matrix, k, d, details) {
+						if(details) {
 							print("->PASO 3: IDENTIFICACIÓN DE LOS OUTLIERS")
 						}	
 						outliers = c()
-						for (column in 1:len(distance_matrix[1,])){
+						for (column in 1:len(distance_matrix[1,])) {
 							ordered_column = bubble(distance_matrix[column,])
-							if (ordered_column[k+1] > d){
+							if (ordered_column[k+1] > d) {
 								outliers = append(outliers,column)
-								if(details){
+								if(details) {
 									cat("El punto", column, "(",
 									paste(sample[column,], collapse = ","),
 									") es un outlier\n")
@@ -1595,14 +1592,14 @@
 					Por último, se han de unir todos los módulos en una función que encapsule toda esta funcionalidad. Para ello se ha creado la siguiente función, que será a la que llame el usuario cuando quiera ejecutar el algoritmo $k-$vecinos:
 					
 					<<>>=
-					k_neighbors = function(sample, k, d, details = FALSE){
-						if(details){
+					k_neighbors = function(sample, k, d, details = FALSE) {
+						if(details) {
 							print("->PASO 1: DETERMINACIÓN DE d Y k")
 							cat("Grado de outlier: d =",d,"\n")
 							cat("K-Vecino más próximo: k =",k,"\n\n")
 						}
 						d_matrix = create_distance_matrix(sample)
-						if(details){
+						if(details) {
 							print("->PASO 2: MATRIZ DE DISTANCIAS ENTRE PUNTOS:\n")
 							print(d_matrix)
 							cat("\n")
@@ -1633,7 +1630,7 @@
 					
 					\subsubsection{Algoritmo LOF}
 					
-						Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o \textsc{Local Outlier Factor}. Este se basa en las densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
+						Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o \textsc{Local Outlier Factor}. Este se basa en las densidades y la distancia Manhattan, que se define de la siguiente forma para los puntos de la muestra: 
 						
 						$$
 						\dt(p_i, p_j) = |p_{i_1}-p_{j_1}| + |p_{i_2}-p_{j_2}|
@@ -1648,7 +1645,7 @@
 						<<>>=
 						manhattan_distance = function(p1, p2) {
 							add = 0
-							for(i in 1:len(p1)){
+							for(i in 1:len(p1)) {
 								add = add + abs(p1[i] - p2[i])
 							}
 							add
@@ -1658,12 +1655,12 @@
 						Como se necesita calcular la distancia entre cada posible par de puntos, se organizan estos datos en una matriz (representada por un dataframe) haciendo uso de la función anterior. Se tiene en cuenta que $\dt(x_i, x_j) = \dt(x_j, x_i)$ y se recoge en la siguiente función. 
 						
 						<<>>=
-						create_distance_matrix = function(df){
+						create_distance_matrix = function(df) {
 							empty_matrix = matrix(ncol = len(df[,1]), nrow = len(df[,1]))
 							distances = data.frame(empty_matrix)
-							for (i in 1:len(df[,1])){
+							for (i in 1:len(df[,1])) {
 								p_dists = c()
-								for (j in i:len(df[,1])){
+								for (j in i:len(df[,1])) {
 									dist = manhattan_distance(df[i,], df[j,])
 									distances[i,j] = dist
 									distances[j,i] = dist
@@ -1677,11 +1674,11 @@
 						Ahora se necesitará ordenar las distancias a los puntos para construir el conjunto $N(x_i, k)$. Para ello se hará uso del algoritmo de ordenación de la burbuja explicado en ejercicios anteriores, pero se le realizarán una serie de modificaciones para adaptarlo a este caso. Esto se realiza con la función que se presenta a continuación. 
 						
 						<<>>=
-						bubble_LOF = function(d_list, p_list){
+						bubble_LOF = function(d_list, p_list) {
 							n = len(d_list)
-							for (i in 2:n){
-								for (j in 1:(n-1)){
-									if (d_list[j] > d_list[j+1]){
+							for (i in 2:n) {
+								for (j in 1:(n-1)) {
+									if (d_list[j] > d_list[j+1]) {
 										temp = d_list[j]
 										d_list[j] = d_list[j+1]
 										d_list[j+1] = temp
@@ -1708,14 +1705,15 @@
 							
 							distance_matrix = create_distance_matrix(df)
 							
-							for (column in 1:len(distance_matrix[1,])){
+							for (column in 1:len(distance_matrix[1,])) {
 								ordered_column = tail(bubble_LOF(distance_matrix[,column],
-								 1:ncol(distance_matrix)), ncol(distance_matrix)-1)
+						 			1:ncol(distance_matrix)), ncol(distance_matrix)-1)
 								
 								k_aux = k
 								
-								while(k_aux < nrow(ordered_column) & 
-								ordered_column[k_aux, "dis"] == ordered_column[k_aux+1, "dis"]) {
+								while(k_aux < nrow(ordered_column) &
+									ordered_column[k_aux, "dis"] ==
+									ordered_column[k_aux + 1, "dis"]) {
 									k_aux = k_aux + 1
 								}
 								
@@ -1752,8 +1750,8 @@
 						get_densities = function(n_set) {
 							densities = c()
 							for (i in 1:len(n_set[,1])) {
-								densities = append(densities, len(n_set[i,1][[1]]) /
-								 add_list(n_set[i,1][[1]]))
+								densities = append(densities,
+									len(n_set[i,1][[1]]) / add_list(n_set[i,1][[1]]))
 							}
 							densities
 						}

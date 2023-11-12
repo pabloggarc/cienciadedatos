@@ -180,8 +180,8 @@
 					\item \texttt{install.packages("nombre\_del\_paquete")}\\
 					A esta función se le debe pasar por parámetro el nombre del paquete que se desea instalar.
 					
-					\item \texttt{install.packages("ubicacion\_del\_paquete", rep=NULL)}\\
-					A la función también se le puede pasar por parámetros la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``c:/'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
+					\item \texttt{install.packages(``ubicacion\_del\_paquete'', rep=NULL)}\\
+					A la función también se le puede pasar por parámetros la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``\texttt{c:/}'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
 					
 					\item \texttt{utils:::menuInstallPkgs()}\\
 					Tras la ejecución de este comando aparecerá una ventana donde se podrá elegir el mirror desde el que se va a descargar el paquete, y tras elegir el mirror (Spain (Madrid) en nuestro caso), aparece otra ventana donde se puede elegir el paquete que se quiere instalar, tras hacer doble click, este se instalará automáticamente.
@@ -207,7 +207,7 @@
 
 			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado dando una mayor flexibilidad, aunque no sea su objetivo principal. Veremos ahora los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que necesitaremos es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que estamos trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
 			
-			Una vez hemos tratado ambos lenguajes, necesitamos entender con qué tipos de extensiones se suelen trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo queremos almacenar nuestro documento, o cómo están almacenadas dependencias de estos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
+			Una vez hemos tratado ambos lenguajes, necesitamos entender con qué tipos de extensiones se suelen trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo queremos almacenar nuestro documento, o cómo están almacenadas las dependencias de estos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
 			
 			Para ello nos fijaremos en la \Cref{fig:extensiones}. Por ahora nos quedaremos con las extensiones que trabajaremos más a menudo, que serán \texttt{.Rnw}, \texttt{.tex}, y \texttt{.pdf}. La primera de ellas representan los archivos que tienen código \LaTeX{} y R ``mezclado'', la segunda aquellos que contienen código \LaTeX{} puro, y la última nuestro documento final. \\
 			
@@ -223,7 +223,7 @@
 				\label{fig:extensiones}
 			\end{figure}
 			
-			Existen dos herramientas que nos permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, optaremos por la segunda, pues existieron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr nos ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages('knitr')} en una consola de R. Sweave viene ya por defecto con \texttt{utils}. \\
+			Existen dos herramientas que nos permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, optaremos por la segunda, pues existieron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr nos ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages("knitr")} en una consola de R. Sweave viene ya por defecto con \texttt{utils}. \\
 			
 			Por último, se explicará cómo hemos agilizado el proceso de trabajo con Knitr y \TeX{}Studio. Lo primero será hacer que R cargue por defecto Knitr, para ello modificaremos el archivo \texttt{Rprofile} en \texttt{libray/base/R} dentro de la carpeta de instalación de R, añadiendo \texttt{knitr} al resto de paquetes que carga por defecto. Una vez hecho esto, iremos a la configuración de \TeX{}Studio, y aquí a \textit{Compilar}. En la zona \textit{Órdenes de usuario}, crearemos una nueva tal y como se ve en la \Cref{fig:orden}, de manera que le digamos dónde están los binarios de R, para que pueda crear un fichero \texttt{.tex}, y posteriormente invocar a nuestro compilador, para obtener nuestro documento en \texttt{.pdf}. \TeX{}Studio se encargará de reemplazar el símbolo \% por el nombre del archivo que le ordenamos compilar. 
 			
@@ -1020,7 +1020,7 @@
 \end{kframe}
 \end{knitrout}
 					
-					Por último, se itera cada punto de la matriz de distancias ordenadas y comprobamos si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.
+					Por último, se itera cada punto de la matriz de distancias ordenadas y comprobamos si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
 					
 					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{k} elementos.
 					
@@ -1079,7 +1079,9 @@
 				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.
 			\end{exercise}
 			
-			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia(km)} para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla. La función empleada ha sido \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma se debería haber usado \texttt{read.csv2}. Se observa en la siguiente línea de código cómo se ha creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura mencionada previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio, habría que pasar por parámetro la ruta donde se encuentra dicho archivo.
+			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia} (km) para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla.\\
+			
+			La función empleada ha sido \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma se debería haber usado \texttt{read.csv2}. Se observa en la siguiente línea de código cómo se ha creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura mencionada previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio, habría que pasar por parámetro la ruta donde se encuentra dicho archivo.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1168,7 +1170,7 @@
 			
 			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se leerán dos datos en vez de uno.\\ 
 			
-			Como se v a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, podemos definirla en una variable nueva a la que llamaremos \texttt{distancias}, de tal forma que no se tenga que estar haciendo \texttt{fichero\$Distancia} repetidamente.
+			Como se va a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, podemos definirla en una variable nueva a la que llamaremos \texttt{distancias}, de tal forma que no se tenga que estar pasando \texttt{fichero\$Distancia} repetidamente.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1183,9 +1185,9 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{count} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list)\{}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list) \{}
                 \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
         \hlstd{\}}
         \hlstd{count}
@@ -1214,12 +1216,12 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{asc} \hlstd{=} \hlnum{TRUE}\hlstd{)\{}
+\hlstd{bubble} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{asc} \hlstd{=} \hlnum{TRUE}\hlstd{) \{}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlstd{direccion} \hlkwb{=} \hlkwd{ifelse}\hlstd{(asc,} \hlnum{1}\hlstd{,} \hlopt{-}\hlnum{1}\hlstd{)}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
-                        \hlkwa{if} \hlstd{(list[j]} \hlopt{*} \hlstd{direccion} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlopt{*} \hlstd{direccion)\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n) \{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{)) \{}
+                        \hlkwa{if} \hlstd{(list[j]} \hlopt{*} \hlstd{direccion} \hlopt{>} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlopt{*} \hlstd{direccion) \{}
                                 \hlstd{temp} \hlkwb{=} \hlstd{list[j]}
                                 \hlstd{list[j]} \hlkwb{=} \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]}
                                 \hlstd{list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
@@ -1234,7 +1236,7 @@
 			
 			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente.\\
 			
-			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable\texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
+			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
 			
 			Hagamos la prueba con la lista de distancias:
 			
@@ -1272,7 +1274,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{rank} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{rank} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
         \hlstd{ordered_list[}\hlkwd{len}\hlstd{(ordered_list)]} \hlopt{-} \hlstd{ordered_list[}\hlnum{1}\hlstd{]}
 \hlstd{\}}
@@ -1299,18 +1301,18 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(ordered_list)}
         \hlstd{elements} \hlkwb{=} \hlkwd{vector}\hlstd{()}
         \hlstd{frequencies} \hlkwb{=} \hlkwd{vector}\hlstd{()}
         \hlstd{i} \hlkwb{=} \hlnum{1}
-        \hlkwa{while} \hlstd{(i} \hlopt{<=} \hlstd{n)\{}
+        \hlkwa{while} \hlstd{(i} \hlopt{<=} \hlstd{n) \{}
                 \hlstd{actual_element} \hlkwb{=} \hlstd{ordered_list[i]}
                 \hlstd{elements} \hlkwb{=} \hlkwd{append}\hlstd{(elements, actual_element)}
                 \hlstd{actual_freq} \hlkwb{=} \hlnum{0}
                 \hlstd{j} \hlkwb{=} \hlstd{i}
-                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j])\{}
+                \hlkwa{while}\hlstd{(j} \hlopt{<=} \hlstd{n} \hlopt{&} \hlstd{actual_element} \hlopt{==} \hlstd{ordered_list[j]) \{}
                         \hlstd{actual_freq} \hlkwb{=} \hlstd{actual_freq} \hlopt{+} \hlnum{1}
                         \hlstd{j} \hlkwb{=} \hlstd{j}\hlopt{+}\hlnum{1}
                 \hlstd{\}}
@@ -1360,11 +1362,11 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
         \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
         \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
-        \hlkwd{rbind}\hlstd{(elements,abs_fvalues}\hlopt{/}\hlkwd{len}\hlstd{(list))}
+        \hlkwd{rbind}\hlstd{(elements, abs_fvalues}\hlopt{/}\hlkwd{len}\hlstd{(list))}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1412,37 +1414,31 @@
 \end{knitrout}
 			}
 			
-			Por último, elaboraremos dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acuulada y la frecuencia relativa acumulada son respectivamente los siguientes:
+			Por último, elaboraremos dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acumulada y la frecuencia relativa acumulada son respectivamente los siguientes:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{acum_absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{acum_absolute_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{f_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
         \hlstd{elements} \hlkwb{=} \hlstd{f_abs[}\hlnum{1}\hlstd{,]}
         \hlstd{abs_fvalues} \hlkwb{=} \hlstd{f_abs[}\hlnum{2}\hlstd{,]}
         \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
         \hlstd{acum} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements)) \{}
                 \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{abs_fvalues[i]}
                 \hlstd{acum_abs_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_abs_fvalues, acum)}
         \hlstd{\}}
         \hlkwd{rbind}\hlstd{(elements, acum_abs_fvalues)}
 \hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-			
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{acum_relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+
+\hlstd{acum_relative_freq} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{f_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(list)}
         \hlstd{elements} \hlkwb{=} \hlstd{f_rel[}\hlnum{1}\hlstd{,]}
         \hlstd{rel_fvalues} \hlkwb{=} \hlstd{f_rel[}\hlnum{2}\hlstd{,]}
         \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{vector}\hlstd{()}
         \hlstd{acum} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements)) \{}
                 \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{rel_fvalues[i]}
                 \hlstd{acum_rel_fvalues} \hlkwb{=} \hlkwd{append}\hlstd{(acum_rel_fvalues, acum)}
         \hlstd{\}}
@@ -1523,14 +1519,14 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mode} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{mode} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{frequencies} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(list)}
         \hlstd{elements} \hlkwb{=} \hlstd{frequencies[}\hlnum{1}\hlstd{,]}
         \hlstd{freq_values} \hlkwb{=} \hlstd{frequencies[}\hlnum{2}\hlstd{,]}
         \hlstd{actual_mode} \hlkwb{=} \hlnum{0}
         \hlstd{actual_mode_val} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements))\{}
-                \hlkwa{if} \hlstd{(freq_values[i]} \hlopt{>} \hlstd{actual_mode_val)\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(elements)) \{}
+                \hlkwa{if} \hlstd{(freq_values[i]} \hlopt{>} \hlstd{actual_mode_val) \{}
                         \hlstd{actual_mode_val} \hlkwb{=} \hlstd{freq_values[i]}
                         \hlstd{actual_mode} \hlkwb{=} \hlstd{elements[i]}
                 \hlstd{\}}
@@ -1567,13 +1563,12 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{median_value} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{median_value} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
-        \hlkwa{if} \hlstd{(n}\hlopt{%%}\hlnum{2} \hlopt{==} \hlnum{0}\hlstd{)\{}
+        \hlkwa{if} \hlstd{(n}\hlopt{%%}\hlnum{2} \hlopt{==} \hlnum{0}\hlstd{) \{}
                 \hlstd{median} \hlkwb{=} \hlstd{(ordered_list[n}\hlopt{/}\hlnum{2}\hlstd{]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{/}\hlnum{2}\hlstd{)}\hlopt{+}\hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
-        \hlstd{\}}
-        \hlkwa{else}\hlstd{\{}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
                 \hlstd{median} \hlkwb{=} \hlstd{ordered_list[(n}\hlopt{+}\hlnum{1}\hlstd{)}\hlopt{/}\hlnum{2}\hlstd{]}
         \hlstd{\}}
         \hlstd{median}
@@ -1603,11 +1598,11 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{standard_dev} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{standard_dev} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{mean} \hlkwb{=} \hlkwd{mean}\hlstd{(list)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlstd{add} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
                 \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{((list[i]} \hlopt{-} \hlstd{mean)}\hlopt{^}\hlnum{2}\hlstd{)}
         \hlstd{\}}
         \hlkwd{sqrt}\hlstd{(add}\hlopt{/}\hlstd{n)}
@@ -1645,7 +1640,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{)\{}
+\hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
         \hlstd{dev} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(list)}
         \hlstd{var} \hlkwb{=} \hlstd{dev}\hlopt{^}\hlnum{2}
         \hlstd{var}
@@ -1668,7 +1663,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Terminadas las medidas de dispersión, se procede a calcular los cuantiles. Para calcular los cuantiles se tendrá que definir, además de la lista de la que se quiere calcular el valor, de c (que es ...). Esto último tendrá que corresponder a un valor entre 0 y 1 en función de $c$. Así, si se introduce por parámetro un $c$ que no es válido se devolverá \texttt{NULL}, ya que no se puede hacer el cálculo. En caso de haber introducido un $c$ válido se observan dos casos.
+			Terminadas las medidas de dispersión, se procede a calcular los cuantiles. Para calcular los cuantiles se tendrá que definir, la lista de la que se quiere calcular el valor, además de c, que es la porción de valores que se busca. Esto último tendrá que corresponder a un valor entre 0 y 1 en función de $c$. Así, si se introduce por parámetro un $c$ que no es válido se devolverá \texttt{NULL}, ya que no se puede hacer el cálculo. En caso de haber introducido un $c$ válido se observan dos casos.
 			
 			\begin{itemize}
 				\item Si $nc \in \mathbb{N}$ (siendo $n$ el número total de elementos), se calculará $\frac{x_{nc}+x_{nc+1}}{2}$. 
@@ -1680,21 +1675,18 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{quant} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{c}\hlstd{)\{}
+\hlstd{quant} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{,} \hlkwc{c}\hlstd{) \{}
         \hlstd{ordered_list} \hlkwb{=} \hlkwd{bubble}\hlstd{(list)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlkwa{if} \hlstd{(c} \hlopt{<} \hlnum{0} \hlopt{|} \hlstd{c} \hlopt{>} \hlnum{1}\hlstd{)\{}
+        \hlkwa{if} \hlstd{(c} \hlopt{<} \hlnum{0} \hlopt{|} \hlstd{c} \hlopt{>} \hlnum{1}\hlstd{) \{}
                 \hlstd{quant} \hlkwb{=} \hlkwa{NULL}
-        \hlstd{\}}
-        \hlkwa{else}\hlstd{\{}
-                \hlkwa{if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                        \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+}
-                         \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
-                \hlstd{\}}
-                \hlkwa{else} \hlstd{\{}
-                        \hlstd{int_prod} \hlkwb{=} \hlkwd{floor}\hlstd{(n}\hlopt{*}\hlstd{c)}
-                        \hlstd{quant} \hlkwb{=} \hlstd{ordered_list[int_prod} \hlopt{+} \hlnum{1}\hlstd{]}
-                \hlstd{\}}
+
+        \hlstd{\}} \hlkwa{else if}\hlstd{((n}\hlopt{*}\hlstd{c)}\hlopt{%%}\hlnum{1} \hlopt{==} \hlnum{0}\hlstd{) \{}
+                \hlstd{quant} \hlkwb{=} \hlstd{(ordered_list[(n}\hlopt{*}\hlstd{c)]} \hlopt{+} \hlstd{ordered_list[(n}\hlopt{*}\hlstd{c)} \hlopt{+} \hlnum{1}\hlstd{])} \hlopt{/} \hlnum{2}
+
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlstd{int_prod} \hlkwb{=} \hlkwd{floor}\hlstd{(n}\hlopt{*}\hlstd{c)}
+                \hlstd{quant} \hlkwb{=} \hlstd{ordered_list[int_prod} \hlopt{+} \hlnum{1}\hlstd{]}
         \hlstd{\}}
         \hlstd{quant}
 \hlstd{\}}
@@ -1783,7 +1775,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Para ello se utilizan las funciones \texttt{get\_elements} y \texttt{get\_table}. 
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos, se hará uso de las funciones \texttt{get\_elements} y \texttt{get\_table}. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1997,7 +1989,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Finalmente, la función \texttt{fk\_1} representa el algoritmo al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y por ejemplo, en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{cabeza} y \texttt{cola}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
+			Finalmente, la función \texttt{fk\_1} representa el algoritmo al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{front} y \texttt{back}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
 			
 			En cada iteración será necesario saber en qué posición del vector inicia y finalizan los sucesos candidatos de dimensión $k-1$. Suponiendo que se tienen $n$ sucesos elementales, la posición del primer suceso de dimensión $k$, viene dada por sumar a la posición del primer suceso de dimensión $k-1$, el número combinatorio $\binom{n}{k}$, pues $F_{k-1} \times F_{k-1}$ irá añadiendo los posibles subconjuntos. \\
 			
@@ -2033,13 +2025,7 @@
         \hlstd{\}}
         \hlkwd{back}\hlstd{(comb, n_comb}\hlopt{-}\hlstd{n)}
 \hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-			
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
+
 \hlstd{confidence} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{left}\hlstd{,} \hlkwc{right}\hlstd{) \{}
         \hlkwd{count_appearance}\hlstd{(table,} \hlkwd{union}\hlstd{(left, right))} \hlopt{/}
                 \hlkwd{count_appearance}\hlstd{(table, left)}
@@ -2062,17 +2048,18 @@
 \begin{alltt}
 \hlstd{get_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{candidates}\hlstd{) \{}
         \hlstd{associations} \hlkwb{=} \hlkwd{data.frame}\hlstd{()}
-        \hlstd{final_associations} \hlkwb{=} \hlkwd{lapply}\hlstd{(candidates,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{}
+        \hlstd{final_associations} \hlkwb{=} \hlkwd{lapply}\hlstd{(candidates,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
                 \hlstd{k} \hlkwb{=} \hlkwd{len}\hlstd{(x)}
-                \hlkwa{for} \hlstd{(dim} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(k} \hlopt{-} \hlnum{1}\hlstd{))\{}
+                \hlkwa{for} \hlstd{(dim} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(k} \hlopt{-} \hlnum{1}\hlstd{)) \{}
                         \hlstd{left_sides} \hlkwb{=} \hlkwd{combn}\hlstd{(x,} \hlkwc{m}\hlstd{=dim,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-                        \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(left_sides[}\hlnum{1}\hlstd{,]))\{}
+                        \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(left_sides[}\hlnum{1}\hlstd{,])) \{}
                                 \hlstd{left_side} \hlkwb{=} \hlstd{left_sides[, col]}
                                 \hlstd{right_side} \hlkwb{=} \hlkwd{dif}\hlstd{(x, left_side)}
                                 \hlstd{new_asoc} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}
                                         \hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(left_side)),}
                                         \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(right_side)))}
-                                \hlstd{associations} \hlkwb{<<-} \hlkwd{rbind}\hlstd{(associations, new_asoc)}
+                                \hlstd{associations} \hlkwb{<<-} \hlkwd{rbind}\hlstd{(}
+                                        \hlstd{associations, new_asoc)}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\})}
@@ -2087,7 +2074,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{print_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{left_list}\hlstd{,} \hlkwc{right_list}\hlstd{)\{}
+\hlstd{print_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{left_list}\hlstd{,} \hlkwc{right_list}\hlstd{) \{}
         \hlstd{left_side} \hlkwb{=} \hlkwd{paste}\hlstd{(left_list[[}\hlnum{1}\hlstd{]],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{)}
         \hlstd{right_side} \hlkwb{=} \hlkwd{paste}\hlstd{(right_list[[}\hlnum{1}\hlstd{]],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{)}
         \hlkwd{cat}\hlstd{(}\hlstr{"\{"}\hlstd{)}
@@ -2140,6 +2127,8 @@
 \end{knitrout}
 			}
 			
+			EXPLICAR AP-GENRULES (se escribe associations por si quieres cambiar el nombre de las variables)
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2156,6 +2145,8 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+			
+			EXPLICAR INDEXOF\_ASSOC\\
 			
 			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
@@ -2174,10 +2165,9 @@
                 \hlstd{conf} \hlkwb{=} \hlkwd{get_associations}\hlstd{(table, valid_support)}
                 \hlstd{valid_asoc} \hlkwb{=} \hlkwd{ap_genrules}\hlstd{(table, conf, c)}
 
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(valid_asoc[,}\hlnum{1}\hlstd{]))\{}
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(valid_asoc[,}\hlnum{1}\hlstd{])) \{}
                         \hlkwd{print_associations}\hlstd{(valid_asoc[i,}\hlnum{1}\hlstd{], valid_asoc[i,}\hlnum{2}\hlstd{])}
                 \hlstd{\}}
-
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
                 \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que pase el soporte"}\hlstd{)}
         \hlstd{\}}
@@ -2218,7 +2208,7 @@
 					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.
 				\end{exercise}
 				
-				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la \Cref{sec:descrip_auto}, se han realizado nuestras propias funciones que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes:\\
+				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la \Cref{sec:descrip_auto}, se han realizado nuestras propias funciones que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes.\\
 				
 				En primer lugar se van a introducir los datos. Para ello se hará tal y se ha visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para \texttt{velocidad} y otra para \texttt{temperatura}) y tantas filas como entradas de datos se tengan. Tras ello, se pasa esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es el siguiente: 
 				
@@ -2269,38 +2259,38 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{boxNmustaches} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{)\{}
+\hlstd{boxNmustaches} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
         \hlstd{outliers} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{if}\hlstd{(details)\{}
+        \hlkwa{if}\hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Se ha introducido un grado de outlier d = "}\hlstd{,d,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
         \hlstd{cuart1} \hlkwb{=} \hlkwd{quant}\hlstd{(sample,} \hlnum{0.25}\hlstd{)}
         \hlstd{cuart3} \hlkwb{=} \hlkwd{quant}\hlstd{(sample,} \hlnum{0.75}\hlstd{)}
-        \hlkwa{if} \hlstd{(details)\{}
+        \hlkwa{if} \hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: CÁLCULO DE LOS CUARTILES 1 Y 3"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"El cuartil 1 es "}\hlstd{,cuart1,} \hlstr{" y el cuartil 3 es "}\hlstd{, cuart3,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
         \hlstd{lim_inf} \hlkwb{=} \hlstd{cuart1} \hlopt{-} \hlstd{(d}\hlopt{*}\hlstd{(cuart3}\hlopt{-}\hlstd{cuart1))}
         \hlstd{lim_sup} \hlkwb{=} \hlstd{cuart3} \hlopt{+} \hlstd{(d}\hlopt{*}\hlstd{(cuart3}\hlopt{-}\hlstd{cuart1))}
-        \hlkwa{if} \hlstd{(details)\{}
+        \hlkwa{if} \hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Fórmula -> (Q1 - d*(Q3-Q1), Q3 + d*(Q3-Q1))\textbackslash{}n"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"El intervalo para los valores atípicos es: ("}\hlstd{,lim_inf,}\hlstr{", "}\hlstd{,lim_sup,}\hlstr{")\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
-        \hlkwa{if}\hlstd{(details)\{}
+        \hlkwa{if}\hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 4: IDENTIFICACIÓN DE OUTLIERS"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Los outliers serán aquellos valores que no están en el intervalo anterior\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample))\{}
-                \hlkwa{if}\hlstd{(sample[i]} \hlopt{<} \hlstd{lim_inf} \hlopt{||} \hlstd{sample[i]} \hlopt{>} \hlstd{lim_sup)\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample)) \{}
+                \hlkwa{if}\hlstd{(sample[i]} \hlopt{<} \hlstd{lim_inf} \hlopt{||} \hlstd{sample[i]} \hlopt{>} \hlstd{lim_sup) \{}
                         \hlstd{outliers} \hlkwb{=} \hlkwd{append}\hlstd{(outliers, i)}
-                        \hlkwa{if}\hlstd{(details)\{}
+                        \hlkwa{if}\hlstd{(details) \{}
                                 \hlkwd{cat}\hlstd{(}\hlstr{"El punto "}\hlstd{,i,}\hlstr{" con valor "}\hlstd{,sample[i],}\hlstr{" es un outlier\textbackslash{}n"}\hlstd{)}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\}}
-        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(outliers)} \hlopt{==} \hlnum{0}\hlstd{)\{}
+        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(outliers)} \hlopt{==} \hlnum{0}\hlstd{) \{}
                 \hlkwd{cat}\hlstd{(}\hlstr{"No hay outliers"}\hlstd{)}
         \hlstd{\}}
 \hlstd{outliers}
@@ -2317,7 +2307,7 @@
 						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
 					\end{itemize}
 					
-					Vamos a centrarnos en la salida detallada para ir explicando poco a poco el algoritmo.
+					A partir de la salida detallada se irá explicando poco a poco el algoritmo.
 					
 					\begin{enumerate}[label = \textbf{\arabic*. }]
 						\item En este paso se determina el grado de outlier, que es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
@@ -2354,11 +2344,11 @@
 \end{kframe}
 \end{knitrout}
 					
-					Se observa cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.\\
+					Se observa cómo se informa al usuario del grado de \textit{outlier} que ha introducido, de los valores de los cuartiles 1 y 3, de cómo se calcula el intervalo para valores atípicos y de todos aquellos \textit{outliers} que se han encontrado. En este ejemplo concreto no hay \textit{outliers} ya que todos los valores se encuentran dentro del intervalo establecido. Si se quisiera acceder a la lista que contiene todos los \textit{outliers} bastaría con acceder en este ejemplo a \texttt{anomalias\_vel}.
 					
 				\subsubsection{Media y desviación}
 					
-					En este segundo apartado del ejercicio se van a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos se ha ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente al visto en teoría. Por ello, se puede aplicar la función \texttt{standard\_dev} que elaborada en la \Cref{sec:descrip_auto} y que da el valor que visto en clase de teoría. Primeramente se guarda la columna de temperaturas para luego trabajar mejor sobre ella.
+					En este segundo apartado del ejercicio se van a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos se ha ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente al visto en teoría. Por ello, se puede aplicar la función \texttt{standard\_dev} que elaborada en la \Cref{sec:descrip_auto} y que da el valor visto en clase de teoría. Primeramente se guarda la columna de temperaturas para luego trabajar mejor sobre ella.
 					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2374,42 +2364,42 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{dispersed_outliers} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{)\{}
+\hlstd{dispersed_outliers} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
         \hlstd{outliers} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{if}\hlstd{(details)\{}
+        \hlkwa{if} \hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Se ha introducido un grado de outlier d = "}\hlstd{,d,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
         \hlstd{mean_sample} \hlkwb{=} \hlkwd{mean}\hlstd{(sample)}
-        \hlkwa{if} \hlstd{(details)\{}
+        \hlkwa{if} \hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: CÁLCULO DE LA MEDIA ARITMÉTICA"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"La media aritmética es "}\hlstd{, mean_sample,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
         \hlstd{dev_sample} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(sample)}
-        \hlkwa{if} \hlstd{(details)\{}
+        \hlkwa{if} \hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: CÁLCULO DE LA DESVIACIÓN TÍPICA"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"La desviación típica es "}\hlstd{, dev_sample,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
         \hlstd{lim_inf} \hlkwb{=} \hlstd{mean_sample} \hlopt{-} \hlstd{(d}\hlopt{*}\hlstd{dev_sample)}
         \hlstd{lim_sup} \hlkwb{=} \hlstd{mean_sample} \hlopt{+} \hlstd{(d}\hlopt{*}\hlstd{dev_sample)}
-        \hlkwa{if} \hlstd{(details)\{}
+        \hlkwa{if} \hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 4: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Fórmula -> (Media - d*DesviaciónTípica, Media + d*DesviaciónTípica)\textbackslash{}n"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"El intervalo para los valores atípicos es: ("}\hlstd{,lim_inf,}\hlstr{", "}\hlstd{,lim_sup,}\hlstr{")\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
-        \hlkwa{if}\hlstd{(details)\{}
+        \hlkwa{if}\hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 5: IDENTIFICACIÓN DE OUTLIERS"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Los outliers serán aquellos valores que no están en el intervalo anterior\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample))\{}
-                \hlkwa{if}\hlstd{(sample[i]} \hlopt{<} \hlstd{lim_inf} \hlopt{||} \hlstd{sample[i]} \hlopt{>} \hlstd{lim_sup)\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample)) \{}
+                \hlkwa{if}\hlstd{(sample[i]} \hlopt{<} \hlstd{lim_inf} \hlopt{||} \hlstd{sample[i]} \hlopt{>} \hlstd{lim_sup) \{}
                         \hlstd{outliers} \hlkwb{=} \hlkwd{append}\hlstd{(outliers, i)}
-                        \hlkwa{if}\hlstd{(details)\{}
+                        \hlkwa{if}\hlstd{(details) \{}
                                 \hlkwd{cat}\hlstd{(}\hlstr{"El punto "}\hlstd{,i,}\hlstr{" con valor "}\hlstd{,sample[i],}\hlstr{" es un outlier\textbackslash{}n"}\hlstd{)}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\}}
-        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(outliers)} \hlopt{==} \hlnum{0}\hlstd{)\{}
+        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(outliers)} \hlopt{==} \hlnum{0}\hlstd{) \{}
                 \hlkwd{cat}\hlstd{(}\hlstr{"No hay outliers"}\hlstd{)}
         \hlstd{\}}
         \hlstd{outliers}
@@ -2426,7 +2416,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{anomalias_temp} \hlkwb{=} \hlkwd{dispersed_outliers}\hlstd{(muestra_temp,}\hlnum{2}\hlstd{,}\hlnum{TRUE}\hlstd{)}
+\hlstd{anomalias_temp} \hlkwb{=} \hlkwd{dispersed_outliers}\hlstd{(muestra_temp,} \hlnum{2}\hlstd{,} \hlnum{TRUE}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"
@@ -2489,15 +2479,14 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{euc_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,}\hlkwc{p2}\hlstd{)\{}
-        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(p1)} \hlopt{==} \hlkwd{len}\hlstd{(p2))\{}
+\hlstd{euc_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,}\hlkwc{p2}\hlstd{) \{}
+        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(p1)} \hlopt{==} \hlkwd{len}\hlstd{(p2)) \{}
                 \hlstd{add} \hlkwb{=} \hlnum{0}
-                \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1))\{}
+                \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1)) \{}
                         \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{((p1[i]} \hlopt{-} \hlstd{p2[i])}\hlopt{^}\hlnum{2}\hlstd{)}
                 \hlstd{\}}
                 \hlkwd{sqrt}\hlstd{(add)}
-        \hlstd{\}}
-        \hlkwa{else} \hlstd{\{}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
                 \hlkwd{print}\hlstd{(}\hlstr{"No se puede calcular la distancia euclídea"}\hlstd{)}
         \hlstd{\}}
 \hlstd{\}}
@@ -2517,11 +2506,11 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{create_distance_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{)\{}
+\hlstd{create_distance_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{) \{}
         \hlstd{empty_matrix} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwc{ncol} \hlstd{=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]),} \hlkwc{nrow} \hlstd{=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))}
         \hlstd{distances} \hlkwb{=} \hlkwd{data.frame}\hlstd{(empty_matrix)}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))\{}
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{i}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{i}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
                         \hlstd{dist} \hlkwb{=} \hlkwd{euc_distance}\hlstd{(df[i,], df[j,])}
                         \hlstd{distances[i,j]} \hlkwb{=} \hlstd{dist}
                         \hlstd{distances[j,i]} \hlkwb{=} \hlstd{dist}
@@ -2540,16 +2529,16 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{detect_outliers} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{distance_matrix}\hlstd{,} \hlkwc{k}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details}\hlstd{)\{}
-        \hlkwa{if}\hlstd{(details)\{}
+\hlstd{detect_outliers} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{distance_matrix}\hlstd{,} \hlkwc{k}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details}\hlstd{) \{}
+        \hlkwa{if}\hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: IDENTIFICACIÓN DE LOS OUTLIERS"}\hlstd{)}
         \hlstd{\}}
         \hlstd{outliers} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{for} \hlstd{(column} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(distance_matrix[}\hlnum{1}\hlstd{,]))\{}
+        \hlkwa{for} \hlstd{(column} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(distance_matrix[}\hlnum{1}\hlstd{,])) \{}
                 \hlstd{ordered_column} \hlkwb{=} \hlkwd{bubble}\hlstd{(distance_matrix[column,])}
-                \hlkwa{if} \hlstd{(ordered_column[k}\hlopt{+}\hlnum{1}\hlstd{]} \hlopt{>} \hlstd{d)\{}
+                \hlkwa{if} \hlstd{(ordered_column[k}\hlopt{+}\hlnum{1}\hlstd{]} \hlopt{>} \hlstd{d) \{}
                         \hlstd{outliers} \hlkwb{=} \hlkwd{append}\hlstd{(outliers,column)}
-                        \hlkwa{if}\hlstd{(details)\{}
+                        \hlkwa{if}\hlstd{(details) \{}
                                 \hlkwd{cat}\hlstd{(}\hlstr{"El punto"}\hlstd{, column,} \hlstr{"("}\hlstd{,}
                                 \hlkwd{paste}\hlstd{(sample[column,],} \hlkwc{collapse} \hlstd{=} \hlstr{","}\hlstd{),}
                                 \hlstr{") es un outlier\textbackslash{}n"}\hlstd{)}
@@ -2571,14 +2560,14 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{k_neighbors} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{k}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{)\{}
-        \hlkwa{if}\hlstd{(details)\{}
+\hlstd{k_neighbors} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{k}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
+        \hlkwa{if}\hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DE d Y k"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"Grado de outlier: d ="}\hlstd{,d,}\hlstr{"\textbackslash{}n"}\hlstd{)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"K-Vecino más próximo: k ="}\hlstd{,k,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
         \hlstd{d_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(sample)}
-        \hlkwa{if}\hlstd{(details)\{}
+        \hlkwa{if}\hlstd{(details) \{}
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: MATRIZ DE DISTANCIAS ENTRE PUNTOS:\textbackslash{}n"}\hlstd{)}
                 \hlkwd{print}\hlstd{(d_matrix)}
                 \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
@@ -2634,7 +2623,7 @@
 					
 					\subsubsection{Algoritmo LOF}
 					
-						Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o \textsc{Local Outlier Factor}. Este se basa en las densidades y la distancia Manhattan. Esta se define de la siguiente forma para los puntos de la muestra: 
+						Para resolver este ejercicio de otra forma se empleará el algoritmo LOF o \textsc{Local Outlier Factor}. Este se basa en las densidades y la distancia Manhattan, que se define de la siguiente forma para los puntos de la muestra: 
 						
 						$$
 						\dt(p_i, p_j) = |p_{i_1}-p_{j_1}| + |p_{i_2}-p_{j_2}|
@@ -2651,7 +2640,7 @@
 \begin{alltt}
 \hlstd{manhattan_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,} \hlkwc{p2}\hlstd{) \{}
         \hlstd{add} \hlkwb{=} \hlnum{0}
-        \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1))\{}
+        \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1)) \{}
                 \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlkwd{abs}\hlstd{(p1[i]} \hlopt{-} \hlstd{p2[i])}
         \hlstd{\}}
         \hlstd{add}
@@ -2665,12 +2654,12 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{create_distance_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{)\{}
+\hlstd{create_distance_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{) \{}
         \hlstd{empty_matrix} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwc{ncol} \hlstd{=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]),} \hlkwc{nrow} \hlstd{=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))}
         \hlstd{distances} \hlkwb{=} \hlkwd{data.frame}\hlstd{(empty_matrix)}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
                 \hlstd{p_dists} \hlkwb{=} \hlkwd{c}\hlstd{()}
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{i}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{]))\{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlstd{i}\hlopt{:}\hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
                         \hlstd{dist} \hlkwb{=} \hlkwd{manhattan_distance}\hlstd{(df[i,], df[j,])}
                         \hlstd{distances[i,j]} \hlkwb{=} \hlstd{dist}
                         \hlstd{distances[j,i]} \hlkwb{=} \hlstd{dist}
@@ -2688,11 +2677,11 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{bubble_LOF} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{d_list}\hlstd{,} \hlkwc{p_list}\hlstd{)\{}
+\hlstd{bubble_LOF} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{d_list}\hlstd{,} \hlkwc{p_list}\hlstd{) \{}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(d_list)}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n)\{}
-                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{))\{}
-                        \hlkwa{if} \hlstd{(d_list[j]} \hlopt{>} \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{])\{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n) \{}
+                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(n}\hlopt{-}\hlnum{1}\hlstd{)) \{}
+                        \hlkwa{if} \hlstd{(d_list[j]} \hlopt{>} \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{]) \{}
                                 \hlstd{temp} \hlkwb{=} \hlstd{d_list[j]}
                                 \hlstd{d_list[j]} \hlkwb{=} \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{]}
                                 \hlstd{d_list[j}\hlopt{+}\hlnum{1}\hlstd{]} \hlkwb{=} \hlstd{temp}
@@ -2723,14 +2712,15 @@
 
         \hlstd{distance_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df)}
 
-        \hlkwa{for} \hlstd{(column} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(distance_matrix[}\hlnum{1}\hlstd{,]))\{}
+        \hlkwa{for} \hlstd{(column} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(distance_matrix[}\hlnum{1}\hlstd{,])) \{}
                 \hlstd{ordered_column} \hlkwb{=} \hlkwd{tail}\hlstd{(}\hlkwd{bubble_LOF}\hlstd{(distance_matrix[,column],}
-                 \hlnum{1}\hlopt{:}\hlkwd{ncol}\hlstd{(distance_matrix)),} \hlkwd{ncol}\hlstd{(distance_matrix)}\hlopt{-}\hlnum{1}\hlstd{)}
+                        \hlnum{1}\hlopt{:}\hlkwd{ncol}\hlstd{(distance_matrix)),} \hlkwd{ncol}\hlstd{(distance_matrix)}\hlopt{-}\hlnum{1}\hlstd{)}
 
                 \hlstd{k_aux} \hlkwb{=} \hlstd{k}
 
                 \hlkwa{while}\hlstd{(k_aux} \hlopt{<} \hlkwd{nrow}\hlstd{(ordered_column)} \hlopt{&}
-                \hlstd{ordered_column[k_aux,} \hlstr{"dis"}\hlstd{]} \hlopt{==} \hlstd{ordered_column[k_aux}\hlopt{+}\hlnum{1}\hlstd{,} \hlstr{"dis"}\hlstd{]) \{}
+                        \hlstd{ordered_column[k_aux,} \hlstr{"dis"}\hlstd{]} \hlopt{==}
+                        \hlstd{ordered_column[k_aux} \hlopt{+} \hlnum{1}\hlstd{,} \hlstr{"dis"}\hlstd{]) \{}
                         \hlstd{k_aux} \hlkwb{=} \hlstd{k_aux} \hlopt{+} \hlnum{1}
                 \hlstd{\}}
 
@@ -2775,8 +2765,8 @@
 \hlstd{get_densities} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{n_set}\hlstd{) \{}
         \hlstd{densities} \hlkwb{=} \hlkwd{c}\hlstd{()}
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(n_set[,}\hlnum{1}\hlstd{])) \{}
-                \hlstd{densities} \hlkwb{=} \hlkwd{append}\hlstd{(densities,} \hlkwd{len}\hlstd{(n_set[i,}\hlnum{1}\hlstd{][[}\hlnum{1}\hlstd{]])} \hlopt{/}
-                 \hlkwd{add_list}\hlstd{(n_set[i,}\hlnum{1}\hlstd{][[}\hlnum{1}\hlstd{]]))}
+                \hlstd{densities} \hlkwb{=} \hlkwd{append}\hlstd{(densities,}
+                        \hlkwd{len}\hlstd{(n_set[i,}\hlnum{1}\hlstd{][[}\hlnum{1}\hlstd{]])} \hlopt{/} \hlkwd{add_list}\hlstd{(n_set[i,}\hlnum{1}\hlstd{][[}\hlnum{1}\hlstd{]]))}
         \hlstd{\}}
         \hlstd{densities}
 \hlstd{\}}
