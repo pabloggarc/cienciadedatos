@@ -117,6 +117,7 @@
 }
 
 \newtheorem{exercise}{Ejercicio}[section]
+\newtheorem{theorem}{Teorema}[section]
 
 \newcommand{\dt}{\text{dist}}
 \newcommand{\ds}{\text{dens}}
@@ -244,6 +245,14 @@
 			\end{figure}
 			
 			Por último, para llevar un mejor control de versiones del proyecto, y de coordinación entre los miembros del grupo, se usará un repositorio de GitHub. Añadiremos un archivo \texttt{.gitignore} para no cargar en el repositorio los archivos temporales generados durante la compilación. Otra alternativa que se podría haber usado, es usar Overleaf (aquí usaríamos la extensión \texttt{.Rtex} en vez de \texttt{.Rnw}), ya que no sería necesaria la instalación de ningún software, y también trabaja con Knitr. Sin embargo, la integración de GitHub en Overleaf es de pago, por lo que optamos por usar la configuración explicada hasta el momento, para poder tener un mejor control de versiones sin coste alguno. \\
+			
+			Por otro lado, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque este documento está siendo realizado siguiendo lo explicado previamente. 
+			
+			\begin{verbatim}
+				rnwfile <- system.file("Sweave", "example-1.Rnw", package="utils")
+				Sweave(rnwfile)
+				tools::texi2pdf("example-1.tex")
+			\end{verbatim}
 			
 			Por último, mencionar que al igual que R posee su repositorio de paquetes (que ya hemos visto que incluye más cosas) llamado CRAN, \LaTeX{} que en realidad es ``un subconjunto'' del lenguaje \TeX{}, también tiene su propio portal llamado CTAN o Comprehensive \TeX{} Archive Network (\url{https://www.ctan.org/}) de donde se descargan los paquetes y otros materiales para el lenguaje. 
 			
@@ -566,15 +575,7 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-			
-			Como añadido, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque como ya se explicó en la introducción, usaremos otra forma de trabajar con estos archivos a lo largo de la práctica. 
-			
-			\begin{verbatim}
-				rnwfile<-system.file("Sweave", "example-1.Rnw", package="utils")
-				Sweave(rnwfile)
-				tools::texi2pdf("example-1.tex")
-			\end{verbatim}
-		
+
 		\section{Asociación}
 		
 			\begin{exercise}
@@ -1236,7 +1237,7 @@
 			
 			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente.\\
 			
-			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
+			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y $-1$ (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
 			
 			Hagamos la prueba con la lista de distancias:
 			
@@ -1327,7 +1328,7 @@
 			
 			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, lo se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.\\
 			
-			Para esta función se han utilizado las funciones de \texttt{append} (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
+			Para esta función se han utilizado las funciones de \texttt{append} (paquete \texttt{base}) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
 			
 			{\small
 \begin{knitrout}
@@ -1805,7 +1806,12 @@
 \end{kframe}
 \end{knitrout}
 			
-			La primera de ellas, recibe una serie de listas que representa la muestra, por ejemplo $[\{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \{\alpha_{n+1}, \alpha_{n+2}, \ldots, \alpha_{n+m}\}]$, de forma que se calcula $\bigcup_{i=1}^{n+m} \alpha_i$ para calcular el espacio muestral. Supongamos que tenemos \{Pan, Agua, Leche\}, \{Pan, Agua\}, y \{Pan, Leche\}. Calculando la unión se obtiene $E = \{$Pan, Agua, Leche\}. \\
+			La primera de ellas, recibe una serie de listas que representa la muestra, por ejemplo dada la siguiente muestra
+			$$
+			M = [\underbrace{\{\alpha_1, \alpha_2, \ldots, \alpha_n\}}_{L_1}, \underbrace{\{\beta_{1}, \beta_{2}, \ldots, \beta_{m}\}}_{L_2}, \ldots, \underbrace{\{\gamma_1, \gamma_2, \ldots, \gamma_{p}\}}_{L_n}], 
+			$$
+			
+			se calcula $\bigcup_{i=1}^{n} L_i$ para hallar el espacio muestral. Supongamos que tenemos \{Pan, Agua, Leche\}, \{Pan, Agua\}, y \{Pan, Leche\}. Calculando la unión se obtiene $E = \{$Pan, Agua, Leche\}. \\
 			
 			La segunda de ellas crea una matriz (codificado por un dataframe) que representa por filas los sucesos de la muestra, y por columnas los sucesos elementales, encontrándose en la entrada $a_{ij}$ un valor binario representando si dicho suceso elemental se encuentra en el suceso de la muestra. Retomando el ejemplo anterior se tendría la siguiente matriz. 
 			
@@ -1900,7 +1906,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Una vez calculados aquellos sucesos elementales que superan el umbral del soporte, deberemos aplicar el método $F_{k-1} \times F_{k-1}$ de \texttt{apriori-gen} para construir los conjuntos candidatos de dimensiones superiores. En cada iteración del algoritmo, este toma dos sucesos de dimensión $k-1$, $\alpha = \{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}\}$ y $\beta = \{\beta_1, \beta_2, \ldots, \beta_{k-1}\}$ para formar un tercer conjunto de dimensión $k$ de la forma $\{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}, \beta_{k-1}\}$. Este sólo se podrá formar si se cumplen las siguientes condiciones: 
+			Una vez calculados aquellos sucesos elementales que superan el umbral del soporte, deberemos aplicar el método $F_{k-1} \times F_{k-1}$ de \texttt{apriori-gen} para construir los conjuntos candidatos de dimensiones superiores. En cada iteración del algoritmo, este toma dos sucesos de dimensión $k-1$, $\alpha = \{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}\}$ y $\beta = \{\beta_1, \beta_2, \ldots, \beta_{k-1}\}$ para formar un tercer conjunto de dimensión $k$ de la forma $\{\alpha_1, \alpha_2, \ldots, \alpha_{k-2}, \alpha_{k-1}, \beta_{k-1}\}$ o $\{\beta_1, \beta_2, \ldots, \beta_{k-2}, \beta_{k-1}, \alpha_{k-1}\}$. En definitiva, se calcula $\alpha \cup \beta$ sólo si se cumplen las siguientes condiciones: 
 			
 			\begin{itemize}
 				\item $\forall i \leq k-2, \,\,\, \alpha_i = \beta_i$
@@ -2046,20 +2052,20 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{get_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{candidates}\hlstd{) \{}
+\hlstd{get_associations} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{candidates}\hlstd{) \{}
         \hlstd{associations} \hlkwb{=} \hlkwd{data.frame}\hlstd{()}
-        \hlstd{final_associations} \hlkwb{=} \hlkwd{lapply}\hlstd{(candidates,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
+        \hlkwd{lapply}\hlstd{(candidates,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
                 \hlstd{k} \hlkwb{=} \hlkwd{len}\hlstd{(x)}
                 \hlkwa{for} \hlstd{(dim} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{(k} \hlopt{-} \hlnum{1}\hlstd{)) \{}
                         \hlstd{left_sides} \hlkwb{=} \hlkwd{combn}\hlstd{(x,} \hlkwc{m}\hlstd{=dim,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
                         \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(left_sides[}\hlnum{1}\hlstd{,])) \{}
                                 \hlstd{left_side} \hlkwb{=} \hlstd{left_sides[, col]}
                                 \hlstd{right_side} \hlkwb{=} \hlkwd{dif}\hlstd{(x, left_side)}
-                                \hlstd{new_asoc} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}
+                                \hlstd{new_assoc} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}
                                         \hlkwc{left} \hlstd{=} \hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(left_side)),}
                                         \hlkwc{right} \hlstd{=} \hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(right_side)))}
                                 \hlstd{associations} \hlkwb{<<-} \hlkwd{rbind}\hlstd{(}
-                                        \hlstd{associations, new_asoc)}
+                                        \hlstd{associations, new_assoc)}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\})}
@@ -2069,7 +2075,69 @@
 \end{kframe}
 \end{knitrout}
 			
-			EXPLICAR GET ASSOCIATIONS
+			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por $\sum_{i = 1}^{k-1}\binom{n}{i}$. Los posibles subconjuntos de $B$, $\binom{n}{i}$, se obtienen mediante la función \texttt{combn} del paquete \texttt{utils}, que recibe como parámetros el conjunto del que obtener subconjuntos, el tamaño de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{indexOf_assoc} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{,} \hlkwc{left_side}\hlstd{,} \hlkwc{right_side}\hlstd{) \{}
+        \hlstd{found} \hlkwb{=} \hlnum{FALSE}
+        \hlstd{i} \hlkwb{=} \hlnum{1}
+        \hlkwa{while}\hlstd{(}\hlopt{!}\hlstd{found} \hlopt{&} \hlstd{i} \hlopt{<=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
+                \hlstd{found} \hlkwb{=} \hlkwd{equals}\hlstd{(df[i,} \hlstr{"left"}\hlstd{][[}\hlnum{1}\hlstd{]], left_side)} \hlopt{&}
+                        \hlkwd{equals}\hlstd{(df[i,} \hlstr{"right"}\hlstd{][[}\hlnum{1}\hlstd{]], right_side)}
+                \hlstd{i} \hlkwb{=} \hlstd{i} \hlopt{+} \hlnum{1}
+        \hlstd{\}}
+        \hlstd{i}\hlopt{-}\hlnum{1}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			La función \texttt{indexOf\_assoc}, es una función auxiliar de \texttt{ap\_genrules} que dados los dos sucesos de una asociación, devuelve el índice del dataframe en el que se encuentra. 
+			
+			{\footnotesize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ap_genrules} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{assoc}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+        \hlstd{assoc} \hlkwb{=} \hlkwd{cbind}\hlstd{(assoc,} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{ncol} \hlstd{=} \hlnum{1}\hlstd{,}
+                \hlkwc{nrow} \hlstd{=} \hlkwd{len}\hlstd{(assoc[,}\hlnum{1}\hlstd{]),} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(assoc[,}\hlnum{1}\hlstd{]),} \hlstr{"valid"}\hlstd{))))}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlkwd{len}\hlstd{(assoc[,}\hlstr{"left"}\hlstd{])}\hlopt{:}\hlnum{1}\hlstd{) \{}
+                \hlstd{A} \hlkwb{=} \hlstd{assoc[i,} \hlstr{"left"}\hlstd{][[}\hlnum{1}\hlstd{]]}
+                \hlstd{right} \hlkwb{=} \hlstd{assoc[i,} \hlstr{"right"}\hlstd{][[}\hlnum{1}\hlstd{]]}
+                \hlstd{B} \hlkwb{=} \hlkwd{union}\hlstd{(A, right)}
+
+                \hlkwa{if}\hlstd{(assoc[i,} \hlstr{"valid"}\hlstd{]) \{}
+                        \hlstd{conf} \hlkwb{=} \hlkwd{confidence}\hlstd{(table, A, right)}
+                        \hlkwa{if} \hlstd{(conf} \hlopt{<} \hlstd{c) \{}
+                                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(A)) \{}
+                                        \hlstd{A_primes} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{combn}\hlstd{(A,} \hlkwc{m}\hlstd{=j,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+                                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(A_primes),} \hlkwc{by}\hlstd{=j)) \{}
+                                                \hlstd{new_left} \hlkwb{=} \hlstd{A_primes[k}\hlopt{:}\hlstd{(k}\hlopt{+}\hlstd{j}\hlopt{-}\hlnum{1}\hlstd{)]}
+                                                \hlstd{new_right} \hlkwb{=} \hlkwd{dif}\hlstd{(B, new_left)}
+                                                \hlstd{index} \hlkwb{=} \hlkwd{indexOf_assoc}\hlstd{(}
+                                                        \hlstd{assoc, new_left, new_right)}
+                                                \hlstd{assoc[index,} \hlstr{"valid"}\hlstd{]} \hlkwb{=} \hlnum{0}
+                                        \hlstd{\}}
+                                \hlstd{\}}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlkwd{subset}\hlstd{(assoc, assoc}\hlopt{$}\hlstd{valid} \hlopt{==} \hlnum{1}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			}
+			
+			\begin{theorem}[\texttt{ap-genrules}]\label{th:ap}
+				Sean dos conjuntos $A$ y $B$, si la asociación $A \rightarrow B - A$ no supera el umbral de confianza, entonces cualquier asociación $A' \rightarrow B - A'$, donde $A'$ es cualquier subconjunto de $A$ $(A' \subseteq A)$, tampoco la alcanzará. 
+			\end{theorem}
+			
+			La función \texttt{ap\_genrules} irá marcando qué asociaciones superan el umbral de confianza. Para ello, añade al dataframe de \texttt{get\_associations} una columna en la que ``marcar'' si cada asociación pasa el umbral de confianza $(\checkmark)$ o no $(\times)$. Para cada asociación de la forma $A \rightarrow B - A$ se toman los conjuntos $A$ cuyo tamaño sea mayor, y se obtienen los conjuntos $B$ y $B - A$ correspondientes para si dicha asociación había sido marcada con $\checkmark$ o $\times$. En caso de estar marcada como $\checkmark$ se pasa a la siguiente asociación, y en caso contrario, se calcula si supera el umbral de confianza establecido (marcándola como $\checkmark$) y si no lo hace, se aplica el \Cref{th:ap}. Finalmente, se devuelve en un dataframe aquellas asociaciones del dataframe marcadas con $\checkmark$ mediante la función \texttt{subset}, del paquete \texttt{base}. \\
+			
+			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{fcd\_apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2087,89 +2155,33 @@
 \end{kframe}
 \end{knitrout}
 			
-			Mediante la función \texttt{print\_associations} se le pasan la parte izquierda y derecha de la asociación y esta imprime todos los elementos entre llaves y con una flecha en medio.
-			
-			{\footnotesize
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{ap_genrules} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{asoc}\hlstd{,} \hlkwc{c}\hlstd{) \{}
-        \hlstd{asoc} \hlkwb{=} \hlkwd{cbind}\hlstd{(asoc,} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{ncol} \hlstd{=} \hlnum{1}\hlstd{,}
-                \hlkwc{nrow} \hlstd{=} \hlkwd{len}\hlstd{(asoc[,}\hlnum{1}\hlstd{]),} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(asoc[,}\hlnum{1}\hlstd{]),} \hlstr{"valid"}\hlstd{))))}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlkwd{len}\hlstd{(asoc[,}\hlstr{"left"}\hlstd{])}\hlopt{:}\hlnum{1}\hlstd{) \{}
-                \hlstd{A} \hlkwb{=} \hlstd{asoc[i,} \hlstr{"left"}\hlstd{][[}\hlnum{1}\hlstd{]]}
-                \hlstd{right} \hlkwb{=} \hlstd{asoc[i,} \hlstr{"right"}\hlstd{][[}\hlnum{1}\hlstd{]]}
-                \hlstd{B} \hlkwb{=} \hlkwd{union}\hlstd{(A, right)}
-
-                \hlkwa{if}\hlstd{(asoc[i,} \hlstr{"valid"}\hlstd{]) \{}
-                        \hlstd{conf} \hlkwb{=} \hlkwd{confidence}\hlstd{(table, A, right)}
-                        \hlkwa{if} \hlstd{(conf} \hlopt{<} \hlstd{c) \{}
-                                \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(A)) \{}
-                                        \hlstd{A_primes} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{lapply}\hlstd{(j,} \hlkwa{function}\hlstd{(}\hlkwc{m}\hlstd{) \{}
-                                                        \hlkwd{combn}\hlstd{(A,} \hlkwc{m}\hlstd{=m,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-                                                        \hlstd{\}}
-                                                \hlstd{),} \hlkwc{recursive}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-                                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(A_primes),} \hlkwc{by}\hlstd{=j)) \{}
-                                                \hlstd{new_left} \hlkwb{=} \hlstd{A_primes[k}\hlopt{:}\hlstd{(k}\hlopt{+}\hlstd{j}\hlopt{-}\hlnum{1}\hlstd{)]}
-                                                \hlstd{new_right} \hlkwb{=} \hlkwd{dif}\hlstd{(B, new_left)}
-                                                \hlstd{index} \hlkwb{=} \hlkwd{indexOf_asoc}\hlstd{(}
-                                                        \hlstd{asoc, new_left, new_right)}
-                                                \hlstd{asoc[index,} \hlstr{"valid"}\hlstd{]} \hlkwb{=} \hlnum{0}
-                                        \hlstd{\}}
-                                \hlstd{\}}
-                        \hlstd{\}}
-                \hlstd{\}}
-        \hlstd{\}}
-        \hlkwd{subset}\hlstd{(asoc, asoc}\hlopt{$}\hlstd{valid} \hlopt{==} \hlnum{1}\hlstd{)}
-\hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-			}
-			
-			EXPLICAR AP-GENRULES (se escribe associations por si quieres cambiar el nombre de las variables)
+			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{indexOf_asoc} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{,} \hlkwc{left_side}\hlstd{,} \hlkwc{right_side}\hlstd{) \{}
-        \hlstd{found} \hlkwb{=} \hlnum{FALSE}
-        \hlstd{i} \hlkwb{=} \hlnum{1}
-        \hlkwa{while}\hlstd{(}\hlopt{!}\hlstd{found} \hlopt{&} \hlstd{i} \hlopt{<=} \hlkwd{len}\hlstd{(df[,}\hlnum{1}\hlstd{])) \{}
-                \hlstd{found} \hlkwb{=} \hlkwd{equals}\hlstd{(df[i,} \hlstr{"left"}\hlstd{][[}\hlnum{1}\hlstd{]], left_side)} \hlopt{&}
-                        \hlkwd{equals}\hlstd{(df[i,} \hlstr{"right"}\hlstd{][[}\hlnum{1}\hlstd{]], right_side)}
-                \hlstd{i} \hlkwb{=} \hlstd{i} \hlopt{+} \hlnum{1}
-        \hlstd{\}}
-        \hlstd{i}\hlopt{-}\hlnum{1}
-\hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-			
-			EXPLICAR INDEXOF\_ASSOC\\
-			
-			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
-			
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
+\hlstd{fcd_apriori} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{s}\hlstd{,} \hlkwc{c}\hlstd{) \{}
         \hlstd{elements} \hlkwb{=} \hlkwd{get_elements}\hlstd{(data)}
         \hlstd{table} \hlkwb{=} \hlkwd{get_table}\hlstd{(data, elements)}
         \hlstd{soporte_clasif} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, elements, s)}
         \hlstd{combinations} \hlkwb{=} \hlkwd{fk_1}\hlstd{(soporte_clasif)}
         \hlstd{valid_support} \hlkwb{=} \hlkwd{support_clasif}\hlstd{(table, combinations, s)}
 
-        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(valid_support)} \hlopt{>} \hlnum{0}\hlstd{) \{}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(valid_support)) \{}
 
-                \hlstd{conf} \hlkwb{=} \hlkwd{get_associations}\hlstd{(table, valid_support)}
-                \hlstd{valid_asoc} \hlkwb{=} \hlkwd{ap_genrules}\hlstd{(table, conf, c)}
+                \hlstd{conf} \hlkwb{=} \hlkwd{get_associations}\hlstd{(valid_support)}
+                \hlstd{valid_assoc} \hlkwb{=} \hlkwd{ap_genrules}\hlstd{(table, conf, c)}
 
-                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(valid_asoc[,}\hlnum{1}\hlstd{])) \{}
-                        \hlkwd{print_associations}\hlstd{(valid_asoc[i,}\hlnum{1}\hlstd{], valid_asoc[i,}\hlnum{2}\hlstd{])}
+                \hlkwa{if} \hlstd{(}\hlopt{!}\hlkwd{len}\hlstd{(valid_assoc[,} \hlnum{1}\hlstd{])) \{}
+                        \hlkwd{print}\hlstd{(}\hlstr{"No hay asociaciones que superen la confianza"}\hlstd{)}
+                \hlstd{\}}
+
+                \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(valid_assoc[,}\hlnum{1}\hlstd{])) \{}
+                        \hlkwd{print_associations}\hlstd{(valid_assoc[i,}\hlnum{1}\hlstd{],}
+                                \hlstd{valid_assoc[i,}\hlnum{2}\hlstd{])}
                 \hlstd{\}}
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
-                \hlkwd{print}\hlstd{(}\hlstr{"No hay ninguna combinación que pase el soporte"}\hlstd{)}
+                \hlkwd{print}\hlstd{(}\hlstr{"No hay combinaciones que superen el soporte"}\hlstd{)}
         \hlstd{\}}
 \hlstd{\}}
 \end{alltt}
@@ -2189,7 +2201,7 @@
 \hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"T"}\hlstd{,} \hlstr{"A"}\hlstd{))}
 
-\hlkwd{apriori}\hlstd{(data,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
+\hlkwd{fcd_apriori}\hlstd{(data,} \hlnum{0.4}\hlstd{,} \hlnum{0.9}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## {B} --> {X}

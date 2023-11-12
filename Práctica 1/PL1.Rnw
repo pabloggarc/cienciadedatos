@@ -67,6 +67,7 @@
 }
 
 \newtheorem{exercise}{Ejercicio}[section]
+\newtheorem{theorem}{Teorema}[section]
 
 \newcommand{\dt}{\text{dist}}
 \newcommand{\ds}{\text{dens}}
@@ -194,6 +195,14 @@
 			\end{figure}
 			
 			Por último, para llevar un mejor control de versiones del proyecto, y de coordinación entre los miembros del grupo, se usará un repositorio de GitHub. Añadiremos un archivo \texttt{.gitignore} para no cargar en el repositorio los archivos temporales generados durante la compilación. Otra alternativa que se podría haber usado, es usar Overleaf (aquí usaríamos la extensión \texttt{.Rtex} en vez de \texttt{.Rnw}), ya que no sería necesaria la instalación de ningún software, y también trabaja con Knitr. Sin embargo, la integración de GitHub en Overleaf es de pago, por lo que optamos por usar la configuración explicada hasta el momento, para poder tener un mejor control de versiones sin coste alguno. \\
+			
+			Por otro lado, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque este documento está siendo realizado siguiendo lo explicado previamente. 
+			
+			\begin{verbatim}
+				rnwfile <- system.file("Sweave", "example-1.Rnw", package="utils")
+				Sweave(rnwfile)
+				tools::texi2pdf("example-1.tex")
+			\end{verbatim}
 			
 			Por último, mencionar que al igual que R posee su repositorio de paquetes (que ya hemos visto que incluye más cosas) llamado CRAN, \LaTeX{} que en realidad es ``un subconjunto'' del lenguaje \TeX{}, también tiene su propio portal llamado CTAN o Comprehensive \TeX{} Archive Network (\url{https://www.ctan.org/}) de donde se descargan los paquetes y otros materiales para el lenguaje. 
 			
@@ -351,15 +360,7 @@
 			cuar1 <- quantile(radio, 0.25)
 			print(cuar1)
 			@
-			
-			Como añadido, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque como ya se explicó en la introducción, usaremos otra forma de trabajar con estos archivos a lo largo de la práctica. 
-			
-			\begin{verbatim}
-				rnwfile<-system.file("Sweave", "example-1.Rnw", package="utils")
-				Sweave(rnwfile)
-				tools::texi2pdf("example-1.tex")
-			\end{verbatim}
-		
+
 		\section{Asociación}
 		
 			\begin{exercise}
@@ -653,7 +654,7 @@
 			
 			A esta función se le deberá pasar la lista que se quiere ordenar y \texttt{TRUE} o \texttt{FALSE} para indicar en el sentido que se quiere ordenar. En caso de ser \texttt{TRUE} se ordenará de manera ascendente, y en caso de \texttt{FALSE} se ordenará de forma descendente. Por defecto, si solo se pasa como parámetro la lista, se ordenará de forma ascendente.\\
 			
-			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y -1 (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
+			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y $-1$ (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
 			
 			Hagamos la prueba con la lista de distancias:
 			
@@ -710,7 +711,7 @@
 			
 			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, lo se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.\\
 			
-			Para esta función se han utilizado las funciones de \texttt{append} (paquete base) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete base), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
+			Para esta función se han utilizado las funciones de \texttt{append} (paquete \texttt{base}) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
 			
 			{\small
 			<<>>=
@@ -999,7 +1000,12 @@
 			}
 			@
 			
-			La primera de ellas, recibe una serie de listas que representa la muestra, por ejemplo $[\{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \{\alpha_{n+1}, \alpha_{n+2}, \ldots, \alpha_{n+m}\}]$, de forma que se calcula $\bigcup_{i=1}^{n+m} \alpha_i$ para calcular el espacio muestral. Supongamos que tenemos \{Pan, Agua, Leche\}, \{Pan, Agua\}, y \{Pan, Leche\}. Calculando la unión se obtiene $E = \{$Pan, Agua, Leche\}. \\
+			La primera de ellas, recibe una serie de listas que representa la muestra, por ejemplo dada la siguiente muestra
+			$$
+			M = [\underbrace{\{\alpha_1, \alpha_2, \ldots, \alpha_n\}}_{L_1}, \underbrace{\{\beta_{1}, \beta_{2}, \ldots, \beta_{m}\}}_{L_2}, \ldots, \underbrace{\{\gamma_1, \gamma_2, \ldots, \gamma_{p}\}}_{L_n}], 
+			$$
+			
+			se calcula $\bigcup_{i=1}^{n} L_i$ para hallar el espacio muestral. Supongamos que tenemos \{Pan, Agua, Leche\}, \{Pan, Agua\}, y \{Pan, Leche\}. Calculando la unión se obtiene $E = \{$Pan, Agua, Leche\}. \\
 			
 			La segunda de ellas crea una matriz (codificado por un dataframe) que representa por filas los sucesos de la muestra, y por columnas los sucesos elementales, encontrándose en la entrada $a_{ij}$ un valor binario representando si dicho suceso elemental se encuentra en el suceso de la muestra. Retomando el ejemplo anterior se tendría la siguiente matriz. 
 			
@@ -1072,7 +1078,7 @@
 			}
 			@
 			
-			Una vez calculados aquellos sucesos elementales que superan el umbral del soporte, deberemos aplicar el método $F_{k-1} \times F_{k-1}$ de \texttt{apriori-gen} para construir los conjuntos candidatos de dimensiones superiores. En cada iteración del algoritmo, este toma dos sucesos de dimensión $k-1$, $\alpha = \{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}\}$ y $\beta = \{\beta_1, \beta_2, \ldots, \beta_{k-1}\}$ para formar un tercer conjunto de dimensión $k$ de la forma $\{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}, \beta_{k-1}\}$. Este sólo se podrá formar si se cumplen las siguientes condiciones: 
+			Una vez calculados aquellos sucesos elementales que superan el umbral del soporte, deberemos aplicar el método $F_{k-1} \times F_{k-1}$ de \texttt{apriori-gen} para construir los conjuntos candidatos de dimensiones superiores. En cada iteración del algoritmo, este toma dos sucesos de dimensión $k-1$, $\alpha = \{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}\}$ y $\beta = \{\beta_1, \beta_2, \ldots, \beta_{k-1}\}$ para formar un tercer conjunto de dimensión $k$ de la forma $\{\alpha_1, \alpha_2, \ldots, \alpha_{k-2}, \alpha_{k-1}, \beta_{k-1}\}$ o $\{\beta_1, \beta_2, \ldots, \beta_{k-2}, \beta_{k-1}, \alpha_{k-1}\}$. En definitiva, se calcula $\alpha \cup \beta$ sólo si se cumplen las siguientes condiciones: 
 			
 			\begin{itemize}
 				\item $\forall i \leq k-2, \,\,\, \alpha_i = \beta_i$
@@ -1200,20 +1206,20 @@
 			\end{equation*}
 			
 			<<>>=
-			get_associations = function(table, candidates) {
+			get_associations = function(candidates) {
 				associations = data.frame()
-				final_associations = lapply(candidates, function(x) {
+				lapply(candidates, function(x) {
 					k = len(x)
 					for (dim in 1:(k - 1)) {
 						left_sides = combn(x, m=dim, simplify=TRUE)
 						for (col in 1:len(left_sides[1,])) {
 							left_side = left_sides[, col]
 							right_side = dif(x, left_side)
-							new_asoc = data.frame(
+							new_assoc = data.frame(
 								left = I(list(left_side)),
 								right = I(list(right_side)))
 							associations <<- rbind(
-								associations, new_asoc)
+								associations, new_assoc)
 						}
 					}
 				})
@@ -1221,7 +1227,61 @@
 			}
 			@
 			
-			EXPLICAR GET ASSOCIATIONS
+			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por $\sum_{i = 1}^{k-1}\binom{n}{i}$. Los posibles subconjuntos de $B$, $\binom{n}{i}$, se obtienen mediante la función \texttt{combn} del paquete \texttt{utils}, que recibe como parámetros el conjunto del que obtener subconjuntos, el tamaño de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
+			
+			<<>>=
+			indexOf_assoc = function(df, left_side, right_side) {
+				found = FALSE
+				i = 1
+				while(!found & i <= len(df[,1])) {
+					found = equals(df[i, "left"][[1]], left_side) &
+						equals(df[i, "right"][[1]], right_side)
+					i = i + 1
+				}
+				i-1
+			}
+			@
+			
+			La función \texttt{indexOf\_assoc}, es una función auxiliar de \texttt{ap\_genrules} que dados los dos sucesos de una asociación, devuelve el índice del dataframe en el que se encuentra. 
+			
+			{\footnotesize
+			<<>>=
+			ap_genrules = function(table, assoc, c) {
+				assoc = cbind(assoc, data.frame(matrix(1, ncol = 1,
+					nrow = len(assoc[,1]), dimnames = list(1:len(assoc[,1]), "valid"))))
+				for (i in len(assoc[,"left"]):1) {
+					A = assoc[i, "left"][[1]]
+					right = assoc[i, "right"][[1]]
+					B = union(A, right)
+					
+					if(assoc[i, "valid"]) {
+						conf = confidence(table, A, right)	
+						if (conf < c) {
+							for (j in 1:len(A)) {
+								A_primes = unlist(combn(A, m=j, simplify=TRUE))
+								for (k in seq(1, len(A_primes), by=j)) {
+									new_left = A_primes[k:(k+j-1)]
+									new_right = dif(B, new_left)
+									index = indexOf_assoc(
+										assoc, new_left, new_right)
+									assoc[index, "valid"] = 0
+								}
+							}
+						}
+					}
+				}
+				subset(assoc, assoc$valid == 1)
+			}
+			@
+			}
+			
+			\begin{theorem}[\texttt{ap-genrules}]\label{th:ap}
+				Sean dos conjuntos $A$ y $B$, si la asociación $A \rightarrow B - A$ no supera el umbral de confianza, entonces cualquier asociación $A' \rightarrow B - A'$, donde $A'$ es cualquier subconjunto de $A$ $(A' \subseteq A)$, tampoco la alcanzará. 
+			\end{theorem}
+			
+			La función \texttt{ap\_genrules} irá marcando qué asociaciones superan el umbral de confianza. Para ello, añade al dataframe de \texttt{get\_associations} una columna en la que ``marcar'' si cada asociación pasa el umbral de confianza $(\checkmark)$ o no $(\times)$. Para cada asociación de la forma $A \rightarrow B - A$ se toman los conjuntos $A$ cuyo tamaño sea mayor, y se obtienen los conjuntos $B$ y $B - A$ correspondientes para si dicha asociación había sido marcada con $\checkmark$ o $\times$. En caso de estar marcada como $\checkmark$ se pasa a la siguiente asociación, y en caso contrario, se calcula si supera el umbral de confianza establecido (marcándola como $\checkmark$) y si no lo hace, se aplica el \Cref{th:ap}. Finalmente, se devuelve en un dataframe aquellas asociaciones del dataframe marcadas con $\checkmark$ mediante la función \texttt{subset}, del paquete \texttt{base}. \\
+			
+			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{fcd\_apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
 			
 			<<>>=
 			print_associations = function(left_list, right_list) {
@@ -1235,79 +1295,31 @@
 			}
 			@
 			
-			Mediante la función \texttt{print\_associations} se le pasan la parte izquierda y derecha de la asociación y esta imprime todos los elementos entre llaves y con una flecha en medio.
-			
-			{\footnotesize
-			<<>>=
-			ap_genrules = function(table, asoc, c) {
-				asoc = cbind(asoc, data.frame(matrix(1, ncol = 1,
-					nrow = len(asoc[,1]), dimnames = list(1:len(asoc[,1]), "valid"))))
-				for (i in len(asoc[,"left"]):1) {
-					A = asoc[i, "left"][[1]]
-					right = asoc[i, "right"][[1]]
-					B = union(A, right)
-					
-					if(asoc[i, "valid"]) {
-						conf = confidence(table, A, right)	
-						if (conf < c) {
-							for (j in 1:len(A)) {
-								A_primes = unlist(lapply(j, function(m) {
-										combn(A, m=m, simplify=TRUE)
-										}
-									), recursive=FALSE)
-								for (k in seq(1, len(A_primes), by=j)) {
-									new_left = A_primes[k:(k+j-1)]
-									new_right = dif(B, new_left)
-									index = indexOf_asoc(
-										asoc, new_left, new_right)
-									asoc[index, "valid"] = 0
-								}
-							}
-						}
-					}
-				}
-				subset(asoc, asoc$valid == 1)
-			}
-			@
-			}
-			
-			EXPLICAR AP-GENRULES (se escribe associations por si quieres cambiar el nombre de las variables)
+			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$.
 			
 			<<>>=
-			indexOf_asoc = function(df, left_side, right_side) {
-				found = FALSE
-				i = 1
-				while(!found & i <= len(df[,1])) {
-					found = equals(df[i, "left"][[1]], left_side) &
-						equals(df[i, "right"][[1]], right_side)
-					i = i + 1
-				}
-				i-1
-			}
-			@
-			
-			EXPLICAR INDEXOF\_ASSOC\\
-			
-			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
-			
-			<<>>=
-			apriori = function(data, s, c) {
+			fcd_apriori = function(data, s, c) {
 				elements = get_elements(data)
 				table = get_table(data, elements)
 				soporte_clasif = support_clasif(table, elements, s)
 				combinations = fk_1(soporte_clasif) 
 				valid_support = support_clasif(table, combinations, s)
 				
-				if (len(valid_support) > 0) {
+				if (len(valid_support)) {
 				
-					conf = get_associations(table, valid_support)
-					valid_asoc = ap_genrules(table, conf, c)
-				
-					for (i in 1:len(valid_asoc[,1])) {
-						print_associations(valid_asoc[i,1], valid_asoc[i,2])
+					conf = get_associations(valid_support)
+					valid_assoc = ap_genrules(table, conf, c)
+					
+					if (!len(valid_assoc[, 1])) {
+						print("No hay asociaciones que superen la confianza")
+					}
+					
+					for (i in 1:len(valid_assoc[,1])) {
+						print_associations(valid_assoc[i,1], 
+							valid_assoc[i,2])
 					}
 				} else {
-					print("No hay ninguna combinación que pase el soporte")
+					print("No hay combinaciones que superen el soporte")
 				}
 			}
 			@
@@ -1323,7 +1335,7 @@
 			c("X", "B", "C"),
 			c("T", "A"))
 			
-			apriori(data, 0.4, 0.9)
+			fcd_apriori(data, 0.4, 0.9)
 			@
 			
 			Finalmente, se observan una lista de las asociaciones que han superado los umbrales de soporte y confianza.
