@@ -3,6 +3,7 @@
 \usepackage[spanish]{babel}
 \usepackage[margin = 2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
+\usepackage[most]{tcolorbox}
 \usepackage{amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
@@ -67,7 +68,8 @@
 }
 
 \newtheorem{exercise}{Ejercicio}[section]
-\newtheorem{theorem}{Teorema}[section]
+\newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}]{teorema}{Teorema}{}{th}
+\newtcbtheorem[number within = section, Crefname = {Definición}{Definición}]{definicion}{Definición}{}{df}
 
 \newcommand{\dt}{\text{dist}}
 \newcommand{\ds}{\text{dens}}
@@ -1047,12 +1049,14 @@
 			
 			La siguiente herramienta que se necesita en el algoritmo apriori es el soporte, que queda definido de la siguiente manera. 
 			
-			\begin{equation*}
-				\begin{gathered}
-					\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
-					s: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \,\, \text{que} \, s(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_T}
-				\end{gathered}
-			\end{equation*}
+			\begin{definicion}{Soporte}{sp}
+				\begin{equation*}
+					\begin{gathered}
+						\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
+						s: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal que} \, s(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_T}
+					\end{gathered}
+				\end{equation*}
+			\end{definicion}
 			
 			Como podemos observar, la función \texttt{count\_appereance} que se había codificado previamente, será de ayuda para calcular el soporte, de forma que ahora basta dividir el resultado de esta por el número de sucesos de la muestra tal y como se hace en la función \texttt{support}. 
 			
@@ -1196,14 +1200,16 @@
 			}
 			@
 			
-			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la siguiente ecuación, se implementa con la función previamente mostrada \texttt{confidence}. 
+			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la \Cref{df:cf}, se implementa con la función previamente mostrada \texttt{confidence}. 
 			
-			\begin{equation*}
-				\begin{gathered}
-					\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
-					c: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal} \, \text{que} \,\, c(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_{A_i}}
-				\end{gathered}
-			\end{equation*}
+			\begin{definicion}{Confianza}{cf}
+				\begin{equation*}
+					\begin{gathered}
+						\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
+						c: P(E) \longrightarrow \mathbb{R}^+ \, \text{tal que} \,\, c(A_i \cup A_j) = \frac{n_{A_i \cup A_j}}{n_{A_i}}
+					\end{gathered}
+				\end{equation*}
+			\end{definicion}
 			
 			<<>>=
 			get_associations = function(candidates) {
@@ -1227,7 +1233,7 @@
 			}
 			@
 			
-			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por $\sum_{i = 1}^{k-1}\binom{n}{i}$. Los posibles subconjuntos de $B$, $\binom{n}{i}$, se obtienen mediante la función \texttt{combn} del paquete \texttt{utils}, que recibe como parámetros el conjunto del que obtener subconjuntos, el tamaño de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
+			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por los $\sum_{i = 1}^{k-1}\binom{n}{i}$ subconjuntos. Estos posibles subconjuntos de $B$, se obtienen mediante la función \texttt{combn} del paquete \texttt{utils}, que recibe como parámetros el conjunto del que obtener subconjuntos, el tamaño de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
 			
 			<<>>=
 			indexOf_assoc = function(df, left_side, right_side) {
@@ -1275,9 +1281,9 @@
 			@
 			}
 			
-			\begin{theorem}[\texttt{ap-genrules}]\label{th:ap}
+			\begin{teorema}{\texttt{ap-genrules}}{ap}
 				Sean dos conjuntos $A$ y $B$, si la asociación $A \rightarrow B - A$ no supera el umbral de confianza, entonces cualquier asociación $A' \rightarrow B - A'$, donde $A'$ es cualquier subconjunto de $A$ $(A' \subseteq A)$, tampoco la alcanzará. 
-			\end{theorem}
+			\end{teorema}
 			
 			La función \texttt{ap\_genrules} irá marcando qué asociaciones superan el umbral de confianza. Para ello, añade al dataframe de \texttt{get\_associations} una columna en la que ``marcar'' si cada asociación pasa el umbral de confianza $(\checkmark)$ o no $(\times)$. Para cada asociación de la forma $A \rightarrow B - A$ se toman los conjuntos $A$ cuyo tamaño sea mayor, y se obtienen los conjuntos $B$ y $B - A$ correspondientes para si dicha asociación había sido marcada con $\checkmark$ o $\times$. En caso de estar marcada como $\checkmark$ se pasa a la siguiente asociación, y en caso contrario, se calcula si supera el umbral de confianza establecido (marcándola como $\checkmark$) y si no lo hace, se aplica el \Cref{th:ap}. Finalmente, se devuelve en un dataframe aquellas asociaciones del dataframe marcadas con $\checkmark$ mediante la función \texttt{subset}, del paquete \texttt{base}. \\
 			
