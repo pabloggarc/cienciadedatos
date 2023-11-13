@@ -54,7 +54,7 @@
 \usepackage[margin = 2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[most]{tcolorbox}
-\usepackage{amssymb, amsthm, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, tikz, tikz-cd}
+\usepackage{amssymb, amsthm, array, cancel, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, qtree, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
 \pagestyle{fancy}
@@ -118,12 +118,15 @@
 }
 
 \newtheorem{exercise}{Ejercicio}[section]
+\newtheorem{observation}{Observación}[section]
 \newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}]{teorema}{Teorema}{}{th}
 \newtcbtheorem[number within = section, Crefname = {Definición}{Definición}]{definicion}{Definición}{}{df}
 
 \newcommand{\dt}{\text{dist}}
 \newcommand{\ds}{\text{dens}}
 \newcommand{\drm}{\text{drm}}
+
+\newcommand{\rojo}[1]{\textcolor{Red}{#1}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 	
@@ -280,7 +283,7 @@
 			\begin{itemize}
 				\item Existirá una tabulación entre dato y dato. 
 				\item La primera columna numera las filas, y en la primera fila se introduce un espacio y el nombre de las variables. 
-				\item Se introducirá un salto de línea en la última fila
+				\item Se introducirá un salto de línea en la última fila. 
 				\item Para los números decimales se utilizarán puntos. 
 				\item Al escribir nombres, no se deberán introducir espacios. 
 			\end{itemize}
@@ -513,7 +516,7 @@
 			
 			Sin embargo, el resultado obtenido no es el esperado. Esto se debe a que esta función realiza el siguiente cálculo
 			$$
-			s = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n-1}}
+			s = \sqrt{\frac{\displaystyle\sum_{i=1}^n (x_i-\bar{x})^2}{n-1}}
 			$$
 			que es más utilizado en inferencia estadística, porque hace que se parezca más a una campana de Gauss (menos sesgo), mientras que la fórmula vista en clase utiliza un factor de $n$ en vez de $n-1$ en el denominador (dentro de la raíz). Para solucionar el problema, el profesor lo corrigió de la siguiente manera: 
 			
@@ -531,7 +534,7 @@
 			
 			En realidad lo que se está realizando es el siguiente ``ajuste'': 
 			$$
-			s' = \sqrt{s^2\cdot\frac{n-1}{n}}
+			s' = \sqrt{s^2\cdot\frac{n-1}{n}} = \sqrt{\frac{\displaystyle\sum_{i=1}^n(x_i - \bar{x})^2}{\cancel{n-1}}\cdot\frac{\cancel{n-1}}{n}} = s
 			$$
 			
 			Una vez se ha visto cómo se calcula la desviación típica, se va a explicar cómo calcular la varianza. Dado que esta es el cuadrado de la desviación típica, bastaría con elevar al cuadrado si no fuera por el ``fallo'' de $n-1$ visto previamente. En este caso, el profesor lo arregló para el caso particular de la siguiente manera:
@@ -1023,7 +1026,7 @@
 \end{kframe}
 \end{knitrout}
 					
-					Por último, se itera cada punto de la matriz de distancias ordenadas y se comprueba si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
+					Por último, se itera cada punto de la matriz de distancias ordenadas y se comprueba si el elemento $k-$ésimo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
 					
 					En el código se puede ver que se elige el elemento 4 en lugar del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que quedan descartados en el conteo de los \texttt{k} elementos.
 					
@@ -1171,7 +1174,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se tomará para cada dato la parte entera y la parte decimal del mismo como dos datos en vez de uno.\\ 
+			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se tomará para cada dato la parte entera y la parte decimal del mismo como dos datos en lugar de uno.\\ 
 			
 			Como se va a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, se puede definir en una variable nueva llamada \texttt{distancias}, de tal forma que no se tenga que estar pasando \texttt{fichero\$Distancia} repetidamente.
 			
@@ -1199,7 +1202,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como se verá más adelante. Llamando a la función se visualiza el número de distancias que se tienen:
+			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, itera todos los elementos de la lista y aumenta en 1 cada vez que haya un nuevo elemento. Por último, se devuelve el contador. Esta función será fundamental en otras funciones tal y como se verá más adelante. Llamando a la función se visualiza el número de distancias que se tienen:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1270,7 +1273,7 @@
 \end{knitrout}
 			}
 			
-			Con la lista ordenada, se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que se haya ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
+			Con la lista ordenada, se puede obtener de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que se haya ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1327,7 +1330,7 @@
 			
 			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que es el resultado de la matriz previa (la lista de todos los elementos de la muestra) y una lista de elementos con sus correspondientes frecuencias a modo de fila concatenada.\\
 			
-			Para esta función se han utilizado las funciones de \texttt{append} (paquete \texttt{base}) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Se comprueban las frecuencias absolutas:
+			Para esta función se han utilizado las funciones \texttt{append} (paquete \texttt{base}), que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Se comprueban las frecuencias absolutas:
 			
 			{\small
 \begin{knitrout}
@@ -1507,9 +1510,13 @@
 \end{knitrout}
 			}
 			
-			Se puede comprobar que son correctos, ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
+			Se puede comprobar que los resultados son correctos, ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
 			
-			Prosiguiendo con el análisis de datos, se tiene que obtener la media aritmética del conjunto de datos. Para ello, se propone la siguiente función, la cual va a sumar todos los elementos de la muestra, y ese resultado se divide entre el número total de elementos de la muestra.
+			Prosiguiendo con el análisis de datos, se debe que obtener la media aritmética del conjunto de datos. Para ello, se propone la siguiente función, la cual va a sumar todos los elementos de la muestra, y ese resultado se divide entre el número total de elementos de la muestra, en definitiva: 
+			
+			$$
+			\bar{x}_a = \frac{\displaystyle\sum_{i=1}^n x_i}{n}
+			$$
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1525,7 +1532,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Se comprueba el funcionamiento de esta función, obteniendo una media de  18.53.
+			Se comprueba el funcionamiento de esta función, obteniendo una media de $18.53$.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1537,6 +1544,7 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+			
 			También se ha de calcular la moda del conjunto de datos. Para ello se ha elaborado una función que calculará este valor. Con ayuda de las frecuencias absolutas, se pueden iterar y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Se va iterando la frecuencia de cada elemento diferente de la lista y se comprueba si su frecuencia es la mayor hasta el momento. En caso de serlo, la moda temporal corresponderá a ese elemento. Así se observarán todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
 			
 			{\small
@@ -1577,9 +1585,16 @@
 		
 			Se observa que la moda del conjunto de distancias es 30. Se puede comprobar que es correcto si se observan las frecuencias absolutas, ya que el elemento que más veces aparece es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos, el algoritmo devolverá el elemento de menor magnitud al iterar de menor a mayor elemento.\\
 			
-			El siguiente análisis que se hará es el de la mediana, que se ha visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor se tendrá que observar la paridad del número total de datos. Para saber si $n$ es par, basta con calcular $n\pmod{2}$. Si $n \equiv 0 \pmod{2}$ será par, y si $n\pmod{2} \equiv 1$, será impar. \\
+			El siguiente análisis que se hará es el de la mediana, que que como ya se ha visto es el dato que divide en dos al conjunto total de datos. Para calcular este valor se tendrá que observar la paridad del número total de datos. Para saber si $n$ es par, basta con calcular $n\pmod{2}$. Si $n \equiv 0 \pmod{2}$ será par, y si $n\pmod{2} \equiv 1$, será impar. \\
 			
-			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente se tendrá que coger el elemento $\frac{n+1}{2}$.\\
+			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, se sumarán y se dividirá el resultado entre dos. En caso de tener un número de elementos impar directamente se tendrá que coger el elemento $\frac{n+1}{2}$. En definitiva, el cálculo obedece a la siguiente ecuación: 
+			
+			$$
+			\tilde{x} = \left\lbrace\begin{array}{cll}
+				\dfrac{x_{\frac{n}{2}} + x_{\frac{n}{2}+1}}{2} & \text{si} & n \equiv 0 \pmod{2}\\
+				x_{\frac{n+1}{2}} & \text{si} & n \not\equiv 0 \pmod{2}
+			\end{array}\right.
+			$$
 			
 			Se han englobado estos cálculos en una función, donde se comprueba si se está ante un número de elementos par o impar, y se accede a los elementos correspondientes. La función es la siguiente:
 			
@@ -1689,6 +1704,16 @@
 				\item Si $nc \in \mathbb{N}$ (siendo $n$ el número total de elementos), se calculará $\frac{x_{nc}+x_{nc+1}}{2}$. 
 				\item Si $nc \not \in \mathbb{N}$ (siendo $n$ el número total de elementos), se deberá coger el elemento $\left\lfloor nc \right\rfloor + 1 $ o $ \left\lceil nc \right\rceil$. 
 			\end{itemize}
+			
+			En resumen, el cálculo obedece a la siguiente fórmula: 
+			
+			$$
+			\forall i \in \{c, d, p\}\,\, \tilde{x}_i = \left\lbrace \begin{array}{cll}
+				x_{\left\lceil ni \right\rceil} & \text{si} & ni \not\in\mathbb{N}\\
+				&&\\
+				\dfrac{x_{ni}+x_{ni+1}}{2} & \text{si} & ni \in\mathbb{N}
+			\end{array}\right.
+			$$
 			
 			Con estos cálculos se codifica una función que calcula los cuantiles. La función es la siguiente:
 			
@@ -2047,16 +2072,22 @@
         \hlstd{\}}
         \hlkwd{back}\hlstd{(comb, n_comb}\hlopt{-}\hlstd{n)}
 \hlstd{\}}
-
-\hlstd{confidence} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{left}\hlstd{,} \hlkwc{right}\hlstd{) \{}
-        \hlkwd{count_appearance}\hlstd{(table,} \hlkwd{union}\hlstd{(left, right))} \hlopt{/}
-                \hlkwd{count_appearance}\hlstd{(table, left)}
-\hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 			
-			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la \Cref{df:cf}. Se implementa con la función previamente mostrada \texttt{confidence}. 
+			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la \Cref{df:cf}. Se implementa con la función \texttt{confidence}. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{confidence} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{table}\hlstd{,} \hlkwc{left}\hlstd{,} \hlkwc{right}\hlstd{) \{}
+        \hlkwd{count_appearance}\hlstd{(table,} \hlkwd{union}\hlstd{(left, right))} \hlopt{/}
+        \hlkwd{count_appearance}\hlstd{(table, left)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 			
 			\begin{definicion}{Confianza}{cf}
 				\begin{equation*}
@@ -2171,7 +2202,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. Aquí se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left_side} y \texttt{right_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
+			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. Aquí se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left\_side} y \texttt{right\_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2228,7 +2259,183 @@
 \end{kframe}
 \end{knitrout}
 			
-			Con todo el algoritmo programado, se procede a ponerlo en práctica con los datos del enunciado, un umbral de soporte del 40\% y un umbral de confianza del 90\%. Se observa la impresión de la lista de las asociaciones que han superado los umbrales de soporte y confianza en base al algoritmo que se ha realizado.
+			Con todo el algoritmo programado, se procede a ponerlo en práctica con los datos del enunciado, un umbral de soporte del 40\% y un umbral de confianza del 90\%. Se observa la impresión de la lista de las asociaciones que han superado los umbrales de soporte y confianza en base al algoritmo que se ha realizado. Este resultado es correcto, sin embargo, vamos a probar a bajar el umbral de soporte al 30\%, y el de confianza a un 70\%. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{fcd_apriori}\hlstd{(data,} \hlnum{0.3}\hlstd{,} \hlnum{0.7}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## {X} --> {B}
+## {B} --> {X}
+## {X} --> {C}
+## {C} --> {X}
+## {N} --> {X}
+## {B} --> {C}
+## {C} --> {B}
+## {B} --> {X,C}
+## {C} --> {X,B}
+## {X,B} --> {C}
+## {X,C} --> {B}
+## {B,C} --> {X}
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Ahora intentaremos replicar este resultado con la función \texttt{apriori} del paquete \texttt{arules} visto en clase. 
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{muestra} \hlkwb{<-} \hlkwd{Matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}
+                        \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}
+                        \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,}
+                        \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,}
+                        \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}
+                        \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,}
+                        \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,}
+                        \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{),}
+\hlnum{8}\hlstd{,} \hlnum{6}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
+\hlkwd{c}\hlstd{(}\hlstr{"s1"}\hlstd{,} \hlstr{"s2"}\hlstd{,} \hlstr{"s3"}\hlstd{,} \hlstr{"s4"}\hlstd{,} \hlstr{"s5"}\hlstd{,} \hlstr{"s6"}\hlstd{,} \hlstr{"s7"}\hlstd{,} \hlstr{"s8"}\hlstd{),}
+\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,} \hlstr{"A"}\hlstd{,} \hlstr{"T"}\hlstd{,} \hlstr{"N"}\hlstd{,} \hlstr{"B"}\hlstd{,} \hlstr{"C"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+
+\hlstd{mmuestra} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
+\hlstd{trans} \hlkwb{<-} \hlkwd{as}\hlstd{(}\hlkwd{t}\hlstd{(mmuestra),} \hlstr{"transactions"}\hlstd{)}
+\hlstd{asoc} \hlkwb{<-} \hlkwd{apriori}\hlstd{(trans,} \hlkwc{parameter} \hlstd{=}
+        \hlkwd{list}\hlstd{(}\hlkwc{support} \hlstd{=} \hlnum{0.3}\hlstd{,} \hlkwc{confidence} \hlstd{=} \hlnum{0.7}\hlstd{,} \hlkwc{minlen} \hlstd{=} \hlnum{2}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{inspect}\hlstd{(asoc)}
+\end{alltt}
+\begin{verbatim}
+##      lhs       rhs support confidence coverage lift     count
+## [1]  {N}    => {X} 0.375   0.7500000  0.500    1.000000 3    
+## [2]  {C}    => {B} 0.500   0.8000000  0.625    1.280000 4    
+## [3]  {B}    => {C} 0.500   0.8000000  0.625    1.280000 4    
+## [4]  {C}    => {X} 0.625   1.0000000  0.625    1.333333 5    
+## [5]  {X}    => {C} 0.625   0.8333333  0.750    1.333333 5    
+## [6]  {B}    => {X} 0.625   1.0000000  0.625    1.333333 5    
+## [7]  {X}    => {B} 0.625   0.8333333  0.750    1.333333 5    
+## [8]  {B, C} => {X} 0.500   1.0000000  0.500    1.333333 4    
+## [9]  {X, C} => {B} 0.500   0.8000000  0.625    1.280000 4    
+## [10] {X, B} => {C} 0.500   0.8000000  0.625    1.280000 4
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			
+			Para nuestra sorpresa, el paquete \texttt{arules} se olvida de dos asociaciones $\{B\} \rightarrow \{X, C\}$ y $\{C\} \rightarrow \{X, B\}$. Esto se debe a que la función \texttt{apriori} de \texttt{arules} está mal programada de manera que no cumple con el algoritmo apriori estudiado. Ejecutaremos de manera manual la traza de este caso brevemente para detectar en qué se equivocaron los creadores. \\
+			
+			Se tomará $E = \{X, A, T, N, B, C\}$ y se hará la siguiente enumeración $E = \{123456\}$, de manera que los sucesos de la muestra serán $\{X, C, N, B\} = \{1645\}, \{X, T, B, C\} = \{1356\}, \{N, C, X\} = \{461\}, \{N, T, X, B\} = \{4315\}, \{X, C, B\} = \{165\}, \{N\} = \{4\}, \{X, B, C\} = \{156\}, \{T, A\} = \{32\}$. \\
+			
+			En primer lugar se debe calcular el soporte de cada suceso elemental, de esta forma: 
+			
+			$$
+			\def\arraystretch{2.2}
+			\begin{array}{ll}
+				s(X) = \frac{6}{8} (\checkmark) & s(N) = \dfrac{4}{8} (\checkmark)\\
+				s(A) = \frac{1}{8} (\times) & s(B) = \dfrac{5}{8} (\checkmark)\\
+				s(T) = \frac{3}{8} (\checkmark) & s(C) = \dfrac{5}{8} (\checkmark)
+			\end{array}
+			$$
+			
+			Pasan el soporte aquellos que aparecen $0.3 \cdot 8 = 2.4$ veces o más. Aplicando el método $F_{k-1} \times F_{k-1}$ se formarán conjuntos candidatos. Aplicando las reglas explicadas de este método se tiene: 
+			
+			\begin{itemize}
+				\item \textbf{Dimensión 2}: 
+				$$
+				\{X, T\}, \{X, N\}, \{X, B\}, \{X, C\}, \{T, N\}, \{T, B\}, \{T, C\}, \{N, B\},\allowbreak \{N, C\}, \{B, C\}
+				$$
+				\item \textbf{Dimensión 3}: 
+				$$
+				\begin{array}{c}
+					\{X, T, N\}, \{X, T, B\}, \{X, T, C\}, \{X, B, N\}, \{X, B, C\}, \{X, N, C\}, \{T, B, N\},\\ \{T, C, N\}, \{T, B, C\}, \{N, C, B\}
+				\end{array}
+				$$
+				\item \textbf{Dimensión 4}: $\{X, T, N, B\}, \{X, T, N, C\}, \{X, T, B, C\}, \{X, B, N, C\}, \{T, B, N, C\}$
+				\item \textbf{Dimensión 5}: $\{X, T, N, B, C\}$
+			\end{itemize}
+			
+			Al realizar la ejecución del algoritmo a mano, conviene trabajar con hash trees con función de partición $h(p) = p \pmod{3}$ para determinar de una manera más sencilla qué sucesos superan el umbral de soporte. Al igual que se estudió en clase, se realizará la partición por dimensiones de los conjuntos generados. \\
+			
+			\Tree[.{Dimensión 2} [. 14 [.15 [.45 ] ] [.13 [.16 [.46 ] ] ] ] 56 [. 34 35 36 ] ]\hfill
+			\Tree[.{Dimensión 3} [. [.146 ] [. [.154 ] [.156 ] ] [. [.134 ] [.135 [.465 ] ] [.136 ] ] ] [. [. [.354 ] [.356 ] ] [.364 ] ] ]\\
+			\Tree[.{Dimensión 4} [. [.1546 ] [. [. [.1345 ] [.1346 ] ] [.1356 ] ] ] [.3546 ] ]\hfill
+			\Tree[.{Dimensión 5} 13456 ]
+			
+			Ahora, para cada suceso $S$ de la muestra, se construye su árbol en la dimensión $k-$ésima clasificando sus posibles $\binom{|S|}{k}$ subconjuntos, y se marca en rojo aquellos que aparezcan en cualquiera de los cuatro árboles anteriores sin importar el orden. 
+			
+			\begin{itemize}
+				\item \textbf{Dimensión 2}\\
+				\Tree[.\{1645\} [. [.\rojo{14} ]  [.\rojo{15} [.\rojo{45} ] ] [.\rojo{16} ] ] [. [.\rojo{64} ] [.\rojo{65} ] ] ]\hfill
+				\Tree[.\{1356\} [. [.\rojo{15} ] [.\rojo{13} [.\rojo{16} ] ] ] [.\rojo{56} ] [. [.\rojo{35} ] [.\rojo{36} ] ] ]\hfill
+				\Tree[.\{461\} [ [.\rojo{41} ] [.\rojo{46} ] ] [.\rojo{61} ] ]\\
+				\Tree[.\{4315\} [. [.\rojo{41} ] [.\rojo{45} [.\rojo{15} ] ] [.\rojo{43} ] ] [. [.\rojo{31} ] [.\rojo{35} ] ] ]\hfill
+				\Tree[.\{165\} [. [.\rojo{15} ] [.\rojo{16} ] ] [.\rojo{65} ] ]\hfill
+				\Tree[.\{156\} [. [.\rojo{15} ] [.\rojo{16} ] ] [.\rojo{56} ] ]\hfill
+				\Tree[.\{32\} [.32] ]
+								
+				\item \textbf{Dimensión 3}\\ 
+				\Tree[.\{1645\} [. [.\rojo{145} ] [. [.\rojo{164} ] [.\rojo{165} ] ] ] [.\rojo{645} ] ]\hfill
+				\Tree[.\{1356\} [. [.\rojo{156} ] [. [.\rojo{135} ] [.\rojo{136} ] ] ] [.\rojo{356} ] ]\hfill
+				\Tree[.\{461\} [.\rojo{461} ] ]\\
+				\Tree[.\{4315\} [. [.415 ] [. [.\rojo{431} ] [.\rojo{435} ] ] ] [.\rojo{315} ] ]\hfill
+				\Tree[.\{165\} [.\rojo{165} ] ]\hfill
+				\Tree[.\{156\} [.\rojo{156} ] ]
+				
+				\item \textbf{Dimensión 4}\\
+				\Tree[.\{1645\} [.\rojo{1645} ] ]\hfill
+				\Tree[.\{1356\} [.\rojo{1356} ] ]\hfill
+				\Tree[.\{4315\} [.\rojo{4315} ] ]\hfill
+			\end{itemize}
+			
+			Una vez construidos estos árboles, se hace un recuento de cuáles de sus hojas aparecen en las del grupo de árboles anterior. Los sucesos candidatos serán aquellos que aparezcan $2.4$ veces o más. \\
+			
+			{\centering\Tree[.{Dimensión 2} [. \boxed{14(3)} [.\boxed{15(5)} [.45(2) ] ] [.13(2) [.\boxed{16(4)} [.46(2) ] ] ] ] \boxed{56(4)} [. 34(1) 35(2) 36(1) ] ]}\\
+			\Tree[.{Dimensión 3} [. [.146(2) ] [. [.154(1) ] [.\boxed{156(4)} ] ] [. [.134(1) ] [.135(2) [.465(1) ] ] [.136(1) ] ] ] [. [. [.354(1) ] [.356(1) ] ] [.364(0) ] ] ]\\
+			\Tree[.{Dimensión 4} [. [.1546(1) ] [. [. [.1345(1) ] [.1346(0) ] ] [.1356(1) ] ] ] [.3546(0) ] ]\hfill
+			\Tree[.{Dimensión 5} 13456(0) ]\\
+			
+			En consecuencia, los sucesos que superan el umbral de soporte son 
+			
+			$$
+			\{X, B, C\}, \{X, N\}, \{X, B\}, \{X, C\}, \{B, C\}. 
+			$$
+			
+			Para el cálculo del umbral de confianza, se irán tomando conjuntos $\beta$ y $\alpha$ de forma que se vayan evaluando asociaciones de la forma $\beta \rightarrow \beta - \alpha$ y se pueda aplicar el \Cref{th:ap}. Se selecciona el $\beta$ de mayor dimensión, y para cada $\beta, \alpha \subset \beta$. 
+			
+			\begin{observation}
+				Como el \Cref{th:ap} es de la forma $\lnot p \rightarrow \lnot q$, siempre que se tiene $\lnot p$ se deduce $\lnot q$, pero si se tiene $p$, no siempre se deduce $\lnot q$, por lo que hay que analizar $\forall i \, \alpha'_i \rightarrow \beta - \alpha'_i$.
+				\label{obs:ap}
+			\end{observation}
+			
+			$$
+			\begin{array}{lllcc}
+				\beta = \{X, B, C\} & \alpha = \{X, B\} & \boxed{\{X, B\} \rightarrow \{C\}} & \frac{4}{5} > 0.7 & \checkmark\\
+				\beta = \{X, B, C\} & \alpha'_1 = \{X\} & \{X\} \rightarrow \{B, C\} & \frac{4}{6} < 0.7 & \times\\
+				\beta = \{X, B, C\} & \alpha'_2 = \{B\} & \boxed{\{B\} \rightarrow \{X, C\}} & \frac{4}{5} > 0.7 & \text{!`}\checkmark!\\
+				\beta = \{X, B, C\} & \alpha = \{X, C\} & \boxed{\{X, C\} \rightarrow \{B\}} & \frac{4}{5} > 0.7 & \checkmark\\
+				\beta = \{X, B, C\} & \alpha'_1 = \{X\} & \{X\} \rightarrow \{B, C\} & \text{ya mirada} & \\
+				\beta = \{X, B, C\} & \alpha'_2 = \{C\} & \boxed{\{C\} \rightarrow \{X, B\}} & \frac{4}{5} > 0.7 & \text{!`}\checkmark!\\
+				\beta = \{X, B, C\} & \alpha = \{B, C\} & \boxed{\{B, C\} \rightarrow \{X\}} & \frac{4}{4} > 0.7 & \checkmark\\
+				\beta = \{X, B, C\} & \alpha'_1 = \{B\} & \{B\} \rightarrow \{X, C\} & \text{ya mirada} & \\
+				\beta = \{X, B, C\} & \alpha'_2 = \{C\} & \{C\} \rightarrow \{X, B\} & \text{ya mirada} & \\
+				\beta = \{X, N\} & \alpha = \{X\} & \{X\} \rightarrow \{N\} & \frac{3}{6} < 0.7 & \times\\
+				\beta = \{X, N\} & \alpha = \{N\} & \boxed{\{N\} \rightarrow \{X\}} & \frac{3}{4} > 0.7 & \checkmark\\
+				\beta = \{X, B\} & \alpha = \{X\} & \boxed{\{X\} \rightarrow \{B\}} & \frac{5}{6} > 0.7 & \checkmark\\
+				\beta = \{X, B\} & \alpha = \{B\} & \boxed{\{B\} \rightarrow \{X\}} & \frac{5}{5} > 0.7 & \checkmark\\
+				\beta = \{X, C\} & \alpha = \{X\} & \boxed{\{X\} \rightarrow \{C\}} & \frac{5}{6} > 0.7 & \checkmark\\
+				\beta = \{X, C\} & \alpha = \{C\} & \boxed{\{C\} \rightarrow \{X\}} & \frac{5}{5} > 0.7 & \checkmark\\
+				\beta = \{B, C\} & \alpha = \{B\} & \boxed{\{B\} \rightarrow \{C\}} & \frac{4}{5} > 0.7 & \checkmark\\
+				\beta = \{B, C\} & \alpha = \{C\} & \boxed{\{C\} \rightarrow \{B\}} & \frac{4}{5} > 0.7 & \checkmark
+			\end{array}
+			$$
+			
+			Del resultado obtenido a mano e idéntico al de la función propia programada, se obtiene una clara conclusión. Las dos asociaciones que le faltan por encontrar a la función de \texttt{arules}, son aquellas provenientes de un $\alpha'_i$, es decir, los programadores no aplicaron correctamente el \Cref{th:ap}, ignorando así el caso que se comentó en la \Cref{obs:ap}. 
 		
 		\section{Detección de datos anómalos}
 		
@@ -2765,7 +2972,7 @@
 						
 						En esta función se seleccionan los primeros $k-$vecinos. Obviamente, en primer lugar se eliminan los elementos $\dt(x_i, x_i)$, pues siempre será igual a 0. Esto se logra con la función \texttt{tail} del paquete \texttt{utils} y que permite conservar el resto de distancias. Una vez seleccionados los $k$ más cercanos, se va avanzado sobre el resto de vecinos y se revisa si el siguiente al último debe añadirse debido a que sean iguales, y así sucesivamente hasta encontrar una pareja de distancias diferentes, o no tener más vecinos. Se utiliza la función \texttt{head} del paquete \texttt{utils} para obtener el conjunto $N(x_i, k)$ y se devuelven en un dataframe. \\
 						
-						El siguiente paso es calcular la densidad de cada punto. Esta se realiza mediante la siguiente expresión: 
+						El siguiente paso es calcular la densidad de cada punto. Esta se realiza mediante la siguiente expresión\footnote{Se entenderá por cardinal del conjunto $A$ a $|A|$. }: 
 						
 						$$
 						\ds(x_i, K) = \frac{|N(x_i, K)|}{\displaystyle\sum_{x_j \in N(x_i, K)}\dt(x_i, x_j)}
