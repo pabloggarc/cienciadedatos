@@ -141,7 +141,7 @@
 	
 		\section*{El lenguaje R}\addcontentsline{toc}{section}{El lenguaje R}
 		
-			El lenguaje R, es un software de uso gratuito comúnmente usado en tareas relacionadas con la estadística, como el análisis o visualización de datos; o en general la propia Ciencia de Datos. Para ello cuenta con una gran cantidad de paquetes y herramientas que facilitan el trabajo.  
+			El lenguaje R, es un software de uso gratuito comúnmente usado en tareas relacionadas con la estadística, como el análisis o visualización de datos; o en general en la propia Ciencia de Datos. Para ello cuenta con una gran cantidad de paquetes y herramientas que facilitan el trabajo.   
 			
 			\begin{figure}[H]
 				\centering
@@ -150,7 +150,7 @@
 				\label{fig:logo_R}
 			\end{figure}
 		
-			El CRAN (Comprehensive R Archive Network, \url{https://cran.r-project.org/}) es un repositorio de recursos en línea que se utiliza para facilitar la distribución, el intercambio y el acceso a una amplia gama de software y paquetes relacionados con el lenguaje de programación R. La página web de CRAN sirve como el portal central para acceder a estos recursos y ofrece una variedad de apartados y enlaces útiles para los usuarios de R. A continuación, proporcionamos una descripción de los distintos enlaces a los que se puede acceder desde la página principal del CRAN: 
+			El CRAN (Comprehensive R Archive Network, \url{https://cran.r-project.org/}) es un repositorio de recursos en línea que se utiliza para facilitar la distribución, el intercambio y el acceso a una amplia gama de software y paquetes relacionados con el lenguaje de programación R. La página web de CRAN sirve como portal central para acceder a estos recursos y ofrece una variedad de apartados y enlaces útiles para los usuarios de R. A continuación, proporcionamos una descripción de los distintos enlaces a los que se puede acceder desde la página principal del CRAN:
 			
 			\begin{itemize}
 				\item Mirrors: Esta sección permite a los usuarios seleccionar un espejo (mirror) cercano para descargar paquetes y recursos. Los espejos son servidores que almacenan copias de los paquetes y datos de CRAN, lo que ayuda a mejorar la velocidad de descarga y la disponibilidad de los recursos.
@@ -168,11 +168,11 @@
 				\item Documentation: Aquí los usuarios pueden encontrar documentación esencial relacionada con R. Esto incluye manuales, preguntas frecuentes (FAQs) y contribuciones de la comunidad para ayudar a los usuarios a comprender y utilizar R de manera efectiva.
 			\end{itemize}
 			
-			En R, los paquetes son extensiones de software que contienen funciones, datos y documentación para realizar tareas específicas. Antes de utilizar un paquete, debes instalarlo y cargarlo en tu sesión de R. Algunas de las funciones más útiles para preparar los paquetes de un proyecto son:
+			En R, los paquetes son extensiones de software que contienen funciones, datos y documentación para realizar tareas específicas. Antes de utilizar un paquete, debe ser instalado y posteriormente cargado en la sesión. Algunas de las funciones más útiles para preparar los paquetes de un proyecto son:
 			
 			\begin{itemize}
 				\item \textbf{Paquetes por defecto}: \\
-				Mediante \texttt{getOption("defaultPackages")} se muestra una lista de los paquetes que se cargan automáticamente cuando inicias una sesión de R. Son los paquetes básicos que R carga por defecto. Para cambiar la lista de archivos que R carga por defecto podemos acceder a la siguiente ubicación (instalación de R por defecto):\\\texttt{C:/Program Files/R/R-4.3.1/library/base/R/RProfile}, y modificar el archivo como se observa en el \Cref{cod:rprofile}, añadiendo al vector \texttt{dp} los paquetes que deseemos. 
+				Mediante \texttt{getOption("defaultPackages")} se muestra una lista de los paquetes que se cargan por defecto cuando una sesión de R es iniciada. Para cambiar esta lista de archivos, se debe acceder a la ubicación en la que está instalado R, que por defecto es:\\\texttt{C:/Program Files/R/R-4.3.1/library/base/R/RProfile}, y modificar el archivo como se observa en el \Cref{cod:rprofile}, añadiendo al vector \texttt{dp} los paquetes que deseados.
 				
 				\lstinputlisting[language = R, style = estilo_pablo, firstline = 46, lastline = 54, firstnumber = 46, caption = Modificación en fichero \texttt{Rprofile}, label = cod:rprofile]{C:/Program Files/R/R-4.3.1/library/base/R/Rprofile}
 				
@@ -181,38 +181,38 @@
 				
 				\begin{enumerate}[label = \textbf{\arabic*. }]
 					\item \texttt{install.packages("nombre\_del\_paquete")}\\
-					A esta función se le debe pasar por parámetro el nombre del paquete que se desea instalar.
+					Esta función recibe por parámetro el nombre del paquete que se desea instalar.
 					
 					\item \texttt{install.packages(``ubicacion\_del\_paquete'', rep=NULL)}\\
-					A la función también se le puede pasar por parámetros la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``\texttt{c:/}'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
+					A la función también se le puede pasar por parámetro la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``\texttt{c:/}'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
 					
 					\item \texttt{utils:::menuInstallPkgs()}\\
-					Tras la ejecución de este comando aparecerá una ventana donde se podrá elegir el mirror desde el que se va a descargar el paquete, y tras elegir el mirror (Spain (Madrid) en nuestro caso), aparece otra ventana donde se puede elegir el paquete que se quiere instalar, tras hacer doble click, este se instalará automáticamente.
+					Tras la ejecución de este comando aparecerá una ventana en la que se podrá elegir el mirror desde el que se va a descargar el paquete. Tras elegir el mirror (Spain (Madrid) en este caso), aparece otra ventana donde se puede elegir el paquete que se desea instalar. Posteriormente, haciendo doble click, este se instalará automáticamente.
 				\end{enumerate}
 				
 				\item \textbf{Información de un paquete}: \\
-				Cuando ejecutas \texttt{library(help="nombre\_del\_paquete")}, R te mostrará información detallada sobre el paquete especificado. Esto incluye una descripción del paquete y una lista de las funciones que contiene, junto con sus descripciones.
+				Cuando se ejecuta \texttt{library(help="nombre\_del\_paquete")}, R muestra información detallada sobre el paquete especificado. Esto incluye una descripción del paquete y una lista de las funciones que contiene, junto con sus descripciones.
 				
 				\item \textbf{Carga de paquetes}: \\
-				Si ejecutas \texttt{library(nombre\_del\_paquete)} con el nombre de un paquete, R cargará el paquete en tu sesión para que puedas utilizar sus funciones y objetos.
+				Si se ejecuta \texttt{library(nombre\_del\_paquete)} con el nombre de un paquete, R cargará el paquete en la sesión para que se puedan utilizar sus funciones y objetos.
 				
 				\item \textbf{Lista de paquetes instalados}: \\
-				Al ejecutar \texttt{library()} sin argumentos, R te mostrará una lista de los paquetes que están actualmente cargados en tu sesión de R. Esto te permite verificar qué paquetes están disponibles para su uso.
+				Al ejecutar \texttt{library()} sin argumentos, R mostrará una lista de los paquetes que están actualmente cargados en la sesión de R. Esto permite verificar qué paquetes están disponibles para su uso.
 				
 				\item \textbf{Lista de paquetes cargados}: \\
-				Mediante \texttt{search()} podemos ver un listado completo de los paquetes actualmente cargados en memoria.
+				Mediante \texttt{search()} es posible visualizar un listado completo de los paquetes actualmente cargados en memoria.
 				
 			\end{itemize}
 			
-			A parte, es recomendable descargar y conocer a conciencia el manual y las viñetas de todos los paquetes que usemos en nuestros proyectos (disponible en la página web del CRAN).
+			Además de todo lo dicho, es recomendable descargar y conocer a conciencia el manual y las viñetas de todos los paquetes que sean usados en los proyectos (disponible en la página web del CRAN).
 		
 		\section*{El lenguaje \LaTeX}\addcontentsline{toc}{section}{El lenguaje \LaTeX}
 
-			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado dando una mayor flexibilidad, aunque no sea su objetivo principal. Veremos ahora los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que necesitaremos es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que estamos trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
+			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado, dando una mayor flexibilidad aunque no sea su objetivo principal. Veremos ahora los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que será necesario es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que se está trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
 			
-			Una vez hemos tratado ambos lenguajes, necesitamos entender con qué tipos de extensiones se suelen trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo queremos almacenar nuestro documento, o cómo están almacenadas las dependencias de estos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
+			Una vez tratados ambos lenguajes, es necesario entender con qué tipos de extensiones se suele trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo se desean almacenar los documentos, o cómo están almacenadas algunas dependencias de los mismos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
 			
-			Para ello nos fijaremos en la \Cref{fig:extensiones}. Por ahora nos quedaremos con las extensiones que trabajaremos más a menudo, que serán \texttt{.Rnw}, \texttt{.tex}, y \texttt{.pdf}. La primera de ellas representan los archivos que tienen código \LaTeX{} y R ``mezclado'', la segunda aquellos que contienen código \LaTeX{} puro, y la última nuestro documento final. \\
+			Para ello será necesario fijarse en la \Cref{fig:extensiones}. Por ahora se utilizarán las extensiones con las que se trabajará más a menudo, que serán \texttt{.Rnw}, \texttt{.tex}, y \texttt{.pdf}. La primera de ellas representa los archivos que tienen código \LaTeX{} y R ``mezclado'', la segunda aquellos que contienen código \LaTeX{} puro, y la última el documento final. \\
 			
 			\begin{figure}[H]
 				\centering
@@ -226,9 +226,9 @@
 				\label{fig:extensiones}
 			\end{figure}
 			
-			Existen dos herramientas que nos permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, optaremos por la segunda, pues existieron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr nos ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages("knitr")} en una consola de R. Sweave viene ya por defecto con \texttt{utils}. \\
+			Existen dos herramientas que permiten trabajar con archivos \texttt{.Rnw}, estas son Sweave y Knitr. A pesar de que en la asignatura ha sido propuesta la primera de ellas, se optará por la segunda, pues se encontraron diversos errores al compilar archivos con esta, y al ser más antigua, los documentos finales tenían menos calidad. Knitr ofrece mayor calidad y un mejor formato en el código fuente R mostrado. Para instalarla basta con escribir \texttt{install.packages("knitr")} en una consola de R. Sweave viene ya por defecto en el paquete \texttt{utils}. \\
 			
-			Por último, se explicará cómo hemos agilizado el proceso de trabajo con Knitr y \TeX{}Studio. Lo primero será hacer que R cargue por defecto Knitr, para ello modificaremos el archivo \texttt{Rprofile} en \texttt{libray/base/R} dentro de la carpeta de instalación de R, añadiendo \texttt{knitr} al resto de paquetes que carga por defecto. Una vez hecho esto, iremos a la configuración de \TeX{}Studio, y aquí a \textit{Compilar}. En la zona \textit{Órdenes de usuario}, crearemos una nueva tal y como se ve en la \Cref{fig:orden}, de manera que le digamos dónde están los binarios de R, para que pueda crear un fichero \texttt{.tex}, y posteriormente invocar a nuestro compilador, para obtener nuestro documento en \texttt{.pdf}. \TeX{}Studio se encargará de reemplazar el símbolo \% por el nombre del archivo que le ordenamos compilar. 
+			Por último, se explicará cómo se ha agilizado el proceso de trabajo con Knitr y \TeX{}Studio. Lo primero será hacer que R cargue por defecto Knitr, para ello se modificará el archivo \texttt{Rprofile} en \texttt{libray/base/R} dentro de la carpeta de instalación de R, añadiendo \texttt{knitr} al resto de paquetes que carga por defecto. Una vez hecho esto, es necesario acceder a la configuración de \TeX{}Studio, y aquí a \textit{Compilar}. En la zona \textit{Órdenes de usuario}, se creará una nueva tal y como se ve en la \Cref{fig:orden}, de manera que se indique dónde están los binarios de R, para que pueda crear un fichero \texttt{.tex}, y posteriormente invocar al compilador, para obtener el documento en \texttt{.pdf}. \TeX{}Studio se encargará de reemplazar el símbolo \% por el nombre del archivo que se le ordene compilar.
 			
 			\begin{figure}[H]
 				\centering
@@ -237,7 +237,7 @@
 				\label{fig:orden}
 			\end{figure}
 			
-			Ahora basta modificar el botón verde del IDE para que en vez de invocar al compilador \hologo{pdfLaTeX}, lleve a cabo la instrucción que le hemos dado. Para ello volveremos al menú de compilación en el que nos ubicábamos previamente, y observaremos la sección de \textit{Meta-Órdenes}. Modificaremos el valor del campo \textit{Compilador por defecto}, escribiendo \texttt{txs:///knitr} para que se ejecute la orden que previamente hemos creado, o podemos hacerlo de manera gráfica como se observa en la \Cref{fig:comp}. Ahora bastará pulsar el botón verde o F5 para ver a nuestra izquierda el código de nuestro documento, y a la derecha actualizado, el documento PDF final. 
+			Ahora basta modificar el botón verde del IDE para que en vez de invocar al compilador \hologo{pdfLaTeX}, lleve a cabo la instrucción que se le ha dado. Para ello se accederá al menú de compilación ya visto previamente, y se observará la sección de \textit{Meta-Órdenes}. Se modificará el valor del campo \textit{Compilador por defecto}, escribiendo \texttt{txs:///knitr} para que se ejecute la orden previamente creada. Además, es posible hacerlo de manera gráfica como se observa en la \Cref{fig:comp}. Ahora bastará con pulsar el botón verde o F5 para ver a la izquierda el código de nuestro documento, y a la derecha actualizado, el documento PDF final.
 			
 			\begin{figure}[H]
 				\centering
@@ -246,7 +246,7 @@
 				\label{fig:comp}
 			\end{figure}
 			
-			Por último, para llevar un mejor control de versiones del proyecto, y de coordinación entre los miembros del grupo, se usará un repositorio de GitHub. Añadiremos un archivo \texttt{.gitignore} para no cargar en el repositorio los archivos temporales generados durante la compilación. Otra alternativa que se podría haber usado, es usar Overleaf (aquí usaríamos la extensión \texttt{.Rtex} en vez de \texttt{.Rnw}), ya que no sería necesaria la instalación de ningún software, y también trabaja con Knitr. Sin embargo, la integración de GitHub en Overleaf es de pago, por lo que optamos por usar la configuración explicada hasta el momento, para poder tener un mejor control de versiones sin coste alguno. \\
+			Para llevar un mejor control de versiones del proyecto, y de coordinación entre los miembros del grupo, se usará un repositorio de GitHub. Se ha añadido un archivo \texttt{.gitignore} para no cargar en el repositorio los archivos temporales generados durante la compilación. Otra alternativa que se podría haber usado, es el uso de Overleaf (aquí se usaría la extensión \texttt{.Rtex} en vez de \texttt{.Rnw}), ya que no sería necesaria la instalación de ningún software, y también trabaja con Knitr. Sin embargo, la integración de GitHub en Overleaf es de pago, por lo que se ha optado por usar la configuración explicada hasta el momento, para poder tener un mejor control de versiones sin coste alguno. \\
 			
 			Por otro lado, el profesor explicó cómo abrir un ejemplo de Sweave, cómo pasarlo a un fichero que \LaTeX{} pudiese leer, y cómo compilarlo a PDF. Las instrucciones son las que se verán a continuación, aunque este documento está siendo realizado siguiendo lo explicado previamente. 
 			
@@ -256,7 +256,7 @@
 				tools::texi2pdf("example-1.tex")
 			\end{verbatim}
 			
-			Por último, mencionar que al igual que R posee su repositorio de paquetes (que ya hemos visto que incluye más cosas) llamado CRAN, \LaTeX{} que en realidad es ``un subconjunto'' del lenguaje \TeX{}, también tiene su propio portal llamado CTAN o Comprehensive \TeX{} Archive Network (\url{https://www.ctan.org/}) de donde se descargan los paquetes y otros materiales para el lenguaje. 
+			Por último, mencionar que al igual que R posee su repositorio de paquetes (que como ya se ha visto, contiene más funcionalidades) llamado CRAN, \LaTeX{} que en realidad es ``un subconjunto'' del lenguaje \TeX{}, también tiene su propio portal llamado CTAN o Comprehensive \TeX{} Archive Network (\url{https://www.ctan.org/}) de donde se descargan los paquetes y otros materiales para el lenguaje.
 			
 			\begin{figure}[H]
 				\centering
@@ -267,7 +267,7 @@
 			
 	\chapter{Ejercicios guiados}\pagestyle{fancy}
 	
-		En esta primera parte de esta práctica, repetirán los ejercicios explicados y realizados por el profesor en las clases de laboratorio, utilizando los mismos procedimientos vistos plasmándolos en este documento. 
+		En esta primera parte de la práctica, se repetirán los ejercicios explicados y realizados por el profesor en las clases de laboratorio, utilizando los mismos procedimientos vistos y plasmándolos en este documento.
 	
 		\section{Descripción de los datos}
 		
@@ -275,7 +275,7 @@
 				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cualitativa, nombre, y otra cuantitativa, radio, de los satélites menores de Urano, es decir, aquellos que tienen un radio menor de 50 Km, dichos datos, los primeros cualitativos nominales, y los segundos cuantitativos continuos, son: (Nombre, radio en Km): Cordelia, 13; Ofelia, 16; Bianca, 22; Crésida, 33; Desdémona, 29; Julieta, 42; Rosalinda, 27; Belinda, 34; Luna-1986U10, 20; Calíbano, 30; Luna-999U1, 20; Luna 1999U2, 15.
 			\end{exercise}
 			
-			Para comenzar con la resolución de este ejercicio, deberemos escribir los datos en un fichero \texttt{.txt}, cumpliendo las siguientes normas: 
+			Para comenzar con la resolución de este ejercicio, deberán ser escritos los datos en un fichero \texttt{.txt}, cumpliendo las siguientes normas:
 			
 			\begin{itemize}
 				\item Existirá una tabulación entre dato y dato. 
@@ -285,7 +285,7 @@
 				\item Al escribir nombres, no se deberán introducir espacios. 
 			\end{itemize}
 			
-			Obedeciendo a estas normas, copiamos los datos en un fichero llamado \texttt{satelites.txt}, y lo cargamos en R de la siguiente manera: 
+			Obedeciendo a estas normas, se copian los datos en un fichero llamado \texttt{satelites.txt}, y se carga en R de la siguiente manera:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -311,7 +311,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Ahora en la variable \texttt{s} tenemos un dataframe con los datos de nuestros satélites. En los dataframes se accede por \texttt{[fila, columna]}, y también podemos consultar las dimensiones con la función \texttt{dim}. Sería de esperar que nos dijera que tiene 12 filas (los 12 datos), y 2 columnas (\texttt{nombre} y \texttt{radio}). 
+			Ahora en la variable \texttt{s} se obtiene un dataframe con los datos de los satélites. Se puede acceder a los dataframes a través de \texttt{[fila, columna]}, y también es posible consultar las dimensiones con la función \texttt{dim}. Sería de esperar que esta función diera como salida que el dataframe posee 12 filas (los 12 datos), y 2 columnas (\texttt{nombre} y \texttt{radio}).
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -324,7 +324,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			También podemos ordenar el dataframe, en función de una de las magnitudes (columnas), usando la función \texttt{order} aplicando recursivamente el concepto de acceder por filas y columnas. Veamos un ejemplo, si en \texttt{s} teníamos guardado nuestro dataframe, y queremos ordenar por \texttt{radio}, la manera de hacerlo sería la siguiente: 
+			También es posible ordenar el dataframe, en función de una de las magnitudes (columnas), usando la función \texttt{order} aplicando recursivamente el concepto de acceder por filas y columnas. Véase un ejemplo, si en \texttt{s} se tiene guardado el dataframe, y se desea ordenar por \texttt{radio}, la manera de hacerlo sería la siguiente: 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -350,7 +350,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Podemos introducir nuevos criterios a la ordenación, como por ejemplo, hacerlo en orden descendente. Para esto usaremos la función \texttt{rev}. 
+			Además, es posible introducir nuevos criterios a la ordenación, como por ejemplo, hacerlo en orden descendente. Para esto se utilizará la función \texttt{rev}.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -376,7 +376,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			También suele ser útil conocer cuántos elementos tiene una columna. Podemos averiguarlo con la función \texttt{length}, veamos un ejemplo. 
+			También suele ser útil conocer cuántos elementos tiene una columna. Es posible averiguarlo con la función \texttt{length}, véase un ejemplo.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -389,7 +389,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Otro valor que nos podemos plantear calcular es el rango. Para ello podemos usar las funciones \texttt{max} y \texttt{min}. Debemos tener cuidado con la función \texttt{range} y no confundirnos, pues nos dará los valores máximo y mínimo. 
+			Otro valor que es posible calcular es el rango. Para ello se utilizan las funciones \texttt{max} y \texttt{min}. Es necesario tener cuidado con la función \texttt{range}, pues esta devuelve los valores máximo y mínimo de la columna. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -409,7 +409,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Para una mejor lectura, podemos cambiar la forma de obtener la columna de los radios: 
+			Para una mejor lectura, es posible cambiar la forma de obtener la columna de los radios: 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -433,7 +433,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Sin embargo, al salir de R, la definición de la función se pierde, por lo que deberemos guardarla en un fichero, y posteriormente cargarlo en futuras ejecuciones. Lo haremos de la siguiente manera: 
+			Sin embargo, al salir de R, la definición de la función se pierde, por lo que para mantenerla es necesario guardarla en un fichero, y posteriormente cargarlo en futuras ejecuciones. Esta acción se realiza de la siguiente manera:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -444,7 +444,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Volviendo al estudio de nuestros datos, veamos cómo calcular las diferentes frecuencias. Como en R no existe una función para las frecuencias relativas, se definirá y guardará una propia. 
+			Retomando el estudio de los datos, va a explicarse cómo calcular las diferentes frecuencias. Como en R no existe una función para las frecuencias relativas, se definirá y guardará una propia. 
 			
 			{\small
 \begin{knitrout}
@@ -483,7 +483,7 @@
 \end{knitrout}
 			}
 			
-			Otro valor que podemos calcular es la media aritmética de los datos, para ello se cuenta con la función \texttt{mean}. 
+			Otro valor que es posible calcular es la media aritmética de los datos, para ello se cuenta con la función \texttt{mean}.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -497,7 +497,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Ahora calcularemos la desviación típica, para ello se cuenta con la función \texttt{sd}. 
+			Tras la media, se calculará la desviación típica, para ello se cuenta con la función \texttt{sd}. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -515,7 +515,7 @@
 			$$
 			s = \sqrt{\frac{\displaystyle\sum_{i=0}^n (x_i-\bar{x})^2}{n-1}}
 			$$
-			que es más utilizado en inferencia estadística, porque hace que se parezca más a una campana de Gauss (menos sesgo), mientras que la fórmula vista en clase utiliza un factor de $n$ en vez de $n-1$ en el denominador (dentro de la raíz). Para ello, el profesor lo corrigió de la siguiente manera: 
+			que es más utilizado en inferencia estadística, porque hace que se parezca más a una campana de Gauss (menos sesgo), mientras que la fórmula vista en clase utiliza un factor de $n$ en vez de $n-1$ en el denominador (dentro de la raíz). Para solucionar el problema, el profesor lo corrigió de la siguiente manera: 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -534,7 +534,7 @@
 			s' = \sqrt{s^2\cdot\frac{n-1}{n}}
 			$$
 			
-			Una vez hemos visto cómo se calcula la desviación típica, podremos ver cómo calcular la varianza. Como sabemos que es el cuadrado de la desviación típica, bastaría con elevar al cuadrado si no fuera por el ``fallo'' de $n-1$ visto previamente. En este caso, el profesor lo arregló para el caso particular de la siguiente manera: 
+			Una vez se ha visto cómo se calcula la desviación típica, se va a explicar cómo calcular la varianza. Dado que esta es el cuadrado de la desviación típica, bastaría con elevar al cuadrado si no fuera por el ``fallo'' de $n-1$ visto previamente. En este caso, el profesor lo arregló para el caso particular de la siguiente manera:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -597,7 +597,7 @@
 			\end{pmatrix}
 			$$
 			
-			Además, deberemos indicar las dimensiones de esta matriz $(6\times5)$, que estamos introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} ponemos los nombres a las filas y las columnas. El código es el siguiente. 
+			Además, deberán ser indicadas las dimensiones de esta matriz $(6\times5)$, que se están introduciendo los datos por filas (\texttt{byrow=TRUE}), y con \texttt{dimnames} se asociarán los nombres a las filas y las columnas. El código es el siguiente.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -610,19 +610,15 @@
 \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlnum{6}\hlstd{,} \hlnum{5}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
 \hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,} \hlstr{"suceso2"}\hlstd{,} \hlstr{"suceso3"}\hlstd{,} \hlstr{"suceso4"}\hlstd{,} \hlstr{"suceso5"}\hlstd{,} \hlstr{"suceso6"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in Matrix(c(1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, : no se pudo encontrar la función "{}Matrix"{}}}\begin{alltt}
 \hlstd{muestra}
 \end{alltt}
-\begin{verbatim}
-## 6 x 5 sparse Matrix of class "dgCMatrix"
-##         Pan Agua Café Leche Naranjas
-## suceso1   1    1    .     1        1
-## suceso2   1    1    1     1        .
-## suceso3   1    1    .     1        .
-## suceso4   1    .    1     1        .
-## suceso5   1    1    .     .        .
-## suceso6   .    .    .     1        .
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\end{kframe}
 \end{knitrout}
 			
 			A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
@@ -631,90 +627,57 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{muestrangCMatrix} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\begin{alltt}
 \hlstd{muestrangCMatrix}
 \end{alltt}
-\begin{verbatim}
-## 6 x 5 sparse Matrix of class "ngCMatrix"
-##         Pan Agua Café Leche Naranjas
-## suceso1   |    |    .     |        |
-## suceso2   |    |    |     |        .
-## suceso3   |    |    .     |        .
-## suceso4   |    .    |     |        .
-## suceso5   |    |    .     .        .
-## suceso6   .    .    .     |        .
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\end{kframe}
 \end{knitrout}
 			
-			Sin embargo, para el algoritmo debemos pasarle justo la transpuesta de la matriz con la que trabajamos, por ello se utiliza la función \texttt{t}. 
+			Sin embargo, para el algoritmo, es necesario pasar por parámetro justo la transpuesta de la matriz con la que se trabaja, por ello se utiliza la función \texttt{t}.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transpmuestrangCMatrix} \hlkwb{<-} \hlkwd{t}\hlstd{(muestrangCMatrix)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transpmuestrangCMatrix}
 \end{alltt}
-\begin{verbatim}
-## 5 x 6 sparse Matrix of class "ngCMatrix"
-##          suceso1 suceso2 suceso3 suceso4 suceso5 suceso6
-## Pan            |       |       |       |       |       .
-## Agua           |       |       |       .       |       .
-## Café           .       |       .       |       .       .
-## Leche          |       |       |       |       .       |
-## Naranjas       |       .       .       .       .       .
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\end{kframe}
 \end{knitrout}
 			
-			Podemos consultar algunos datos acerca de los datos de nuestra matriz podemos usar la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} podemos ver un resumen de algunos parámetros básicos de los datos que contiene la matriz. 
+			Es posible consultar algunos datos acerca de la matriz usando la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} se puede ver un resumen de algunos parámetros básicos de los datos que contiene la matriz.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(transpmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transacciones}
 \end{alltt}
-\begin{verbatim}
-## transactions in sparse format with
-##  6 transactions (rows) and
-##  5 items (columns)
-\end{verbatim}
-\begin{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\begin{alltt}
 \hlkwd{summary}\hlstd{(transacciones)}
 \end{alltt}
-\begin{verbatim}
-## transactions as itemMatrix in sparse format with
-##  6 rows (elements/itemsets/transactions) and
-##  5 columns (items) and a density of 0.5666667 
-## 
-## most frequent items:
-##      Pan    Leche     Agua     Café Naranjas  (Other) 
-##        5        5        4        2        1        0 
-## 
-## element (itemset/transaction) length distribution:
-## sizes
-## 1 2 3 4 
-## 1 1 2 2 
-## 
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   1.000   2.250   3.000   2.833   3.750   4.000 
-## 
-## includes extended item information - examples:
-##   labels
-## 1    Pan
-## 2   Agua
-## 3   Café
-## 
-## includes extended transaction information - examples:
-##   itemsetID
-## 1   suceso1
-## 2   suceso2
-## 3   suceso3
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\end{kframe}
 \end{knitrout}
 			
-			Finalmente, podemos ejecutar el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Definimos el soporte con un valor del 50\%, y la confianza con 80\%. 
+			Finalmente, se ejecuta el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Se define en este caso el soporte con un valor del 50\%, y la confianza con 80\%. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -722,53 +685,24 @@
 \hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter} \hlstd{=}
 \hlkwd{list}\hlstd{(}\hlkwc{support} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{confidence} \hlstd{=} \hlnum{0.8}\hlstd{))}
 \end{alltt}
-\begin{verbatim}
-## Apriori
-## 
-## Parameter specification:
-##  confidence minval smax arem  aval originalSupport maxtime support minlen
-##         0.8    0.1    1 none FALSE            TRUE       5     0.5      1
-##  maxlen target  ext
-##      10  rules TRUE
-## 
-## Algorithmic control:
-##  filter tree heap memopt load sort verbose
-##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-## 
-## Absolute minimum support count: 3 
-## 
-## set item appearances ...[0 item(s)] done [0.00s].
-## set transactions ...[5 item(s), 6 transaction(s)] done [0.00s].
-## sorting and recoding items ... [3 item(s)] done [0.00s].
-## creating transaction tree ... done [0.00s].
-## checking subsets of size 1 2 3 done [0.00s].
-## writing ... [7 rule(s)] done [0.00s].
-## creating S4 object  ... done [0.00s].
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in apriori(transacciones, parameter = list(support = 0.5, confidence = 0.8)): no se pudo encontrar la función "{}apriori"{}}}\end{kframe}
 \end{knitrout}
 			
-			Podemos ver el resultado del algoritmo con la función \texttt{inspect}. 
+			Es posible visualizar el resultado del algoritmo con la función \texttt{inspect}. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{inspect}\hlstd{(asociaciones)}
 \end{alltt}
-\begin{verbatim}
-##     lhs              rhs     support   confidence coverage  lift count
-## [1] {}            => {Leche} 0.8333333 0.8333333  1.0000000 1.00 5    
-## [2] {}            => {Pan}   0.8333333 0.8333333  1.0000000 1.00 5    
-## [3] {Agua}        => {Pan}   0.6666667 1.0000000  0.6666667 1.20 4    
-## [4] {Pan}         => {Agua}  0.6666667 0.8000000  0.8333333 1.20 4    
-## [5] {Leche}       => {Pan}   0.6666667 0.8000000  0.8333333 0.96 4    
-## [6] {Pan}         => {Leche} 0.6666667 0.8000000  0.8333333 0.96 4    
-## [7] {Agua, Leche} => {Pan}   0.5000000 1.0000000  0.5000000 1.20 3
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in inspect(asociaciones): no se pudo encontrar la función "{}inspect"{}}}\end{kframe}
 \end{knitrout}
 			
-			Aquí observamos el resultado del algoritmo. Debemos ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, nos indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
+			En esta imagen se observa el resultado del algoritmo. Se deben ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
 			
 			
 		\section{Detección de datos anómalos}
@@ -781,7 +715,7 @@
 				
 				\subsubsection{Caja y bigotes}\label{subsub:caja_bigotes}
 				
-					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers. Para realizar el cálculo de los outliers en clase, se introdujeron los datos en una matriz mediante \texttt{matrix}, luego se transpuso y se pasó a un \texttt{dataframe}. Para esta primera técnica vamos a usar la primera columna (\texttt{resistencia}).
+					Es una herramienta gráfica utilizada en estadística para representar la distribución de un conjunto de datos y detectar sucesos anómalos o outliers. Para realizar el cálculo de los outliers en clase, se introducen los datos en una matriz mediante \texttt{matrix}, posteriormente se debe trasponer y se convertir a un \texttt{dataframe}. Para esta primera técnica se va a utilizar la primera columna (\texttt{resistencia}).
 					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -840,9 +774,9 @@
 \end{kframe}
 \end{knitrout}
 					
-					Como podemos ver en \texttt{\$out}, se obtiene que el suceso outlier es el 14, que como se vio en el ejercicio de la clase de teoría es correcto, pero, si nos fijamos en \texttt{\$conf}, se pueden ver los límites del intervalo, pero estos no coinciden con los vistos en clase. Esto se debe a que al igual que ocurría al usar la función \texttt{sd} para el cálculo de la desviación, R utiliza un factor de $n-1$ en vez de $n$, por lo que no son los valores exactos. \\
+					Como es posible visualizar en \texttt{\$out}, se obtiene que el suceso outlier es el 14, que como se vió en el ejercicio de la clase de teoría es correcto. Sin embargo, si al fijarse en \texttt{\$conf}, se pueden ver los límites del intervalo, y estos no coinciden con los vistos en clase. Esto es debido a que, al igual que ocurría al usar la función \texttt{sd} para el cálculo de la desviación, R utiliza un factor de $n-1$ en vez de $n$, por lo que no son los valores exactos. \\
 					
-					Ahora vamos a hacerlo mediante el cálculo de los cuartiles como se vio en ejercicios anteriores. Además, se han calculado los límites del intervalo mediante la siguiente ecuación.
+					Tras codificar el algoritmo caja y bigotes, se va a realizar la identificación de outliers mediante el cálculo de los cuartiles. Además, se han calculado los límites del intervalo mediante la siguiente ecuación.
 					
 					\begin{equation}
 						(Q_1 - d(Q_3 - Q_1), Q_3 + d(Q_3 - Q_1))
@@ -900,7 +834,7 @@
 				
 				\subsubsection{Media y desviación}
 				
-					Otra manera de buscar sucesos outliers usando técnicas con base estadística es mediante el uso de la media y la desviación típica. Aquí vamos a usar la otra columna del dataframe (\texttt{densidad}), mediante el uso de las funciones \texttt{mean} y \texttt{sd} sacamos ambos valores, que unimos en los límites del intervalo mediante la siguiente ecuación.
+					Otra forma de buscar sucesos outliers utilizando técnicas con base estadística es mediante el uso de la media y la desviación típica. Para mostrar esta técnica, se va a utilizar la otra columna del dataframe (\texttt{densidad}). A través el uso de las funciones \texttt{mean} y \texttt{sd} se obtienen ambos valores, que son unidos en los límites del intervalo mediante la siguiente ecuación.
 					
 					\begin{equation}
 						(\bar{x}_a - d\cdot s_a, \bar{x}_a + d\cdot s_a)
@@ -930,7 +864,7 @@
 \end{kframe}
 \end{knitrout}
 					
-					Se puede ver que los valores inferior y superior del intervalo no son iguales que en el ejercicio que realizado en clase, esto se debe a que, como ya se vio, la desviación típica se calcula con un factor de $n-1$ en vez de $n$, por lo que arreglando el cálculo de la desviación quedaría así.
+					Se observa que los valores inferior y superior del intervalo no son iguales que en el ejercicio realizado en clase, esto se debe a que, como ya se vio, la desviación típica se calcula con un factor de $n-1$ en vez de $n$, por lo que arreglando el cálculo de la desviación quedaría así.
 					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1023,9 +957,9 @@
 \end{kframe}
 \end{knitrout}
 					
-					Por último, se itera cada punto de la matriz de distancias ordenadas y comprobamos si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
+					Por último, se itera cada punto de la matriz de distancias ordenadas y se comprueba si el elemento $k-$éismo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
 					
-					En el código se puede ver que se elige el elemento 4 en vez del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que los descartamos en el conteo de los \texttt{k} elementos.
+					En el código se puede ver que se elige el elemento 4 en lugar del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que quedan descartados en el conteo de los \texttt{k} elementos.
 					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1044,13 +978,13 @@
 \end{kframe}
 \end{knitrout}
 					
-					Podemos ver que como salida se obtiene que el punto 4 es un suceso anómalo o outlier, al igual que ocurría en el ejercicio resuelto en teoría.
+					Se obtiene como salida que el punto 4 es un suceso anómalo o outlier, al igual que ocurría en el ejercicio resuelto en teoría.
 				
 				\subsubsection{Algoritmo LOF}
 				
 					Como último ejercicio realizado en clase, se ha empleado el algoritmo LOF o \textsc{Local Outlier Factor} para identificar outliers basado en distancias, que evalúa la densidad local de puntos en relación con sus vecinos, identificando valores anómalos en regiones menos densas que el entorno circundante.\\
 					
-					Se obtiene una matriz de distancias haciendo uso de la función \texttt{dist}, pero en este caso se pasa como parámetro el método que queremos que sea usado para calcular la distancia (\texttt{method="manhattan"}), en este caso el método \textit{Manhattan}, que se calcula de la siguiente manera.
+					Se obtiene una matriz de distancias haciendo uso de la función \texttt{dist}, pero en este caso se pasa como parámetro el método deseado para calcular la distancia (\texttt{method="manhattan"}), en este caso \textit{Manhattan}, que se ejecuta de la siguiente forma.
 					
 					$$
 					\dt(x_i, x_j) = |x_{i_1} - x_{j_1}| + |x_{i_2} - x_{j_2}|
