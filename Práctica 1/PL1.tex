@@ -1082,7 +1082,7 @@
 				El primer conjunto de datos, que se empleará para realizar el análisis de descripción de datos, estará formado por datos de una característica cuantitativa, distancia, desde el domicilio de cada estudiantes hasta la Universidad, dichos datos, cuantitativos continuos, son: 16.5, 34.8, 20.7, 6.2, 4.4, 3.4, 24, 24, 32, 30, 33, 27, 15, 9.4, 2.1, 34, 24, 12, 4.4, 28, 31.4, 21.6, 3.1, 4.5, 5.1, 4, 3.2, 25, 4.5, 20, 34, 12, 12, 12, 12, 5, 19, 30, 5.5, 38, 25, 3.7, 9, 30, 13, 30, 30, 26, 30, 30, 1, 26, 22, 10, 9.7, 11, 24.1, 33, 17.2, 27, 24, 27, 21, 28, 30, 4, 46, 29, 3.7, 2.7, 8.1, 19, 16.
 			\end{exercise}
 			
-			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia} (km) para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, guardamos el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla.\\
+			Para comenzar, se han introducido todos los datos en un fichero CSV. Para realizar este fichero se ha abierto un fichero Excel y se han ido introduciendo los datos en la primera columna. Cabe destacar que la primera fila no corresponde a ningún valor ya que se ha puesto \texttt{Distancia} (km) para mantener la estructura con respecto al ejercicio guiado. Una vez han sido introducidos todos los datos, se guarda el fichero con extensión \texttt{.csv}. Para leer este fichero dentro de R se hace uso de la función \texttt{read.csv}, perteneciente al paquete por defecto \texttt{utils}. Esta función en realidad es un uso diferente de la función \texttt{read.table} orientado a la lectura de ficheros CSV. Esta función lee el archivo en formato tabla y a partir de él crea un dataframe haciendo corresponder las filas y las columnas de la tabla.\\
 			
 			La función empleada ha sido \texttt{read.csv} primeramente porque es un fichero CSV y además porque está delimitado por comas (en caso de haber estado delimitado por punto y coma se debería haber usado \texttt{read.csv2}. Se observa en la siguiente línea de código cómo se ha creado un archivo \texttt{distancia\_universitarios.csv} siguiendo la estructura mencionada previamente. Con este fichero creado basta con llamar a la función \texttt{read.csv} pasando como parámetro el fichero. Si el archivo estuviera en otro directorio, habría que pasar por parámetro la ruta donde se encuentra dicho archivo.
 			
@@ -1171,9 +1171,9 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se leerán dos datos en vez de uno.\\ 
+			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se tomará para cada dato la parte entera y la parte decimal del mismo como dos datos en vez de uno.\\ 
 			
-			Como se va a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, podemos definirla en una variable nueva a la que llamaremos \texttt{distancias}, de tal forma que no se tenga que estar pasando \texttt{fichero\$Distancia} repetidamente.
+			Como se va a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, se puede definir en una variable nueva llamada \texttt{distancias}, de tal forma que no se tenga que estar pasando \texttt{fichero\$Distancia} repetidamente.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1183,7 +1183,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Para conocer la longitud de \texttt{distancias}, se ha decidido elaborar una función propia, la cual nos devolverá un escalar con el número de elementos que contenga nuestra lista (distancias en este caso). 
+			Para conocer la longitud de \texttt{distancias}, se ha decidido elaborar una función propia, la cual devolverá un escalar con el número de elementos que contenga la lista (distancias en este caso). 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1199,7 +1199,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como veremos más adelante. Veamos cuántas distancias se tienen:
+			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como se verá más adelante. Llamando a la función se visualiza el número de distancias que se tienen:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1212,9 +1212,9 @@
 \end{kframe}
 \end{knitrout}
 			
-			Observamos se tienen 73 elementos, es decir, 73 distancias. La próxima utilidad que se necesita es la ordenación de la lista de distancias. Para ello se ha elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando el método de la burbuja. \\
+			Se observa que se tienen 73 elementos, es decir, 73 distancias. La próxima utilidad que se necesita es la ordenación de la lista de distancias. Para ello se ha elaborado una función que ordenará la lista en sentido ascendente o descendente utilizando el método de la burbuja. \\
 			
-			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, tendremos por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. Esto se consigue en un tiempo $\mathcal{O}(n^2)$. La función que realiza este método de ordenación es la siguiente:
+			El método de la burbuja consiste en ir evaluando por pares todos los elementos de una lista, de tal forma que se vayan reposicionando según el sentido en el que se esté ordenando. En caso de ir ordenando en sentido ascendente, el mayor elemento de la lista se irá reposicionando hasta llegar a la derecha del todo. En caso de hacerlo en sentido descendente, el elemento que quedará a la derecha del todo será el menor. Conforme se vaya avanzando, se tendrá por cada iteración un elemento más colocado a la derecha del todo, y así sucesivamente hasta que todos los elementos queden ordenados. Esto se consigue en un tiempo $\mathcal{O}(n^2)$. La función que realiza este método de ordenación es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1241,14 +1241,13 @@
 			
 			Además, el algoritmo de ordenación de la burbuja hace uso de la variable \texttt{direccion}, la cual adquiere los valores de 1 (en sentido ascendente) y $-1$ (en sentido descendente). Esto se consigue con la función \texttt{ifelse} del paquete \texttt{base}, a la cual se le pasa un valor booleano y dos valores. En función del valor booleano, si este es \texttt{TRUE} se coge el primer valor y si es \texttt{FALSE} el segundo. El valor escogido es asignado a la variable \texttt{direccion}. Esta cambiará o no el signo de los elementos de la lista que se está ordenando. En los números positivos, cuanto mayor sea el valor mayor será este, y en los negativos al revés. Si se ordena una lista de números negativos quedará a la derecha del todo el menor valor al ser este el número mayor. Esto se puede generalizar al sentido de ordenación de la lista.\\
 			
-			Hagamos la prueba con la lista de distancias:
+			Se comprueba el funcionamiento de esta función haciendo la prueba con la lista de distancias:
 			
 			{\small 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{distancias_asc} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias)}
-\hlstd{distancias_asc}
+\hlstd{(distancias_asc} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ##  [1]  1.0  2.1  2.7  3.1  3.2  3.4  3.7  3.7  4.0  4.0  4.4  4.4  4.5  4.5  5.0
@@ -1258,8 +1257,7 @@
 ## [61] 30.0 30.0 30.0 30.0 31.4 32.0 33.0 33.0 34.0 34.0 34.8 38.0 46.0
 \end{verbatim}
 \begin{alltt}
-\hlstd{distancias_desc} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias,} \hlnum{FALSE}\hlstd{)}
-\hlstd{distancias_desc}
+\hlstd{(distancias_desc} \hlkwb{=} \hlkwd{bubble}\hlstd{(distancias,} \hlnum{FALSE}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ##  [1] 46.0 38.0 34.8 34.0 34.0 33.0 33.0 32.0 31.4 30.0 30.0 30.0 30.0 30.0 30.0
@@ -1272,7 +1270,7 @@
 \end{knitrout}
 			}
 			
-			Con la lista ordenada, se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que hayamos ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
+			Con la lista ordenada, se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que se haya ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1290,8 +1288,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{rango_dist} \hlkwb{=} \hlkwd{rank}\hlstd{(distancias)}
-\hlstd{rango_dist}
+\hlstd{(rango_dist} \hlkwb{=} \hlkwd{rank}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 45
@@ -1299,7 +1296,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Ahora se realizará el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente se crea una función para cada una. La primera que realizaremos y en la que se basará el resto, será la frecuencia absoluta. El código de la función es el siguiente:
+			Ahora se realizará el cálculo de las frecuencias absoluta y relativa y sus respectivas acumuladas. Para ello, nuevamente se crea una función para cada una. La primera que se va a realizar y en la que se basará el resto, será la frecuencia absoluta. El código de la función es el siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1328,16 +1325,15 @@
 \end{kframe}
 \end{knitrout}
 			
-			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, lo se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que contiene ambas listas de elementos y sus correspondientes frecuencias.\\
+			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que es el resultado de la matriz previa (la lista de todos los elementos de la muestra) y una lista de elementos con sus correspondientes frecuencias a modo de fila concatenada.\\
 			
-			Para esta función se han utilizado las funciones de \texttt{append} (paquete \texttt{base}) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Comprobamos las frecuencias absolutas:
+			Para esta función se han utilizado las funciones de \texttt{append} (paquete \texttt{base}) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Se comprueban las frecuencias absolutas:
 			
 			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_abs}
+\hlstd{(frecuencia_abs} \hlkwb{=} \hlkwd{absolute_freq}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ##             [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
@@ -1360,7 +1356,7 @@
 \end{knitrout}
 			}
 		
-			Una vez realizadas las frecuencias absolutas pasaremos a realizar las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo se disponen de todas las herramientas, ya que se tiene la función \texttt{len}, que dice cuántos elementos hay, y la función de frecuencias absolutas que acabamos de realizar. Se puede codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que se ha visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
+			Una vez realizadas las frecuencias absolutas se van a realizar las frecuencias relativas. La frecuencia relativa no es más que la frecuencia absoluta de un elemento dividido entre el total de elementos. Para realizar este cálculo se disponen de todas las herramientas, ya que se tiene la función \texttt{len}, que dice cuántos elementos hay, y la función de frecuencias absolutas que se acaba de realizar. Se puede codificar otra función que devuelva una matriz (con \texttt{rbind} al igual que se ha visto en el ejercicio anterior) con los elementos distintos de la lista y su frecuencia absoluta dividida entre la longitud de la misma. Siguiendo esta idea, el código de la función es el siguiente.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1381,8 +1377,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{frecuencia_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_rel}
+\hlstd{(frecuencia_rel} \hlkwb{=} \hlkwd{relative_freq}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ##                [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
@@ -1417,7 +1412,7 @@
 \end{knitrout}
 			}
 			
-			Por último, elaboraremos dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acumulada y la frecuencia relativa acumulada son respectivamente los siguientes:
+			Por último, se elaborarán dos funciones para las frecuencias acumuladas absoluta y relativa. Con todas las frecuencias de cada elemento y la lista ordenada se puede iterar la lista de frecuencias e ir sumando para cada elemento la suma de las frecuencias de los elementos menores o iguales al elemento del que se está calculando. Dependiendo de qué frecuencia acumulada se esté calculando se tendrá que trabajar con la función de frecuencias absolutas (\texttt{absolute\_freq}) o con la de frecuencias relativas (\texttt{relative\_freq}). Se irá iterando cada elemento y se irá creando un nuevo vector con la frecuencia acumulada. Los códigos de las funciones que realizan la frecuencia absoluta acumulada y la frecuencia relativa acumulada son respectivamente los siguientes:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1451,14 +1446,13 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como se puede observar es el mismo código solo que en uno se trabajan con las frecuencias absolutas y en el otro con las relativas. Comprobamos su funcionamiento:
+			Como se puede observar es el mismo código solo que en uno se trabajan con las frecuencias absolutas y en el otro con las relativas. Se comprueba su funcionamiento:
 			
 			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{frecuencia_abs_acum} \hlkwb{=} \hlkwd{acum_absolute_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_abs_acum}
+\hlstd{(frecuencia_abs_acum} \hlkwb{=} \hlkwd{acum_absolute_freq}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ##                  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
@@ -1478,8 +1472,7 @@
 ## acum_abs_fvalues    68    70  71.0    72    73
 \end{verbatim}
 \begin{alltt}
-\hlstd{frecuencia_rel_acum} \hlkwb{=} \hlkwd{acum_relative_freq}\hlstd{(distancias)}
-\hlstd{frecuencia_rel_acum}
+\hlstd{(frecuencia_rel_acum} \hlkwb{=} \hlkwd{acum_relative_freq}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ##                        [,1]       [,2]       [,3]       [,4]       [,5]
@@ -1516,7 +1509,35 @@
 			
 			Se puede comprobar que son correctos, ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
 			
-			Prosiguiendo con el análisis de datos, se tiene que obtener la moda del conjunto de datos. Para ello se ha elaborado una función que nos calculará este valor. Ayudándonos de las frecuencias absolutas, se pueden iterar y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Se va iterando la frecuencia de cada elemento diferente de la lista y se comprueba si su frecuencia es la mayor hasta el momento. En caso de serlo, la moda temporal corresponderá a ese elemento. Así observaremos todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
+			Prosiguiendo con el análisis de datos, se tiene que obtener la media aritmética del conjunto de datos. Para ello, se propone la siguiente función, la cual va a sumar todos los elementos de la muestra, y ese resultado se divide entre el número total de elementos de la muestra.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fcd_mean} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
+        \hlstd{add} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(list)) \{}
+                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{list[i]}
+        \hlstd{\}}
+        \hlstd{add} \hlopt{/} \hlkwd{len}\hlstd{(list)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+			
+			Se comprueba el funcionamiento de esta función, obteniendo una media de  18.53.
+			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(media_aritm} \hlkwb{=} \hlkwd{fcd_mean}\hlstd{(distancias))}
+\end{alltt}
+\begin{verbatim}
+## [1] 18.53425
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+			También se ha de calcular la moda del conjunto de datos. Para ello se ha elaborado una función que calculará este valor. Con ayuda de las frecuencias absolutas, se pueden iterar y buscar la mayor frecuencia, cuyo elemento asociado será la moda. Se va iterando la frecuencia de cada elemento diferente de la lista y se comprueba si su frecuencia es la mayor hasta el momento. En caso de serlo, la moda temporal corresponderá a ese elemento. Así se observarán todos los elementos, devolviendo después de terminar la iteración de la lista el elemento con mayor frecuencia, la moda. El código que incluye esta funcionalidad es el siguiente:
 			
 			{\small
 \begin{knitrout}
@@ -1546,8 +1567,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{moda} \hlkwb{=} \hlkwd{mode}\hlstd{(distancias)}
-\hlstd{moda}
+\hlstd{(moda} \hlkwb{=} \hlkwd{mode}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 30
@@ -1555,11 +1575,11 @@
 \end{kframe}
 \end{knitrout}
 		
-			Se observa que la moda del conjunto de distancias es 30. Se puede comprobar que es correcto si observamos las frecuencias absolutas, ya que el elemento más que tiene es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos, el algoritmo devolverá el elemento de menor magnitud al iterar de menor a mayor elemento.\\
+			Se observa que la moda del conjunto de distancias es 30. Se puede comprobar que es correcto si se observan las frecuencias absolutas, ya que el elemento que más veces aparece es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos, el algoritmo devolverá el elemento de menor magnitud al iterar de menor a mayor elemento.\\
 			
 			El siguiente análisis que se hará es el de la mediana, que se ha visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor se tendrá que observar la paridad del número total de datos. Para saber si $n$ es par, basta con calcular $n\pmod{2}$. Si $n \equiv 0 \pmod{2}$ será par, y si $n\pmod{2} \equiv 1$, será impar. \\
 			
-			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente tendremos que coger el elemento $\frac{n+1}{2}$.\\
+			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente se tendrá que coger el elemento $\frac{n+1}{2}$.\\
 			
 			Se han englobado estos cálculos en una función, donde se comprueba si se está ante un número de elementos par o impar, y se accede a los elementos correspondientes. La función es la siguiente:
 			
@@ -1585,8 +1605,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{mediana} \hlkwb{=} \hlkwd{median}\hlstd{(distancias)}
-\hlstd{mediana}
+\hlstd{(mediana} \hlkwb{=} \hlkwd{median}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 20
@@ -1596,13 +1615,13 @@
 			
 			Se observa que el valor medio es 20. Esto es correcto, ya que si se observa el conjunto ordenado, se ve que existen 73 datos, luego $\tilde{x}$ será el elemento $x_{\frac{73+1}{2}} = x_{37} = 20$, el valor obtenido como mediana. \\
 			
-			Tras haber codificado las medidas de tendencia central, se estudiarán dos medidas de dispersión. La primera de las medidas que se van a calcular es la desviación típica. Para ello se ha codificado la siguiente función:
+			A continuación se estudiarán dos medidas de dispersión. La primera de las medidas que se van a calcular es la desviación típica. Para ello se ha codificado la siguiente función:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{standard_dev} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
-        \hlstd{mean} \hlkwb{=} \hlkwd{mean}\hlstd{(list)}
+        \hlstd{mean} \hlkwb{=} \hlkwd{fcd_mean}\hlstd{(list)}
         \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
         \hlstd{add} \hlkwb{=} \hlnum{0}
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
@@ -1625,8 +1644,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{desviacion} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(distancias)}
-\hlstd{desviacion}
+\hlstd{(desviacion} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 11.23204
@@ -1657,8 +1675,7 @@
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{varianza} \hlkwb{=} \hlkwd{variance}\hlstd{(distancias)}
-\hlstd{varianza}
+\hlstd{(varianza} \hlkwb{=} \hlkwd{variance}\hlstd{(distancias))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 126.1587
@@ -1704,37 +1721,32 @@
 				\item Siempre se cumplirá que $0 < c < 1$. 
 			\end{itemize}
 			
-			En caso de que $nc \not \in \mathbb{N}$ se trabajará con $\left\lfloor nc \right\rfloor$. Para calcularla se ha hecho uso de la función \texttt{floor} perteneciente al paquete \texttt{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si aplicamos esta función a $4.99$, devolverá 4, pues $\left\lfloor4.99\right\rfloor = 4$.\\
+			En caso de que $nc \not \in \mathbb{N}$ se trabajará con $\left\lfloor nc \right\rfloor$. Para calcularla se ha hecho uso de la función \texttt{floor} perteneciente al paquete \texttt{base}. Esta función recoge como parámetro un número y devuelve su aproximación en número entero redondeado hacia abajo. Por ejemplo, si se aplica esta función a $4.99$, devolverá 4, pues $\left\lfloor4.99\right\rfloor = 4$.\\
 			
 			Con esta función se podrán calcular cuantiles, entre los que se incluyen cuartiles, deciles, percentiles, etc. Para probar la función se calculan los tres cuartiles $\frac{1}{4}, \frac{2}{4}$ y $\frac{3}{4}$.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{cuartil1} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.25}\hlstd{)}
-\hlstd{cuartil2} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.5}\hlstd{)}
-\hlstd{cuartil3} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.75}\hlstd{)}
-\hlstd{cuartilerr} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,} \hlopt{-}\hlnum{0.2}\hlstd{)}
-
-\hlstd{cuartil1}
+\hlstd{(cuartil1} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.25}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 8.1
 \end{verbatim}
 \begin{alltt}
-\hlstd{cuartil2}
+\hlstd{(cuartil2} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.5}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 20
 \end{verbatim}
 \begin{alltt}
-\hlstd{cuartil3}
+\hlstd{(cuartil3} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,}\hlnum{0.75}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 28
 \end{verbatim}
 \begin{alltt}
-\hlstd{cuartilerr}
+\hlstd{(cuartilerr} \hlkwb{=} \hlkwd{quant}\hlstd{(distancias,} \hlopt{-}\hlnum{0.2}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
 ## NULL
@@ -1742,7 +1754,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Se observa que los valores de $\tilde{x}_{\frac{1}{4}}, \tilde{x}_{\frac{2}{4}}, \tilde{x}_{\frac{3}{4}}$ son $8.1, 20$ y $28$. Además, se ha probado a meter un valor de $c$ no válido y verificamos que efectivamente se devuelve \texttt{NULL}, ya que ese cálculo no sería lógicamente correcto. También se comprueba que $\tilde{x}_{\frac{2}{4}} = \tilde{x}$ que se ha calculado previamente. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
+			Se observa que los valores de $\tilde{x}_{\frac{1}{4}}, \tilde{x}_{\frac{2}{4}}, \tilde{x}_{\frac{3}{4}}$ son $8.1, 20$ y $28$. Además, se ha probado a meter un valor de $c$ no válido y se verifica que efectivamente se devuelve \texttt{NULL}, ya que ese cálculo no sería lógicamente correcto. También se comprueba que $\tilde{x}_{\frac{2}{4}} = \tilde{x}$ que se ha calculado previamente. Ambos valores deben coincidir ya que hacen referencia al mismo elemento que realiza la misma división de los datos.
 			
 		\section{Asociación}
 		
@@ -1750,7 +1762,7 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
 			\end{exercise}
 			
-			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$. Por otro lado, la diferencia de dos conjuntos $A \backslash B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$. Como función auxiliar también ser hará uso de la función \texttt{len}, explicada en la \Cref{sec:descrip_auto}.
+			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$. Por otro lado, la diferencia de dos conjuntos $A \backslash B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$. Como función auxiliar también se hará uso de la función \texttt{len}, explicada en la \Cref{sec:descrip_auto}.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1778,7 +1790,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos, se hará uso de las funciones \texttt{get\_elements} y \texttt{get\_table}. 
+			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Se hará uso de las funciones \texttt{get\_elements} y \texttt{get\_table}. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1841,7 +1853,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			A continuación se va a realizar una función que cuente las apariciones de una serie de elementos en los sucesos. Se sumará uno al contador cuando todos los elementos aparezcan en el mismo suceso. La función es la siguiente:
+			A continuación se va a realizar una función que cuente las apariciones de una serie de sucesos en la muestra. Se sumará uno al contador cuando todos los elementos del suceso que se está estudiando aparezcan en el mismo suceso de la muestra. La función es la siguiente:
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1878,7 +1890,7 @@
 				\end{equation*}
 			\end{definicion}
 			
-			Como podemos observar, la función \texttt{count\_appereance} que se había codificado previamente, será de ayuda para calcular el soporte, de forma que ahora basta dividir el resultado de esta por el número de sucesos de la muestra tal y como se hace en la función \texttt{support}. 
+			Como se puede observar, la función \texttt{count\_appereance} que se había codificado previamente, será de ayuda para calcular el soporte, de forma que ahora basta dividir el resultado de esta por el número de sucesos de la muestra tal y como se hace en la función \texttt{support}. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1910,7 +1922,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Una vez calculados aquellos sucesos elementales que superan el umbral del soporte, deberemos aplicar el método $F_{k-1} \times F_{k-1}$ de \texttt{apriori-gen} para construir los conjuntos candidatos de dimensiones superiores. En cada iteración del algoritmo, este toma dos sucesos de dimensión $k-1$, $\alpha = \{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}\}$ y $\beta = \{\beta_1, \beta_2, \ldots, \beta_{k-1}\}$ para formar un tercer conjunto de dimensión $k$ de la forma $\{\alpha_1, \alpha_2, \ldots, \alpha_{k-2}, \alpha_{k-1}, \beta_{k-1}\}$ o $\{\beta_1, \beta_2, \ldots, \beta_{k-2}, \beta_{k-1}, \alpha_{k-1}\}$. En definitiva, se calcula $\alpha \cup \beta$ sólo si se cumplen las siguientes condiciones: 
+			Una vez calculados aquellos sucesos elementales que superan el umbral del soporte, se deberá aplicar el método $F_{k-1} \times F_{k-1}$ de \texttt{apriori-gen} para construir los conjuntos candidatos de dimensiones superiores. En cada iteración del algoritmo, este toma dos sucesos de dimensión $k-1$, $\alpha = \{\alpha_1, \alpha_2, \ldots, \alpha_{k-1}\}$ y $\beta = \{\beta_1, \beta_2, \ldots, \beta_{k-1}\}$ para formar un tercer conjunto de dimensión $k$ de la forma $\{\alpha_1, \alpha_2, \ldots, \alpha_{k-2}, \alpha_{k-1}, \beta_{k-1}\}$ o $\{\beta_1, \beta_2, \ldots, \beta_{k-2}, \beta_{k-1}, \alpha_{k-1}\}$. En definitiva, se calcula $\alpha \cup \beta$ sólo si se cumplen las siguientes condiciones: 
 			
 			\begin{itemize}
 				\item $\forall i \leq k-2, \,\,\, \alpha_i = \beta_i$
@@ -1953,7 +1965,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Como veremos a continuación al explicar el funcionamiento del algoritmo, necesitaremos calcular el número combinatorio $\binom{n}{k}$, que representa el número de subconjuntos de tamaño $k$ que tiene un conjunto de tamaño $n$. Para realizar su cálculo, se ha programado un algoritmo de programación dinámica que se ejecuta en un tiempo de $\mathcal{O}(n^2)$. En primer lugar, el número combinatorio se define como
+			Como se verá a continuación al explicar el funcionamiento del algoritmo, se necesitará calcular el número combinatorio $\binom{n}{k}$, que representa el número de subconjuntos de tamaño $k$ que tiene un conjunto de tamaño $n$. Para realizar su cálculo, se ha programado un algoritmo de programación dinámica que se ejecuta en un tiempo de $\mathcal{O}(n^2)$. En primer lugar, el número combinatorio se define como
 			
 			$$
 			\binom{n}{k} = \frac{n!}{k!(n-k)!}
@@ -2044,7 +2056,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la \Cref{df:cf}, se implementa con la función previamente mostrada \texttt{confidence}. 
+			De la misma manera que se ha necesitado calcular el soporte, también se necesitará calcular la confianza, definida como se muestra en la \Cref{df:cf}. Se implementa con la función previamente mostrada \texttt{confidence}. 
 			
 			\begin{definicion}{Confianza}{cf}
 				\begin{equation*}
@@ -2141,9 +2153,7 @@
 				Sean dos conjuntos $A$ y $B$, si la asociación $A \rightarrow B - A$ no supera el umbral de confianza, entonces cualquier asociación $A' \rightarrow B - A'$, donde $A'$ es cualquier subconjunto de $A$ $(A' \subseteq A)$, tampoco la alcanzará. 
 			\end{teorema}
 			
-			La función \texttt{ap\_genrules} irá marcando qué asociaciones superan el umbral de confianza. Para ello, añade al dataframe de \texttt{get\_associations} una columna en la que ``marcar'' si cada asociación pasa el umbral de confianza $(\checkmark)$ o no $(\times)$. Para cada asociación de la forma $A \rightarrow B - A$ se toman los conjuntos $A$ cuyo tamaño sea mayor, y se obtienen los conjuntos $B$ y $B - A$ correspondientes para si dicha asociación había sido marcada con $\checkmark$ o $\times$. En caso de estar marcada como $\checkmark$ se pasa a la siguiente asociación, y en caso contrario, se calcula si supera el umbral de confianza establecido (marcándola como $\checkmark$) y si no lo hace, se aplica el \Cref{th:ap}. Finalmente, se devuelve en un dataframe aquellas asociaciones del dataframe marcadas con $\checkmark$ mediante la función \texttt{subset}, del paquete \texttt{base}. \\
-			
-			Finalmente, combinamos todas las funciones explicadas anteriormente en una nueva función llamada \texttt{fcd\_apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza. 
+			La función \texttt{ap\_genrules} irá marcando qué asociaciones superan el umbral de confianza. Para ello, añade al dataframe de \texttt{get\_associations} una columna en la que ``marcar'' si cada asociación pasa el umbral de confianza $(\checkmark)$ o no $(\times)$. Para cada asociación de la forma $A \rightarrow B - A$ se toman los conjuntos $A$ cuyo tamaño sea mayor, y se obtienen los conjuntos $B$ y $B - A$ correspondientes para si dicha asociación había sido marcada con $\checkmark$ o $\times$. En caso de estar marcada como $\checkmark$ se pasa a la siguiente asociación, y en caso contrario, se calcula si supera el umbral de confianza establecido (marcándola como $\checkmark$) y si no lo hace, se aplica el \Cref{th:ap}. Finalmente, se devuelve en un dataframe aquellas asociaciones del dataframe marcadas con $\checkmark$ mediante la función \texttt{subset}, del paquete \texttt{base}. \\ 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2161,7 +2171,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$.
+			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. Aquí se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left_side} y \texttt{right_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2194,6 +2204,8 @@
 \end{kframe}
 \end{knitrout}
 			
+			Finalmente, se combinan todas las funciones explicadas anteriormente en una nueva función llamada \texttt{fcd\_apriori} que ejecuta el propio algoritmo dados los datos de la muestra, el umbral de soporte, y el de confianza. Construye la matriz de elementos, deshecha aquellos sucesos elementales que no superan el umbral de soporte, muestra todas las combinaciones y asociaciones posibles, y finalmente filtra aquellas que superan el umbral de confianza.
+			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2216,7 +2228,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Finalmente, se observan una lista de las asociaciones que han superado los umbrales de soporte y confianza.
+			Con todo el algoritmo programado, se procede a ponerlo en práctica con los datos del enunciado, un umbral de soporte del 40\% y un umbral de confianza del 90\%. Se observa la impresión de la lista de las asociaciones que han superado los umbrales de soporte y confianza en base al algoritmo que se ha realizado.
 		
 		\section{Detección de datos anómalos}
 		
@@ -2226,9 +2238,9 @@
 					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.
 				\end{exercise}
 				
-				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  Si recordamos, en la \Cref{sec:descrip_auto}, se han realizado nuestras propias funciones que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes.\\
+				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) que están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  En la \Cref{sec:descrip_auto} se han realizado funciones propias que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes.\\
 				
-				En primer lugar se van a introducir los datos. Para ello se hará tal y se ha visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para \texttt{velocidad} y otra para \texttt{temperatura}) y tantas filas como entradas de datos se tengan. Tras ello, se pasa esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es el siguiente: 
+				En primer lugar se van a introducir los datos. Para ello se hará tal y como se ha visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para \texttt{velocidad} y otra para \texttt{temperatura}) y tantas filas como entradas de datos se tengan. Tras ello, se pasa esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es el siguiente: 
 				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2236,9 +2248,7 @@
 \hlstd{muestra} \hlkwb{=} \hlkwd{t}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{10}\hlstd{,}\hlnum{7.46}\hlstd{,}\hlnum{8}\hlstd{,}\hlnum{6.77}\hlstd{,}\hlnum{13}\hlstd{,}\hlnum{12.74}\hlstd{,}\hlnum{9}\hlstd{,}\hlnum{7.11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{7.81}\hlstd{,}\hlnum{14}\hlstd{,}\hlnum{8.84}\hlstd{,}\hlnum{6}\hlstd{,}
 \hlnum{6.08}\hlstd{,}\hlnum{4}\hlstd{,}\hlnum{5.39}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{8.15}\hlstd{,}\hlnum{7}\hlstd{,}\hlnum{6.42}\hlstd{,}\hlnum{5}\hlstd{,}\hlnum{5.73}\hlstd{),}
 \hlnum{2}\hlstd{,}\hlnum{11}\hlstd{,}\hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"velocidad"}\hlstd{,}\hlstr{"temperatura"}\hlstd{))))}
-\hlstd{muestra}\hlkwb{=}\hlkwd{data.frame}\hlstd{(muestra)}
-
-\hlstd{muestra}
+\hlstd{(muestra}\hlkwb{=}\hlkwd{data.frame}\hlstd{(muestra))}
 \end{alltt}
 \begin{verbatim}
 ##    velocidad temperatura
@@ -2261,7 +2271,7 @@
 				
 				\subsubsection{Caja y bigotes}
 				
-					Con los datos organizados se puede empezar a trabajar. Lo primero de todo será aplicar las medidas de ordenación a la velocidad. Esto quiere decir aplicar el algoritmo de caja y bigotes visto en la \Cref{subsub:caja_bigotes}. Primeramente, centraremos nuestra atención en la columna \texttt{velocidad}, que es la que interesa ahora:
+					Con los datos organizados se puede empezar a trabajar. Lo primero de todo será aplicar las medidas de ordenación a la velocidad. Esto quiere decir aplicar el algoritmo de caja y bigotes visto en la \Cref{subsub:caja_bigotes}. Primeramente, se va a centrar la atención en la columna \texttt{velocidad}, que es la que interesa ahora:
 					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2271,40 +2281,40 @@
 \end{kframe}
 \end{knitrout}
 					
-					Con esta línea de código se guarda la columna de velocidad, y se podrá llamar a la función que implementa el algoritmo directamente con \texttt{muestra\_velocidad}. Una vez tenemos está todo listo veamos el código del algoritmo.
+					Con esta línea de código se guarda la columna de velocidad, y se podrá llamar a la función que implementa el algoritmo directamente con \texttt{muestra\_velocidad}. Una vez se tiene todo listo, este es el código del algoritmo.
 					
-					{\tiny
+					{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{boxNmustaches} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
         \hlstd{outliers} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{if}\hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"Se ha introducido un grado de outlier d = "}\hlstd{,d,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
         \hlstd{cuart1} \hlkwb{=} \hlkwd{quant}\hlstd{(sample,} \hlnum{0.25}\hlstd{)}
         \hlstd{cuart3} \hlkwb{=} \hlkwd{quant}\hlstd{(sample,} \hlnum{0.75}\hlstd{)}
-        \hlkwa{if} \hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: CÁLCULO DE LOS CUARTILES 1 Y 3"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"El cuartil 1 es "}\hlstd{,cuart1,} \hlstr{" y el cuartil 3 es "}\hlstd{, cuart3,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
         \hlstd{lim_inf} \hlkwb{=} \hlstd{cuart1} \hlopt{-} \hlstd{(d}\hlopt{*}\hlstd{(cuart3}\hlopt{-}\hlstd{cuart1))}
         \hlstd{lim_sup} \hlkwb{=} \hlstd{cuart3} \hlopt{+} \hlstd{(d}\hlopt{*}\hlstd{(cuart3}\hlopt{-}\hlstd{cuart1))}
-        \hlkwa{if} \hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"Fórmula -> (Q1 - d*(Q3-Q1), Q3 + d*(Q3-Q1))\textbackslash{}n"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"El intervalo para los valores atípicos es: ("}\hlstd{,lim_inf,}\hlstr{", "}\hlstd{,lim_sup,}\hlstr{")\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
+
         \hlkwa{if}\hlstd{(details) \{}
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"Grado de outlier d = "}\hlstd{,d,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: CÁLCULO CUARTILES 1 Y 3"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"El cuart. 1 es "}\hlstd{,cuart1,} \hlstr{" y el cuart. 3 es "}\hlstd{, cuart3,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: CÁLCULO DEL INTERVALO"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"Fórmula -> (Q1 - d*(Q3-Q1), Q3 + d*(Q3-Q1))\textbackslash{}n"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"Intervalo: ("}\hlstd{,lim_inf,}\hlstr{", "}\hlstd{,lim_sup,}\hlstr{")\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
+
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 4: IDENTIFICACIÓN DE OUTLIERS"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"Los outliers serán aquellos valores que no están en el intervalo anterior\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
+
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample)) \{}
                 \hlkwa{if}\hlstd{(sample[i]} \hlopt{<} \hlstd{lim_inf} \hlopt{||} \hlstd{sample[i]} \hlopt{>} \hlstd{lim_sup) \{}
                         \hlstd{outliers} \hlkwb{=} \hlkwd{append}\hlstd{(outliers, i)}
                         \hlkwa{if}\hlstd{(details) \{}
-                                \hlkwd{cat}\hlstd{(}\hlstr{"El punto "}\hlstd{,i,}\hlstr{" con valor "}\hlstd{,sample[i],}\hlstr{" es un outlier\textbackslash{}n"}\hlstd{)}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"El punto "}\hlstd{,i,}\hlstr{" con valor "}\hlstd{,sample[i],}
+                                \hlstr{" es un outlier\textbackslash{}n"}\hlstd{)}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\}}
@@ -2322,13 +2332,13 @@
 					\begin{itemize}
 						\item \texttt{sample}: El data frame con los datos correspondientes. En este caso, \texttt{muestra\_velocidad}. 
 						\item \texttt{d}: El grado de \textit{outlier} a partir del cual un dato se considera anómalo. Servirá para calcular el intervalo para valores atípicos.
-						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla nos referimos a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que vamos obteniendo.
+						\item \texttt{details}: Es un parámetro que por defecto estará a \texttt{FALSE}, y que servirá para que el usuario indique si quiere una salida detallada o sencilla. Con salida sencilla se refiere a una lista con los índices de los puntos que se han evaluado como \textit{outliers}, mientras que con salida detallada se devolverá esto mismo además de una serie de mensajes por pantalla donde se detalla cada paso y lo que se hace en él, así como los resultados parciales que se han ido obteniendo.
 					\end{itemize}
 					
 					A partir de la salida detallada se irá explicando poco a poco el algoritmo.
 					
 					\begin{enumerate}[label = \textbf{\arabic*. }]
-						\item En este paso se determina el grado de outlier, que es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{d} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de \texttt{d} a la cadena de texto que se imprimirá.
+						\item En este paso se determina el grado de outlier, que es elegido arbitrariamente por el usuario. Esta parte del algoritmo no es más que reescribir el parámetro \texttt{d} que ha introducido a la hora de llamar a la función. Además, se hace uso de \texttt{cat}, función ya vista previamente.
 						
 						\item En este paso se van a calcular los cuartiles 1 y 3 ($0.25$ y $0.75$) para posteriormente utilizarlos en el cálculo del intervalo para valores atípicos. Se observa que se hace uso de la función \texttt{quant}, definida en la \Cref{sec:descrip_auto}. Además, si el usuario lo desea, se imprime por pantalla el valor de ambos.
 						
@@ -2346,17 +2356,16 @@
 \end{alltt}
 \begin{verbatim}
 ## [1] "->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"
-## Se ha introducido un grado de outlier d =  1.5 
+## Grado de outlier d =  1.5 
 ## 
-## [1] "->PASO 2: CÁLCULO DE LOS CUARTILES 1 Y 3"
-## El cuartil 1 es  6  y el cuartil 3 es  12 
+## [1] "->PASO 2: CÁLCULO CUARTILES 1 Y 3"
+## El cuart. 1 es  6  y el cuart. 3 es  12 
 ## 
-## [1] "->PASO 3: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS"
+## [1] "->PASO 3: CÁLCULO DEL INTERVALO"
 ## Fórmula -> (Q1 - d*(Q3-Q1), Q3 + d*(Q3-Q1))
-## El intervalo para los valores atípicos es: ( -3 ,  21 )
+## Intervalo: ( -3 ,  21 )
 ## 
 ## [1] "->PASO 4: IDENTIFICACIÓN DE OUTLIERS"
-## Los outliers serán aquellos valores que no están en el intervalo anterior
 ## No hay outliers
 \end{verbatim}
 \end{kframe}
@@ -2366,7 +2375,7 @@
 					
 				\subsubsection{Media y desviación}
 					
-					En este segundo apartado del ejercicio se van a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como hemos se ha ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente al visto en teoría. Por ello, se puede aplicar la función \texttt{standard\_dev} que elaborada en la \Cref{sec:descrip_auto} y que da el valor visto en clase de teoría. Primeramente se guarda la columna de temperaturas para luego trabajar mejor sobre ella.
+					En este segundo apartado del ejercicio se van a detectar anomalías, esta vez sobre la columna de temperatura y aplicando medidas de dispersión. El cálculo del intervalo se realiza esta vez con la media aritmética y la desviación típica. Como se ha ido viendo, el cálculo de la desviación típica mediante la función \texttt{sd} es diferente al visto en teoría. Por ello, se puede aplicar la función \texttt{standard\_dev} elaborada en la \Cref{sec:descrip_auto} y que da el valor visto en clase de teoría. Primeramente se guarda la columna de temperaturas para posteriormente trabajar mejor sobre ella.
 					
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2378,45 +2387,44 @@
 					
 					Ya se tienen los datos de temperatura, así que solo queda llamar a la función que implementa este algoritmo. Es bastante similar a la función anterior de \texttt{boxNmustaches}, solo que ahora en vez de calcular cuartiles, se calculan la media aritmética y la desviación típica; y la fórmula del intervalo para valores atípicos también cambia, tal y como se ha visto en la \Cref{subsub:caja_bigotes}. La función que implementa el algoritmo es la siguiente:
 					
-					{\tiny
+					{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{dispersed_outliers} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
         \hlstd{outliers} \hlkwb{=} \hlkwd{c}\hlstd{()}
-        \hlkwa{if} \hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"Se ha introducido un grado de outlier d = "}\hlstd{,d,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
-        \hlstd{mean_sample} \hlkwb{=} \hlkwd{mean}\hlstd{(sample)}
-        \hlkwa{if} \hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: CÁLCULO DE LA MEDIA ARITMÉTICA"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"La media aritmética es "}\hlstd{, mean_sample,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
+        \hlstd{mean_sample} \hlkwb{=} \hlkwd{fcd_mean}\hlstd{(sample)}
         \hlstd{dev_sample} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(sample)}
-        \hlkwa{if} \hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: CÁLCULO DE LA DESVIACIÓN TÍPICA"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"La desviación típica es "}\hlstd{, dev_sample,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
         \hlstd{lim_inf} \hlkwb{=} \hlstd{mean_sample} \hlopt{-} \hlstd{(d}\hlopt{*}\hlstd{dev_sample)}
         \hlstd{lim_sup} \hlkwb{=} \hlstd{mean_sample} \hlopt{+} \hlstd{(d}\hlopt{*}\hlstd{dev_sample)}
-        \hlkwa{if} \hlstd{(details) \{}
-                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 4: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"Fórmula -> (Media - d*DesviaciónTípica, Media + d*DesviaciónTípica)\textbackslash{}n"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"El intervalo para los valores atípicos es: ("}\hlstd{,lim_inf,}\hlstr{", "}\hlstd{,lim_sup,}\hlstr{")\textbackslash{}n\textbackslash{}n"}\hlstd{)}
-        \hlstd{\}}
+
         \hlkwa{if}\hlstd{(details) \{}
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"Grado de outlier d = "}\hlstd{,d,}\hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 2: CÁLCULO DE LA MEDIA ARITMÉTICA"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"La media aritmética es "}\hlstd{, mean_sample,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 3: CÁLCULO DE LA DESVIACIÓN TÍPICA"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"La desviación típica es "}\hlstd{, dev_sample,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
+                \hlkwd{print}\hlstd{(}\hlstr{"->PASO 4: CÁLCULO DEL INTERVALO"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"Fórmula -> (Media - d*DesvTipica, Media + d*DesvTipica)\textbackslash{}n"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"El intervalo es: ("}\hlstd{,lim_inf,}\hlstr{", "}\hlstd{,lim_sup,}\hlstr{")\textbackslash{}n\textbackslash{}n"}\hlstd{)}
+
                 \hlkwd{print}\hlstd{(}\hlstr{"->PASO 5: IDENTIFICACIÓN DE OUTLIERS"}\hlstd{)}
-                \hlkwd{cat}\hlstd{(}\hlstr{"Los outliers serán aquellos valores que no están en el intervalo anterior\textbackslash{}n"}\hlstd{)}
         \hlstd{\}}
+
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample)) \{}
                 \hlkwa{if}\hlstd{(sample[i]} \hlopt{<} \hlstd{lim_inf} \hlopt{||} \hlstd{sample[i]} \hlopt{>} \hlstd{lim_sup) \{}
                         \hlstd{outliers} \hlkwb{=} \hlkwd{append}\hlstd{(outliers, i)}
                         \hlkwa{if}\hlstd{(details) \{}
-                                \hlkwd{cat}\hlstd{(}\hlstr{"El punto "}\hlstd{,i,}\hlstr{" con valor "}\hlstd{,sample[i],}\hlstr{" es un outlier\textbackslash{}n"}\hlstd{)}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"El punto "}\hlstd{,i,}\hlstr{" con valor "}\hlstd{,sample[i],}
+                                \hlstr{" es un outlier\textbackslash{}n"}\hlstd{)}
                         \hlstd{\}}
                 \hlstd{\}}
         \hlstd{\}}
+
         \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(outliers)} \hlopt{==} \hlnum{0}\hlstd{) \{}
                 \hlkwd{cat}\hlstd{(}\hlstr{"No hay outliers"}\hlstd{)}
         \hlstd{\}}
@@ -2438,7 +2446,7 @@
 \end{alltt}
 \begin{verbatim}
 ## [1] "->PASO 1: DETERMINACIÓN DEL GRADO DE OUTLIER"
-## Se ha introducido un grado de outlier d =  2 
+## Grado de outlier d =  2 
 ## 
 ## [1] "->PASO 2: CÁLCULO DE LA MEDIA ARITMÉTICA"
 ## La media aritmética es  7.5 
@@ -2446,12 +2454,11 @@
 ## [1] "->PASO 3: CÁLCULO DE LA DESVIACIÓN TÍPICA"
 ## La desviación típica es  1.935933 
 ## 
-## [1] "->PASO 4: CÁLCULO DE LOS LÍMITES DEL INTERVALO PARA VALORES ATÍPICOS"
-## Fórmula -> (Media - d*DesviaciónTípica, Media + d*DesviaciónTípica)
-## El intervalo para los valores atípicos es: ( 3.628134 ,  11.37187 )
+## [1] "->PASO 4: CÁLCULO DEL INTERVALO"
+## Fórmula -> (Media - d*DesvTipica, Media + d*DesvTipica)
+## El intervalo es: ( 3.628134 ,  11.37187 )
 ## 
 ## [1] "->PASO 5: IDENTIFICACIÓN DE OUTLIERS"
-## Los outliers serán aquellos valores que no están en el intervalo anterior
 ## El punto  3  con valor  12.74  es un outlier
 \end{verbatim}
 \end{kframe}
@@ -2472,7 +2479,7 @@
 \end{kframe}
 \end{knitrout}
 					
-					Y efectivamente se tiene una lista con un 3, el punto que visto que era un \textit{outlier}. 
+					Y efectivamente se tiene una lista con un 3, el punto que se ha visto que era un \textit{outlier}. 
 					
 			\subsection{Técnicas de proximidad y densidad}
 			
@@ -2571,7 +2578,7 @@
 					
 					En el dataframe que había quedado antes se tiene en cada columna $i-$ésima las distancias del punto $i-$ésimo, por lo que se irá ordenando columna por columna gracias a la función \texttt{bubble} realizada en ejercicios anteriores. De esa ordenación bastará con fijarse en la posición $k+1$ (ya que la primera posición corresponde a la distancia del punto a sí mismo que es 0 y no es considerada un $k-$vecino). Si esta es mayor que $d$ se clasifica al punto como anomalía, en caso contrario no lo será. Se devuelve de esta forma una lista con los puntos que son considerados anomalías.\\ 
 					
-					Una característica de esta función es que si el parámetro \texttt{details} (que se verá ahora en más detalle) está a \texttt{TRUE}, imprime con \texttt{cat} que el punto $x$ es un \textit{outlier}. Además de imprimir el número $x$ del punto imprime las componentes que lo forman con la función \texttt{paste} que hemos visto en el ejercicio autónomo de asociación, y que pasa la lista con las componentes del punto a cadena, separando cada una con comas gracias al parámetro \texttt{collapse = ","}; de tal forma que también se puedan imprimir las componentes del punto.\\
+					Una característica de esta función es que si el parámetro \texttt{details} (que se verá ahora en más detalle) está a \texttt{TRUE}, imprime con \texttt{cat} que el punto $x$ es un \textit{outlier}. Además de imprimir el número $x$ del punto imprime las componentes que lo forman con la función \texttt{paste} que se ha visto en el ejercicio autónomo de asociación, y que pasa la lista con las componentes del punto a cadena, separando cada una con comas gracias al parámetro \texttt{collapse = ","}; de tal forma que también se puedan imprimir las componentes del punto.\\
 					
 					Por último, se han de unir todos los módulos en una función que encapsule toda esta funcionalidad. Para ello se ha creado la siguiente función, que será a la que llame el usuario cuando quiera ejecutar el algoritmo $k-$vecinos:
 					
@@ -2657,11 +2664,15 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{manhattan_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,} \hlkwc{p2}\hlstd{) \{}
-        \hlstd{add} \hlkwb{=} \hlnum{0}
-        \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1)) \{}
-                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlkwd{abs}\hlstd{(p1[i]} \hlopt{-} \hlstd{p2[i])}
+        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(p1)} \hlopt{==} \hlkwd{len}\hlstd{(p2))\{}
+                \hlstd{add} \hlkwb{=} \hlnum{0}
+                \hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(p1)) \{}
+                        \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlkwd{abs}\hlstd{(p1[i]} \hlopt{-} \hlstd{p2[i])}
+                \hlstd{\}}
+                \hlstd{add}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlkwd{print}\hlstd{(}\hlstr{"No se puede calcular la distancia Manhattan"}\hlstd{)}
         \hlstd{\}}
-        \hlstd{add}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -2718,7 +2729,7 @@
 						
 						Esta función recibe los parámetros \texttt{d\_list} y \texttt{p\_list}, que representan las listas de las distancias y de los punto, respectivamente. En realidad, realiza lo mismo que el algoritmo visto en otros ejercicios, ordenando la lista \texttt{d\_list}, pero aplica los cambios en las sucesivas iteraciones también en la lista \texttt{p\_list}. Se devolverán dos columnas, una con listas de puntos, y otra con listas a las distancias a dichos puntos, ordenadas de forma ascendente. Estas listas serán paralelas (compartirán índices), y representarán al mismo elemento. \\
 						
-						Una vez ordenadas las distancias y los puntos, deberán ser calculados los conjuntos $N(x_i, k)$. Por su propia definición debemos mirar (al menos) hasta el $k-$vecino más cercano al punto, y añadir estos, y en caso de que los sucesivos $k+\alpha$ compartan distancia con el $k$, entonces también deberán ser añadidos. Esto se recoge en la siguiente función: 
+						Una vez ordenadas las distancias y los puntos, deberán ser calculados los conjuntos $N(x_i, k)$. Por su propia definición se debe mirar (al menos) hasta el $k-$vecino más cercano al punto, y añadir estos, y en caso de que los sucesivos $k+\alpha$ compartan distancia con el $k$, entonces también deberán ser añadidos. Esto se recoge en la siguiente función: 
 						
 						{\small
 \begin{knitrout}
