@@ -607,7 +607,7 @@
 			fichero
 			@
 			
-			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se tomará para cada dato la parte entera y la parte decimal del mismo como dos datos en vez de uno.\\ 
+			Como se puede observar, se ha leído correctamente el fichero, creando el dataframe con los datos leídos. Al ser un CSV delimitado por comas, hay que tener cuidado con los números decimales y separar estos por un punto, ya que si se separa por comas, se tomará para cada dato la parte entera y la parte decimal del mismo como dos datos en lugar de uno.\\ 
 			
 			Como se va a trabajar todo el rato con la columna \texttt{Distancia} del dataframe, para no tener que acceder repetidamente a esta, se puede definir en una variable nueva llamada \texttt{distancias}, de tal forma que no se tenga que estar pasando \texttt{fichero\$Distancia} repetidamente.
 			
@@ -627,7 +627,7 @@
 			}
 			@
 			
-			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, iterar todos los elementos de la lista y aumentar en 1 cada vez que haya un nuevo elemento. Por último, se devolverá el contador. Esta función será fundamental en otras funciones tal y como se verá más adelante. Llamando a la función se visualiza el número de distancias que se tienen:
+			La función \texttt{len} se basa en un contador el cual se inicializa a 0 y, por medio de un bucle, itera todos los elementos de la lista y aumenta en 1 cada vez que haya un nuevo elemento. Por último, se devuelve el contador. Esta función será fundamental en otras funciones tal y como se verá más adelante. Llamando a la función se visualiza el número de distancias que se tienen:
 			
 			<<>>=
 			(longitud = len(distancias))
@@ -668,7 +668,7 @@
 			@
 			}
 			
-			Con la lista ordenada, se puede saber de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que se haya ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
+			Con la lista ordenada, se puede obtener de forma muy sencilla el rango. Previamente, en los ejercicios guiados, se tenía que llamar a las funciones \texttt{max} y \texttt{min}. Con la lista ordenada, se pueden acceder a estos valores, ya que estarán en el primer y último índice en función del sentido en el que se haya ordenado la lista. Es por ello que resulta muy fácil crear una función rango.
 			
 			<<>>=
 			rank = function(list) {
@@ -710,7 +710,7 @@
 			
 			El algoritmo consiste en iterar toda la lista. Se tienen dos listas auxiliares, una de elementos y otra de las frecuencias de esos elementos. Con la lista ordenada, cada vez que se encuentra un elemento distinto del anterior, se apunta en la lista de elementos, y mientras se continua iterando la lista, se van apuntando en un contador auxiliar las veces que va apareciendo ese elemento. Nótese que el elemento va a aparecer contiguo y no va a volver a aparecer en el resto de la lista, ya que previamente ha sido ordenada. De esta forma, se encuentra un elemento, se cuentan las veces contiguas que aparece y cuando aparece otro elemento, se apuntan las frecuencias del anterior y se inicia el mismo procedimiento con el siguiente elemento. Una vez se completa la iteración de la lista,  se devuelve con \texttt{rbind} una matriz que es el resultado de la matriz previa (la lista de todos los elementos de la muestra) y una lista de elementos con sus correspondientes frecuencias a modo de fila concatenada.\\
 			
-			Para esta función se han utilizado las funciones de \texttt{append} (paquete \texttt{base}) que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Se comprueban las frecuencias absolutas:
+			Para esta función se han utilizado las funciones \texttt{append} (paquete \texttt{base}), que devuelve un vector con la lista que se pasa como parámetro y el elemento que se introduce como parámetro concatenado a la derecha del mismo, y la función \texttt{rbind} (paquete \texttt{base}), que devuelva una matriz con los vectores que se pasan como parámetros a modo de fila. Se comprueban las frecuencias absolutas:
 			
 			{\small
 			<<>>=
@@ -777,9 +777,9 @@
 			@
 			}
 			
-			Se puede comprobar que son correctos, ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
+			Se puede comprobar que los resultados son correctos, ya que la frecuencia absoluta acumulada del último elemento es igual al número total de elementos (73) y la frecuencia relativa acumulada del último elemento es 1.\\
 			
-			Prosiguiendo con el análisis de datos, se tiene que obtener la media aritmética del conjunto de datos. Para ello, se propone la siguiente función, la cual va a sumar todos los elementos de la muestra, y ese resultado se divide entre el número total de elementos de la muestra.
+			Prosiguiendo con el análisis de datos, se debe que obtener la media aritmética del conjunto de datos. Para ello, se propone la siguiente función, la cual va a sumar todos los elementos de la muestra, y ese resultado se divide entre el número total de elementos de la muestra.
 			
 			<<>>=
 			fcd_mean = function(list) {
@@ -791,7 +791,7 @@
 			}
 			@
 			
-			Se comprueba el funcionamiento de esta función, obteniendo una media de  18.53.
+			Se comprueba el funcionamiento de esta función, obteniendo una media de 18.53.
 			
 			<<>>=
 			(media_aritm = fcd_mean(distancias))
@@ -825,9 +825,9 @@
 		
 			Se observa que la moda del conjunto de distancias es 30. Se puede comprobar que es correcto si se observan las frecuencias absolutas, ya que el elemento que más veces aparece es el 30 con una frecuencia absoluta de 8. Cabe destacar que en caso de haber dos o más elementos con la misma mayor frecuencia del conjunto de datos, el algoritmo devolverá el elemento de menor magnitud al iterar de menor a mayor elemento.\\
 			
-			El siguiente análisis que se hará es el de la mediana, que se ha visto que es el dato que divide en dos al conjunto total de datos. Para calcular este valor se tendrá que observar la paridad del número total de datos. Para saber si $n$ es par, basta con calcular $n\pmod{2}$. Si $n \equiv 0 \pmod{2}$ será par, y si $n\pmod{2} \equiv 1$, será impar. \\
+			El siguiente análisis que se hará es el de la mediana, que que como ya se ha visto es el dato que divide en dos al conjunto total de datos. Para calcular este valor se tendrá que observar la paridad del número total de datos. Para saber si $n$ es par, basta con calcular $n\pmod{2}$. Si $n \equiv 0 \pmod{2}$ será par, y si $n\pmod{2} \equiv 1$, será impar. \\
 			
-			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, sumarlos y dividir entre dos. En caso de tener un número de elementos impar directamente se tendrá que coger el elemento $\frac{n+1}{2}$.\\
+			En caso de tener un número de elementos par, se cogerá de la lista ordenada el elemento $\frac{n}{2}$ y el elemento $\frac{n}{2} + 1$, se sumarán y se dividirá el resultado entre dos. En caso de tener un número de elementos impar directamente se tendrá que coger el elemento $\frac{n+1}{2}$.\\
 			
 			Se han englobado estos cálculos en una función, donde se comprueba si se está ante un número de elementos par o impar, y se accede a los elementos correspondientes. La función es la siguiente:
 			
