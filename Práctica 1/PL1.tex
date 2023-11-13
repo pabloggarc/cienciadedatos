@@ -150,7 +150,7 @@
 				\label{fig:logo_R}
 			\end{figure}
 		
-			El CRAN (Comprehensive R Archive Network, \url{https://cran.r-project.org/}) es un repositorio de recursos en línea que se utiliza para facilitar la distribución, el intercambio y el acceso a una amplia gama de software y paquetes relacionados con el lenguaje de programación R. La página web de CRAN sirve como portal central para acceder a estos recursos y ofrece una variedad de apartados y enlaces útiles para los usuarios de R. A continuación, proporcionamos una descripción de los distintos enlaces a los que se puede acceder desde la página principal del CRAN:
+			El CRAN (Comprehensive R Archive Network, \url{https://cran.r-project.org/}) es un repositorio de recursos en línea que se utiliza para facilitar la distribución, el intercambio y el acceso a una amplia gama de software y paquetes relacionados con el lenguaje de programación R. La página web de CRAN sirve como portal central para acceder a estos recursos y ofrece una variedad de apartados y enlaces útiles para los usuarios de R. A continuación, se proporciona una descripción de los distintos enlaces a los que se puede acceder desde la página principal del CRAN:
 			
 			\begin{itemize}
 				\item Mirrors: Esta sección permite a los usuarios seleccionar un espejo (mirror) cercano para descargar paquetes y recursos. Los espejos son servidores que almacenan copias de los paquetes y datos de CRAN, lo que ayuda a mejorar la velocidad de descarga y la disponibilidad de los recursos.
@@ -184,7 +184,7 @@
 					Esta función recibe por parámetro el nombre del paquete que se desea instalar.
 					
 					\item \texttt{install.packages(``ubicacion\_del\_paquete'', rep=NULL)}\\
-					A la función también se le puede pasar por parámetro la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``\texttt{c:/}'', este archivo lo descargamos desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Elegimos el paquete y descargamos la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
+					A la función también se le puede pasar por parámetro la ubicación del archivo, que recomendablemente debe estar en una carpeta temporal en ``\texttt{c:/}'', este archivo se descarga desde:\\ \url{https://cran.r-project.org/} $>$ \texttt{Packages} $>$ \texttt{Table of available packages, sorted by name} $>$ Se elige el paquete y se descarga la versión \texttt{r-release} de la sección \texttt{Windows binaries}.
 					
 					\item \texttt{utils:::menuInstallPkgs()}\\
 					Tras la ejecución de este comando aparecerá una ventana en la que se podrá elegir el mirror desde el que se va a descargar el paquete. Tras elegir el mirror (Spain (Madrid) en este caso), aparece otra ventana donde se puede elegir el paquete que se desea instalar. Posteriormente, haciendo doble click, este se instalará automáticamente.
@@ -208,7 +208,7 @@
 		
 		\section*{El lenguaje \LaTeX}\addcontentsline{toc}{section}{El lenguaje \LaTeX}
 
-			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado, dando una mayor flexibilidad aunque no sea su objetivo principal. Veremos ahora los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que será necesario es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que se está trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
+			Para la realización de esta práctica, se empleará el concepto de \textbf{programación literaria}, que consiste en crear un documento en el que se combine texto con código, de manera que este se pueda explicar y entender de una manera mucho más sencilla. Una forma de realizar esto con código R, es el uso del lenguaje \LaTeX{}, que es un sistema de composición de documentos enfocado al ámbito científico. Es algo similar a un lenguaje de marcas con el que poder definir la estructura de un documento, pero cuenta con la particularidad de que es un lenguaje Turing--completo, por lo que cualquier algoritmo puede ser implementado, dando una mayor flexibilidad aunque no sea su objetivo principal. Ahora se detallarán los pasos seguidos para su instalación. Para poder trabajar, lo mínimo que será necesario es un compilador de \LaTeX{}, en este caso se ha optado por la distribución \hologo{MiKTeX} que lo incluye, ya que se está trabajando en Windows. Además, para una mayor comodidad trabajando con el código, se ha optado por el IDE \TeX{}studio, uno de los más conocidos en la comunidad. \\
 			
 			Una vez tratados ambos lenguajes, es necesario entender con qué tipos de extensiones se suele trabajar para ver el proceso de integración con R (sin entrar en profundidad). Estas dependen de cómo se desean almacenar los documentos, o cómo están almacenadas algunas dependencias de los mismos, como por ejemplo, imágenes. Esta tarea se realiza usando un compilador u otro. \\
 			
@@ -584,7 +584,7 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes 6 cestas de la compra: \{Pan, Agua, Leche, Naranjas\}, \{Pan, Agua, Café, Leche\}, \{Pan, Agua, Leche\}, \{Pan, Café, Leche\}, \{Pan, Agua\}, \{Leche\}.
 			\end{exercise}
 				
-			Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. La matriz es la siguiente:
+			Lo primero explicado por el profesor fue la preparación de los datos proporcionados para que \texttt{arules} fuese capaz de tratar con ellos. Para ello se introduce una matriz de ceros y unos mediante el paquete \texttt{Matrix}, que indique en cada suceso, qué elementos contiene. Así, cada fila representará un suceso de la muestra y cada columna corresponderá con un suceso elemental; de tal forma que si ese suceso elemental se encuentra en un suceso de la muestra, su posición en la matriz será un 1, y en caso contrario será un 0. La matriz es la siguiente:
 			
 			$$
 			\begin{pmatrix}
@@ -610,15 +610,19 @@
 \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlnum{6}\hlstd{,} \hlnum{5}\hlstd{,} \hlkwc{byrow} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{dimnames} \hlstd{=} \hlkwd{list}\hlstd{(}
 \hlkwd{c}\hlstd{(}\hlstr{"suceso1"}\hlstd{,} \hlstr{"suceso2"}\hlstd{,} \hlstr{"suceso3"}\hlstd{,} \hlstr{"suceso4"}\hlstd{,} \hlstr{"suceso5"}\hlstd{,} \hlstr{"suceso6"}\hlstd{),}
 \hlkwd{c}\hlstd{(}\hlstr{"Pan"}\hlstd{,} \hlstr{"Agua"}\hlstd{,} \hlstr{"Café"}\hlstd{,} \hlstr{"Leche"}\hlstd{,} \hlstr{"Naranjas"}\hlstd{)),} \hlkwc{sparse}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in Matrix(c(1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, : no se pudo encontrar la función "{}Matrix"{}}}\begin{alltt}
 \hlstd{muestra}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "dgCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   1    1    .     1        1
+## suceso2   1    1    1     1        .
+## suceso3   1    1    .     1        .
+## suceso4   1    .    1     1        .
+## suceso5   1    1    .     .        .
+## suceso6   .    .    .     1        .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			A continuación, se ha enseñado cómo mostrar la matriz con puntos y barras, en vez de con unos y ceros. Se consigue con la función \texttt{as} y el parámetro \texttt{nsparseMatrix}. 
@@ -627,15 +631,19 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{muestrangCMatrix} \hlkwb{<-} \hlkwd{as}\hlstd{(muestra,} \hlstr{"nsparseMatrix"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestra' no encontrado}}\begin{alltt}
 \hlstd{muestrangCMatrix}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 6 x 5 sparse Matrix of class "ngCMatrix"
+##         Pan Agua Café Leche Naranjas
+## suceso1   |    |    .     |        |
+## suceso2   |    |    |     |        .
+## suceso3   |    |    .     |        .
+## suceso4   |    .    |     |        .
+## suceso5   |    |    .     .        .
+## suceso6   .    .    .     |        .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Sin embargo, para el algoritmo, es necesario pasar por parámetro justo la transpuesta de la matriz con la que se trabaja, por ello se utiliza la función \texttt{t}.
@@ -644,37 +652,66 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transpmuestrangCMatrix} \hlkwb{<-} \hlkwd{t}\hlstd{(muestrangCMatrix)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'muestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transpmuestrangCMatrix}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\end{kframe}
+\begin{verbatim}
+## 5 x 6 sparse Matrix of class "ngCMatrix"
+##          suceso1 suceso2 suceso3 suceso4 suceso5 suceso6
+## Pan            |       |       |       |       |       .
+## Agua           |       |       |       .       |       .
+## Café           .       |       .       |       .       .
+## Leche          |       |       |       |       .       |
+## Naranjas       |       .       .       .       .       .
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
-			Es posible consultar algunos datos acerca de la matriz usando la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} se puede ver un resumen de algunos parámetros básicos de los datos que contiene la matriz.
+			Es posible consultar información acerca de la matriz usando la función \texttt{as} con el parámetro \texttt{transactions}. Además, con \texttt{summary} se puede ver un resumen de algunos parámetros básicos de los datos que contiene la matriz.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{transacciones} \hlkwb{=} \hlkwd{as}\hlstd{(transpmuestrangCMatrix,} \hlstr{"transactions"}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transpmuestrangCMatrix' no encontrado}}\begin{alltt}
 \hlstd{transacciones}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\begin{alltt}
+\begin{verbatim}
+## transactions in sparse format with
+##  6 transactions (rows) and
+##  5 items (columns)
+\end{verbatim}
+\begin{alltt}
 \hlkwd{summary}\hlstd{(transacciones)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'transacciones' no encontrado}}\end{kframe}
+\begin{verbatim}
+## transactions as itemMatrix in sparse format with
+##  6 rows (elements/itemsets/transactions) and
+##  5 columns (items) and a density of 0.5666667 
+## 
+## most frequent items:
+##      Pan    Leche     Agua     Café Naranjas  (Other) 
+##        5        5        4        2        1        0 
+## 
+## element (itemset/transaction) length distribution:
+## sizes
+## 1 2 3 4 
+## 1 1 2 2 
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   2.250   3.000   2.833   3.750   4.000 
+## 
+## includes extended item information - examples:
+##   labels
+## 1    Pan
+## 2   Agua
+## 3   Café
+## 
+## includes extended transaction information - examples:
+##   itemsetID
+## 1   suceso1
+## 2   suceso2
+## 3   suceso3
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Finalmente, se ejecuta el algoritmo apriori llamando a la función \texttt{apriori} del paquete \texttt{arules}. Se define en este caso el soporte con un valor del 50\%, y la confianza con 80\%. 
@@ -685,9 +722,30 @@
 \hlstd{asociaciones} \hlkwb{=} \hlkwd{apriori}\hlstd{(transacciones,} \hlkwc{parameter} \hlstd{=}
 \hlkwd{list}\hlstd{(}\hlkwc{support} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{confidence} \hlstd{=} \hlnum{0.8}\hlstd{))}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in apriori(transacciones, parameter = list(support = 0.5, confidence = 0.8)): no se pudo encontrar la función "{}apriori"{}}}\end{kframe}
+\begin{verbatim}
+## Apriori
+## 
+## Parameter specification:
+##  confidence minval smax arem  aval originalSupport maxtime support minlen
+##         0.8    0.1    1 none FALSE            TRUE       5     0.5      1
+##  maxlen target  ext
+##      10  rules TRUE
+## 
+## Algorithmic control:
+##  filter tree heap memopt load sort verbose
+##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+## 
+## Absolute minimum support count: 3 
+## 
+## set item appearances ...[0 item(s)] done [0.00s].
+## set transactions ...[5 item(s), 6 transaction(s)] done [0.00s].
+## sorting and recoding items ... [3 item(s)] done [0.00s].
+## creating transaction tree ... done [0.00s].
+## checking subsets of size 1 2 3 done [0.00s].
+## writing ... [7 rule(s)] done [0.00s].
+## creating S4 object  ... done [0.00s].
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			Es posible visualizar el resultado del algoritmo con la función \texttt{inspect}. 
@@ -697,9 +755,17 @@
 \begin{alltt}
 \hlkwd{inspect}\hlstd{(asociaciones)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in inspect(asociaciones): no se pudo encontrar la función "{}inspect"{}}}\end{kframe}
+\begin{verbatim}
+##     lhs              rhs     support   confidence coverage  lift count
+## [1] {}            => {Leche} 0.8333333 0.8333333  1.0000000 1.00 5    
+## [2] {}            => {Pan}   0.8333333 0.8333333  1.0000000 1.00 5    
+## [3] {Agua}        => {Pan}   0.6666667 1.0000000  0.6666667 1.20 4    
+## [4] {Pan}         => {Agua}  0.6666667 0.8000000  0.8333333 1.20 4    
+## [5] {Leche}       => {Pan}   0.6666667 0.8000000  0.8333333 0.96 4    
+## [6] {Pan}         => {Leche} 0.6666667 0.8000000  0.8333333 0.96 4    
+## [7] {Agua, Leche} => {Pan}   0.5000000 1.0000000  0.5000000 1.20 3
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 			
 			En esta imagen se observa el resultado del algoritmo. Se deben ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
