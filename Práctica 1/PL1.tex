@@ -105,7 +105,7 @@
 }
 
 \date{
-	\large{14 de noviembre de 2023}
+	\large{\today}
 }
 
 \hypersetup{
@@ -120,8 +120,8 @@
 
 \newtheorem{exercise}{Ejercicio}[section]
 \newtheorem{observation}{Observación}[section]
-\newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}, fonttitle = \bfseries]{teorema}{Teorema}{}{th}
-\newtcbtheorem[number within = section, Crefname = {Definición}{Definición}, fonttitle = \bfseries]{definicion}{Definición}{}{df}
+\newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}]{teorema}{Teorema}{fonttitle = \bfseries}{th}
+\newtcbtheorem[number within = section, Crefname = {Definición}{Definición}]{definicion}{Definición}{fonttitle = \bfseries}{df}
 
 \newcommand{\dt}{\text{dist}}
 \newcommand{\ds}{\text{dens}}
@@ -1788,7 +1788,7 @@
 				El segundo conjunto de datos, que se empleará para realizar el análisis de asociación, estará formado por las siguientes conjuntos de extras incluidos en 8 ventas de coches: \{X, C, N, B\}, \{X, T, B, C\}, \{N, C, X\}, \{N, T, X, B\}, \{X, C, B\}, \{N\}, \{X, B, C\}, \{T, A\}. Donde: \{X: Faros de Xenon, A: Alarma, T: Techo Solar, N: Navegador, B: Bluetooth, C: Control de Velocidad\}, son los extras que se pueden incluir en cada coche.
 			\end{exercise}
 			
-			Para realizar el algoritmo $apriori$ es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$. Por otro lado, la diferencia de dos conjuntos $A \backslash B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$. Como función auxiliar también se hará uso de la función \texttt{len}, explicada en la \Cref{sec:descrip_auto}.
+			Para realizar el algoritmo apriori es necesario programar previamente algunas funciones auxiliares que ayudarán a trabajar con conjuntos. Las funciones necesarias en este caso son la unión y la diferencia de conjuntos. La unión de dos conjuntos $A \cup B$ resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$. Por otro lado, la diferencia de dos conjuntos $A \backslash B$ da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$. Como función auxiliar también se hará uso de la función \texttt{len}, explicada en la \Cref{sec:descrip_auto}.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1910,6 +1910,7 @@
 			La siguiente herramienta que se necesita en el algoritmo apriori es el soporte, que queda definido de la siguiente manera. 
 			
 			\begin{definicion}{Soporte}{sp}
+				Establece la probabilidad de aparición de los elementos del conjunto $P(E)$ que engloban a dichos sucesos en toda la muestra estudiada. Formalmente se define de la siguiente manera: 
 				\begin{equation*}
 					\begin{gathered}
 						\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
@@ -2093,6 +2094,7 @@
 \end{knitrout}
 			
 			\begin{definicion}{Confianza}{cf}
+				Establece la prioridad de aparición de los elementos del conjunto $P(E)$ que engloban a dichos sucesos en el subconjunto de la muestra compuesto únicamente por los sucesos en los que se de uno de los dos subconjuntos cuya asociación se esté estudiando. Formalmente se define de la siguiente manera: 
 				\begin{equation*}
 					\begin{gathered}
 						\forall\{A_i\}_{i=1}^\infty \subset P(E) \, \text{con} \, A_i \cap A_j \neq \varnothing \, \forall i \neq j, \\
@@ -2415,7 +2417,7 @@
 			Para el cálculo del umbral de confianza, se irán tomando conjuntos $\beta$ y $\alpha$ de forma que se vayan evaluando asociaciones de la forma $\beta \rightarrow \beta - \alpha$ y se pueda aplicar el \Cref{th:ap}. Se selecciona el $\beta$ de mayor dimensión, y para cada $\beta, \alpha \subset \beta$. 
 			
 			\begin{observation}
-				Como el \Cref{th:ap} es de la forma $\lnot p \rightarrow \lnot q$, siempre que se tiene $\lnot p$ se deduce $\lnot q$, pero si se tiene $p$, no siempre se deduce $\lnot q$, por lo que hay que analizar $\forall i \, \alpha'_i \rightarrow \beta - \alpha'_i$.
+				Como el \Cref{th:ap} es de la forma $\lnot p \rightarrow \lnot q$, siempre que se tiene $\lnot p$ se deduce $\lnot q$ por la regla de resolución, pero si se tiene $p$, no siempre se deduce $\lnot q$, por lo que hay que analizar $\forall i \, \alpha'_i \rightarrow \beta - \alpha'_i$.
 				\label{obs:ap}
 			\end{observation}
 			
@@ -2451,7 +2453,7 @@
 					El tercer conjunto de datos, que se empleará para realizar el análisis de detección de datos anómalos utilizando técnicas con base estadística, estará formado por los siguientes 10 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}. Aplicar las medidas de ordenación a la velocidad y las de dispersión a la temperatura.
 				\end{exercise}
 				
-				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) que están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final.  En la \Cref{sec:descrip_auto} se han realizado funciones propias que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes.\\
+				Como se ha visto previamente, el cálculo de \textit{outliers} por medio de técnicas con base estadística no proporcionaban los mismos resultados que los vistos en clase, ya que hay ciertos cálculos (como el de los cuartiles o la desviación) que están realizados de forma diferente a como se ha estudiado; y esto implica un error que se propaga al cálculo de los intervalos para valores atípicos y por consecuente al resultado final. En la \Cref{sec:descrip_auto} se han realizado funciones propias que proporcionan los resultados correctos a los cálculos. Es por ello que, en base a estas funciones, se van a realizar los algoritmos correspondientes.\\
 				
 				En primer lugar se van a introducir los datos. Para ello se hará tal y como se ha visto previamente, con la función \texttt{matrix}, de tal forma que esta tenga dos columnas (una para \texttt{velocidad} y otra para \texttt{temperatura}) y tantas filas como entradas de datos se tengan. Tras ello, se pasa esta matriz a un \texttt{dataframe} para operar sobre los datos de una forma más cómoda. El resultado es el siguiente: 
 				
