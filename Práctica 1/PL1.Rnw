@@ -47,6 +47,7 @@
 }
 
 \author{
+	Grupo 9\\\\
 	Pablo García García\\
 	Abel López Martínez\\
 	Álvaro Jesús Martínez Parra\\
@@ -69,8 +70,8 @@
 
 \newtheorem{exercise}{Ejercicio}[section]
 \newtheorem{observation}{Observación}[section]
-\newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}]{teorema}{Teorema}{}{th}
-\newtcbtheorem[number within = section, Crefname = {Definición}{Definición}]{definicion}{Definición}{}{df}
+\newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}, fonttitle = \bfseries]{teorema}{Teorema}{}{th}
+\newtcbtheorem[number within = section, Crefname = {Definición}{Definición}, fonttitle = \bfseries]{definicion}{Definición}{}{df}
 
 \newcommand{\dt}{\text{dist}}
 \newcommand{\ds}{\text{dens}}
@@ -1380,7 +1381,7 @@
 			fcd_apriori(data, 0.3, 0.7)
 			@
 			
-			Ahora intentaremos replicar este resultado con la función \texttt{apriori} del paquete \texttt{arules} visto en clase. 
+			Ahora se intentará replicar este resultado con la función \texttt{apriori} del paquete \texttt{arules} visto en clase. 
 			
 			<<results=FALSE>>=
 			muestra <- Matrix(c(1, 0, 0, 1, 1, 1, 
@@ -1400,6 +1401,9 @@
 			asoc <- apriori(trans, parameter = 
 				list(support = 0.3, confidence = 0.7, minlen = 2))
 			@
+			
+			Se destaca el parámetro \texttt{minlen} que el profesor no mencionó en clase y permite ocultar las asociaciones de la forma $\varnothing \rightarrow \{...\}$. Para ello se le asigna el valor 2, tal y como se explica en la documentación de \texttt{arules}. 
+			
 			<<>>=
 			inspect(asoc)
 			@
@@ -1471,7 +1475,7 @@
 			
 			Una vez construidos estos árboles, se hace un recuento de cuáles de sus hojas aparecen en las del grupo de árboles anterior. Los sucesos candidatos serán aquellos que aparezcan $2.4$ veces o más. \\
 			
-			{\centering\Tree[.{Dimensión 2} [. \boxed{14(3)} [.\boxed{15(5)} [.45(2) ] ] [.13(2) [.\boxed{16(4)} [.46(2) ] ] ] ] \boxed{56(4)} [. 34(1) 35(2) 36(1) ] ]}\\
+			{\centering\Tree[.{Dimensión 2} [. \boxed{14(3)} [.\boxed{15(5)} [.45(2) ] ] [.13(2) [.\boxed{16(5)} [.46(2) ] ] ] ] \boxed{56(4)} [. 34(1) 35(2) 36(1) ] ]}\\
 			\Tree[.{Dimensión 3} [. [.146(2) ] [. [.154(1) ] [.\boxed{156(4)} ] ] [. [.134(1) ] [.135(2) [.465(1) ] ] [.136(1) ] ] ] [. [. [.354(1) ] [.356(1) ] ] [.364(0) ] ] ]\\
 			\Tree[.{Dimensión 4} [. [.1546(1) ] [. [. [.1345(1) ] [.1346(0) ] ] [.1356(1) ] ] ] [.3546(0) ] ]\hfill
 			\Tree[.{Dimensión 5} 13456(0) ]\\
@@ -1801,14 +1805,12 @@
 					
 					La función llama de esta forma a \texttt{create\_distance\_matrix} para crear la matriz de distancias y a \texttt{detect\_outliers} para clasificar según el algoritmo $k-$vecinos.\\
 					
-					Se procede a probar la función \texttt{k\_neighbors} con la muestra del ejercicio. En este caso se opta por realizar una ejecución detallada de la misma.
+					Se procede a probar la función \texttt{k\_neighbors} con la muestra del ejercicio. En este caso se opta por realizar una ejecución detallada de la misma. Para este caso se ha tomado arbitrariamente $k = 3$ y $d = 3.5$. 
 					
 					<<>>=
 					muestra = data.frame("mujeres" = c(9,9,11,2,11), "hombres" = c(9,7,11,1,9))
 					k_neighbors(muestra,3,3.5,TRUE)
 					@
-					
-					%AQUÍ FALTA EXPLICAR QUE K Y D SE HA INTRODUCIDO Y LA SALIDA%
 					
 					\subsubsection{Algoritmo LOF}
 					
@@ -1989,7 +1991,7 @@
 						}
 						@
 						
-						Se comprueban los resultados obtenidos, dejando a juicio del analista el valor de $k$ y la selección de outlier en función de la drm. 
+						Se comprueban los resultados obtenidos, dejando a juicio del analista el valor de $k$ y la selección de outlier en función de la drm. Para este caso se ha tomado arbitrariamente $k = 3$. 
 						
 						<<>>=
 						muestra = data.frame("mujeres" = c(9,9,11,2,11), "hombres" = c(9,7,11,1,9))
