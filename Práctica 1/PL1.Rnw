@@ -1263,7 +1263,7 @@
 			}
 			@
 			
-			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por los $\sum_{i = 1}^{k-1}\binom{n}{i}$ subconjuntos. Estos posibles subconjuntos de $B$, se obtienen mediante la función \texttt{combn} del paquete \texttt{utils}, que recibe como parámetros el conjunto del que obtener subconjuntos, el tamaño de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
+			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por los $\sum_{i = 1}^{k-1}\binom{n}{i}$ subconjuntos. Estos posibles subconjuntos de $B$, se obtienen en un dataframe donde cada columna corresponde a una combinación de $B$ de la dimensión indicada; todo ello a través de la función \texttt{combn} del paquete \texttt{utils}. Esta recibe como parámetros el conjunto $B$ del que obtener subconjuntos, el tamaño o dimensión de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
 			
 			<<>>=
 			indexOf_assoc = function(df, left_side, right_side) {
@@ -1294,9 +1294,9 @@
 						conf = confidence(table, A, right)	
 						if (conf < c) {
 							for (j in 1:len(A)) {
-								A_primes = unlist(combn(A, m=j, simplify=TRUE))
-								for (k in seq(1, len(A_primes), by=j)) {
-									new_left = A_primes[k:(k+j-1)]
+								A_primes = combn(A, m=j, simplify=TRUE)
+								for (k in 1:len(A_primes[1,])) {
+									new_left = A_primes[,k]
 									new_right = dif(B, new_left)
 									index = indexOf_assoc(
 										assoc, new_left, new_right)

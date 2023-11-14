@@ -2126,7 +2126,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por los $\sum_{i = 1}^{k-1}\binom{n}{i}$ subconjuntos. Estos posibles subconjuntos de $B$, se obtienen mediante la función \texttt{combn} del paquete \texttt{utils}, que recibe como parámetros el conjunto del que obtener subconjuntos, el tamaño de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
+			La función \texttt{get\_associations} recibe como parámetro una lista con los sucesos que han superado el soporte, y en un dataframe de dos columnas se guardarán las posibles asociaciones $(A \rightarrow B - A)$, representando la primera columna los lados izquierdos de las asociaciones, y la segunda los derechos. Para cada candidato $(B)$, se define una lista con todas las posibles combinaciones de elementos que puedan haber en el lado izquierdo $(A)$, siendo estas todas las representadas por los $\sum_{i = 1}^{k-1}\binom{n}{i}$ subconjuntos. Estos posibles subconjuntos de $B$, se obtienen en un dataframe donde cada columna corresponde a una combinación de $B$ de la dimensión indicada; todo ello a través de la función \texttt{combn} del paquete \texttt{utils}. Esta recibe como parámetros el conjunto $B$ del que obtener subconjuntos, el tamaño o dimensión de los subconjuntos $(i)$, y si importa el orden o no (en este caso no). El lado derecho o $B - A$, se calcula mediante la diferencia de los conjuntos $B$ y $A$. Finalmente, se va modificando el dataframe original para añadir asociaciones. Al estar en un ámbito superior se utiliza $\twoheadleftarrow$. 
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2163,9 +2163,9 @@
                         \hlstd{conf} \hlkwb{=} \hlkwd{confidence}\hlstd{(table, A, right)}
                         \hlkwa{if} \hlstd{(conf} \hlopt{<} \hlstd{c) \{}
                                 \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(A)) \{}
-                                        \hlstd{A_primes} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{combn}\hlstd{(A,} \hlkwc{m}\hlstd{=j,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{))}
-                                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{len}\hlstd{(A_primes),} \hlkwc{by}\hlstd{=j)) \{}
-                                                \hlstd{new_left} \hlkwb{=} \hlstd{A_primes[k}\hlopt{:}\hlstd{(k}\hlopt{+}\hlstd{j}\hlopt{-}\hlnum{1}\hlstd{)]}
+                                        \hlstd{A_primes} \hlkwb{=} \hlkwd{combn}\hlstd{(A,} \hlkwc{m}\hlstd{=j,} \hlkwc{simplify}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+                                        \hlkwa{for} \hlstd{(k} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(A_primes[}\hlnum{1}\hlstd{,])) \{}
+                                                \hlstd{new_left} \hlkwb{=} \hlstd{A_primes[,k]}
                                                 \hlstd{new_right} \hlkwb{=} \hlkwd{dif}\hlstd{(B, new_left)}
                                                 \hlstd{index} \hlkwb{=} \hlkwd{indexOf_assoc}\hlstd{(}
                                                         \hlstd{assoc, new_left, new_right)}
