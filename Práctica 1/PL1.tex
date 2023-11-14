@@ -1795,7 +1795,7 @@
 \hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
         \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
                 \hlstd{c2}
-        \hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
+        \hlstd{\}} \hlkwa{else if} \hlstd{(c1[}\hlnum{1}\hlstd{]} \hlopt{%in%} \hlstd{c2) \{}
                 \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
         \hlstd{\}} \hlkwa{else} \hlstd{\{}
                 \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
@@ -1814,6 +1814,8 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+			
+			Para ambas funciones se ha hecho uso del operador \texttt{\%in\%}, el cual determina si un elemento se encuentra en una lista. \\
 			
 			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Se hará uso de las funciones \texttt{get\_elements} y \texttt{get\_table}. 
 			
@@ -2202,7 +2204,7 @@
 \end{kframe}
 \end{knitrout}
 			
-			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. Aquí se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left\_side} y \texttt{right\_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
+			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. En primer lugar, se hace uso de la función \texttt{paste} del paquete \texttt{base}, la cual pasa una lista de elementos (como son en este caso \texttt{left\_side} y \texttt{right\_side}) y la devuelve en formato de cadena de texto. Además, la cadena de texto contiene todos los elementos separados por una coma, como se encuentra indicado con el parámetro \texttt{collapse} de la función. Por otro lado, se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left\_side} y \texttt{right\_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2950,7 +2952,7 @@
 
         \hlkwa{for} \hlstd{(column} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(distance_matrix[}\hlnum{1}\hlstd{,])) \{}
                 \hlstd{ordered_column} \hlkwb{=} \hlkwd{tail}\hlstd{(}\hlkwd{bubble_LOF}\hlstd{(distance_matrix[,column],}
-                        \hlnum{1}\hlopt{:}\hlkwd{ncol}\hlstd{(distance_matrix)),} \hlkwd{ncol}\hlstd{(distance_matrix)}\hlopt{-}\hlnum{1}\hlstd{)}
+                        \hlnum{1}\hlopt{:}\hlkwd{ncol}\hlstd{(distance_matrix)),} \hlopt{-}\hlnum{1}\hlstd{)}
 
                 \hlstd{k_aux} \hlkwb{=} \hlstd{k}
 

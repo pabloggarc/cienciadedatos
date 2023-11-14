@@ -984,7 +984,7 @@
 			union = function(c1, c2) {
 				if (len(c1) == 0) {
 					c2
-				} else if (is.element(c1[1], c2)) {
+				} else if (c1[1] %in% c2) {
 					union(c1[-1], c2)
 				} else {
 					union(c1[-1], append(c2, c1[1]))
@@ -1001,6 +1001,8 @@
 				res
 			}
 			@
+			
+			Para ambas funciones se ha hecho uso del operador \texttt{\%in\%}, el cual determina si un elemento se encuentra en una lista. \\
 			
 			Tras codificar las funciones auxiliares sobre conjuntos, se va a proceder a programar el algoritmo. Para ello, lo primero será trabajar la entrada de datos. Se hará uso de las funciones \texttt{get\_elements} y \texttt{get\_table}. 
 			
@@ -1327,7 +1329,7 @@
 			}
 			@
 			
-			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. Aquí se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left\_side} y \texttt{right\_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
+			Mediante la función \texttt{print\_associations}, dados los dos sucesos que forman una asociación, imprime esta de la forma $\{\ldots\} \rightarrow \{\ldots\}$. En primer lugar, se hace uso de la función \texttt{paste} del paquete \texttt{base}, la cual pasa una lista de elementos (como son en este caso \texttt{left\_side} y \texttt{right\_side}) y la devuelve en formato de cadena de texto. Además, la cadena de texto contiene todos los elementos separados por una coma, como se encuentra indicado con el parámetro \texttt{collapse} de la función. Por otro lado, se hace uso de \texttt{cat}, función contenida en el paquete \texttt{base} y que permite realizar salidas por pantalla con argumentos. En este caso, se desea imprimir por pantalla, además de un mensaje, el valor de \texttt{left\_side} y \texttt{right\_side} en la misma línea. Para evitar hacer dos \texttt{print}, se emplea esta función que pasará el valor de ambos a la cadena de texto que se imprimirá. Se podría haber hecho todo en una misma instrucción \texttt{cat}; sin embargo, se ha optado por separar la cadena de tal forma que se pueda ver de una forma más organizada el proceso de formación e impresión de la asociación.
 			
 			<<>>=
 			fcd_apriori = function(data, s, c) {
@@ -1891,7 +1893,7 @@
 							
 							for (column in 1:len(distance_matrix[1,])) {
 								ordered_column = tail(bubble_LOF(distance_matrix[,column],
-						 			1:ncol(distance_matrix)), ncol(distance_matrix)-1)
+						 			1:ncol(distance_matrix)), -1)
 								
 								k_aux = k
 								
