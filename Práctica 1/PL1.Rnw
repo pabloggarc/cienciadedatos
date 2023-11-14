@@ -435,7 +435,7 @@
 			inspect(asociaciones)
 			@
 			
-			En esta imagen se observa el resultado del algoritmo. Se deben ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo. En el resto de casos $A \rightarrow B$, indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
+			En esta imagen se observa el resultado del algoritmo. Se deben ignorar las dos primeras filas, pues no tiene sentido alguno que $\varnothing \rightarrow$ \{Leche\}, o que $\varnothing \rightarrow$ \{Pan\}, aparecen por cómo el autor del paquete codificó el algoritmo\footnote{El profesor explicó esto, pero tras investigar en la documentación, en la segunda parte se muestra como ocultarlas. }. En el resto de casos $A \rightarrow B$, indica cómo de probable es comprar $B$ cuando se compra $A$ (en función del soporte y la confianza provistas). 
 			
 			
 		\section{Detección de datos anómalos}
@@ -565,7 +565,7 @@
 					
 					Por último, se itera cada punto de la matriz de distancias ordenadas y se comprueba si el elemento $k-$ésimo está a una distancia mayor de $2.5$ (elegido arbitrariamente), donde el punto se consideraría outlier.\\
 					
-					En el código se puede ver que se elige el elemento 4 en lugar del 3 que era la \texttt{k} elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que quedan descartados en el conteo de los \texttt{k} elementos.
+					En el código se puede ver que se elige el elemento 4 en lugar del 3 que era la $k$ elegida para resolverlo, esto se debe a que la primera fila de valores, son las distancias desde cada punto hacia sí mismo, es decir, siempre 0, por lo que quedan descartados en el conteo de los $k$ elementos.
 					
 					<<>>=
 					for (i in 1:5) {
@@ -1189,7 +1189,7 @@
 			}
 			@
 			
-			Finalmente, la función \texttt{fk\_1} representa el algoritmo al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{front} y \texttt{back}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
+			Finalmente, la función \texttt{fk\_1} representa a \texttt{apriori-gen} y $F_{k-1} \times F_{k-1}$ al completo. El algoritmo funciona alrededor de ir añadiendo subconjuntos candidatos calculados en iteraciones previas a un vector. El algoritmo recibe una lista de los sucesos elementales que han superado el umbral de soporte establecido en el paso previo del algoritmo, y con \texttt{lapply} añade al vector mencionado previamente los que serían los conjuntos candidatos de dimensión 1. El algoritmo sigue con las sucesivas dimensiones, y en la dimensión $k$ combina los sucesos candidatos de dimensión $k-1$ dos a dos, obtenidos en la iteración previa. Para cada posible pareja, se comprueban las dos reglas explicadas previamente con ayuda de las funciones \texttt{front} y \texttt{back}. Aquellas que verifican ambas reglas, se añaden al vector comentado como candidatos de dimensión $k$. \\
 			
 			En cada iteración será necesario saber en qué posición del vector inicia y finalizan los sucesos candidatos de dimensión $k-1$. Suponiendo que se tienen $n$ sucesos elementales, la posición del primer suceso de dimensión $k$, viene dada por sumar a la posición del primer suceso de dimensión $k-1$, el número combinatorio $\binom{n}{k}$, pues $F_{k-1} \times F_{k-1}$ irá añadiendo los posibles subconjuntos. \\
 			
@@ -1377,7 +1377,7 @@
 			fcd_apriori(data, 0.4, 0.9)
 			@
 			
-			Con todo el algoritmo programado, se procede a ponerlo en práctica con los datos del enunciado, un umbral de soporte del 40\% y un umbral de confianza del 90\%. Se observa la impresión de la lista de las asociaciones que han superado los umbrales de soporte y confianza en base al algoritmo que se ha realizado. Este resultado es correcto, sin embargo, vamos a probar a bajar el umbral de soporte al 30\%, y el de confianza a un 70\%. 
+			Con todo el algoritmo programado, se procede a ponerlo en práctica con los datos del enunciado, un umbral de soporte del 40\% y un umbral de confianza del 90\%. Se observa la impresión de la lista de las asociaciones que han superado los umbrales de soporte y confianza en base al algoritmo que se ha realizado. Este resultado es correcto, sin embargo, se va a probar a bajar el umbral de soporte al 30\%, y el de confianza a un 70\%. 
 			
 			<<>>=
 			fcd_apriori(data, 0.3, 0.7)
@@ -1410,7 +1410,7 @@
 			inspect(asoc)
 			@
 			
-			Para nuestra sorpresa, el paquete \texttt{arules} se olvida de dos asociaciones $\{B\} \rightarrow \{X, C\}$ y $\{C\} \rightarrow \{X, B\}$. Esto se debe a que la función \texttt{apriori} de \texttt{arules} está mal programada de manera que no cumple con el algoritmo apriori estudiado. Ejecutaremos de manera manual la traza de este caso brevemente para detectar en qué se equivocaron los creadores. \\
+			Para nuestra sorpresa, el paquete \texttt{arules} se olvida de dos asociaciones $\{B\} \rightarrow \{X, C\}$ y $\{C\} \rightarrow \{X, B\}$. Esto se debe a que la función \texttt{apriori} de \texttt{arules} está mal programada de manera que no cumple con el algoritmo apriori estudiado. Se ejecutará de manera manual la traza de este caso brevemente para detectar en qué se equivocaron los creadores. \\
 			
 			Se tomará $E = \{X, A, T, N, B, C\}$ y se hará la siguiente enumeración $E = \{123456\}$, de manera que los sucesos de la muestra serán $\{X, C, N, B\} = \{1645\}, \{X, T, B, C\} = \{1356\}, \{N, C, X\} = \{461\}, \{N, T, X, B\} = \{4315\}, \{X, C, B\} = \{165\}, \{N\} = \{4\}, \{X, B, C\} = \{156\}, \{T, A\} = \{32\}$. \\
 			
@@ -1419,9 +1419,9 @@
 			$$
 			\def\arraystretch{2.2}
 			\begin{array}{ll}
-				s(X) = \frac{6}{8} (\checkmark) & s(N) = \dfrac{4}{8} (\checkmark)\\
-				s(A) = \frac{1}{8} (\times) & s(B) = \dfrac{5}{8} (\checkmark)\\
-				s(T) = \frac{3}{8} (\checkmark) & s(C) = \dfrac{5}{8} (\checkmark)
+				s(X) = \frac{6}{8} (\checkmark) & s(N) = \frac{4}{8} (\checkmark)\\
+				s(A) = \frac{1}{8} (\times) & s(B) = \frac{5}{8} (\checkmark)\\
+				s(T) = \frac{3}{8} (\checkmark) & s(C) = \frac{5}{8} (\checkmark)
 			\end{array}
 			$$
 			
@@ -1488,7 +1488,7 @@
 			\{X, B, C\}, \{X, N\}, \{X, B\}, \{X, C\}, \{B, C\}. 
 			$$
 			
-			Para el cálculo del umbral de confianza, se irán tomando conjuntos $\beta$ y $\alpha$ de forma que se vayan evaluando asociaciones de la forma $\beta \rightarrow \beta - \alpha$ y se pueda aplicar el \Cref{th:ap}. Se selecciona el $\beta$ de mayor dimensión, y para cada $\beta, \alpha \subset \beta$. 
+			Para el cálculo del umbral de confianza, se irán tomando conjuntos $\beta$ y $\alpha$ de forma que se vayan evaluando asociaciones de la forma $\alpha \rightarrow \beta - \alpha$ y se pueda aplicar el \Cref{th:ap}. Se selecciona el $\beta$ de mayor dimensión, y para cada $\beta, \alpha \subset \beta$. 
 			
 			\begin{observation}
 				Como el \Cref{th:ap} es de la forma $\lnot p \rightarrow \lnot q$, siempre que se tiene $\lnot p$ se deduce $\lnot q$ por la regla de resolución, pero si se tiene $p$, no siempre se deduce $\lnot q$, por lo que hay que analizar $\forall i \, \alpha'_i \rightarrow \beta - \alpha'_i$.
