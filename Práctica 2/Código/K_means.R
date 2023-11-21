@@ -7,24 +7,16 @@ len = function(list) {
 }
 
 euc_distance = function(p1, p2) {
-  if(len(p1) == len(p2)) {
-    add = 0
-    for(i in 1:len(p1)) {
-      add = add + ((p1[i] - p2[i])^2)
-    }
-    sqrt(add)
-  } else {
-    print("No se puede calcular la distancia euclídea")
-  }
+  sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
 }
 
-create_distance_matrix = function(pts, cent) {
-  n_pts = nrow(pts)
-  n_cent = nrow(cent)
+create_distance_matrix = function(points, centroids) {
+  n_pts = nrow(points)
+  n_cent = nrow(centroids)
   distances = data.frame(matrix(ncol = n_pts, nrow = n_cent))
-  for (i in 1:n_cent) {
-    for (j in 1:n_pts) {
-      distances[i, j] = euc_distance(pts[j,], cent[i,])
+  for (cent in 1:n_cent) {
+    for (pt in 1:n_pts) {
+      distances[cent, pt] = euc_distance(points[pt,], centroids[cent,])
     }
   }
   distances            
