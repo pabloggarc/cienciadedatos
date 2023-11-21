@@ -1,0 +1,91 @@
+Ahora ya solo hay que entregar el pdf, pero siguiendo el paradigma de progaramación literaria
+
+Vamos a ver RStudio (a buenas horas xd)
+Le gustaría que progaramasemos todo
+
+--------------------------------------------------------------------------------------------------------------
+RStudio
+
+Rstudio se llama Posit ahora: https://posit.co/blog/rstudio-is-now-posit/ (deberiamos hablar algo de esta pag)
+
+Tiene la pantalla diviidda en 4 partes (inicialmente en 3 hasta que abrimos un script)
+
+APARTADOS DE ARRIBA DEL TODO
+En File-New File aparecen todas las cosas con las que se pueden trabajar. Podemos hacer scripts de python. Hay un entorno de sweave.
+En File podemos trabajar con proyectos, Esto es lo lógico profesionalmente y podemos crear un proyecto.
+En la segunda práctica hay que leer datos de Excel, hay que cargar un paquete (no es lo mismo que CSV). 
+Para esto último Import Dataset.
+
+En edit es igual que el resto
+R es un entorno para anlisis estadistico y grafico. Apartado plots se utiliza mucho en visualización. Una vez tenemos el análsisi alguient iene que recibir la info de ese análisis, y eso se hace con los gráfcicos.
+
+En tools hay un apartado de Project Option y Opciones Globales. Esta última sirve para personalizar el entorno de desarrollo. Panel Layout por ejemplo dice como poner las 4 pantallas en las que se divide RStudio.
+
+El apartado Help también es muy importante porque hay que saber cómo funciona R.
+
+No estamos obligados a utilizar RStudio, podemos usar otros por ejemplo Jupiter podemos instalar un kernel que permite la rpoamagación litetaria en R. No da más nota. Si usamos uno hay que explicarlo bien. 
+
+---------------------------------------------------------------------------------------------------
+PRACTICA
+No se pueden meter los datos como matrices. Hayq eu leerlos de algun sitio
+
+m<-matrix(c(4,4, 3,5, 1,2, 5,5, 0,1, 2,2, 4,5, 2,1),2,8)
+(m<-t(m))
+Vamos a aplicar KMeans a esto y vamos a buscar clusters. Vamos a utilizar una función kmeans del paquete stats (el cual se encuentra cargado por defecto)
+
+Ahora tengo que introducir una matriz con los centroides
+
+> c<-matrix(c(0,1,2,2),2,2)
+> (c<-t(c))
+
+Ya tengo los datos y dos clusters con sus respectivos centroides. El siguiente atributo que le tenemos que pasar a kmenas es el numero de iteraciones que queremos que haga. En el ejemplo de clase 4
+
+(clasificacionns = (kmeans(m,c,4)))   (el ns es de no supervisada)
+
+Me salen los dos centroides del otro día.
+
+Lo que esté progaramado es lo que hemos hecho en clase.
+El clustering vector se puede usar como entrada de otras cosas. Me dice a que cluster pertenece cada punto. Queremos analizar cada cluster por separado para ver sus caracteristicas comunes y ver qué pasa ahí, por qué están relacionados.
+
+(m=cbind(clasificacionns$cluster,m))
+Con esto añadimos una columna que indica el cluster a que pertenece el punto.
+
+mc1=subset(m,m[,1]==1)
+mc2=subset(m,m[,1]==2)
+
+Ahora saco un subset que es la porcion de la matriz cuya primera columna son 1 y 2, es decir, los puntos que pertenecen al cluster 1 y 2
+
+(mc1 = mc1[,-1]) Con esto le quito la columna del tipo de cluster, ya se sobreentiende que son de un cluster determinado.
+
+Hay que darle los centroides y los puntos de cada cluster.
+
+--------------------------------------------------------------------------------------------------------
+CLUSTERIZACION JERARQUICA AGLOMERATIVA
+A descargarse la documentacion. Me descargo el pdf y las viñetas y el rsource. Me pongo el zip en la carpeta tmp y hago
+("C:/tmp/LearnClust_1.1.zip", rep=NULL)
+Y lo meto en paquetes por defecto tal y como hicimos en Apuntes10Oct
+Compruebo que ya lo tengo cerrando y volviendo a brir R y haciendo search()
+
+Meto la matriz:
+ m<-matrix(c(0.89,2.94, 4.36,5.21, 3.75,1.12, 6.25,3.14, 4.1,1.8, 3.9,4.27),2,6)
+ (m<-t(m))
+ 
+ agglomerativeHC(m,'EUC','MIN')
+ Los primeros 6 clusters es la primera iteración. Tengo 6 puntos, 6 clusters.
+ El cluster 7 es el que se ha obtenido de juntar los puntos 3 y 5
+ El cluster 8 es el que se obtiene de juntar los puntos 2 y 4.
+ El cluster 9 es el que une los dos clusters
+ El cluster 10 une un punto con los clusteres
+ El último cluster es unir el punto que eueda con el cluster tocho.
+ 
+ Ahora vamos a poner la funión details para ver que ha hecho en cada uno de los pasos
+ agglomerativeHC.details(m,'EUC','MIN')
+ 
+ En RStudio, lo que sale en rojo es explicación
+ 
+ Ahora lo hacemos con el max
+ agglomerativeHC.details(m,'EUC','MAX')
+ Es un poco confusa la forma de nombrar a los clusters.
+ 
+ También se puede hacer con AVERAGE.
+ 
