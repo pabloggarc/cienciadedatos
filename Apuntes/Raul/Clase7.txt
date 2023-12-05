@@ -1,0 +1,73 @@
+Cargar directorio con setwd o desde session
+
+Crear txt con la informacion de calificaciones
+
+Leer txt
+
+calificaciones=read.table("hunt.txt")
+calificaciones
+
+Para intalar el paquete. Abajo a la derecha packages, install, buscar el paquete,
+Y luego lo buscas y lo activas
+
+(muestra = data.frame(calificaciones))
+
+clasificacion = rpart(CG~T+L+P, data=muestra, method="class", minsplit=1)
+
+Pasar a dataframe y clasificar. Con un . se clasificaria todo, minsplit porque hay muy pocos datos.
+En donde hemos puesto T+L+Pse podria poner un punto ya que el punto son todos los atributos.
+
+Regresión. Montar txt con datos
+
+Se hace sin paquetes ni ná
+
+regresion = lm(D~R, data = muestra)
+
+Se dice en función de que datos se quiere hacer y ya está.
+
+Da 4.36 en este caso y 0.14. Es imprescindible dar el rcuadrado para saber como de bueno es
+
+summary(regresion)
+
+El que busco es el multiple Rsquare. Como es muy bajo, la recta es muy mala.
+
+Con los residuos se va a trabajar también.
+
+Hay que ver si hay outliers. Extraer el valor de los residuos para calcular el error estándar de los residuos
+Hay que calcular d*S*r y extraer el valor de los residuos.
+
+(res = summary(regresion)$residuals)
+
+Calculas el error estandar de los residuos
+
+(sr = sqrt(sum(res^2)/4))
+
+
+Buscas los outliers (grado 3)
+
+for (i in 1:length(res)) {
+  if (res[i] > 3*sr) { 
+    print("el suceso"); print(res[i]); print("es un suceso anómalo o outlier")
+  }
+}
+
+En este caso no hay outliers.
+
+Probamos con otro conjunto (regresionOutliers.txt) (en este caso grado 2 de outlier)
+
+La recta de regresión se llama dfr.
+
+muestra = read.table("regresionOutliers.txt")
+
+dfr= lm(muestra$D~muestra$R)
+
+(res = summary(dfr)$residuals)
+
+(sr = sqrt(sum(res^2)/7))	// El 7 es la longitud del dataset
+
+for (i in 1:length(res)) {
+  if (res[i] > 2*sr) { 
+    print("el suceso"); print(res[i]); print("es un suceso anómalo o outlier")
+  }
+}
+Se obtiene el suceso 2 Como outlier
