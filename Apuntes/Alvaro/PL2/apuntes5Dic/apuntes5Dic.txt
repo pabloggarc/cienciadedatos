@@ -1,0 +1,79 @@
+Me voy a packages en la ventana inferior derecha en rstudio y le damos a install. Ponemos rpart y lo instalamos. Una vez instalaod, nos saldrá en la lista de packages. Le damos a la casilla para cargarlo. Esto no carga el paquete por defecto
+
+calificaciones<-read.table("calificaciones.txt") LEO EL TXT
+muestra = data.frame(calificaciones) LO PASO A DATAFRAME
+
+APLICO EL ALGORITMO DE HUNT
+clasificacion = rpart(CG~T+L+P, data = muestra, method = "class", minsplit = 1)
+Pongo calificacion global en funcion de los atributos que tengo (T L Y P)Con poner un punto se añadirian todos automaticamente. Pongo los datos (en dataframe) y luego el método. La que hace la clasifcación por árboles es class. El minsplit de 1 lo pongo porque tengo muy pocos datos, sino daría problemas.
+Hace el procedimiento tal cual lo hemos visto en clase. Vemos que nos sale lo mismo que en teoría.
+
+n= 9 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+1) root 9 3 Ss (0.3333333 0.6666667)  
+  2) L=A,B 5 2 Ap (0.6000000 0.4000000)  
+    4) P=A,B 3 0 Ap (1.0000000 0.0000000) *
+    5) P=C,D 2 0 Ss (0.0000000 1.0000000) *
+  3) L=C,D 4 0 Ss (0.0000000 1.0000000) *
+  
+  
+----------------------------------------------------------------------------------------------------------------------
+
+AHORA REGRESIÓN
+muestra = read.table("planetas.txt") LEO EL TXT
+
+regresion=lm(D~R, data=muestra)
+Funcion de los paquetes basicos. Le digo que quiero la densidad en funcion del radio y luego le digo de qué datos quiero hacer la regresión.
+
+Call:
+lm(formula = D ~ R, data = muestra)
+
+Coefficients:
+(Intercept)            R  
+     4.3624       0.1394  
+	 
+Nos dice que la densidad es 4.3624 + 0.1394R	
+
+Con summary(regresion puedo obtener detalles. Entre datos hay por ejemplo multiple R-Squared que es el que vamos a calcular en clase. Muchos de estos datos me permiten pasar de una muestra a una población.
+
+Ahora vamos a ver si hay outliers
+Primeor vamos a extraer el vector de residuos que aarece en summary. Los residuos son el grado de medida del que se separa un punto de la recta obtenida en la regresión
+Si alguno de los residuos es mayor que d (grado de outlier) * sr (que es el error estandar de los residuos) es un outlier. 
+
+res=summary(regresion)$residuals EXTRAIGO LOS RESIDUOS
+
+Calculo el error estandar de los residuos
+sr = sqrt(sum(res^2)/4)
+
+Y ahora hago la ecuacion para determinar si es outlier. Voy a elegir grado de outlier 3 y voy a ver que valores son outliers
+Me creo un Rscript y pongo este código
+
+for (i in 1:length(res)){
+  if(res[i]>3*sr){
+    print("el suceso"); print(res[i]); print("es un suceso anómalo o outlier")
+  }
+}
+
+No saca nada porque no hay outliers. Vamos a probar ahora con datos que sí tienen  outliers y vamos a demostrar que el código funciona
+
+muestra = read.table("planetas2.txt")
+dfr=lm(D~R, data=muestra)
+res=summary(dfr)$residuals
+sr = sqrt(sum(res^2)/7)
+for (i in 1:length(res)){
+  if(res[i]>2*sr){
+    print("el suceso"); print(res[i]); print("es un suceso anómalo o outlier")
+  }
+}
+
+Hemos cambiado el grado de outlier a 2, y nótese que en sr ahora tenemos que dividir entre 7 porque hemos aumentado el número de datos en el fichero. El resto es igual
+Nos sale lo siguiente:
+[1] "el suceso"
+     2. 
+6.18587 
+[1] "es un suceso anómalo o outlier"
+
+
