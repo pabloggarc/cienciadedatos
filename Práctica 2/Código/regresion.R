@@ -31,10 +31,9 @@ variance = function(list) {
 }
 
 covariance = function(x, y) {
-  if(len(x) != len(y)){
+  if (len(x) != len(y)) {
     stop("X e Y deben tener la misma dimensión")
-  }
-  else{
+  } else {
     sum = 0
     for (i in 1:len(x)) {
       sum = sum + (x[i] * y[i])
@@ -43,41 +42,60 @@ covariance = function(x, y) {
   }
 }
 
-regression_line = function(x, y){
+regression_line = function(x, y) {
   b = covariance(x, y) / variance(x)
   a = fcd_mean(y) - b * fcd_mean(x)
   matrix(c(a, b), ncol = 1)
 }
 
-ssr = function(p, x, y){
+ssr = function(p, x, y) {
   y_hat = c()
-  for(xi in x){
+  for (xi in x) {
     Xi = matrix(c(1, xi), nrow = 1)
     y_hat = c(y_hat, Xi %*% p)
   }
   sum((y_hat - rep(fcd_mean(y)))^2)
 }
 
-ssy = function(y){
+ssy = function(y) {
   sum((y - rep(fcd_mean(y)))^2)
 }
 
-r2 = function(sr, sy){
+r2 = function(sr, sy) {
   sr/sy
 }
 
-fcd_regression = function(data){
-  X = data[, 1]
-  Y = data[, 2]
+fcd_regression = function(sample) {
+  X = sample[, 1]
+  Y = sample[, 2]
   
   param = regression_line(X, Y)
   r = r2(ssr(param, X, Y), ssy(Y))
   
-  print(paste0("y = ", param[2, 1], "x + ", param[1, 1]))
-  print(paste0("R2 = ", r))
+  a = param[1, 1]
+  b = param[2, 1]
   
-  #line = function(x){matrix(c(1, x), nrow = 1) %*% param}
-  #Buscar la forma de plotear la funcion line
+  print(sprintf("y = %.3fx + %.3f", a, b))
+  print(sprintf("R2 = %.3f", r))
+  
+  plot(X, Y, col="blue", main="Recta de regresión", xlab="Eje X", ylab="Eje Y")
+  
+  abline(a=a, b=b, col="red")
 }
 
-fcd_regression(data.frame(c(2.4, 6.1, 6.4, 3.4), c(5.4, 5.2, 5.5, 3.9)))
+
+sample1 = read.xlsx("../data/conj1.xlsx", colNames=FALSE)
+fcd_regression(sample1)
+
+sample2 = read.xlsx("../data/conj2.xlsx", colNames=FALSE)
+fcd_regression(sample2)
+
+sample3 = read.xlsx("../data/conj3.xlsx", colNames=FALSE)
+fcd_regression(sample3)
+
+sample4 = read.xlsx("../data/conj4.xlsx", colNames=FALSE)
+fcd_regression(sample4)
+
+
+
+
