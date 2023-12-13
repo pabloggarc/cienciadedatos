@@ -84,16 +84,16 @@ fcd_regression = function(sample) {
 }
 
 
-sample1 = read.xlsx("../data/conj1.xlsx", colNames=FALSE)
+sample1 = read.xlsx("../Memoria/data/conj1.xlsx", colNames=FALSE)
 fcd_regression(sample1)
 
-sample2 = read.xlsx("../data/conj2.xlsx", colNames=FALSE)
+sample2 = read.xlsx("../Memoria/data/conj2.xlsx", colNames=FALSE)
 fcd_regression(sample2)
 
-sample3 = read.xlsx("../data/conj3.xlsx", colNames=FALSE)
+sample3 = read.xlsx("../Memoria/data/conj3.xlsx", colNames=FALSE)
 fcd_regression(sample3)
 
-sample4 = read.xlsx("../data/conj4.xlsx", colNames=FALSE)
+sample4 = read.xlsx("../Memoria/data/conj4.xlsx", colNames=FALSE)
 fcd_regression(sample4)
 
 
