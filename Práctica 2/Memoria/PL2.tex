@@ -152,6 +152,151 @@
 		El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con KMeans, estará formado por las siguientes 8 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{3, 5\}; 3. \{1, 2\}; 4. \{5, 5\}; 5.\{0, 1\}; 6. \{2, 2\}; 7. \{4, 5\}; 8. \{2, 1\}, donde las características de las calificaciones son: \{Teoría, Laboratorio\}.
 	\end{exercise}
 	
+	En este ejercicio se va a detallar cómo realizar una clasificación no supervisada en un conjunto de datos en R; concretamente utilizando el algoritmo K-Means. El objetivo será agrupar subconjuntos de los datos en clusters o grupos, creando de esta forma una clasificación del conjunto total. Estos clusters se determinarán en base a la muestra, obteniéndose durante el mismo proceso de clasificación.\\
+	
+	El algoritmo K-Means ofrece una técnica de clusterización en base a una muestra de datos y una cantidad $n$ de clusters. Para empezar a realizar el algoritmo se necesita la ubicación de los centroides de cada cluster. Un centroide es el punto medio del grupo de sucesos que componen el cluster, por lo que habrá tantos centroides como $n$ clusters haya. La cantidad de clusters así como sus centroides iniciales serán elegidos arbitrariamente por el usuario; estos se irán reubicando a medida que se itere en el algoritmo. \\
+	
+	Para empezar, en R se necesita introducir la muestra o conjunto de datos con el que se va a trabajar. Estos datos serán introducidos en una matriz utilizando la función \texttt{matrix}.
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{m}\hlkwb{<-}\hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{4}\hlstd{,}\hlnum{4}\hlstd{,} \hlnum{3}\hlstd{,}\hlnum{5}\hlstd{,} \hlnum{1}\hlstd{,}\hlnum{2}\hlstd{,} \hlnum{5}\hlstd{,}\hlnum{5}\hlstd{,} \hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,}\hlnum{2}\hlstd{,} \hlnum{4}\hlstd{,}\hlnum{5}\hlstd{,} \hlnum{2}\hlstd{,}\hlnum{1}\hlstd{),}\hlnum{2}\hlstd{,}\hlnum{8}\hlstd{)}
+\hlstd{(m}\hlkwb{<-}\hlkwd{t}\hlstd{(m))}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    4    4
+## [2,]    3    5
+## [3,]    1    2
+## [4,]    5    5
+## [5,]    0    1
+## [6,]    2    2
+## [7,]    4    5
+## [8,]    2    1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Para poder trabajar debidamente se debe trasponer la matriz, de tal forma que cada columna represente una componente. El primer punto conformará la primera fila, el segundo punto la segunda fila y así sucesivamente con todos los datos.\\
+	
+	Además del conjunto de datos, el algoritmo K-Means necesita unos centroides iniciales. Estos se introducirán de la misma forma que la muestra, teniendo en la primera fila el centroide del primer cluster, en la siguiente fila el centroide del segundo... Al tratarse de pocos puntos se eligen arbitrariamente dos centroides, por lo que la clasificación final será realizada con dos clusters. Se introducen así los centroides:
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{c}\hlkwb{<-}\hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{),}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{)}
+\hlstd{(c}\hlkwb{<-}\hlkwd{t}\hlstd{(c))}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    0    1
+## [2,]    2    2
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Con la muestra y los centroides introducidos en el entorno de trabajo, ya se puede realizar el algoritmo. Para ello se utilizará la función \texttt{kmeans}, función del paquete cargado por defecto \texttt{stats}. La función recibe tres parámetros: la muestra de los datos (\texttt{m}), los centroides iniciales de los clusters (\texttt{c}) y el número de iteraciones que se desean. En este caso se eligen cuatro iteraciones, las mismas que se necesitaron en clase de teoría. En teoría, el número de iteraciones no se sabe a priori, por lo que habría que ir probando. Sin embargo, como ya se sabe el número que se necesita, se pone directamente 4.
+	
+	{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(clasificacionns} \hlkwb{=} \hlstd{(}\hlkwd{kmeans}\hlstd{(m,c,}\hlnum{4}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## K-means clustering with 2 clusters of sizes 4, 4
+## 
+## Cluster means:
+##   [,1] [,2]
+## 1 1.25 1.50
+## 2 4.00 4.75
+## 
+## Clustering vector:
+## [1] 2 2 1 2 1 1 2 1
+## 
+## Within cluster sum of squares by cluster:
+## [1] 3.75 2.75
+##  (between_SS / total_SS =  84.8 %)
+## 
+## Available components:
+## 
+## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+## [6] "betweenss"    "size"         "iter"         "ifault"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	}
+	
+	Entre los parámetros que aparecen en la salida se encuentran \texttt{Cluster means} y \texttt{Clustering vector}. El primero de ellos proporciona la ubicación de los dos centroides de los clusters que conforman la clasificación final. Como se puede apreciar, salen los dos centroides que salieron en teoría. El segundo parámetro indica a qué cluster pertenece cada suceso de la muestra introducida. Así el punto 1 pertenece al cluster 2, el punto 2 pertenece al cluster 2, el punto 3 al cluster 1... Este último se puede utilizar como entrada para realizar otras tareas. Puede ser muy útil para analizar cada cluster por separado, ver sus caracteristicas comunes e intentar deducir por qué esos datos están relacionados.\\
+	
+	El siguiente comando permite añadir una columna a la izquierda de la muestra de datos (\texttt{m}) que se había introducido al inicio, indicando a qué cluster pertenece cada suceso.
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(m}\hlkwb{=}\hlkwd{cbind}\hlstd{(clasificacionns}\hlopt{$}\hlstd{cluster,m))}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    2    4    4
+## [2,]    2    3    5
+## [3,]    1    1    2
+## [4,]    2    5    5
+## [5,]    1    0    1
+## [6,]    1    2    2
+## [7,]    2    4    5
+## [8,]    1    2    1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Esto se realiza para poder dividir la muestra según la clasificación que se ha conseguido. Llamando a la función subset se puede extraer la porción de la muestra que pertenece al cluster 1 y la porción restante que pertenece al cluster 2.
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(mc1}\hlkwb{=}\hlkwd{subset}\hlstd{(m,m[,}\hlnum{1}\hlstd{]}\hlopt{==}\hlnum{1}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    1    2
+## [2,]    1    0    1
+## [3,]    1    2    2
+## [4,]    1    2    1
+\end{verbatim}
+\begin{alltt}
+\hlstd{(mc2}\hlkwb{=}\hlkwd{subset}\hlstd{(m,m[,}\hlnum{1}\hlstd{]}\hlopt{==}\hlnum{2}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    2    4    4
+## [2,]    2    3    5
+## [3,]    2    5    5
+## [4,]    2    4    5
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Una vez se tienen los datos separados se puede eliminar la columna que indica el cluster al que pertenece cada dato, ya que se sobreentiende que todos pertenecen al mismo cluster porque ya han pasado por un proceso de separación en función de la clasificación. Por ejemplo, para los datos pertenecientes al primer cluster, se haría de la siguiente forma:
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(mc1} \hlkwb{=} \hlstd{mc1[,}\hlopt{-}\hlnum{1}\hlstd{])}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1    2
+## [2,]    0    1
+## [3,]    2    2
+## [4,]    2    1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Con todo esto se consigue, partiendo de una muestra de datos, una clasificación no supervisada utilizando la técnica de clusterización basada en el algoritmo K-Means. A partir de ella se podrán intentar deducir ciertas conclusiones.
+	
 	\section{Clasificación No Supervisada con CJA}
 	
 	\begin{exercise}
@@ -201,9 +346,9 @@
 \end{kframe}
 \end{knitrout}
 	
-	Una vez se tienen los datos en R, se procede a hacer uso de la función \texttt{lm} contenida en los paquetes básicos (concretamente en el paquete \texttt{stats}). Esta función recibe dos parámetros. El primero de ellos es la fórmula en donde se va a decir en función de qué parámetro se quiere otro parámetro. En este caso se tiene la columna \texttt{R} que representa el radio y la columna \texttt{D} que representa la densidad. Como se quiere la densidad en función del radio, el primer parámetro tendrá que ser formula=D$\sim$R. Se indica de esta forma que se pretende obtener la columna \texttt{D} en función de la columna \texttt{R}; o lo que es lo mismo, la densidad en función del radio.
+	Una vez se tienen los datos en R, se procede a hacer uso de la función \texttt{lm} contenida en los paquetes básicos (concretamente en el paquete \texttt{stats}). Esta función recibe dos parámetros. El primero de ellos es la fórmula en donde se va a decir en función de qué parámetro se quiere otro parámetro. En este caso se tiene la columna \texttt{R} que representa el radio y la columna \texttt{D} que representa la densidad. Como se quiere la densidad en función del radio, el primer parámetro tendrá que ser formula=D$\sim$R. Se indica de esta forma que se pretende obtener la columna \texttt{D} en función de la columna \texttt{R}; o lo que es lo mismo, la densidad en función del radio.\\
 	
-	El segundo parámetro que entra a la función es la estructura que contiene los datos que se pretenden estudiar. En este caso, el parámetro \texttt{data} será la variable \texttt{muestra}, confeccionada previamente.
+	El segundo parámetro que entra a la función es la estructura que contiene los datos que se pretenden estudiar. En este caso, el parámetro \texttt{data} será la variable \texttt{muestra}, confeccionada previamente.\\
 	
 	Con los parámetros de la función \texttt{lm} claros, se invoca a la misma de la siguiente forma:
 	
@@ -267,7 +412,7 @@
 \end{kframe}
 \end{knitrout}
 	 
-	 Entre todos los detalles que aparecen, se observa el parámetro \texttt{Residuals}. Este parámetro devuelve un vector con los residuos, o dicho de otra forma, la distancia entre el valor real y el valor que se obtiene por medio de la recta calculada. También se puede apreciar el parámetro \texttt{Multiple R-squared}, el cual sirve como medida de cuán bueno ha sido el ajuste. Este valor podrá tomar valores entre 0 y 1, siendo 0 un ajuste muy malo y 1 un ajuste perfecto. Como se observa, el valor de este parámetro es 0.1377, lo cual quiere decir que el ajuste es malo; y con ello se puede concluir que el radio no explica la densidad de los planetas.
+	 Entre todos los detalles que aparecen, se observa el parámetro \texttt{Residuals}. Este parámetro devuelve un vector con los residuos, o dicho de otra forma, la distancia entre el valor real y el valor que se obtiene por medio de la recta calculada. También se puede apreciar el parámetro \texttt{Multiple R-squared}, el cual sirve como medida de cuán bueno ha sido el ajuste. Este valor podrá tomar valores entre 0 y 1, siendo 0 un ajuste muy malo y 1 un ajuste perfecto. Como se observa, el valor de este parámetro es 0.1377, lo cual quiere decir que el ajuste es malo; y con ello se puede concluir que el radio no explica la densidad de los planetas.\\
 	 
 	 Una vez visto en detalle el cálculo y valoración de la recta de regresión se va a ver cómo se pueden identificar sucesos anómalos mediante la técnica de regresión. El proceso por lo general sigue 5 pasos:
 	 
@@ -322,7 +467,7 @@
 \end{kframe}
 \end{knitrout}
 	 
-	 Este bucle comprueba por cada elemento del vector de residuos si supera o no el límite establecido para outliers; en caso afirmativo lo imprime por pantalla. En la salida anterior se puede observar que no hay ningún outlier, ya que ningún residuo supera el umbral establecido. 
+	 Este bucle comprueba por cada elemento del vector de residuos si supera o no el límite establecido para outliers; en caso afirmativo lo imprime por pantalla. En la salida anterior se puede observar que no hay ningún outlier, ya que ningún residuo supera el umbral establecido.\\ 
 	 
 	 Se va a probar con otro conjunto de datos para demostrar que por medio de este método podemos identificar las anomalías. En primer lugar, se vuelve a confeccionar un archivo de texto (\texttt{.txt}) atendiendo a las normas previamente expuestas. Este archivo de texto se llamará \texttt{planetas2.txt} para evitar problemas de sobrescritura. 
 	
