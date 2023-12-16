@@ -75,7 +75,7 @@ fcd_regression = function(sample) {
   a = param[1, 1]
   b = param[2, 1]
   
-  print(sprintf("y = %.3fx + %.3f", a, b))
+  print(sprintf("y = %.3fx + %.3f", b, a))
   print(sprintf("R2 = %.3f", r))
   
   plot(X, Y, col="blue", main="Recta de regresión", xlab="Eje X", ylab="Eje Y")
@@ -95,7 +95,3 @@ fcd_regression(sample3)
 
 sample4 = read.xlsx("../Memoria/data/conj4.xlsx", colNames=FALSE)
 fcd_regression(sample4)
-
-
-
-
