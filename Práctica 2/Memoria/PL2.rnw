@@ -159,6 +159,52 @@
 		El segundo conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa, estará formado por 6 calificaciones de estudiantes: 1. \{0.89, 2.94\}; 2.\{4.36, 5.21\}; 3. \{3.75, 1.12\}; 4. \{6.25, 3.14\}; 5. \{4.1, 1.8\}; 6. \{3.9, 4.27\}.
 	\end{exercise}
 	
+	La Clusterización Jerárquica Aglomerativa es un método de análisis de datos que comienza tratando cada punto como un cluster individual y luego, iterativamente, combina los clusters más cercanos hasta formar un único cluster. Este método es útil para identificar grupos naturales en los datos. En clase se implementó mediante el paquete \texttt{LearnClust} del CRAN.\\
+	
+	Inicialmente, se crea una matriz con la muestra del problema, y se transpone la matriz para que tenga el formato deseado.
+	
+	<<>>=
+	m <- matrix(
+		c(0.89,2.94, 4.36,5.21, 3.75,1.12, 6.25,3.14, 4.1,1.8, 3.9,4.27),2,6)
+	(m <- t(m))
+	@
+	
+	Para la ejecución del algoritmo utilizamos la función \texttt{agglomerativeHC}. Esta función recibe como parámetros la matriz de datos, la métrica de distancia y el criterio de enlace.
+	
+	<<>>=
+	agglomerativeHC(m, 'EUC', 'MIN')
+	@
+	
+	En este código, `EUC' representa la métrica de distancia euclidiana y `MIN' el criterio para la agrupación de clusters. En la salida se pueden observar cuatro apartados.\\
+	
+	El primero es una figura los datos de la matriz que hemos introducido impresos en una gráfica.\\
+	
+	El segundo es el número de puntos que se han introducido, mediante el atributo \texttt{\$dendrogram}, en este caso 6.\\
+	
+	El tercer apartado es una lista que muestra las coordenadas de todos los clusters al finalizar la ejecución, los 6 primeros son los puntos introducidos y los 5 siguientes son los formados por cada una de las iteraciones uniendo dos clusters anteriores hasta tener todos unidos en el mismo cluster, momento en el que finaliza el algoritmo. Se puede ver en el atributo \texttt{\$clusters}.\\
+	
+	El cuarto apartado es el proceso que se realiza en cada iteración, se pueden ver en el apartado \texttt{\$groupedClusters}.
+	
+	\begin{enumerate}
+		\item Se unen los clusters 3 y 5, para formar el cluster 7.
+		\item Se unen los clusters 2 y 6, para formar el cluster 8.
+		\item Se unen los clusters 4 y 8, para formar el cluster 9.
+		\item Se unen los clusters 7 y 9, para formar el cluster 10.
+		\item Se unen los clusters 1 y 10, para formar el cluster 11.
+	\end{enumerate}
+	
+	Para obtener una explicación detallada paso a paso tal y como se ha explicado en clase, usamos la función \texttt{agglomerativeHC.details}.
+	
+	<<>>=
+	agglomerativeHC.details(m, 'EUC', 'MIN')
+	@
+	
+	La función también se puede ejecutar con diferentes criterios de unión, como `MAX' y `AVG', para observar cómo cambian los clusters:\\
+	
+	\texttt{agglomerativeHC.details(m, `EUC', `MAX')}\\
+	
+	\texttt{agglomerativeHC.details(m, `EUC', `AVG')}
+	
 	\section{Clasificación Supervisada con Árboles de Decisión}
 	
 	\begin{exercise}

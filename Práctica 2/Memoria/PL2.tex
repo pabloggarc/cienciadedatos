@@ -303,6 +303,363 @@
 		El segundo conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa, estará formado por 6 calificaciones de estudiantes: 1. \{0.89, 2.94\}; 2.\{4.36, 5.21\}; 3. \{3.75, 1.12\}; 4. \{6.25, 3.14\}; 5. \{4.1, 1.8\}; 6. \{3.9, 4.27\}.
 	\end{exercise}
 	
+	La Clusterización Jerárquica Aglomerativa es un método de análisis de datos que comienza tratando cada punto como un cluster individual y luego, iterativamente, combina los clusters más cercanos hasta formar un único cluster. Este método es útil para identificar grupos naturales en los datos. En clase se implementó mediante el paquete \texttt{LearnClust} del CRAN.\\
+	
+	Inicialmente, se crea una matriz con la muestra del problema, y se transpone la matriz para que tenga el formato deseado.
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{m} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}
+        \hlkwd{c}\hlstd{(}\hlnum{0.89}\hlstd{,}\hlnum{2.94}\hlstd{,} \hlnum{4.36}\hlstd{,}\hlnum{5.21}\hlstd{,} \hlnum{3.75}\hlstd{,}\hlnum{1.12}\hlstd{,} \hlnum{6.25}\hlstd{,}\hlnum{3.14}\hlstd{,} \hlnum{4.1}\hlstd{,}\hlnum{1.8}\hlstd{,} \hlnum{3.9}\hlstd{,}\hlnum{4.27}\hlstd{),}\hlnum{2}\hlstd{,}\hlnum{6}\hlstd{)}
+\hlstd{(m} \hlkwb{<-} \hlkwd{t}\hlstd{(m))}
+\end{alltt}
+\begin{verbatim}
+##      [,1] [,2]
+## [1,] 0.89 2.94
+## [2,] 4.36 5.21
+## [3,] 3.75 1.12
+## [4,] 6.25 3.14
+## [5,] 4.10 1.80
+## [6,] 3.90 4.27
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Para la ejecución del algoritmo utilizamos la función \texttt{agglomerativeHC}. Esta función recibe como parámetros la matriz de datos, la métrica de distancia y el criterio de enlace.
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{agglomerativeHC}\hlstd{(m,} \hlstr{'EUC'}\hlstd{,} \hlstr{'MIN'}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-8-1} 
+\begin{kframe}\begin{verbatim}
+## $dendrogram
+## Number of objects: 6 
+## 
+## 
+## $clusters
+## $clusters[[1]]
+##     X1   X2
+## 1 0.89 2.94
+## 
+## $clusters[[2]]
+##     X1   X2
+## 1 4.36 5.21
+## 
+## $clusters[[3]]
+##     X1   X2
+## 1 3.75 1.12
+## 
+## $clusters[[4]]
+##     X1   X2
+## 1 6.25 3.14
+## 
+## $clusters[[5]]
+##    X1  X2
+## 1 4.1 1.8
+## 
+## $clusters[[6]]
+##    X1   X2
+## 1 3.9 4.27
+## 
+## $clusters[[7]]
+##     X1   X2
+## 1 3.75 1.12
+## 2 4.10 1.80
+## 
+## $clusters[[8]]
+##     X1   X2
+## 1 4.36 5.21
+## 2 3.90 4.27
+## 
+## $clusters[[9]]
+##     X1   X2
+## 1 3.75 1.12
+## 2 4.10 1.80
+## 3 4.36 5.21
+## 4 3.90 4.27
+## 
+## $clusters[[10]]
+##     X1   X2
+## 1 6.25 3.14
+## 2 3.75 1.12
+## 3 4.10 1.80
+## 4 4.36 5.21
+## 5 3.90 4.27
+## 
+## $clusters[[11]]
+##     X1   X2
+## 1 0.89 2.94
+## 2 6.25 3.14
+## 3 3.75 1.12
+## 4 4.10 1.80
+## 5 4.36 5.21
+## 6 3.90 4.27
+## 
+## 
+## $groupedClusters
+##   cluster1 cluster2
+## 1        3        5
+## 2        2        6
+## 3        7        8
+## 4        4        9
+## 5        1       10
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	En este código, `EUC' representa la métrica de distancia euclidiana y `MIN' el criterio para la agrupación de clusters. En la salida se pueden observar cuatro apartados.\\
+	
+	El primero es una figura los datos de la matriz que hemos introducido impresos en una gráfica.\\
+	
+	El segundo es el número de puntos que se han introducido, mediante el atributo \texttt{\$dendrogram}, en este caso 6.\\
+	
+	El tercer apartado es una lista que muestra las coordenadas de todos los clusters al finalizar la ejecución, los 6 primeros son los puntos introducidos y los 5 siguientes son los formados por cada una de las iteraciones uniendo dos clusters anteriores hasta tener todos unidos en el mismo cluster, momento en el que finaliza el algoritmo. Se puede ver en el atributo \texttt{\$clusters}.\\
+	
+	El cuarto apartado es el proceso que se realiza en cada iteración, se pueden ver en el apartado \texttt{\$groupedClusters}.
+	
+	\begin{enumerate}
+		\item Se unen los clusters 3 y 5, para formar el cluster 7.
+		\item Se unen los clusters 2 y 6, para formar el cluster 8.
+		\item Se unen los clusters 4 y 8, para formar el cluster 9.
+		\item Se unen los clusters 7 y 9, para formar el cluster 10.
+		\item Se unen los clusters 1 y 10, para formar el cluster 11.
+	\end{enumerate}
+	
+	Para obtener una explicación detallada paso a paso tal y como se ha explicado en clase, usamos la función \texttt{agglomerativeHC.details}.
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{agglomerativeHC.details}\hlstd{(m,} \hlstr{'EUC'}\hlstd{,} \hlstr{'MIN'}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \ \ Agglomerative hierarchical clustering is a classification technique that initializes \\\#\# \ a cluster for each data.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ \ It calculates the distance between datas depending on the approach type given and}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ it creates a new cluster joining the most similar clusters until getting only one.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \ \ 'toList' creates a list initializing datas by creating clusters with each one}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ \ These are the clusters with only one element:}}\begin{verbatim}
+## [[1]]
+##      [,1] [,2] [,3]
+## [1,] 0.89 2.94    1
+## 
+## [[2]]
+##      [,1] [,2] [,3]
+## [1,] 4.36 5.21    1
+## 
+## [[3]]
+##      [,1] [,2] [,3]
+## [1,] 3.75 1.12    1
+## 
+## [[4]]
+##      [,1] [,2] [,3]
+## [1,] 6.25 3.14    1
+## 
+## [[5]]
+##      [,1] [,2] [,3]
+## [1,]  4.1  1.8    1
+## 
+## [[6]]
+##      [,1] [,2] [,3]
+## [1,]  3.9 4.27    1
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ \ In each step: \\\#\# \ \ \ - It calculates a matrix distance between active clusters depending on the approach and distance type.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \ \ \ - It gets the minimum distance value from the matrix.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \ \ \ - It creates a new cluster joining the minimum distance clusters.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \ \ \ - It repeats these steps while final clusters do not include all datas.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# STEP => 1}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Matrix Distance (distance type = EUC, approach type = MIN):}}\begin{verbatim}
+##          [,1]     [,2]      [,3]     [,4]      [,5]     [,6]
+## [1,] 0.000000 4.146541 3.3899853 5.363730 3.4064204 3.290745
+## [2,] 4.146541 0.000000 4.1352388 2.803034 3.4198977 1.046518
+## [3,] 3.389985 4.135239 0.0000000 3.214094 0.7647876 3.153569
+## [4,] 5.363730 2.803034 3.2140940 0.000000 2.5333969 2.607566
+## [5,] 3.406420 3.419898 0.7647876 2.533397 0.0000000 2.478084
+## [6,] 3.290745 1.046518 3.1535694 2.607566 2.4780839 0.000000
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The minimum distance is: 0.764787552199956}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The closest clusters are: 3, 5}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The grouped clusters are added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Grouping clusters 3 and cluster 5, it is created a new cluster:}}\begin{verbatim}
+##     X1   X2
+## 1 3.75 1.12
+## 2 4.10 1.80
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The new cluster is added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# STEP => 2}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Matrix Distance (distance type = EUC, approach type = MIN):}}\begin{verbatim}
+##          [,1]     [,2] [,3]     [,4] [,5]     [,6]     [,7]
+## [1,] 0.000000 4.146541    0 5.363730    0 3.290745 3.389985
+## [2,] 4.146541 0.000000    0 2.803034    0 1.046518 3.419898
+## [3,] 0.000000 0.000000    0 0.000000    0 0.000000 0.000000
+## [4,] 5.363730 2.803034    0 0.000000    0 2.607566 2.533397
+## [5,] 0.000000 0.000000    0 0.000000    0 0.000000 0.000000
+## [6,] 3.290745 1.046518    0 2.607566    0 0.000000 2.478084
+## [7,] 3.389985 3.419898    0 2.533397    0 2.478084 0.000000
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The minimum distance is: 1.04651803615609}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The closest clusters are: 2, 6}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The grouped clusters are added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Grouping clusters 2 and cluster 6, it is created a new cluster:}}\begin{verbatim}
+##     X1   X2
+## 1 4.36 5.21
+## 2 3.90 4.27
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The new cluster is added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# STEP => 3}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Matrix Distance (distance type = EUC, approach type = MIN):}}\begin{verbatim}
+##          [,1] [,2] [,3]     [,4] [,5] [,6]     [,7]     [,8]
+## [1,] 0.000000    0    0 5.363730    0    0 3.389985 3.290745
+## [2,] 0.000000    0    0 0.000000    0    0 0.000000 0.000000
+## [3,] 0.000000    0    0 0.000000    0    0 0.000000 0.000000
+## [4,] 5.363730    0    0 0.000000    0    0 2.533397 2.607566
+## [5,] 0.000000    0    0 0.000000    0    0 0.000000 0.000000
+## [6,] 0.000000    0    0 0.000000    0    0 0.000000 0.000000
+## [7,] 3.389985    0    0 2.533397    0    0 0.000000 2.478084
+## [8,] 3.290745    0    0 2.607566    0    0 2.478084 0.000000
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The minimum distance is: 2.47808393723861}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The closest clusters are: 7, 8}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The grouped clusters are added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Grouping clusters 7 and cluster 8, it is created a new cluster:}}\begin{verbatim}
+##     X1   X2
+## 1 3.75 1.12
+## 2 4.10 1.80
+## 3 4.36 5.21
+## 4 3.90 4.27
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The new cluster is added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# STEP => 4}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Matrix Distance (distance type = EUC, approach type = MIN):}}\begin{verbatim}
+##           [,1] [,2] [,3]     [,4] [,5] [,6] [,7] [,8]     [,9]
+##  [1,] 0.000000    0    0 5.363730    0    0    0    0 3.290745
+##  [2,] 0.000000    0    0 0.000000    0    0    0    0 0.000000
+##  [3,] 0.000000    0    0 0.000000    0    0    0    0 0.000000
+##  [4,] 5.363730    0    0 0.000000    0    0    0    0 2.533397
+##  [5,] 0.000000    0    0 0.000000    0    0    0    0 0.000000
+##  [6,] 0.000000    0    0 0.000000    0    0    0    0 0.000000
+##  [7,] 0.000000    0    0 0.000000    0    0    0    0 0.000000
+##  [8,] 0.000000    0    0 0.000000    0    0    0    0 0.000000
+##  [9,] 3.290745    0    0 2.533397    0    0    0    0 0.000000
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The minimum distance is: 2.53339692902632}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The closest clusters are: 4, 9}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The grouped clusters are added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Grouping clusters 4 and cluster 9, it is created a new cluster:}}\begin{verbatim}
+##     X1   X2
+## 1 6.25 3.14
+## 2 3.75 1.12
+## 3 4.10 1.80
+## 4 4.36 5.21
+## 5 3.90 4.27
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The new cluster is added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# STEP => 5}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Matrix Distance (distance type = EUC, approach type = MIN):}}\begin{verbatim}
+##           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]    [,10]
+##  [1,] 0.000000    0    0    0    0    0    0    0    0 3.290745
+##  [2,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [3,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [4,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [5,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [6,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [7,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [8,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+##  [9,] 0.000000    0    0    0    0    0    0    0    0 0.000000
+## [10,] 3.290745    0    0    0    0    0    0    0    0 0.000000
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The minimum distance is: 3.29074459659208}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The closest clusters are: 1, 10}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The grouped clusters are added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ Grouping clusters 1 and cluster 10, it is created a new cluster:}}\begin{verbatim}
+##     X1   X2
+## 1 0.89 2.94
+## 2 6.25 3.14
+## 3 3.75 1.12
+## 4 4.10 1.80
+## 5 4.36 5.21
+## 6 3.90 4.27
+\end{verbatim}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ The new cluster is added to the solution.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# \ This loop has been repeated until the last cluster contained every single clusters.}}\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-9-1} 
+\end{knitrout}
+	
+	La función también se puede ejecutar con diferentes criterios de unión, como `MAX' y `AVG', para observar cómo cambian los clusters:\\
+	
+	\texttt{agglomerativeHC.details(m, `EUC', `MAX')}\\
+	
+	\texttt{agglomerativeHC.details(m, `EUC', `AVG')}
+	
 	\section{Clasificación Supervisada con Árboles de Decisión}
 	
 	\begin{exercise}
