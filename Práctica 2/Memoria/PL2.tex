@@ -973,4 +973,420 @@
 \end{knitrout}
 	 
 	 Se observa en la salida del código que el suceso 2 es un outlier. Atendiendo a los parámetros que se han ido obteniendo, se observa a simple vista que el suceso 2 supera el límite establecido. 
+	 
+	 \chapter{Ejercicios autónomos}\pagestyle{fancy}
+	 
+	 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
+	 
+	 \section{Clasificación No Supervisada con K-Means}
+	 
+	 \begin{exercise}
+	 	El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Kmeans, estará formado por los siguientes 15 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: 1.\{3.5, 4.5\}; 2.\{0.75, 3.25\}; 3.\{0, 3\}; 4.\{1.75, 0.75\}; 5.\{3, 3.75\}; 6.\{3.75, 4.5\}; 7.\{1.25, 0.75\}; 8.\{0.25, 3\}; 9.\{3.5, 4.25\}; 10.\{1.5, 0.5\}; 11.\{1, 1\}; 12.\{3, 4\}; 13.\{0.5, 3\}; 14.\{2, 0.25\}; 15.\{0, 2.5\}. Del análisis visual de los datos se ha concluido que hay una alta probabilidad que sean tres clusters.
+	 \end{exercise}
+	 
+	 Los datos que se proponen en el enunciado del ejercicio van a ser introducidos en un fichero Excel (\texttt{.xlsx}), de tal forma que estos se van a obtener leyendo este fichero desde R. Para ello, se hará uso de la función \texttt{read.xlsx} contenida en el paquete \texttt{openxlsx} que se ha visto previamente. Con esta función se puede pasar como parámetro la ruta del archivo que contiene los datos, devolviendo los mismos en un dataframe.\\
+	 
+		 Para este ejercicio en concreto se hará uso de dos ficheros, uno con los datos de velocidad y temperatura (dispuestos cada uno en una columna del Excel), y otro fichero que contenga las coordenadas de los centroides iniciales que se van a utilizar en el algoritmo. En la primera fila de ambos ficheros deberá ir el título de cada columna. \\
+	 
+	 Primeramente se leen los datos del ejercicio. A partir de ahora, a cada uno de estos datos se les conocerán como puntos.
+	 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(data} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{read.xlsx}\hlstd{(}\hlstr{"data/datosKMeans.xlsx"}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+##    Velocidad Temperatura
+## 1       3.50        4.50
+## 2       0.75        3.25
+## 3       0.00        3.00
+## 4       1.75        0.75
+## 5       3.00        3.75
+## 6       3.75        4.50
+## 7       1.25        0.75
+## 8       0.25        3.00
+## 9       3.50        4.25
+## 10      1.50        0.50
+## 11      1.00        1.00
+## 12      3.00        4.00
+## 13      0.50        3.00
+## 14      2.00        0.25
+## 15      0.00        2.50
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	 
+	 Y posteriormente se lee el fichero con los centroides iniciales. En la clasificación final se tendrán tantos clusters como centroides se hayan introducido, ya que al final un centroide representa un cluster.
+	 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(centroides} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{read.xlsx}\hlstd{(}\hlstr{"data/centroides.xlsx"}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+##     X   Y
+## 1 0.5 0.5
+## 2 1.0 2.0
+## 3 2.0 1.0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	 
+	 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. Previo a ello se necesitan dos funciones auxiliares que ya se han visto en la anterior práctica. Estas son la función \texttt{len} para determinar la longitud de una lista y \texttt{euc\_distance}, a la cual se pasan dos puntos y devuelve la distancia euclídea entre los mismos.
+	 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
+                 \hlstd{count} \hlkwb{=} \hlnum{0}
+                 \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list) \{}
+                        \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
+                 \hlstd{\}}
+                 \hlstd{count}
+\hlstd{\}}
+
+\hlstd{euc_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,} \hlkwc{p2}\hlstd{) \{}
+        \hlkwd{sqrt}\hlstd{(((p1[}\hlnum{1}\hlstd{]} \hlopt{-} \hlstd{p2[}\hlnum{1}\hlstd{])}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{+} \hlstd{((p1[}\hlnum{2}\hlstd{]} \hlopt{-} \hlstd{p2[}\hlnum{2}\hlstd{])}\hlopt{^}\hlnum{2}\hlstd{))}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	 
+	 El primer paso del algoritmo consiste en realizar una matriz de distancias. Esta matriz tendrá tantas filas como centroides se hayan declarado y tantas columnas como puntos se hayan introducido. Esta matriz recoge las distancias euclídeas de todos los puntos a todos los centroides. Para realizar esta tabla se ha programado la siguiente función, la cual va rellenando una matriz con las distancias euclídeas de cada punto a cada cluster.
+	 
+	 {\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{create_distance_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{points}\hlstd{,} \hlkwc{centroids}\hlstd{) \{}
+                \hlstd{n_pts} \hlkwb{=} \hlkwd{nrow}\hlstd{(points)}
+                \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(centroids)}
+                \hlstd{distances} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
+                \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cent) \{}
+                        \hlkwa{for} \hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
+                                \hlstd{distances[cent, pt]} \hlkwb{=}
+                                \hlkwd{euc_distance}\hlstd{(points[pt,], centroids[cent,])}
+                        \hlstd{\}}
+        \hlstd{\}}
+                \hlstd{distances}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	 }
+	 
+	 Una vez se tiene la matriz de distancias se debe realizar una matriz de asignaciones. Esta matriz será de las mismas dimensiones que la anterior, pero ahora no contendrá las distancias euclídeas. Por cada punto (columna) tendremos un 0 o un 1. Si aparece un 1 en una posición, la distancia del punto a ese cluster que representa la fila es la mínima. Por ejemplo; si el punto 1 esta más cerca del cluster 2 que del resto de clusters, la posición \texttt{$1x2$} tendrá un 1, y el resto de la columna un 0.\\
+	 
+	 Para realizar esta tabla se itera punto por punto, y por cada uno se observa la distancia del mismo a todos los clusters. Se debe poner un 1 en el lugar donde se encuentra la distancia euclídea mínima y un 0 en el resto de celdas de la columna. Es por ello que primero se inicializa a 0 toda la matriz y se va buscando por cada punto el cluster que está a menos distancia, para poner un 1 en su celda correspondiente. El código que recoge esta funcionalidad es el siguiente:
+	 
+	 {\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{create_assigment_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{dist_matrix}\hlstd{) \{}
+                 \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(dist_matrix)}
+                 \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(dist_matrix)}
+                 \hlstd{assig_matrix} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
+                 \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
+                         \hlstd{minimum_centroid} \hlkwb{=} \hlnum{1}
+                         \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n_cent) \{}
+                                 \hlkwa{if} \hlstd{(dist_matrix[cent, col]} \hlopt{<}
+                                   \hlstd{dist_matrix[minimum_centroid, col]) \{}
+                                        \hlstd{minimum_centroid} \hlkwb{=} \hlstd{cent}
+                                \hlstd{\}}
+                         \hlstd{\}}
+                         \hlstd{assig_matrix[minimum_centroid, col]} \hlkwb{=} \hlnum{1}
+                 \hlstd{\}}
+                 \hlstd{assig_matrix}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	}
+	 
+	 Por último, una vez se han asignado los puntos más próximos a cada cluster, se deben recalcular los centroides del mismo. Para recalcular un centroide en específico se deben tener en cuenta todos los puntos asociados al mismo. Las nuevas coordenadas del centroide se calculan realizando la media de los puntos que tiene asignados. El resultado de este algoritmo resulta en un nuevo dataframe donde, por cada fila, se van a tener las nuevas componentes del centroide correspondiente, y que serán usados para continuar con la ejecución del algoritmo.\\
+	 
+	 Antes de ver el código, se ha de considerar que un centroide puede no tener ningún punto asociado, por lo que el cálculo que se propone arriba no sería posible (ya que se tendría que dividir entre cero a la hora de calcular la media). Es por ello que si un centroide no tiene ningún punto asociado, este se quedará igual (sus componentes no se verán alteradas). Esto resultará en que el centroide propuesto no se ha definido muy bien, y desemboca en una clasificación diferente a la esperada.
+	 
+	 {\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{update_cent} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df_sample}\hlstd{,} \hlkwc{centroids}\hlstd{,} \hlkwc{assig_matrix}\hlstd{) \{}
+                 \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
+                 \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
+                 \hlstd{new_centroids} \hlkwb{=} \hlkwd{c}\hlstd{()}
+                 \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cent) \{}
+                         \hlstd{centroid_x} \hlkwb{=} \hlnum{0}
+                         \hlstd{centroid_y} \hlkwb{=} \hlnum{0}
+                         \hlstd{count} \hlkwb{=} \hlnum{0}
+                         \hlkwa{for} \hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
+                                 \hlkwa{if} \hlstd{(assig_matrix[cent, pt]} \hlopt{==} \hlnum{1}\hlstd{) \{}
+                                         \hlstd{centroid_x} \hlkwb{=} \hlstd{centroid_x} \hlopt{+} \hlstd{df_sample[pt,} \hlnum{1}\hlstd{]}
+                                         \hlstd{centroid_y} \hlkwb{=} \hlstd{centroid_y} \hlopt{+} \hlstd{df_sample[pt,} \hlnum{2}\hlstd{]}
+                                         \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
+                                 \hlstd{\}}
+                         \hlstd{\}}
+                         \hlkwa{if} \hlstd{(count} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                                \hlstd{new_centroids} \hlkwb{=} \hlkwd{append}\hlstd{(}\hlkwd{append}\hlstd{(new_centroids,}
+                                   \hlstd{centroids[cent,}\hlnum{1}\hlstd{]),centroids[cent,}\hlnum{2}\hlstd{])}
+                         \hlstd{\}}
+                         \hlkwa{else} \hlstd{\{}
+                                \hlstd{new_centroids} \hlkwb{=} \hlkwd{append}\hlstd{(}\hlkwd{append}\hlstd{(new_centroids,}
+                                   \hlstd{centroid_x}\hlopt{/}\hlstd{count), centroid_y}\hlopt{/}\hlstd{count)}
+                         \hlstd{\}}
+                 \hlstd{\}}
+                 \hlkwd{data.frame}\hlstd{(}\hlkwd{t}\hlstd{(}\hlkwd{matrix}\hlstd{(new_centroids,} \hlnum{2}\hlstd{, n_cent,}
+                    \hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,}\hlstr{"Y"}\hlstd{)))))}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	}
+	 
+	 El algoritmo se ejecutará hasta que la matriz de asignaciones sea la misma en una iteración con respecto a su anterior. Para visualizar el resultado o clasificación final se propone una función que tomará la matriz de asignaciones final y el valor de los centroides finales. Este método imprimirá las coordenadas de cada centroide, así como los puntos que conforman el cluster representado por ese centroide.
+	 
+	 {\tiny
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{printCentroids} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df_sample}\hlstd{,} \hlkwc{centroids}\hlstd{,} \hlkwc{assig_matrix}\hlstd{)\{}
+                 \hlstd{n_cents} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
+                 \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
+                 \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n--RESULTADOS--\textbackslash{}n"}\hlstd{)}
+                 \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cents)\{}
+                         \hlkwd{cat}\hlstd{(}\hlstr{"Centroide"}\hlstd{, cent,} \hlstr{"("}\hlstd{, centroids[cent,}\hlnum{1}\hlstd{],} \hlstr{","}\hlstd{, centroids[cent,}\hlnum{2}\hlstd{],}\hlstr{") \textbackslash{}n"}\hlstd{)}
+                         \hlkwa{for}\hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts)\{}
+                                 \hlkwa{if} \hlstd{(assig_matrix[cent,pt]} \hlopt{==} \hlnum{1}\hlstd{)\{}
+                                        \hlkwd{cat}\hlstd{(}\hlstr{"  - Punto"}\hlstd{, pt,} \hlstr{"("}\hlstd{, df_sample[pt,} \hlnum{1}\hlstd{],} \hlstr{","}\hlstd{, df_sample[pt,}\hlnum{2}\hlstd{],} \hlstr{")\textbackslash{}n"}\hlstd{)}
+                                 \hlstd{\}}
+                         \hlstd{\}}
+                         \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
+                 \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	}
+	 
+	 De todo este algoritmo, se ha considerado que la salida mas útil para el analista es un vector de clusterización. Este consiste en un vector de tantos elementos como puntos se hayan introducido, de tal forma que la posición $i$-ésima del mismo corresponda con el cluster asociado al punto $i$. Se itera la matriz de asignaciones final por puntos, y por cada uno de ellos se devuelve el valor de la fila que contiene un 1 (el número del centroide al que se ha asociado en la clasificación final)
+	 
+	 {\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{create_clust_vector} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{assig_matrix}\hlstd{)\{}
+                 \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
+                 \hlstd{n_cents} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
+                 \hlstd{clust_vector} \hlkwb{=} \hlkwd{c}\hlstd{()}
+                 \hlkwa{for}\hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts)\{}
+                         \hlkwa{for}\hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cents)\{}
+                                 \hlkwa{if} \hlstd{(assig_matrix[cent,pt]} \hlopt{==} \hlnum{1}\hlstd{)\{}
+                                        \hlstd{clust_vector} \hlkwb{=} \hlkwd{append}\hlstd{(clust_vector, cent)}
+                                 \hlstd{\}}
+                         \hlstd{\}}
+                 \hlstd{\}}
+                 \hlstd{clust_vector}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	}
+	 
+	 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clusterización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clusterización.
+	 
+	 {\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fcd_kmeans} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df_sample}\hlstd{,} \hlkwc{centroids}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
+                 \hlstd{n_pts} \hlkwb{=} \hlkwd{nrow}\hlstd{(df_sample)}
+                 \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(centroids)}
+
+                 \hlstd{prev_assig_matrix} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}
+                     \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
+
+                 \hlstd{step} \hlkwb{=} \hlnum{1}
+                 \hlstd{dist_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df_sample, centroids)}
+                 \hlstd{assig_matrix} \hlkwb{=} \hlkwd{create_assigment_matrix}\hlstd{(dist_matrix)}
+                 \hlkwa{if}\hlstd{(details)\{}
+                         \hlkwd{cat}\hlstd{(}\hlstr{"PASO"}\hlstd{, step,} \hlstr{"\textbackslash{}n------- \textbackslash{}n"}\hlstd{)}
+                         \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de distancias \textbackslash{}n"}\hlstd{)}
+                         \hlkwd{print}\hlstd{(dist_matrix)}
+                         \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de asignaciones \textbackslash{}n"}\hlstd{)}
+                         \hlkwd{print}\hlstd{(assig_matrix)}
+                 \hlstd{\}}
+
+                 \hlkwa{while} \hlstd{(}\hlopt{!}\hlkwd{identical}\hlstd{(prev_assig_matrix, assig_matrix)) \{}
+                         \hlstd{prev_assig_matrix} \hlkwb{=} \hlstd{assig_matrix}
+                         \hlstd{centroids} \hlkwb{=} \hlkwd{update_cent}\hlstd{(df_sample, centroids, assig_matrix)}
+                         \hlstd{dist_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df_sample, centroids)}
+                         \hlstd{assig_matrix} \hlkwb{=} \hlkwd{create_assigment_matrix}\hlstd{(dist_matrix)}
+
+                         \hlkwa{if}\hlstd{(details) \{}
+                                 \hlkwd{cat}\hlstd{(}\hlstr{"Los nuevos centroides son:\textbackslash{}n"}\hlstd{)}
+                                 \hlkwd{print}\hlstd{(centroids)}
+                                 \hlstd{step} \hlkwb{=} \hlstd{step} \hlopt{+} \hlnum{1}
+                                 \hlkwd{cat}\hlstd{(}\hlstr{"PASO"}\hlstd{, step,} \hlstr{"\textbackslash{}n------- \textbackslash{}n"}\hlstd{)}
+                                 \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de distancias \textbackslash{}n"}\hlstd{)}
+                                 \hlkwd{print}\hlstd{(dist_matrix)}
+                                 \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de asignaciones \textbackslash{}n"}\hlstd{)}
+                                 \hlkwd{print}\hlstd{(assig_matrix)}
+                         \hlstd{\}}
+                 \hlstd{\}}
+                 \hlkwd{printCentroids}\hlstd{(df_sample, centroids, assig_matrix)}
+                 \hlkwd{cat}\hlstd{(}\hlstr{"Vector de clusterización\textbackslash{}n"}\hlstd{)}
+                 \hlkwd{create_clust_vector}\hlstd{(assig_matrix)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	}
+	 
+	 Un aspecto a destacar es el uso de la función \texttt{identical} contenida en el paquete \texttt{base}. Esta función permite comparar si dos dataframes son iguales. Esto sirve en el algoritmo para ver si la matriz de asignaciones de la anterior iteración es igual que la actual. Esta condición será la que se deba cumplir para que el algoritmo finalice.\\
+	 
+	 Con esto ya estaría el algoritmo implementado. Ahora se va a llamar a la función \texttt{fcd\_kmeans} con los datos leídos al principio. Se va a optar por una salida detallada.
+	 
+	 {\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{fcd_kmeans}\hlstd{(data, centroides,} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## PASO 1 
+## ------- 
+## Matriz de distancias 
+##         X1       X2       X3        X4       X5       X6        X7       X8
+## 1 5.000000 2.761340 2.549510 1.2747549 4.100305 5.153882 0.7905694 2.512469
+## 2 3.535534 1.274755 1.414214 1.4577380 2.657536 3.716517 1.2747549 1.250000
+## 3 3.807887 2.573908 2.828427 0.3535534 2.926175 3.913119 0.7905694 2.657536
+##         X9       X10       X11      X12      X13      X14      X15
+## 1 4.802343 1.0000000 0.7071068 4.301163 2.500000 1.520691 2.061553
+## 2 3.363406 1.5811388 1.0000000 2.828427 1.118034 2.015564 1.118034
+## 3 3.579455 0.7071068 1.0000000 3.162278 2.500000 0.750000 2.500000
+## Matriz de asignaciones 
+##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
+## 1  0  0  0  0  0  0  1  0  0   0   1   0   0   0   0
+## 2  1  1  1  0  1  1  0  1  1   0   0   1   1   0   1
+## 3  0  0  0  1  0  0  0  0  0   1   0   0   0   1   0
+## Los nuevos centroides son:
+##       X     Y
+## 1 1.125 0.875
+## 2 1.825 3.575
+## 3 1.750 0.500
+## PASO 2 
+## ------- 
+## Matriz de distancias 
+##         X1       X2       X3        X4       X5       X6        X7       X8
+## 1 4.333734 2.404423 2.404423 0.6373774 3.432383 4.475628 0.1767767 2.298097
+## 2 1.913439 1.123054 1.913439 2.8259954 1.187960 2.135708 2.8829239 1.676678
+## 3 4.366062 2.926175 3.051639 0.2500000 3.482097 4.472136 0.5590170 2.915476
+##         X9       X10       X11      X12      X13       X14      X15
+## 1 4.126894 0.5303301 0.1767767 3.644345 2.215006 1.0752907 1.976424
+## 2 1.805893 3.0921271 2.7039323 1.249500 1.444386 3.3296021 2.118077
+## 3 4.138236 0.2500000 0.9013878 3.716517 2.795085 0.3535534 2.657536
+## Matriz de asignaciones 
+##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
+## 1  0  0  0  0  0  0  1  0  0   0   1   0   0   0   1
+## 2  1  1  1  0  1  1  0  1  1   0   0   1   1   0   0
+## 3  0  0  0  1  0  0  0  0  0   1   0   0   0   1   0
+## Los nuevos centroides son:
+##          X        Y
+## 1 0.750000 1.416667
+## 2 2.027778 3.694444
+## 3 1.750000 0.500000
+## PASO 3 
+## ------- 
+## Matriz de distancias 
+##         X1       X2       X3       X4        X5       X6        X7       X8
+## 1 4.131518 1.833333 1.751983 1.201850 3.2414417 4.301970 0.8333333 1.660405
+## 2 1.678201 1.352866 2.143394 2.957518 0.9738082 1.901307 3.0454378 1.908598
+## 3 4.366062 2.926175 3.051639 0.250000 3.4820971 4.472136 0.5590170 2.915476
+##         X9      X10       X11      X12      X13       X14      X15
+## 1 3.948453 1.184389 0.4859127 3.425801 1.602949 1.7098570 1.317616
+## 2 1.573557 3.237750 2.8838096 1.019108 1.678201 3.4445564 2.353419
+## 3 4.138236 0.250000 0.9013878 3.716517 2.795085 0.3535534 2.657536
+## Matriz de asignaciones 
+##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
+## 1  0  0  1  0  0  0  0  1  0   0   1   0   1   0   1
+## 2  1  1  0  0  1  1  0  0  1   0   0   1   0   0   0
+## 3  0  0  0  1  0  0  1  0  0   1   0   0   0   1   0
+## Los nuevos centroides son:
+##          X        Y
+## 1 0.350000 2.500000
+## 2 2.916667 4.041667
+## 3 1.625000 0.562500
+## PASO 4 
+## ------- 
+## Matriz de distancias 
+##          X1       X2        X3       X4        X5        X6        X7       X8
+## 1 3.7312866 0.850000 0.6103278 2.241093 2.9300171 3.9446166 1.9678669 0.509902
+## 2 0.7418539 2.306768 3.0970977 3.492303 0.3033379 0.9510594 3.6895592 2.862897
+## 3 4.3611388 2.826355 2.9295104 0.225347 3.4714235 4.4743191 0.4192627 2.798577
+##          X9       X10       X11       X12       X13       X14      X15
+## 1 3.6034705 2.3070544 1.6347783 3.0450780 0.5220153 2.7901613 0.350000
+## 2 0.6194195 3.8144917 3.5951839 0.0931695 2.6316054 3.9008991 3.299042
+## 3 4.1368202 0.1397542 0.7629097 3.7023008 2.6845914 0.4881406 2.528741
+## Matriz de asignaciones 
+##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
+## 1  0  1  1  0  0  0  0  1  0   0   0   0   1   0   1
+## 2  1  0  0  0  1  1  0  0  1   0   0   1   0   0   0
+## 3  0  0  0  1  0  0  1  0  0   1   1   0   0   1   0
+## Los nuevos centroides son:
+##      X    Y
+## 1 0.30 2.95
+## 2 3.35 4.20
+## 3 1.50 0.65
+## PASO 5 
+## ------- 
+## Matriz de distancias 
+##          X1        X2        X3        X4        X5       X6        X7
+## 1 3.5556293 0.5408327 0.3041381 2.6348624 2.8160256 3.782195 2.3963514
+## 2 0.3354102 2.7681221 3.5584407 3.8029594 0.5700877 0.500000 4.0388736
+## 3 4.3384905 2.7060118 2.7879204 0.2692582 3.4438351 4.459260 0.2692582
+##           X8        X9      X10       X11       X12       X13       X14
+## 1 0.07071068 3.4539832 2.728095 2.0718349 2.8969812 0.2061553 3.1906112
+## 2 3.32415403 0.1581139 4.136726 3.9702015 0.4031129 3.0923292 4.1743263
+## 3 2.66176633 4.1182521 0.150000 0.6103278 3.6704904 2.5539186 0.6403124
+##         X15
+## 1 0.5408327
+## 2 3.7566608
+## 3 2.3817011
+## Matriz de asignaciones 
+##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
+## 1  0  1  1  0  0  0  0  1  0   0   0   0   1   0   1
+## 2  1  0  0  0  1  1  0  0  1   0   0   1   0   0   0
+## 3  0  0  0  1  0  0  1  0  0   1   1   0   0   1   0
+## 
+## --RESULTADOS--
+## Centroide 1 ( 0.3 , 2.95 ) 
+##   - Punto 2 ( 0.75 , 3.25 )
+##   - Punto 3 ( 0 , 3 )
+##   - Punto 8 ( 0.25 , 3 )
+##   - Punto 13 ( 0.5 , 3 )
+##   - Punto 15 ( 0 , 2.5 )
+## 
+## Centroide 2 ( 3.35 , 4.2 ) 
+##   - Punto 1 ( 3.5 , 4.5 )
+##   - Punto 5 ( 3 , 3.75 )
+##   - Punto 6 ( 3.75 , 4.5 )
+##   - Punto 9 ( 3.5 , 4.25 )
+##   - Punto 12 ( 3 , 4 )
+## 
+## Centroide 3 ( 1.5 , 0.65 ) 
+##   - Punto 4 ( 1.75 , 0.75 )
+##   - Punto 7 ( 1.25 , 0.75 )
+##   - Punto 10 ( 1.5 , 0.5 )
+##   - Punto 11 ( 1 , 1 )
+##   - Punto 14 ( 2 , 0.25 )
+## 
+## Vector de clusterización
+##  [1] 2 1 1 3 2 2 3 1 2 3 3 2 1 3 1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	}
+	 
+	 Se ha optado por tres centroides que más o menos se encuentran entre el conjunto total de puntos. Han sido necesarios 4 pasos para llegar a una solución. Se puede ver cómo se han ido calculando las matrices de distancias y asignaciones, así como los nuevos centroides, hasta que se ha llegado a los resultados finales. En estos se aprecian las coordenadas de los tres centroides así como los puntos que contienen cada uno. Por último, se devuelve el vector de clusterización que también se puede ver en la salida de la función realizada.
 \end{document}

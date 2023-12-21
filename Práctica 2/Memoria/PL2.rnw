@@ -401,4 +401,225 @@
 	 @
 	 
 	 Se observa en la salida del código que el suceso 2 es un outlier. Atendiendo a los parámetros que se han ido obteniendo, se observa a simple vista que el suceso 2 supera el límite establecido. 
+	 
+	 \chapter{Ejercicios autónomos}\pagestyle{fancy}
+	 
+	 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
+	 
+	 \section{Clasificación No Supervisada con K-Means}
+	 
+	 \begin{exercise}
+	 	El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Kmeans, estará formado por los siguientes 15 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: 1.\{3.5, 4.5\}; 2.\{0.75, 3.25\}; 3.\{0, 3\}; 4.\{1.75, 0.75\}; 5.\{3, 3.75\}; 6.\{3.75, 4.5\}; 7.\{1.25, 0.75\}; 8.\{0.25, 3\}; 9.\{3.5, 4.25\}; 10.\{1.5, 0.5\}; 11.\{1, 1\}; 12.\{3, 4\}; 13.\{0.5, 3\}; 14.\{2, 0.25\}; 15.\{0, 2.5\}. Del análisis visual de los datos se ha concluido que hay una alta probabilidad que sean tres clusters.
+	 \end{exercise}
+	 
+	 Los datos que se proponen en el enunciado del ejercicio van a ser introducidos en un fichero Excel (\texttt{.xlsx}), de tal forma que estos se van a obtener leyendo este fichero desde R. Para ello, se hará uso de la función \texttt{read.xlsx} contenida en el paquete \texttt{openxlsx} que se ha visto previamente. Con esta función se puede pasar como parámetro la ruta del archivo que contiene los datos, devolviendo los mismos en un dataframe.\\
+	 
+		 Para este ejercicio en concreto se hará uso de dos ficheros, uno con los datos de velocidad y temperatura (dispuestos cada uno en una columna del Excel), y otro fichero que contenga las coordenadas de los centroides iniciales que se van a utilizar en el algoritmo. En la primera fila de ambos ficheros deberá ir el título de cada columna. \\
+	 
+	 Primeramente se leen los datos del ejercicio. A partir de ahora, a cada uno de estos datos se les conocerán como puntos.
+	 
+	 <<>>=
+	 (data = data.frame(read.xlsx("data/datosKMeans.xlsx")))
+	 @
+	 
+	 Y posteriormente se lee el fichero con los centroides iniciales. En la clasificación final se tendrán tantos clusters como centroides se hayan introducido, ya que al final un centroide representa un cluster.
+	 
+	 <<>>=
+	 (centroides = data.frame(read.xlsx("data/centroides.xlsx")))
+	 @
+	 
+	 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. Previo a ello se necesitan dos funciones auxiliares que ya se han visto en la anterior práctica. Estas son la función \texttt{len} para determinar la longitud de una lista y \texttt{euc\_distance}, a la cual se pasan dos puntos y devuelve la distancia euclídea entre los mismos.
+	 
+	 <<>>=
+	 len = function(list) {
+		 count = 0
+		 for (element in list) {
+		 	count = count + 1
+		 }
+		 count
+	 }
+	 
+	 euc_distance = function(p1, p2) {
+	 	sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
+	 }
+	 @
+	 
+	 El primer paso del algoritmo consiste en realizar una matriz de distancias. Esta matriz tendrá tantas filas como centroides se hayan declarado y tantas columnas como puntos se hayan introducido. Esta matriz recoge las distancias euclídeas de todos los puntos a todos los centroides. Para realizar esta tabla se ha programado la siguiente función, la cual va rellenando una matriz con las distancias euclídeas de cada punto a cada cluster.
+	 
+	 {\small
+ 	<<>>=
+ 	create_distance_matrix = function(points, centroids) {
+	 	n_pts = nrow(points)
+	 	n_cent = nrow(centroids)
+	 	distances = data.frame(matrix(ncol = n_pts, nrow = n_cent))
+	 	for (cent in 1:n_cent) {
+		 	for (pt in 1:n_pts) {
+		 		distances[cent, pt] = 
+		 		euc_distance(points[pt,], centroids[cent,])
+		 	}
+ 		}
+	 	distances            
+ 	}
+ 	@
+	 }
+	 
+	 Una vez se tiene la matriz de distancias se debe realizar una matriz de asignaciones. Esta matriz será de las mismas dimensiones que la anterior, pero ahora no contendrá las distancias euclídeas. Por cada punto (columna) tendremos un 0 o un 1. Si aparece un 1 en una posición, la distancia del punto a ese cluster que representa la fila es la mínima. Por ejemplo; si el punto 1 esta más cerca del cluster 2 que del resto de clusters, la posición \texttt{$1x2$} tendrá un 1, y el resto de la columna un 0.\\
+	 
+	 Para realizar esta tabla se itera punto por punto, y por cada uno se observa la distancia del mismo a todos los clusters. Se debe poner un 1 en el lugar donde se encuentra la distancia euclídea mínima y un 0 en el resto de celdas de la columna. Es por ello que primero se inicializa a 0 toda la matriz y se va buscando por cada punto el cluster que está a menos distancia, para poner un 1 en su celda correspondiente. El código que recoge esta funcionalidad es el siguiente:
+	 
+	 {\small
+	 <<>>=
+	 create_assigment_matrix = function(dist_matrix) {
+		 n_pts = ncol(dist_matrix)
+		 n_cent = nrow(dist_matrix)
+		 assig_matrix = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
+		 for (col in 1:n_pts) {
+			 minimum_centroid = 1
+			 for (cent in 2:n_cent) {
+				 if (dist_matrix[cent, col] < 
+				   dist_matrix[minimum_centroid, col]) {
+				 	minimum_centroid = cent
+			 	}
+			 }
+			 assig_matrix[minimum_centroid, col] = 1
+		 }
+		 assig_matrix            
+	 }
+	 @
+	}
+	 
+	 Por último, una vez se han asignado los puntos más próximos a cada cluster, se deben recalcular los centroides del mismo. Para recalcular un centroide en específico se deben tener en cuenta todos los puntos asociados al mismo. Las nuevas coordenadas del centroide se calculan realizando la media de los puntos que tiene asignados. El resultado de este algoritmo resulta en un nuevo dataframe donde, por cada fila, se van a tener las nuevas componentes del centroide correspondiente, y que serán usados para continuar con la ejecución del algoritmo.\\
+	 
+	 Antes de ver el código, se ha de considerar que un centroide puede no tener ningún punto asociado, por lo que el cálculo que se propone arriba no sería posible (ya que se tendría que dividir entre cero a la hora de calcular la media). Es por ello que si un centroide no tiene ningún punto asociado, este se quedará igual (sus componentes no se verán alteradas). Esto resultará en que el centroide propuesto no se ha definido muy bien, y desemboca en una clasificación diferente a la esperada.
+	 
+	 {\small
+	 <<>>=
+	 update_cent = function(df_sample, centroids, assig_matrix) {
+		 n_pts = ncol(assig_matrix)
+		 n_cent = nrow(assig_matrix)
+		 new_centroids = c()
+		 for (cent in 1:n_cent) {
+			 centroid_x = 0
+			 centroid_y = 0
+			 count = 0
+			 for (pt in 1:n_pts) {
+				 if (assig_matrix[cent, pt] == 1) {
+					 centroid_x = centroid_x + df_sample[pt, 1]
+					 centroid_y = centroid_y + df_sample[pt, 2]
+					 count = count + 1
+				 }
+			 }
+			 if (count == 0){
+			 	new_centroids = append(append(new_centroids, 
+			 	   centroids[cent,1]),centroids[cent,2])
+			 }
+			 else {
+			 	new_centroids = append(append(new_centroids, 
+			 	   centroid_x/count), centroid_y/count)
+			 }
+		 }
+		 data.frame(t(matrix(new_centroids, 2, n_cent, 
+		    dimnames=list(c("X","Y")))))
+	 }
+	 @
+	}
+	 
+	 El algoritmo se ejecutará hasta que la matriz de asignaciones sea la misma en una iteración con respecto a su anterior. Para visualizar el resultado o clasificación final se propone una función que tomará la matriz de asignaciones final y el valor de los centroides finales. Este método imprimirá las coordenadas de cada centroide, así como los puntos que conforman el cluster representado por ese centroide.
+	 
+	 {\tiny
+	 <<>>=
+	 printCentroids = function(df_sample, centroids, assig_matrix){
+		 n_cents = nrow(assig_matrix)
+		 n_pts = ncol(assig_matrix)
+		 cat("\n--RESULTADOS--\n")
+		 for (cent in 1:n_cents){
+			 cat("Centroide", cent, "(", centroids[cent,1], ",", centroids[cent,2],") \n")
+			 for(pt in 1:n_pts){
+				 if (assig_matrix[cent,pt] == 1){
+				 	cat("  - Punto", pt, "(", df_sample[pt, 1], ",", df_sample[pt,2], ")\n")
+				 }
+			 }
+			 cat("\n")
+		 }
+	 }
+	 @
+	}
+	 
+	 De todo este algoritmo, se ha considerado que la salida mas útil para el analista es un vector de clusterización. Este consiste en un vector de tantos elementos como puntos se hayan introducido, de tal forma que la posición $i$-ésima del mismo corresponda con el cluster asociado al punto $i$. Se itera la matriz de asignaciones final por puntos, y por cada uno de ellos se devuelve el valor de la fila que contiene un 1 (el número del centroide al que se ha asociado en la clasificación final)
+	 
+	 {\small
+	 <<>>=
+	 create_clust_vector = function(assig_matrix){
+		 n_pts = ncol(assig_matrix)
+		 n_cents = nrow(assig_matrix)
+		 clust_vector = c()
+		 for(pt in 1:n_pts){
+			 for(cent in 1:n_cents){
+				 if (assig_matrix[cent,pt] == 1){
+				 	clust_vector = append(clust_vector, cent)
+				 }
+			 }
+		 }
+		 clust_vector
+	 }
+	 @
+	}
+	 
+	 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clusterización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clusterización.
+	 
+	 {\small
+	 <<>>=
+	 fcd_kmeans = function(df_sample, centroids, details = FALSE) {
+		 n_pts = nrow(df_sample)
+		 n_cent = nrow(centroids)
+		 
+		 prev_assig_matrix = data.frame(
+		     matrix(0, ncol = n_pts, nrow = n_cent))
+		 
+		 step = 1
+		 dist_matrix = create_distance_matrix(df_sample, centroids)
+		 assig_matrix = create_assigment_matrix(dist_matrix)
+		 if(details){
+			 cat("PASO", step, "\n------- \n")
+			 cat("Matriz de distancias \n")
+			 print(dist_matrix)
+			 cat("Matriz de asignaciones \n")
+			 print(assig_matrix)
+		 }
+		 
+		 while (!identical(prev_assig_matrix, assig_matrix)) {
+			 prev_assig_matrix = assig_matrix
+			 centroids = update_cent(df_sample, centroids, assig_matrix)
+			 dist_matrix = create_distance_matrix(df_sample, centroids)
+			 assig_matrix = create_assigment_matrix(dist_matrix)
+			 
+			 if(details) {
+				 cat("Los nuevos centroides son:\n")
+				 print(centroids)
+				 step = step + 1
+				 cat("PASO", step, "\n------- \n")
+				 cat("Matriz de distancias \n")
+				 print(dist_matrix)
+				 cat("Matriz de asignaciones \n")
+				 print(assig_matrix)
+			 }
+		 }
+		 printCentroids(df_sample, centroids, assig_matrix)
+		 cat("Vector de clusterización\n")
+		 create_clust_vector(assig_matrix)
+	 } 
+	 @
+	}
+	 
+	 Un aspecto a destacar es el uso de la función \texttt{identical} contenida en el paquete \texttt{base}. Esta función permite comparar si dos dataframes son iguales. Esto sirve en el algoritmo para ver si la matriz de asignaciones de la anterior iteración es igual que la actual. Esta condición será la que se deba cumplir para que el algoritmo finalice.\\
+	 
+	 Con esto ya estaría el algoritmo implementado. Ahora se va a llamar a la función \texttt{fcd\_kmeans} con los datos leídos al principio. Se va a optar por una salida detallada.
+	 
+	 {\small
+	 <<>>=
+	 fcd_kmeans(data, centroides, TRUE)
+	 @
+	}
+	 
+	 Se ha optado por tres centroides que más o menos se encuentran entre el conjunto total de puntos. Han sido necesarios 4 pasos para llegar a una solución. Se puede ver cómo se han ido calculando las matrices de distancias y asignaciones, así como los nuevos centroides, hasta que se ha llegado a los resultados finales. En estos se aprecian las coordenadas de los tres centroides así como los puntos que contienen cada uno. Por último, se devuelve el vector de clusterización que también se puede ver en la salida de la función realizada.
 \end{document}

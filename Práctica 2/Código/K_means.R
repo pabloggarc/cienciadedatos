@@ -22,65 +22,117 @@ create_distance_matrix = function(points, centroids) {
   distances            
 }
 
-create_assigment_matrix = function(df) {
-  n_pts = ncol(df)
-  n_cent = nrow(df)
-  assigment = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
+create_assigment_matrix = function(dist_matrix) {
+  n_pts = ncol(dist_matrix)
+  n_cent = nrow(dist_matrix)
+  assig_matrix = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
   for (col in 1:n_pts) {
-    minimum_idx = 1
+    minimum_centroid = 1
     for (cent in 2:n_cent) {
-      if (df[cent, col] < df[minimum_idx, col]) {
-        minimum_idx = cent
+      if (dist_matrix[cent, col] < dist_matrix[minimum_centroid, col]) {
+        minimum_centroid = cent
       }
     }
-    assigment[minimum_idx, col] = 1
+    assig_matrix[minimum_centroid, col] = 1
   }
-  assigment            
+  assig_matrix            
 }
 
-update_cent = function(df_sample, mat_assig) {
-  n_pts = ncol(mat_assig)
-  n_cent = nrow(mat_assig)
-  centroid_mean = c()
+update_cent = function(df_sample, centroids, assig_matrix) {
+  n_pts = ncol(assig_matrix)
+  n_cent = nrow(assig_matrix)
+  new_centroids = c()
   for (cent in 1:n_cent) {
     centroid_x = 0
     centroid_y = 0
     count = 0
     for (pt in 1:n_pts) {
-      if (mat_assig[cent, pt] == 1) {
+      if (assig_matrix[cent, pt] == 1) {
         centroid_x = centroid_x + df_sample[pt, 1]
         centroid_y = centroid_y + df_sample[pt, 2]
         count = count + 1
       }
     }
-    centroid_mean = append(append(centroid_mean, centroid_x/count), centroid_y/count)
+    if (count == 0){
+      new_centroids = append(append(new_centroids, centroids[cent,1]),centroids[cent,2])
+    }
+    else {
+      new_centroids = append(append(new_centroids, centroid_x/count), centroid_y/count)
+    }
   }
-  data.frame(t(matrix(centroid_mean, 2, n_cent, dimnames=list(c("X","Y")))))
+  data.frame(t(matrix(new_centroids, 2, n_cent, dimnames=list(c("X","Y")))))
 }
 
-fcd_kmeans = function(df_sample, centroids) {
+printCentroids = function(df_sample, centroids, assig_matrix){
+  n_cents = nrow(assig_matrix)
+  n_pts = ncol(assig_matrix)
+  cat("\n--RESULTADOS--\n")
+  for (cent in 1:n_cents){
+    cat("Centroide", cent, "(", centroids[cent,1], ",", centroids[cent,2],") \n")
+    for(pt in 1:n_pts){
+      if (assig_matrix[cent,pt] == 1){
+        cat("  - Punto", pt, "(", df_sample[pt, 1], ",", df_sample[pt,2], ")\n")
+      }
+    }
+    cat("\n")
+  }
+}
+
+create_clust_vector = function(assig_matrix){
+  n_pts = ncol(assig_matrix)
+  n_cents = nrow(assig_matrix)
+  clust_vector = c()
+  for(pt in 1:n_pts){
+    for(cent in 1:n_cents){
+      if (assig_matrix[cent,pt] == 1){
+        clust_vector = append(clust_vector, cent)
+      }
+    }
+  }
+  clust_vector
+}
+
+fcd_kmeans = function(df_sample, centroids, details = FALSE) {
   n_pts = nrow(df_sample)
   n_cent = nrow(centroids)
   
-  prev_iter = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
+  prev_assig_matrix = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
   
-  mat = create_distance_matrix(df_sample, centroids)
-  mat_assig = create_assigment_matrix(mat)
-
-  while (!identical(prev_iter, mat_assig)) {
-    prev_iter = mat_assig
-    centroids = update_cent(df_sample, mat_assig)
-    mat = create_distance_matrix(df_sample, centroids)
-    mat_assig = create_assigment_matrix(mat)
+  step = 1
+  dist_matrix = create_distance_matrix(df_sample, centroids)
+  assig_matrix = create_assigment_matrix(dist_matrix)
+  if(details){
+    cat("PASO", step, "\n------- \n")
+    cat("Matriz de distancias \n")
+    print(dist_matrix)
+    cat("Matriz de asignaciones \n")
+    print(assig_matrix)
   }
-  centroids
+  
+  while (!identical(prev_assig_matrix, assig_matrix)) {
+    prev_assig_matrix = assig_matrix
+    centroids = update_cent(df_sample, centroids, assig_matrix)
+    dist_matrix = create_distance_matrix(df_sample, centroids)
+    assig_matrix = create_assigment_matrix(dist_matrix)
+    
+    if(details) {
+      cat("Los nuevos centroides son:\n")
+      print(centroids)
+      step = step + 1
+      cat("PASO", step, "\n------- \n")
+      cat("Matriz de distancias \n")
+      print(dist_matrix)
+      cat("Matriz de asignaciones \n")
+      print(assig_matrix)
+    }
+  }
+  printCentroids(df_sample, centroids, assig_matrix)
+  cat("Vector de clusterización\n")
+  create_clust_vector(assig_matrix)
 }
 
 
-df_sample = data.frame(t(matrix(c(4, 4, 3, 5, 1, 2, 5, 5, 0, 1, 2, 2, 4, 5, 2, 1), 2, 8, dimnames=list(c("velocidad","temperatura")))))
-centroids = data.frame(t(matrix(c(0, 1, 2, 2), 2, 2, dimnames=list(c("X","Y")))))
+(data = read.xlsx("data/datosKMeans.xlsx"))
+(centroides = read.xlsx("data/centroides.xlsx"))
 
-df_sample = data.frame(t(matrix(c(3.5, 4.5, 0.75, 3.25, 0, 3, 1.75, 0.75, 3, 3.75, 3.75, 4.5, 1.25, 0.75, 0.25, 3, 3.5, 4.25, 1.5, 0.5, 1, 1, 3, 4, 0.5, 3, 2, 0.25, 0, 0.25), 2, 15, dimnames=list(c("velocidad","temperatura")))))
-centroids = data.frame(t(matrix(c(1, 2, 2, 2, 3, 2), 2, 3, dimnames=list(c("X","Y")))))
-
-fcd_kmeans(df_sample, centroids)
+fcd_kmeans(data, centroides)
