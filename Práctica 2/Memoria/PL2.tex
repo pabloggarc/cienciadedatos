@@ -731,6 +731,95 @@
 		Ss\}, donde las características de las calificaciones son: \{Teoría, Laboratorio, Prácticas, Calificación Global).
 	\end{exercise}
 	
+	El primer paso a ejecutar para poder realizar la clasificación supervisada con árboles de decisión es introducir los datos en un archivo de texto (\texttt{.txt}) que será posteriormente leído con el lenguaje R. Para ello, es necesario que el archivo de texto cumpla con un formato en concreto:
+	
+	\begin{itemize}
+		\item La primera fila contendrá los nombres de las columnas, iniciando la fila con un tabulado o espacio e introduciendo otro entre cada una de las columnas.
+		\item La primera columna contendrá los nombres de cada una de las filas del dataframe.
+		\item Cada elemento de una fila estará separado del resto con un tabulado o espacio.
+		\item El archivo de texto debe finalizar con una fila vacía.
+	\end{itemize}
+	
+	Este archivo de texto se llamará \texttt{aprobados.txt} y será guardado en la carpeta \texttt{data}.
+	
+	El archivo es cargado en R de la siguiente forma:
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{(calificaciones}\hlkwb{=}\hlkwd{read.table}\hlstd{(}\hlstr{"data/aprobados.txt"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##    T L P CG
+## 1. A A B Ap
+## 2. A B D Ss
+## 3. D D C Ss
+## 4. D D A Ss
+## 5. B C B Ss
+## 6. C B B Ap
+## 7. B B A Ap
+## 8. C D C Ss
+## 9. B A C Ss
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Para la implementación del algoritmo, se emplea el paquete \texttt{rpart}, el cual se encuentra disponible en el repositorio \texttt{CRAN}. Este paquete ofrece un método homónimo que recibe por parámetro, entre otros, los datos en forma de dataframe. Por ello, es necesario poseer los datos en esta forma en lugar de en una tabla:
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(rpart)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'rpart' was built under R version 4.3.2}}\begin{alltt}
+\hlstd{(muestra}\hlkwb{=}\hlkwd{data.frame}\hlstd{(calificaciones))}
+\end{alltt}
+\begin{verbatim}
+##    T L P CG
+## 1. A A B Ap
+## 2. A B D Ss
+## 3. D D C Ss
+## 4. D D A Ss
+## 5. B C B Ss
+## 6. C B B Ap
+## 7. B B A Ap
+## 8. C D C Ss
+## 9. B A C Ss
+\end{verbatim}
+\begin{alltt}
+\hlstd{clasificacion} \hlkwb{=} \hlkwd{rpart}\hlstd{(CG}\hlopt{~}\hlstd{T}\hlopt{+}\hlstd{L}\hlopt{+}\hlstd{P,} \hlkwc{data}\hlstd{=muestra,} \hlkwc{method}\hlstd{=}\hlstr{"class"}\hlstd{,} \hlkwc{minsplit}\hlstd{=}\hlnum{1}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	
+	El primer argumento que se le pasa es \texttt{CG~T+L+P}, que contiene como primer elemento (a la izquierda de \texttt{~}) el criterio que se desea clasificar, y a la derecha de la virgulilla, aparecen las columnas sobre las que se desea clasificar. También es posible poner un punto (\texttt{.}) a la derecha, lo cual significa que se clasificaría en base a todas las columnas que no fueran el criterio de clasificación. El segundo parámetro es, como ya se ha mencionado, la muestra en un dataframe, el tercer parámetro \texttt{ method="class"} indica que se está abordando un problema de clasificación, y el último parámetro \texttt{minsplit=1} es necesario ya que se está trabajando sobre un conjunto de datos pequeño. 
+	
+	La salida de la función es la siguiente:
+	
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{clasificacion}
+\end{alltt}
+\begin{verbatim}
+## n= 9 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+## 1) root 9 3 Ss (0.3333333 0.6666667)  
+##   2) L=A,B 5 2 Ap (0.6000000 0.4000000)  
+##     4) P=A,B 3 0 Ap (1.0000000 0.0000000) *
+##     5) P=C,D 2 0 Ss (0.0000000 1.0000000) *
+##   3) L=C,D 4 0 Ss (0.0000000 1.0000000) *
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+	
+	Se puede apreciar que el árbol consta de dos niveles además de la raíz. El primero de ellos clasifica según la nota en laboratorio, en caso de ser \texttt{C} o \texttt{D}, la calificación final es \texttt{Ss}, en caso de ser \texttt{A} o \texttt{B} es necesario observar el siguiente nivel. Este segundo nivel clasifica según la nota de prácticas, si la nota es \texttt{A} o \texttt{B}, la calificación es \texttt{Ap} y si es \texttt{C} o \texttt{D}, la calificación final es \texttt{Ss}.
+		
 	\newpage
 	
 	\section{Clasificación Supervisada con Regresión}
@@ -995,25 +1084,9 @@
 \begin{alltt}
 \hlstd{(data} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{read.xlsx}\hlstd{(}\hlstr{"data/datosKMeans.xlsx"}\hlstd{)))}
 \end{alltt}
-\begin{verbatim}
-##    Velocidad Temperatura
-## 1       3.50        4.50
-## 2       0.75        3.25
-## 3       0.00        3.00
-## 4       1.75        0.75
-## 5       3.00        3.75
-## 6       3.75        4.50
-## 7       1.25        0.75
-## 8       0.25        3.00
-## 9       3.50        4.25
-## 10      1.50        0.50
-## 11      1.00        1.00
-## 12      3.00        4.00
-## 13      0.50        3.00
-## 14      2.00        0.25
-## 15      0.00        2.50
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in read.xlsx("{}data/datosKMeans.xlsx"{}): no se pudo encontrar la función "{}read.xlsx"{}}}\end{kframe}
 \end{knitrout}
 	 
 	 Y posteriormente se lee el fichero con los centroides iniciales. En la clasificación final se tendrán tantos clusters como centroides se hayan introducido, ya que al final un centroide representa un cluster.
@@ -1023,13 +1096,9 @@
 \begin{alltt}
 \hlstd{(centroides} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{read.xlsx}\hlstd{(}\hlstr{"data/centroides.xlsx"}\hlstd{)))}
 \end{alltt}
-\begin{verbatim}
-##     X   Y
-## 1 0.5 0.5
-## 2 1.0 2.0
-## 3 2.0 1.0
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in read.xlsx("{}data/centroides.xlsx"{}): no se pudo encontrar la función "{}read.xlsx"{}}}\end{kframe}
 \end{knitrout}
 	 
 	 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. Previo a ello se necesitan dos funciones auxiliares que ya se han visto en la anterior práctica. Estas son la función \texttt{len} para determinar la longitud de una lista y \texttt{euc\_distance}, a la cual se pasan dos puntos y devuelve la distancia euclídea entre los mismos.
@@ -1253,138 +1322,9 @@
 \begin{alltt}
 \hlkwd{fcd_kmeans}\hlstd{(data, centroides,} \hlnum{TRUE}\hlstd{)}
 \end{alltt}
-\begin{verbatim}
-## PASO 1 
-## ------- 
-## Matriz de distancias 
-##         X1       X2       X3        X4       X5       X6        X7       X8
-## 1 5.000000 2.761340 2.549510 1.2747549 4.100305 5.153882 0.7905694 2.512469
-## 2 3.535534 1.274755 1.414214 1.4577380 2.657536 3.716517 1.2747549 1.250000
-## 3 3.807887 2.573908 2.828427 0.3535534 2.926175 3.913119 0.7905694 2.657536
-##         X9       X10       X11      X12      X13      X14      X15
-## 1 4.802343 1.0000000 0.7071068 4.301163 2.500000 1.520691 2.061553
-## 2 3.363406 1.5811388 1.0000000 2.828427 1.118034 2.015564 1.118034
-## 3 3.579455 0.7071068 1.0000000 3.162278 2.500000 0.750000 2.500000
-## Matriz de asignaciones 
-##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
-## 1  0  0  0  0  0  0  1  0  0   0   1   0   0   0   0
-## 2  1  1  1  0  1  1  0  1  1   0   0   1   1   0   1
-## 3  0  0  0  1  0  0  0  0  0   1   0   0   0   1   0
-## Los nuevos centroides son:
-##       X     Y
-## 1 1.125 0.875
-## 2 1.825 3.575
-## 3 1.750 0.500
-## PASO 2 
-## ------- 
-## Matriz de distancias 
-##         X1       X2       X3        X4       X5       X6        X7       X8
-## 1 4.333734 2.404423 2.404423 0.6373774 3.432383 4.475628 0.1767767 2.298097
-## 2 1.913439 1.123054 1.913439 2.8259954 1.187960 2.135708 2.8829239 1.676678
-## 3 4.366062 2.926175 3.051639 0.2500000 3.482097 4.472136 0.5590170 2.915476
-##         X9       X10       X11      X12      X13       X14      X15
-## 1 4.126894 0.5303301 0.1767767 3.644345 2.215006 1.0752907 1.976424
-## 2 1.805893 3.0921271 2.7039323 1.249500 1.444386 3.3296021 2.118077
-## 3 4.138236 0.2500000 0.9013878 3.716517 2.795085 0.3535534 2.657536
-## Matriz de asignaciones 
-##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
-## 1  0  0  0  0  0  0  1  0  0   0   1   0   0   0   1
-## 2  1  1  1  0  1  1  0  1  1   0   0   1   1   0   0
-## 3  0  0  0  1  0  0  0  0  0   1   0   0   0   1   0
-## Los nuevos centroides son:
-##          X        Y
-## 1 0.750000 1.416667
-## 2 2.027778 3.694444
-## 3 1.750000 0.500000
-## PASO 3 
-## ------- 
-## Matriz de distancias 
-##         X1       X2       X3       X4        X5       X6        X7       X8
-## 1 4.131518 1.833333 1.751983 1.201850 3.2414417 4.301970 0.8333333 1.660405
-## 2 1.678201 1.352866 2.143394 2.957518 0.9738082 1.901307 3.0454378 1.908598
-## 3 4.366062 2.926175 3.051639 0.250000 3.4820971 4.472136 0.5590170 2.915476
-##         X9      X10       X11      X12      X13       X14      X15
-## 1 3.948453 1.184389 0.4859127 3.425801 1.602949 1.7098570 1.317616
-## 2 1.573557 3.237750 2.8838096 1.019108 1.678201 3.4445564 2.353419
-## 3 4.138236 0.250000 0.9013878 3.716517 2.795085 0.3535534 2.657536
-## Matriz de asignaciones 
-##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
-## 1  0  0  1  0  0  0  0  1  0   0   1   0   1   0   1
-## 2  1  1  0  0  1  1  0  0  1   0   0   1   0   0   0
-## 3  0  0  0  1  0  0  1  0  0   1   0   0   0   1   0
-## Los nuevos centroides son:
-##          X        Y
-## 1 0.350000 2.500000
-## 2 2.916667 4.041667
-## 3 1.625000 0.562500
-## PASO 4 
-## ------- 
-## Matriz de distancias 
-##          X1       X2        X3       X4        X5        X6        X7       X8
-## 1 3.7312866 0.850000 0.6103278 2.241093 2.9300171 3.9446166 1.9678669 0.509902
-## 2 0.7418539 2.306768 3.0970977 3.492303 0.3033379 0.9510594 3.6895592 2.862897
-## 3 4.3611388 2.826355 2.9295104 0.225347 3.4714235 4.4743191 0.4192627 2.798577
-##          X9       X10       X11       X12       X13       X14      X15
-## 1 3.6034705 2.3070544 1.6347783 3.0450780 0.5220153 2.7901613 0.350000
-## 2 0.6194195 3.8144917 3.5951839 0.0931695 2.6316054 3.9008991 3.299042
-## 3 4.1368202 0.1397542 0.7629097 3.7023008 2.6845914 0.4881406 2.528741
-## Matriz de asignaciones 
-##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
-## 1  0  1  1  0  0  0  0  1  0   0   0   0   1   0   1
-## 2  1  0  0  0  1  1  0  0  1   0   0   1   0   0   0
-## 3  0  0  0  1  0  0  1  0  0   1   1   0   0   1   0
-## Los nuevos centroides son:
-##      X    Y
-## 1 0.30 2.95
-## 2 3.35 4.20
-## 3 1.50 0.65
-## PASO 5 
-## ------- 
-## Matriz de distancias 
-##          X1        X2        X3        X4        X5       X6        X7
-## 1 3.5556293 0.5408327 0.3041381 2.6348624 2.8160256 3.782195 2.3963514
-## 2 0.3354102 2.7681221 3.5584407 3.8029594 0.5700877 0.500000 4.0388736
-## 3 4.3384905 2.7060118 2.7879204 0.2692582 3.4438351 4.459260 0.2692582
-##           X8        X9      X10       X11       X12       X13       X14
-## 1 0.07071068 3.4539832 2.728095 2.0718349 2.8969812 0.2061553 3.1906112
-## 2 3.32415403 0.1581139 4.136726 3.9702015 0.4031129 3.0923292 4.1743263
-## 3 2.66176633 4.1182521 0.150000 0.6103278 3.6704904 2.5539186 0.6403124
-##         X15
-## 1 0.5408327
-## 2 3.7566608
-## 3 2.3817011
-## Matriz de asignaciones 
-##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
-## 1  0  1  1  0  0  0  0  1  0   0   0   0   1   0   1
-## 2  1  0  0  0  1  1  0  0  1   0   0   1   0   0   0
-## 3  0  0  0  1  0  0  1  0  0   1   1   0   0   1   0
-## 
-## --RESULTADOS--
-## Centroide 1 ( 0.3 , 2.95 ) 
-##   - Punto 2 ( 0.75 , 3.25 )
-##   - Punto 3 ( 0 , 3 )
-##   - Punto 8 ( 0.25 , 3 )
-##   - Punto 13 ( 0.5 , 3 )
-##   - Punto 15 ( 0 , 2.5 )
-## 
-## Centroide 2 ( 3.35 , 4.2 ) 
-##   - Punto 1 ( 3.5 , 4.5 )
-##   - Punto 5 ( 3 , 3.75 )
-##   - Punto 6 ( 3.75 , 4.5 )
-##   - Punto 9 ( 3.5 , 4.25 )
-##   - Punto 12 ( 3 , 4 )
-## 
-## Centroide 3 ( 1.5 , 0.65 ) 
-##   - Punto 4 ( 1.75 , 0.75 )
-##   - Punto 7 ( 1.25 , 0.75 )
-##   - Punto 10 ( 1.5 , 0.5 )
-##   - Punto 11 ( 1 , 1 )
-##   - Punto 14 ( 2 , 0.25 )
-## 
-## Vector de clusterización
-##  [1] 2 1 1 3 2 2 3 1 2 3 3 2 1 3 1
-\end{verbatim}
-\end{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): objeto 'centroides' no encontrado}}\end{kframe}
 \end{knitrout}
 	}
 	 
