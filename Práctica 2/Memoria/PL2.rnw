@@ -81,6 +81,13 @@
 
 \begin{document}
 	
+	%Configuración para los gráficos de R
+	<<setup, include = FALSE>>=
+		knitr::opts_chunk$set(fig.align = 'center')
+		knitr::opts_chunk$set(fig.width = 4)
+		knitr::opts_chunk$set(fig.height = 4)
+	@
+	
 	\renewcommand{\chaptername}{Parte}
 	\renewcommand{\lstlistingname}{Código}
 	\maketitle \thispagestyle{empty}
@@ -92,565 +99,758 @@
 	
 	\chapter*{Introducción}\addcontentsline{toc}{chapter}{Introducción}\pagestyle{plain}
 	
-	\section*{RStudio}
+		\section*{RStudio}\addcontentsline{toc}{section}{RStudio}
 	
-	RStudio es un entorno de desarrollo integrado (IDE) para R, un lenguaje de programación ampliamente utilizado en estadística, análisis de datos, investigación científica y visualización de datos.
+			RStudio es un entorno de desarrollo integrado (IDE) para R, un lenguaje de programación ampliamente utilizado en estadística, análisis de datos, investigación científica y visualización de datos. Será empleado para el desarrollo de esta práctica. La interfaz del IDE de RStudio está diseñada para facilitar el análisis estadístico y la visualización de datos.
+			
+			\begin{itemize}
+				
+				\item \textbf{File}: Aquí puedes crear nuevos archivos y proyectos, incluidos scripts de Python y documentos Sweave. Trabajar con proyectos es una práctica profesional estándar y permite una mejor organización.
+				
+				\item \textbf{Edit}: Esta sección funciona de manera similar a otros entornos de desarrollo, proporcionando herramientas de edición de texto estándar.
+				
+				\item \textbf{Code}: Incluye herramientas específicas para escribir y ejecutar código R, como insertar operadores o ejecutar scripts completos.
+				
+				\item \textbf{View}: Permite ajustar la apariencia de la interfaz de RStudio, como mostrar u ocultar diferentes paneles.
+				
+				\item \textbf{Plots}: Muy utilizado para la visualización de datos, permite generar, ver y manipular gráficos estadísticos.
+				
+				\item \textbf{Session}: Controla las sesiones de R, permitiendo iniciar, interrumpir o terminar sesiones.
+				
+				\item \textbf{Build}: Herramientas relacionadas con la construcción de paquetes de R.
+				
+				\item \textbf{Debug}: Funciones para depurar el código R.
+				
+				\item \textbf{Profile}: Herramientas para medir el rendimiento del código R.
+				
+				\item \textbf{Tools}: Opciones para configurar el entorno de desarrollo globalmente, como la disposición del panel y opciones de proyecto.
+				
+				\item \textbf{Help}: Ofrece documentación y ayuda para usar R y RStudio, un recurso esencial para el aprendizaje y la solución de problemas.
+				
+			\end{itemize}
+			
+			El entorno de RStudio es altamente personalizable y se organiza en cuatro áreas principales. Puedes redactar código en el panel de \texttt{scripts}, ejecutar instrucciones en el \texttt{console}, y ver los objetos activos y el historial en el área de \texttt{environment/history}. El cuarto panel es multifuncional, permitiendo administrar archivos, visualizar datos a través de gráficos, instalar y administrar paquetes y buscar en la documentación en la sección indicada a continuación. 
+			\begin{verbatim}
+				files/plots/packages/help/viewer
+			\end{verbatim}
+			Este diseño modular facilita la gestión eficiente del flujo de trabajo en análisis de datos y desarrollo estadístico.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale = 0.15]{img/rstudio}
+				\caption{Logo del entorno RStudio}
+				\label{fig:logo_rstudio}
+			\end{figure}
+			
+		\section*{Posit}\addcontentsline{toc}{section}{Posit}
+			
+			La página web de Posit (\url{https://posit.co/}) ofrece una amplia gama de productos y soluciones para la ciencia de datos, enfocándose en el uso de R y Python. Presenta opciones de software de código abierto, soluciones empresariales y basadas en la nube. Destaca su compromiso con la ciencia de datos accesible para todos, ofreciendo recursos educativos, historias de clientes y soporte para la comunidad. La empresa busca promover un entorno inclusivo y empoderador, destacando su papel en el avance de la ciencia de datos a través de la colaboración y la innovación tecnológica.
+				
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale = 0.15]{img/posit}
+				\caption{Logo de la compañía Posit}
+				\label{fig:logo_posit}
+			\end{figure}
 	
-	\subsection*{De RStudio a Posit}
+		\section*{De RStudio a Posit}\addcontentsline{toc}{section}{De RStudio a Posit}
 	
-	El artículo del blog de Posit (\url{https://posit.co/blog/rstudio-is-now-posit/}), anteriormente conocido como RStudio, detalla los cambios y compromisos de la compañía a medida que evoluciona. Fundada en 2009, RStudio se centró en crear software de código abierto de alta calidad para científicos de datos. La compañía ha invertido significativamente en el desarrollo de código abierto, educación y la comunidad, con el objetivo de servir a los creadores de conocimiento durante los próximos 100 años.\\
-	
-	La transformación de RStudio a Posit no solo implica un cambio de nombre, sino también una reafirmación de sus valores y objetivos. Como una Corporación de Beneficio Público y una B Corp certificada, Posit se compromete a cumplir con los más altos estándares de desempeño social y ambiental, transparencia y responsabilidad. Los directivos de Posit tienen la responsabilidad fiduciaria de abordar las necesidades sociales, económicas y ambientales, además de supervisar los objetivos comerciales de la empresa. La misión de Posit incluye mantener su independencia a largo plazo para cumplir con estos objetivos.\\
-	
-	El compromiso de Posit con el código abierto sigue siendo una prioridad central. La empresa cree firmemente que el progreso significativo se logra poniendo herramientas de ciencia de datos al alcance de todos, independientemente de sus medios económicos. Además, Posit busca expandir su enfoque más allá del lenguaje de programación R, abrazando también a la comunidad de Python y a otras comunidades de programación. Aunque R sigue siendo un componente clave, el objetivo es mejorar la comunicación científica para todos, creando software tanto de código abierto como comercial para R, Python y más.\\
-	
-	Finalmente, Posit desea fomentar una comunidad más amplia y diversa. Inspirándose en la comunidad de R, la compañía aspira a ayudar a que otras áreas de la ciencia sean tan abiertas, dinámicas, inclusivas y diversas como la comunidad a la que pertenecen. A pesar del cambio de nombre, la dedicación de Posit a ayudar a los científicos de datos a utilizar software de código abierto para plantear y responder preguntas importantes permanece inalterada.
-	
-	\subsection*{Posit}
-	
-	La página web de Posit (\url{https://posit.co/}) ofrece una amplia gama de productos y soluciones para la ciencia de datos, enfocándose en el uso de R y Python. Presenta opciones de software de código abierto, soluciones empresariales y basadas en la nube. Destaca su compromiso con la ciencia de datos accesible para todos, ofreciendo recursos educativos, historias de clientes y soporte para la comunidad. La empresa busca promover un entorno inclusivo y empoderador, destacando su papel en el avance de la ciencia de datos a través de la colaboración y la innovación tecnológica.
-	
-	\subsection*{Entorno RStudio}
-	
-	La interfaz del IDE de RStudio está diseñada para facilitar el análisis estadístico y la visualización de datos.
-	
-	\begin{itemize}
-	
-	\item \textbf{File}: Aquí puedes crear nuevos archivos y proyectos, incluidos scripts de Python y documentos Sweave. Trabajar con proyectos es una práctica profesional estándar y permite una mejor organización.
-	
-	\item \textbf{Edit}: Esta sección funciona de manera similar a otros entornos de desarrollo, proporcionando herramientas de edición de texto estándar.
-	
-	\item \textbf{Code}: Incluye herramientas específicas para escribir y ejecutar código R, como insertar operadores o ejecutar scripts completos.
-	
-	\item \textbf{View}: Permite ajustar la apariencia de la interfaz de RStudio, como mostrar u ocultar diferentes paneles.
-	
-	\item \textbf{Plots}: Muy utilizado para la visualización de datos, permite generar, ver y manipular gráficos estadísticos.
-	
-	\item \textbf{Session}: Controla las sesiones de R, permitiendo iniciar, interrumpir o terminar sesiones.
-	
-	\item \textbf{Build}: Herramientas relacionadas con la construcción de paquetes de R.
-	
-	\item \textbf{Debug}: Funciones para depurar el código R.
-	
-	\item \textbf{Profile}: Herramientas para medir el rendimiento del código R.
-	
-	\item \textbf{Tools}: Opciones para configurar el entorno de desarrollo globalmente, como la disposición del panel y opciones de proyecto.
-	
-	\item \textbf{Help}: Ofrece documentación y ayuda para usar R y RStudio, un recurso esencial para el aprendizaje y la solución de problemas.
-	
-	\end{itemize}
-		
-	El entorno de RStudio es altamente personalizable y se organiza en cuatro áreas principales. Puedes redactar código en el panel de \texttt{scripts}, ejecutar instrucciones en el \texttt{console}, y ver los objetos activos y el historial en el área de \texttt{environment/history}. El cuarto panel es multifuncional, permitiendo administrar archivos, visualizar datos a través de gráficos, instalar y administrar paquetes y buscar en la documentación en la sección \texttt{files/plots/packages/help/viewer}. Este diseño modular facilita la gestión eficiente del flujo de trabajo en análisis de datos y desarrollo estadístico.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[scale = 0.15]{img/posit}
-		\caption{Logo de la compañía Posit}
-		\label{fig:logo_posit}
-	\end{figure}
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[scale = 0.15]{img/rstudio}
-		\caption{Logo del entorno RStudio}
-		\label{fig:logo_rstudio}
-	\end{figure}
+			El artículo del blog de Posit (\url{https://posit.co/blog/rstudio-is-now-posit/}), anteriormente conocido como RStudio, detalla los cambios y compromisos de la compañía a medida que evoluciona. Fundada en 2009, RStudio se centró en crear software de código abierto de alta calidad para científicos de datos. La compañía ha invertido significativamente en el desarrollo de código abierto, educación y la comunidad, con el objetivo de servir a los creadores de conocimiento durante los próximos 100 años.\\
+			
+			La transformación de RStudio a Posit no solo implica un cambio de nombre, sino también una reafirmación de sus valores y objetivos. Como una Corporación de Beneficio Público y una B Corp certificada, Posit se compromete a cumplir con los más altos estándares de desempeño social y ambiental, transparencia y responsabilidad. Los directivos de Posit tienen la responsabilidad fiduciaria de abordar las necesidades sociales, económicas y ambientales, además de supervisar los objetivos comerciales de la empresa. La misión de Posit incluye mantener su independencia a largo plazo para cumplir con estos objetivos.\\
+			
+			El compromiso de Posit con el código abierto sigue siendo una prioridad central. La empresa cree firmemente que el progreso significativo se logra poniendo herramientas de ciencia de datos al alcance de todos, independientemente de sus medios económicos. Además, Posit busca expandir su enfoque más allá del lenguaje de programación R, abrazando también a la comunidad de Python y a otras comunidades de programación. Aunque R sigue siendo un componente clave, el objetivo es mejorar la comunicación científica para todos, creando software tanto de código abierto como comercial para R, Python y más.\\
+			
+			Finalmente, Posit desea fomentar una comunidad más amplia y diversa. Inspirándose en la comunidad de R, la compañía aspira a ayudar a que otras áreas de la ciencia sean tan abiertas, dinámicas, inclusivas y diversas como la comunidad a la que pertenecen. A pesar del cambio de nombre, la dedicación de Posit a ayudar a los científicos de datos a utilizar software de código abierto para plantear y responder preguntas importantes permanece inalterada.
 	
 	\chapter{Ejercicios guiados}\pagestyle{fancy}
 	
-	En esta primera parte de la práctica, se repetirán los ejercicios explicados y realizados por el profesor en las clases de laboratorio, utilizando los mismos procedimientos vistos y plasmándolos en este documento.
-	
-	\section{Clasificación No Supervisada con K-Means}
-	
-	\begin{exercise}
-		El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con KMeans, estará formado por las siguientes 8 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{3, 5\}; 3. \{1, 2\}; 4. \{5, 5\}; 5.\{0, 1\}; 6. \{2, 2\}; 7. \{4, 5\}; 8. \{2, 1\}, donde las características de las calificaciones son: \{Teoría, Laboratorio\}.
-	\end{exercise}
-	
-	En este ejercicio se va a detallar cómo realizar una clasificación no supervisada en un conjunto de datos en R; concretamente utilizando el algoritmo K-Means. El objetivo será agrupar subconjuntos de los datos en clusters o grupos, creando de esta forma una clasificación del conjunto total. Estos clusters se determinarán en base a la muestra, obteniéndose durante el mismo proceso de clasificación.\\
-	
-	El algoritmo K-Means ofrece una técnica de clusterización en base a una muestra de datos y una cantidad $n$ de clusters. Para empezar a realizar el algoritmo se necesita la ubicación de los centroides de cada cluster. Un centroide es el punto medio del grupo de sucesos que componen el cluster, por lo que habrá tantos centroides como $n$ clusters haya. La cantidad de clusters así como sus centroides iniciales serán elegidos arbitrariamente por el usuario; estos se irán reubicando a medida que se itere en el algoritmo. \\
-	
-	Para empezar, en R se necesita introducir la muestra o conjunto de datos con el que se va a trabajar. Estos datos serán introducidos en una matriz utilizando la función \texttt{matrix}.
-	
-	<<>>=
-	m<-matrix(c(4,4, 3,5, 1,2, 5,5, 0,1, 2,2, 4,5, 2,1),2,8)
-	(m<-t(m))
-	@ 
-	
-	Para poder trabajar debidamente se debe trasponer la matriz, de tal forma que cada columna represente una componente. El primer punto conformará la primera fila, el segundo punto la segunda fila y así sucesivamente con todos los datos.\\
-	
-	Además del conjunto de datos, el algoritmo K-Means necesita unos centroides iniciales. Estos se introducirán de la misma forma que la muestra, teniendo en la primera fila el centroide del primer cluster, en la siguiente fila el centroide del segundo... Al tratarse de pocos puntos se eligen arbitrariamente dos centroides, por lo que la clasificación final será realizada con dos clusters. Se introducen así los centroides:
-	
-	<<>>=
-	c<-matrix(c(0,1,2,2),2,2)
-	(c<-t(c))
-	@
-	
-	Con la muestra y los centroides introducidos en el entorno de trabajo, ya se puede realizar el algoritmo. Para ello se utilizará la función \texttt{kmeans}, función del paquete cargado por defecto \texttt{stats}. La función recibe tres parámetros: la muestra de los datos (\texttt{m}), los centroides iniciales de los clusters (\texttt{c}) y el número de iteraciones que se desean. En este caso se eligen cuatro iteraciones, las mismas que se necesitaron en clase de teoría. En teoría, el número de iteraciones no se sabe a priori, por lo que habría que ir probando. Sin embargo, como ya se sabe el número que se necesita, se pone directamente 4.
-	
-	{\small
-	<<>>=
-	(clasificacionns = (kmeans(m,c,4)))
-	@
-	}
-	
-	Entre los parámetros que aparecen en la salida se encuentran \texttt{Cluster means} y \texttt{Clustering vector}. El primero de ellos proporciona la ubicación de los dos centroides de los clusters que conforman la clasificación final. Como se puede apreciar, salen los dos centroides que salieron en teoría. El segundo parámetro indica a qué cluster pertenece cada suceso de la muestra introducida. Así el punto 1 pertenece al cluster 2, el punto 2 pertenece al cluster 2, el punto 3 al cluster 1... Este último se puede utilizar como entrada para realizar otras tareas. Puede ser muy útil para analizar cada cluster por separado, ver sus caracteristicas comunes e intentar deducir por qué esos datos están relacionados.\\
-	
-	El siguiente comando permite añadir una columna a la izquierda de la muestra de datos (\texttt{m}) que se había introducido al inicio, indicando a qué cluster pertenece cada suceso.
-	
-	<<>>=
-	(m=cbind(clasificacionns$cluster,m))
-	@ 
-	
-	Esto se realiza para poder dividir la muestra según la clasificación que se ha conseguido. Llamando a la función subset se puede extraer la porción de la muestra que pertenece al cluster 1 y la porción restante que pertenece al cluster 2.
-	
-	<<>>=
-	(mc1=subset(m,m[,1]==1))
-	(mc2=subset(m,m[,1]==2))
-	@
-	
-	Una vez se tienen los datos separados se puede eliminar la columna que indica el cluster al que pertenece cada dato, ya que se sobreentiende que todos pertenecen al mismo cluster porque ya han pasado por un proceso de separación en función de la clasificación. Por ejemplo, para los datos pertenecientes al primer cluster, se haría de la siguiente forma:
-	
-	<<>>=
-	(mc1 = mc1[,-1])
-	@
-	
-	Con todo esto se consigue, partiendo de una muestra de datos, una clasificación no supervisada utilizando la técnica de clusterización basada en el algoritmo K-Means. A partir de ella se podrán intentar deducir ciertas conclusiones.
-	
-	\section{Clasificación No Supervisada con CJA}
-	
-	\begin{exercise}
-		El segundo conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa, estará formado por 6 calificaciones de estudiantes: 1. \{0.89, 2.94\}; 2.\{4.36, 5.21\}; 3. \{3.75, 1.12\}; 4. \{6.25, 3.14\}; 5. \{4.1, 1.8\}; 6. \{3.9, 4.27\}.
-	\end{exercise}
-	
-	La Clusterización Jerárquica Aglomerativa es un método de análisis de datos que comienza tratando cada punto como un cluster individual y luego, iterativamente, combina los clusters más cercanos hasta formar un único cluster. Este método es útil para identificar grupos naturales en los datos. En clase se implementó mediante el paquete \texttt{LearnClust} del CRAN.\\
-	
-	Inicialmente, se crea una matriz con la muestra del problema, y se transpone la matriz para que tenga el formato deseado.
-	
-	<<>>=
-	m <- matrix(
-		c(0.89,2.94, 4.36,5.21, 3.75,1.12, 6.25,3.14, 4.1,1.8, 3.9,4.27),2,6)
-	(m <- t(m))
-	@
-	
-	Para la ejecución del algoritmo utilizamos la función \texttt{agglomerativeHC}. Esta función recibe como parámetros la matriz de datos, la métrica de distancia y el criterio de enlace.
-	
-	<<>>=
-	agglomerativeHC(m, 'EUC', 'MIN')
-	@
-	
-	En este código, `EUC' representa la métrica de distancia euclidiana y `MIN' el criterio para la agrupación de clusters. En la salida se pueden observar cuatro apartados.\\
-	
-	El primero es una figura los datos de la matriz que hemos introducido impresos en una gráfica.\\
-	
-	El segundo es el número de puntos que se han introducido, mediante el atributo \texttt{\$dendrogram}, en este caso 6.\\
-	
-	El tercer apartado es una lista que muestra las coordenadas de todos los clusters al finalizar la ejecución, los 6 primeros son los puntos introducidos y los 5 siguientes son los formados por cada una de las iteraciones uniendo dos clusters anteriores hasta tener todos unidos en el mismo cluster, momento en el que finaliza el algoritmo. Se puede ver en el atributo \texttt{\$clusters}.\\
-	
-	El cuarto apartado es el proceso que se realiza en cada iteración, se pueden ver en el apartado \texttt{\$groupedClusters}.
-	
-	\begin{enumerate}
-		\item Se unen los clusters 3 y 5, para formar el cluster 7.
-		\item Se unen los clusters 2 y 6, para formar el cluster 8.
-		\item Se unen los clusters 4 y 8, para formar el cluster 9.
-		\item Se unen los clusters 7 y 9, para formar el cluster 10.
-		\item Se unen los clusters 1 y 10, para formar el cluster 11.
-	\end{enumerate}
-	
-	Para obtener una explicación detallada paso a paso tal y como se ha explicado en clase, usamos la función \texttt{agglomerativeHC.details}.
-	
-	<<>>=
-	agglomerativeHC.details(m, 'EUC', 'MIN')
-	@
-	
-	La función también se puede ejecutar con diferentes criterios de unión, como `MAX' y `AVG', para observar cómo cambian los clusters:\\
-	
-	\texttt{agglomerativeHC.details(m, `EUC', `MAX')}\\
-	
-	\texttt{agglomerativeHC.details(m, `EUC', `AVG')}
-	
-	\section{Clasificación Supervisada con Árboles de Decisión}
-	
-	\begin{exercise}
-		El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por las siguientes 9 calificaciones de estudiantes: 1. \{A, A, B, Ap\}; 2. \{A, B, D, Ss\}; 3. \{D, D, C, Ss\}; 4. \{D, D, A, Ss\}; 5. \{B, C, B, Ss\}; 6. \{C, B, B, Ap\}; 7. \{B, B, A, Ap\}; 8. \{C, D, C, Ss\}; 9. \{B, A, C,
-		Ss\}, donde las características de las calificaciones son: \{Teoría, Laboratorio, Prácticas, Calificación Global).
-	\end{exercise}
-	
-	El primer paso a ejecutar para poder realizar la clasificación supervisada con árboles de decisión es introducir los datos en un archivo de texto (\texttt{.txt}), que será posteriormente leído con el lenguaje R. Para ello, es necesario que el archivo de texto cumpla con un formato en concreto:
-	
-	\begin{itemize}
-		\item La primera fila contendrá los nombres de las columnas, iniciando la fila con un tabulado o espacio e introduciendo otro entre cada una de las columnas.
-		\item La primera columna contendrá los nombres de cada una de las filas del dataframe.
-		\item Cada elemento de una fila estará separado del resto con un tabulado o espacio.
-		\item El archivo de texto debe finalizar con una fila vacía.
-	\end{itemize}
-	
-	Este archivo de texto se llamará \texttt{aprobados.txt} y será guardado en la carpeta \texttt{data}. El archivo es cargado en R de la siguiente forma:
-	
-	<<>>=
-	(calificaciones=read.table("data/aprobados.txt"))
-	@
-	
-	Para la implementación del algoritmo, se emplea el paquete \texttt{rpart}, el cual se encuentra disponible en el repositorio \texttt{CRAN}. Este paquete ofrece un método homónimo que recibe por parámetro, entre otros, los datos en forma de dataframe. Por ello, es necesario poseer los datos en esta forma en lugar de en una tabla:
-	
-	<<>>=
-	(muestra=data.frame(calificaciones))
-	
-	clasificacion = rpart(CG~T+L+P, data=muestra, method="class", minsplit=1)
-	@
-	
-	El primer argumento que se le pasa es \texttt{CG~T+L+P}, que contiene como primer elemento (a la izquierda de \texttt{\~}) el criterio que se desea clasificar, y a la derecha de la virgulilla, aparecen las columnas sobre las que se desea clasificar. También es posible poner un punto (\texttt{.}) a la derecha, lo cual significa que se clasificaría en base a todas las columnas que no fueran el criterio de clasificación. El segundo parámetro es, como ya se ha mencionado, la muestra en un dataframe; el tercer parámetro \texttt{ method="class"} indica que se está abordando un problema de clasificación; y el último parámetro \texttt{minsplit=1} es necesario ya que se está trabajando sobre un conjunto de datos pequeño. La salida de la función es la siguiente:
-	
-	<<>>=
-	clasificacion
-	@
-	
-	Se puede apreciar que el árbol consta de dos niveles además de la raíz. El primero de ellos clasifica según la nota en laboratorio. En caso de ser \texttt{C} o \texttt{D}, la calificación final es \texttt{Ss}, en caso de ser \texttt{A} o \texttt{B} es necesario observar el siguiente nivel. Este segundo nivel clasifica según la nota de prácticas, si la nota es \texttt{A} o \texttt{B}, la calificación es \texttt{Ap} y si es \texttt{C} o \texttt{D}, la calificación final es \texttt{Ss}.
+		En esta primera parte de la práctica, se repetirán los ejercicios explicados y realizados por el profesor en las clases de laboratorio, utilizando los mismos procedimientos vistos y plasmándolos en este documento.
 		
-	\newpage
-	
-	\section{Clasificación Supervisada con Regresión}
-	
-	\begin{exercise}
-		El cuarto conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando regresión, estará formado por los siguientes 4 radios ecuatoriales y densidades de los planetas interiores:
-		\{Mercurio, 2.4, 5.4; Venus, 6.1, 5.2; Tierra, 6.4, 5.5; Marte, 3.4, 3.9\}.
-	\end{exercise}
-	
-	Para empezar este ejercicio se deberán introducir los datos expuestos en el enunciado en un archivo de texto (\texttt{.txt}), con el fin de ser posteriormente leídos. La inserción de los datos en este fichero se hará atendiendo a las normas relacionadas con este tipo de archivos que ya se vieron en la primera práctica. Estas normas son las siguientes:
-	
-	\begin{itemize}
-		\item Existirá una tabulación entre dato y dato. 
-		\item La primera columna numera las filas, y en la primera fila se introduce un espacio y el nombre de las variables. 
-		\item Se introducirá un salto de línea en la última fila. 
-		\item Para los números decimales se utilizarán puntos. 
-		\item Al escribir nombres, no se deberán introducir espacios. 
-	\end{itemize}
-	
-	Obedeciendo estas normas, se copian los datos en un fichero llamado \texttt{planetas.txt}, y se carga en R de la siguiente manera:
-	
-	<<>>=
-	(muestra = read.table("data/planetas.txt"))
-	@
-	
-	Una vez se tienen los datos en R, se procede a hacer uso de la función \texttt{lm} contenida en los paquetes básicos (concretamente en el paquete \texttt{stats}). Esta función recibe dos parámetros. El primero de ellos es la fórmula en donde se va a decir en función de qué parámetro se quiere otro parámetro. En este caso se tiene la columna \texttt{R} que representa el radio y la columna \texttt{D} que representa la densidad. Como se quiere la densidad en función del radio, el primer parámetro tendrá que ser formula=D$\sim$R. Se indica de esta forma que se pretende obtener la columna \texttt{D} en función de la columna \texttt{R}; o lo que es lo mismo, la densidad en función del radio.\\
-	
-	El segundo parámetro que entra a la función es la estructura que contiene los datos que se pretenden estudiar. En este caso, el parámetro \texttt{data} será la variable \texttt{muestra}, confeccionada previamente.\\
-	
-	Con los parámetros de la función \texttt{lm} claros, se invoca a la misma de la siguiente forma:
-	
-	<<>>=
-	(regresion=lm(D~R, data=muestra))
-	@
-	
-	En la salida de la función se observan los coeficientes que conforman la recta de regresión que mejor se adapta a los datos introducidos. El método de obtención o ajuste de la función es el de mínimos cuadrados, pudiendo comprobar que el resultado es el mismo que el que se ha visto en clase. En este método, los coeficientes se calculan de la siguiente forma, siendo $x$ el radio e $y$ la densidad:
-	
-	\begin{center}
-		$b = \frac{s_{xy}}{s^{2}_x}$;
-		$a = \overline{y} -b\overline{x}$
-	\end{center}
-	 
-	 La salida proporciona directamente los valores de a y b, siendo estos el primero y el segundo respectivamente. Con estos valores se puede decir que la densidad de un planeta se puede sacar atendiendo a la siguiente fórmula:
-	 
-	 \begin{center}
-	 	$D = 4.3624 + 0.1394R$
-	 \end{center}
-	 
-	 Con el comando \texttt{summary} aplicado a la regresión que se acaba de hacer se pueden ver parámetros que detallan esta recta de regresión con respecto a los datos.
-	 
-	 <<>>=
-	 (summary(regresion))
-	 @
-	 
-	 Entre todos los detalles que aparecen, se observa el parámetro \texttt{Residuals}. Este parámetro devuelve un vector con los residuos, o dicho de otra forma, la distancia entre el valor real y el valor que se obtiene por medio de la recta calculada. También se puede apreciar el parámetro \texttt{Multiple R-squared}, el cual sirve como medida de cuán bueno ha sido el ajuste. Este valor podrá tomar valores entre 0 y 1, siendo 0 un ajuste muy malo y 1 un ajuste perfecto. Como se observa, el valor de este parámetro es 0.1377, lo cual quiere decir que el ajuste es malo; y con ello se puede concluir que el radio no explica la densidad de los planetas.\\
-	 
-	 Una vez visto en detalle el cálculo y valoración de la recta de regresión se va a ver cómo se pueden identificar sucesos anómalos mediante la técnica de regresión. El proceso por lo general sigue 5 pasos:
-	 
-	 \begin{enumerate}
-	 	\item Determinar el grado de outlier \texttt{d}
-	 	\item Obtener la ecuación de la recta de regresión
-	 	\item Obtener el error estándar $s_r$ del vector de residuos
-	 	\item Calcular el límite para los valores típicos como $lim = d \cdot s_r$
-	 	\item Identificar como outliers los residuos (en valor absoluto) que superen ese límite
-	 \end{enumerate}
-	 
-	 Hasta ahora se tiene la recta de regresión y el vector de residuos que está en \texttt{summary}. Para extraerlo y poder operar con él se hace de la siguiente forma:
-	 
-	 <<>>=
-	 (res=summary(regresion)$residuals)
-	 @
-	 
-	 Una vez se tiene el vector de residuos se calcula el error estándar del mismo:
-	 
-	 <<>>=
-	 (sr = sqrt(sum(res^2)/4))
-	 @
-	 
-	 Con ello se puede plantear un bucle el cual compruebe qué elemento o elementos se presentan como anomalías. Se va a elegir como grado de outlier $d = 3$
-	 
-	 <<>>=
-	 for (i in 1:length(res)){
-		 if(res[i]>3*sr){
-		 	print("el suceso"); 
-		 	print(res[i]); 
-		 	print("es un suceso anómalo o outlier")
-		 }
-	 }
-	 @
-	 
-	 Este bucle comprueba por cada elemento del vector de residuos si supera o no el límite establecido para outliers; en caso afirmativo lo imprime por pantalla. En la salida anterior se puede observar que no hay ningún outlier, ya que ningún residuo supera el umbral establecido.\\ 
-	 
-	 Se va a probar con otro conjunto de datos para demostrar que por medio de este método podemos identificar las anomalías. En primer lugar, se vuelve a confeccionar un archivo de texto (\texttt{.txt}) atendiendo a las normas previamente expuestas. Este archivo de texto se llamará \texttt{planetas2.txt} para evitar problemas de sobrescritura. 
-	
-	 <<>>=
-	 (muestra = read.table("data/planetas2.txt"))
-	 @
-	 
-	 Una vez hecho esto se invoca a la función \texttt{lm} para sacar la regresión y se guarda el vector de residuos tal y como se ha hecho previamente.
-	 
-	 {\small
-	 <<>>=
-	 (dfr=lm(D~R, data=muestra))
-	 (res=summary(dfr)$residuals)
-	 @
-	}
-	 Se vuelve a calcular el error estándar de los residuos. Atendiendo a la fórmula hay que dividir entre 7, ya que se tienen 7 entradas en el conjunto de datos del fichero. 
-	 
-	 <<>>=
-	 (sr = sqrt(sum(res^2)/7))
-	 @ 
-	 
-	 Una vez se tienen todos los datos necesarios, se pone a prueba el código visto previamente para detectar anomalías. Esta vez se cambiará el grado de outlier $d = 2$.
-	 
-	 <<>>=
-	 for (i in 1:length(res)){
-	 	if(res[i]>2*sr){
-	 		print("el suceso");
-	 		print(res[i]);
-	 		print("es un suceso anómalo o outlier");
-		 }
-	 }
-	 @
-	 
-	 Se observa en la salida del código que el suceso 2 es un outlier. Atendiendo a los parámetros que se han ido obteniendo, se observa a simple vista que el suceso 2 supera el límite establecido. 
-	 
-	 \chapter{Ejercicios autónomos}\pagestyle{fancy}
-	 
-	 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
-	 
-	 \section{Clasificación No Supervisada con K-Means}
-	 
-	 \begin{exercise}
-	 	El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Kmeans, estará formado por los siguientes 15 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: 1.\{3.5, 4.5\}; 2.\{0.75, 3.25\}; 3.\{0, 3\}; 4.\{1.75, 0.75\}; 5.\{3, 3.75\}; 6.\{3.75, 4.5\}; 7.\{1.25, 0.75\}; 8.\{0.25, 3\}; 9.\{3.5, 4.25\}; 10.\{1.5, 0.5\}; 11.\{1, 1\}; 12.\{3, 4\}; 13.\{0.5, 3\}; 14.\{2, 0.25\}; 15.\{0, 2.5\}. Del análisis visual de los datos se ha concluido que hay una alta probabilidad que sean tres clusters.
-	 \end{exercise}
-	 
-	 Los datos que se proponen en el enunciado del ejercicio van a ser introducidos en un fichero Excel (\texttt{.xlsx}), de tal forma que estos se van a obtener leyendo este fichero desde R. Para ello, se hará uso de la función \texttt{read.xlsx} contenida en el paquete \texttt{openxlsx} que se ha visto previamente. Con esta función se puede pasar como parámetro la ruta del archivo que contiene los datos, devolviendo los mismos en un dataframe.\\
-	 
-		 Para este ejercicio en concreto se hará uso de dos ficheros, uno con los datos de velocidad y temperatura (dispuestos cada uno en una columna del Excel), y otro fichero que contenga las coordenadas de los centroides iniciales que se van a utilizar en el algoritmo. En la primera fila de ambos ficheros deberá ir el título de cada columna. \\
-	 
-	 Primeramente se leen los datos del ejercicio. A partir de ahora, a cada uno de estos datos se les conocerán como puntos.
-	 
-	 <<>>=
-	 (data = data.frame(read.xlsx("data/datosKMeans.xlsx")))
-	 @
-	 
-	 Y posteriormente se lee el fichero con los centroides iniciales. En la clasificación final se tendrán tantos clusters como centroides se hayan introducido, ya que al final un centroide representa un cluster.
-	 
-	 <<>>=
-	 (centroides = data.frame(read.xlsx("data/centroides.xlsx")))
-	 @
-	 
-	 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. Previo a ello se necesitan dos funciones auxiliares que ya se han visto en la anterior práctica. Estas son la función \texttt{len} para determinar la longitud de una lista y \texttt{euc\_distance}, a la cual se pasan dos puntos y devuelve la distancia euclídea entre los mismos.
-	 
-	 <<>>=
-	 len = function(list) {
-		 count = 0
-		 for (element in list) {
-		 	count = count + 1
-		 }
-		 count
-	 }
-	 
-	 euc_distance = function(p1, p2) {
-	 	sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
-	 }
-	 @
-	 
-	 El primer paso del algoritmo consiste en realizar una matriz de distancias. Esta matriz tendrá tantas filas como centroides se hayan declarado y tantas columnas como puntos se hayan introducido. Esta matriz recoge las distancias euclídeas de todos los puntos a todos los centroides. Para realizar esta tabla se ha programado la siguiente función, la cual va rellenando una matriz con las distancias euclídeas de cada punto a cada cluster.
-	 
-	 {\small
- 	<<>>=
- 	create_distance_matrix = function(points, centroids) {
-	 	n_pts = nrow(points)
-	 	n_cent = nrow(centroids)
-	 	distances = data.frame(matrix(ncol = n_pts, nrow = n_cent))
-	 	for (cent in 1:n_cent) {
-		 	for (pt in 1:n_pts) {
-		 		distances[cent, pt] = 
-		 		euc_distance(points[pt,], centroids[cent,])
-		 	}
- 		}
-	 	distances            
- 	}
- 	@
-	 }
-	 
-	 Una vez se tiene la matriz de distancias se debe realizar una matriz de asignaciones. Esta matriz será de las mismas dimensiones que la anterior, pero ahora no contendrá las distancias euclídeas. Por cada punto (columna) tendremos un 0 o un 1. Si aparece un 1 en una posición, la distancia del punto a ese cluster que representa la fila es la mínima. Por ejemplo; si el punto 1 esta más cerca del cluster 2 que del resto de clusters, la posición \texttt{$1x2$} tendrá un 1, y el resto de la columna un 0.\\
-	 
-	 Para realizar esta tabla se itera punto por punto, y por cada uno se observa la distancia del mismo a todos los clusters. Se debe poner un 1 en el lugar donde se encuentra la distancia euclídea mínima y un 0 en el resto de celdas de la columna. Es por ello que primero se inicializa a 0 toda la matriz y se va buscando por cada punto el cluster que está a menos distancia, para poner un 1 en su celda correspondiente. El código que recoge esta funcionalidad es el siguiente:
-	 
-	 {\small
-	 <<>>=
-	 create_assigment_matrix = function(dist_matrix) {
-		 n_pts = ncol(dist_matrix)
-		 n_cent = nrow(dist_matrix)
-		 assig_matrix = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
-		 for (col in 1:n_pts) {
-			 minimum_centroid = 1
-			 for (cent in 2:n_cent) {
-				 if (dist_matrix[cent, col] < 
-				   dist_matrix[minimum_centroid, col]) {
-				 	minimum_centroid = cent
-			 	}
-			 }
-			 assig_matrix[minimum_centroid, col] = 1
-		 }
-		 assig_matrix            
-	 }
-	 @
-	}
-	 
-	 Por último, una vez se han asignado los puntos más próximos a cada cluster, se deben recalcular los centroides del mismo. Para recalcular un centroide en específico se deben tener en cuenta todos los puntos asociados al mismo. Las nuevas coordenadas del centroide se calculan realizando la media de los puntos que tiene asignados. El resultado de este algoritmo resulta en un nuevo dataframe donde, por cada fila, se van a tener las nuevas componentes del centroide correspondiente, y que serán usados para continuar con la ejecución del algoritmo.\\
-	 
-	 Antes de ver el código, se ha de considerar que un centroide puede no tener ningún punto asociado, por lo que el cálculo que se propone arriba no sería posible (ya que se tendría que dividir entre cero a la hora de calcular la media). Es por ello que si un centroide no tiene ningún punto asociado, este se quedará igual (sus componentes no se verán alteradas). Esto resultará en que el centroide propuesto no se ha definido muy bien, y desemboca en una clasificación diferente a la esperada.
-	 
-	 {\small
-	 <<>>=
-	 update_cent = function(df_sample, centroids, assig_matrix) {
-		 n_pts = ncol(assig_matrix)
-		 n_cent = nrow(assig_matrix)
-		 new_centroids = c()
-		 for (cent in 1:n_cent) {
-			 centroid_x = 0
-			 centroid_y = 0
-			 count = 0
-			 for (pt in 1:n_pts) {
-				 if (assig_matrix[cent, pt] == 1) {
-					 centroid_x = centroid_x + df_sample[pt, 1]
-					 centroid_y = centroid_y + df_sample[pt, 2]
-					 count = count + 1
-				 }
-			 }
-			 if (count == 0){
-			 	new_centroids = append(append(new_centroids, 
-			 	   centroids[cent,1]),centroids[cent,2])
-			 }
-			 else {
-			 	new_centroids = append(append(new_centroids, 
-			 	   centroid_x/count), centroid_y/count)
-			 }
-		 }
-		 data.frame(t(matrix(new_centroids, 2, n_cent, 
-		    dimnames=list(c("X","Y")))))
-	 }
-	 @
-	}
-	 
-	 El algoritmo se ejecutará hasta que la matriz de asignaciones sea la misma en una iteración con respecto a su anterior. Para visualizar el resultado o clasificación final se propone una función que tomará la matriz de asignaciones final y el valor de los centroides finales. Este método imprimirá las coordenadas de cada centroide, así como los puntos que conforman el cluster representado por ese centroide.
-	 
-	 {\tiny
-	 <<>>=
-	 printCentroids = function(df_sample, centroids, assig_matrix){
-		 n_cents = nrow(assig_matrix)
-		 n_pts = ncol(assig_matrix)
-		 cat("\n--RESULTADOS--\n")
-		 for (cent in 1:n_cents){
-			 cat("Centroide", cent, "(", centroids[cent,1], ",", centroids[cent,2],") \n")
-			 for(pt in 1:n_pts){
-				 if (assig_matrix[cent,pt] == 1){
-				 	cat("  - Punto", pt, "(", df_sample[pt, 1], ",", df_sample[pt,2], ")\n")
-				 }
-			 }
-			 cat("\n")
-		 }
-	 }
-	 @
-	}
-	 
-	 De todo este algoritmo, se ha considerado que la salida mas útil para el analista es un vector de clusterización. Este consiste en un vector de tantos elementos como puntos se hayan introducido, de tal forma que la posición $i$-ésima del mismo corresponda con el cluster asociado al punto $i$. Se itera la matriz de asignaciones final por puntos, y por cada uno de ellos se devuelve el valor de la fila que contiene un 1 (el número del centroide al que se ha asociado en la clasificación final)
-	 
-	 {\small
-	 <<>>=
-	 create_clust_vector = function(assig_matrix){
-		 n_pts = ncol(assig_matrix)
-		 n_cents = nrow(assig_matrix)
-		 clust_vector = c()
-		 for(pt in 1:n_pts){
-			 for(cent in 1:n_cents){
-				 if (assig_matrix[cent,pt] == 1){
-				 	clust_vector = append(clust_vector, cent)
-				 }
-			 }
-		 }
-		 clust_vector
-	 }
-	 @
-	}
-	 
-	 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clusterización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clusterización.
-	 
-	 {\small
-	 <<>>=
-	 fcd_kmeans = function(df_sample, centroids, details = FALSE) {
-		 n_pts = nrow(df_sample)
-		 n_cent = nrow(centroids)
-		 
-		 prev_assig_matrix = data.frame(
-		     matrix(0, ncol = n_pts, nrow = n_cent))
-		 
-		 step = 1
-		 dist_matrix = create_distance_matrix(df_sample, centroids)
-		 assig_matrix = create_assigment_matrix(dist_matrix)
-		 if(details){
-			 cat("PASO", step, "\n------- \n")
-			 cat("Matriz de distancias \n")
-			 print(dist_matrix)
-			 cat("Matriz de asignaciones \n")
-			 print(assig_matrix)
-		 }
-		 
-		 while (!identical(prev_assig_matrix, assig_matrix)) {
-			 prev_assig_matrix = assig_matrix
-			 centroids = update_cent(df_sample, centroids, assig_matrix)
-			 dist_matrix = create_distance_matrix(df_sample, centroids)
-			 assig_matrix = create_assigment_matrix(dist_matrix)
+		\section{Clasificación no supervisada}
+		
+			\subsection{$k-$means}
+		
+				\begin{exercise}
+					El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con $k-$means, estará formado por las siguientes 8 calificaciones de estudiantes: 1. \{4, 4\}; 2. \{3, 5\}; 3. \{1, 2\}; 4. \{5, 5\}; 5.\{0, 1\}; 6. \{2, 2\}; 7. \{4, 5\}; 8. \{2, 1\}, donde las características de las calificaciones son: \{Teoría, Laboratorio\}.
+				\end{exercise}
+				
+				En este ejercicio se va a detallar cómo realizar una clasificación no supervisada en un conjunto de datos en R; concretamente utilizando el algoritmo $k-$means. El objetivo será agrupar subconjuntos de los datos en clústers o grupos, creando de esta forma una clasificación del conjunto total. Estos clústers se determinarán en base a la muestra, obteniéndose durante el mismo proceso de clasificación.\\
+				
+				El algoritmo $k-$means ofrece una técnica de clústerización en base a una muestra de datos y una cantidad $n$ de clústers. Para empezar a realizar el algoritmo se necesita la ubicación de los centroides de cada clúster. Un centroide es el punto medio del grupo de sucesos que componen el clúster, por lo que habrá tantos centroides como $n$ clústers haya. La cantidad de clústers así como sus centroides iniciales serán elegidos arbitrariamente por el usuario; estos se irán reubicando a medida que se itere en el algoritmo. \\
+				
+				Para empezar, en R se necesita introducir la muestra o conjunto de datos con el que se va a trabajar. Estos datos serán introducidos en una matriz utilizando la función \texttt{matrix}.
+				
+				<<>>=
+				m <- matrix(c(4,4, 3,5, 1,2, 5,5, 0,1, 2,2, 4,5, 2,1),2,8)
+				(m <- t(m))
+				@ 
+				
+				Para poder trabajar debidamente se debe trasponer la matriz, de tal forma que cada columna represente una componente. El primer punto conformará la primera fila, el segundo punto la segunda fila y así sucesivamente con todos los datos.\\
+				
+				Además del conjunto de datos, el algoritmo $k-$means necesita unos centroides iniciales. Estos se introducirán de la misma forma que la muestra, teniendo en la primera fila el centroide del primer clúster, en la siguiente fila el centroide del segundo... Al tratarse de pocos puntos se eligen arbitrariamente dos centroides, por lo que la clasificación final será realizada con dos clústers. Se introducen así los centroides:
+				
+				<<>>=
+				c <- matrix(c(0,1,2,2),2,2)
+				(c < -t(c))
+				@
+				
+				Con la muestra y los centroides introducidos en el entorno de trabajo, ya se puede realizar el algoritmo. Para ello se utilizará la función \texttt{kmeans}, función del paquete cargado por defecto \texttt{stats}. La función recibe tres parámetros: la muestra de los datos (\texttt{m}), los centroides iniciales de los clústers (\texttt{c}) y el número de iteraciones que se desean. En este caso se eligen cuatro iteraciones, las mismas que se necesitaron en clase de teoría. En teoría, el número de iteraciones no se sabe a priori, por lo que habría que ir probando. Sin embargo, como ya se sabe el número que se necesita, se pone directamente 4.
+				
+				{\small
+				<<>>=
+				(clasificacionns = (kmeans(m,c,4)))
+				@
+				}
+				
+				Entre los parámetros que aparecen en la salida se encuentran \texttt{Cluster means} y \texttt{Clustering vector}. El primero de ellos proporciona la ubicación de los dos centroides de los clústers que conforman la clasificación final. Como se puede apreciar, salen los dos centroides que salieron en teoría. El segundo parámetro indica a qué clúster pertenece cada suceso de la muestra introducida. Así el punto 1 pertenece al clúster 2, el punto 2 pertenece al clúster 2, el punto 3 al clúster 1... Este último se puede utilizar como entrada para realizar otras tareas. Puede ser muy útil para analizar cada clúster por separado, ver sus caracteristicas comunes e intentar deducir por qué esos datos están relacionados.\\
+				
+				El siguiente comando permite añadir una columna a la izquierda de la muestra de datos (\texttt{m}) que se había introducido al inicio, indicando a qué clúster pertenece cada suceso.
+				
+				<<>>=
+				(m = cbind(clasificacionns$clúster,m))
+				@ 
+				
+				Esto se realiza para poder dividir la muestra según la clasificación que se ha conseguido. Llamando a la función subset se puede extraer la porción de la muestra que pertenece al clúster 1 y la porción restante que pertenece al clúster 2.
+				
+				<<>>=
+				(mc1 = subset(m,m[,1]==1))
+				(mc2 = subset(m,m[,1]==2))
+				@
+				
+				Una vez se tienen los datos separados se puede eliminar la columna que indica el clúster al que pertenece cada dato, ya que se sobreentiende que todos pertenecen al mismo clúster porque ya han pasado por un proceso de separación en función de la clasificación. Por ejemplo, para los datos pertenecientes al primer clúster, se haría de la siguiente forma:
+				
+				<<>>=
+				(mc1 = mc1[,-1])
+				@
+				
+				Con todo esto se consigue, partiendo de una muestra de datos, una clasificación no supervisada utilizando la técnica de clústerización basada en el algoritmo $k-$means. A partir de ella se podrán intentar deducir ciertas conclusiones.
+		
+			\subsection{Clusterización jerárquica algomerativa}
+		
+				\begin{exercise}
+					El segundo conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa, estará formado por 6 calificaciones de estudiantes: 1. \{0.89, 2.94\}; 2.\{4.36, 5.21\}; 3. \{3.75, 1.12\}; 4. \{6.25, 3.14\}; 5. \{4.1, 1.8\}; 6. \{3.9, 4.27\}.
+				\end{exercise}
+				
+				La Clusterización Jerárquica Aglomerativa es un método de análisis de datos que comienza tratando cada punto como un clúster individual y luego, iterativamente, combina los clústers más cercanos hasta formar un único clúster. Este método es útil para identificar grupos naturales en los datos. En clase se implementó mediante el paquete \texttt{LearnClust} del CRAN.\\
+				
+				Inicialmente, se crea una matriz con la muestra del problema, y se transpone la matriz para que tenga el formato deseado.
+				
+				<<>>=
+				m <- matrix(
+					c(0.89,2.94, 4.36,5.21, 3.75,1.12, 6.25,3.14, 4.1,1.8, 3.9,4.27),2,6)
+				(m <- t(m))
+				@
+				
+				Para la ejecución del algoritmo utilizamos la función \texttt{agglomerativeHC}. Esta función recibe como parámetros la matriz de datos, la métrica de distancia y el criterio de enlace.
+				
+				<<fig.show='hide'>>=
+				agglomerativeHC(m, 'EUC', 'MIN')
+				@
+				
+				En este código, \texttt{EUC} representa la métrica de distancia euclidiana y \texttt{MIN} el criterio para la agrupación de clústers. En la salida se pueden observar cuatro apartados.
+				
+				\begin{itemize}
+					\item El primero es una figura los datos de la matriz que hemos introducido impresos en una gráfica.
+					
+					\item El segundo es el número de puntos que se han introducido, mediante el atributo \texttt{\$dendrogram}, en este caso 6.
+					
+					\item El tercer apartado es una lista que muestra las coordenadas de todos los clústers al finalizar la ejecución, los 6 primeros son los puntos introducidos y los 5 siguientes son los formados por cada una de las iteraciones uniendo dos clústers anteriores hasta tener todos unidos en el mismo clúster, momento en el que finaliza el algoritmo. Se puede ver en el atributo \texttt{\$clústers}.
+					
+					\item El cuarto apartado es el proceso que se realiza en cada iteración, se pueden ver en el apartado \texttt{\$groupedClusters}.
+					
+					\begin{enumerate}[label = \textbf{\arabic*.}]
+						\item Se unen los clústers 3 y 5, para formar el clúster 7.
+						\item Se unen los clústers 2 y 6, para formar el clúster 8.
+						\item Se unen los clústers 4 y 8, para formar el clúster 9.
+						\item Se unen los clústers 7 y 9, para formar el clúster 10.
+						\item Se unen los clústers 1 y 10, para formar el clúster 11.
+					\end{enumerate}
+					
+				\end{itemize}
+				
+				Para obtener una explicación detallada paso a paso tal y como se ha explicado en clase, usamos la función \texttt{agglomerativeHC.details}.
+				
+				{
+				\footnotesize
+				<<fig.cap = "Diagrama de LearnClust">>=
+				agglomerativeHC.details(m, 'EUC', 'MIN')
+				@
+				}
+				
+				La función también se puede ejecutar con diferentes criterios de unión, como \texttt{MAX} y \texttt{AVG}, para observar cómo cambian los clústers:
+				
+				\begin{verbatim}
+					agglomerativeHC.details(m, 'EUC', 'MAX')
+					agglomerativeHC.details(m, 'EUC', 'AVG')
+				\end{verbatim}
+		
+		\section{Clasificación supervisada}
+		
+			\subsection{Árboles de decisión}
+		
+				\begin{exercise}
+					El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por las siguientes 9 calificaciones de estudiantes: 1. \{A, A, B, Ap\}; 2. \{A, B, D, Ss\}; 3. \{D, D, C, Ss\}; 4. \{D, D, A, Ss\}; 5. \{B, C, B, Ss\}; 6. \{C, B, B, Ap\}; 7. \{B, B, A, Ap\}; 8. \{C, D, C, Ss\}; 9. \{B, A, C,
+					Ss\}, donde las características de las calificaciones son: \{Teoría, Laboratorio, Prácticas, Calificación Global).
+				\end{exercise}
+				
+				El primer paso a ejecutar para poder realizar la clasificación supervisada con árboles de decisión es introducir los datos en un archivo de texto (\texttt{.txt}), que será posteriormente leído con el lenguaje R. Para ello, es necesario que el archivo de texto cumpla con un formato en concreto:
+				
+				\begin{itemize}
+					\item La primera fila contendrá los nombres de las columnas, iniciando la fila con un tabulado o espacio e introduciendo otro entre cada una de las columnas.
+					\item La primera columna contendrá los nombres de cada una de las filas del dataframe.
+					\item Cada elemento de una fila estará separado del resto con un tabulado o espacio.
+					\item El archivo de texto debe finalizar con una fila vacía.
+				\end{itemize}
+				
+				Este archivo de texto se llamará \texttt{aprobados.txt} y será guardado en la carpeta \texttt{data}. El archivo es cargado en R de la siguiente forma:
+				
+				<<>>=
+				(calificaciones=read.table("data/aprobados.txt"))
+				@
+				
+				Para la implementación del algoritmo, se emplea el paquete \texttt{rpart}, el cual se encuentra disponible en el repositorio \texttt{CRAN}. Este paquete ofrece un método homónimo que recibe por parámetro, entre otros, los datos en forma de dataframe. Por ello, es necesario poseer los datos en esta forma en lugar de en una tabla:
+				
+				<<>>=
+				(muestra=data.frame(calificaciones))
+				
+				clasificacion = rpart(CG~T+L+P, data=muestra, method="class", minsplit=1)
+				@
+				
+				El primer argumento que se le pasa es \texttt{CG~T+L+P}, que contiene como primer elemento (a la izquierda de \texttt{\~}) el criterio que se desea clasificar, y a la derecha de la virgulilla, aparecen las columnas sobre las que se desea clasificar. También es posible poner un punto (\texttt{.}) a la derecha, lo cual significa que se clasificaría en base a todas las columnas que no fueran el criterio de clasificación. El segundo parámetro es, como ya se ha mencionado, la muestra en un dataframe; el tercer parámetro \texttt{ method='class'} indica que se está abordando un problema de clasificación; y el último parámetro \texttt{minsplit=1} es necesario ya que se está trabajando sobre un conjunto de datos pequeño. La salida de la función es la siguiente:
+				
+				<<>>=
+				clasificacion
+				@
+				
+				Se puede apreciar que el árbol consta de dos niveles además de la raíz. El primero de ellos clasifica según la nota en laboratorio. En caso de ser \texttt{C} o \texttt{D}, la calificación final es \texttt{Ss}, en caso de ser \texttt{A} o \texttt{B} es necesario observar el siguiente nivel. Este segundo nivel clasifica según la nota de prácticas, si la nota es \texttt{A} o \texttt{B}, la calificación es \texttt{Ap} y si es \texttt{C} o \texttt{D}, la calificación final es \texttt{Ss}.
+		
+		\subsection{Regresión lineal}
+		
+			\begin{exercise}
+				El cuarto conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando regresión, estará formado por los siguientes 4 radios ecuatoriales y densidades de los planetas interiores:
+				\{Mercurio, 2.4, 5.4; Venus, 6.1, 5.2; Tierra, 6.4, 5.5; Marte, 3.4, 3.9\}.
+			\end{exercise}
+			
+			Para empezar este ejercicio se deberán introducir los datos expuestos en el enunciado en un archivo de texto (\texttt{.txt}), con el fin de ser posteriormente leídos. La inserción de los datos en este fichero se hará atendiendo a las normas relacionadas con este tipo de archivos que ya se vieron en la primera práctica. Estas normas son las siguientes:
+			
+			\begin{itemize}
+				\item Existirá una tabulación entre dato y dato. 
+				\item La primera columna numera las filas, y en la primera fila se introduce un espacio y el nombre de las variables. 
+				\item Se introducirá un salto de línea en la última fila. 
+				\item Para los números decimales se utilizarán puntos. 
+				\item Al escribir nombres, no se deberán introducir espacios. 
+			\end{itemize}
+			
+			Obedeciendo estas normas, se copian los datos en un fichero llamado \texttt{planetas.txt}, y se carga en R de la siguiente manera:
+			
+			<<>>=
+			(muestra = read.table("data/planetas.txt"))
+			@
+			
+			Una vez se tienen los datos en R, se procede a hacer uso de la función \texttt{lm} contenida en los paquetes básicos (concretamente en el paquete \texttt{stats}). Esta función recibe dos parámetros. El primero de ellos es la fórmula en donde se va a decir en función de qué parámetro se quiere otro parámetro. En este caso se tiene la columna \texttt{R} que representa el radio y la columna \texttt{D} que representa la densidad. Como se quiere la densidad en función del radio, el primer parámetro tendrá que ser formula=D$\sim$R. Se indica de esta forma que se pretende obtener la columna \texttt{D} en función de la columna \texttt{R}; o lo que es lo mismo, la densidad en función del radio.\\ %No entiendo qué es lo de formula=...
+			
+			El segundo parámetro que entra a la función es la estructura que contiene los datos que se pretenden estudiar. En este caso, el parámetro \texttt{data} será la variable \texttt{muestra}, confeccionada previamente. Con los parámetros de la función \texttt{lm} claros, se invoca a la misma de la siguiente forma:
+			
+			<<>>=
+			(regresion=lm(D~R, data=muestra))
+			@
+			
+			En la salida de la función se observan los coeficientes que conforman la recta de regresión que mejor se adapta a los datos introducidos. El método de obtención o ajuste de la función es el de mínimos cuadrados, pudiendo comprobar que el resultado es el mismo que el que se ha visto en clase. En este método, los coeficientes de la recta $\hat{y} = a +bx$ se calculan de la siguiente forma, siendo $x$ el radio e $y$ la densidad:
+			
+			$$
+			\begin{gathered}
+				b = \frac{S_{xy}}{S^2_x}\\
+				a = \bar{y}-b\bar{x}
+			\end{gathered}
+			$$
 			 
-			 if(details) {
-				 cat("Los nuevos centroides son:\n")
-				 print(centroids)
-				 step = step + 1
-				 cat("PASO", step, "\n------- \n")
-				 cat("Matriz de distancias \n")
-				 print(dist_matrix)
-				 cat("Matriz de asignaciones \n")
-				 print(assig_matrix)
+			 La salida proporciona directamente los valores de $a$ y $b$, siendo estos el primero y el segundo respectivamente. Con estos valores se puede decir que la densidad de un planeta se puede obtener atendiendo a la siguiente fórmula:
+			 
+			 \begin{center}
+			 	$D = 4.3624 + 0.1394R$
+			 \end{center}
+			 
+			 Con el comando \texttt{summary} aplicado a la regresión que se acaba de hacer se pueden ver parámetros que detallan esta recta de regresión con respecto a los datos.
+			 
+			 <<>>=
+			 (summary(regresion))
+			 @
+			 
+			 Entre todos los detalles que aparecen, se observa el parámetro \texttt{Residuals}. Este parámetro devuelve un vector con los residuos, o dicho de otra forma, la distancia entre el valor real y el valor que se obtiene por medio de la recta calculada. También se puede apreciar el parámetro \texttt{Multiple R-squared}, el cual sirve como medida de cuán bueno ha sido el ajuste. Este valor podrá tomar valores entre 0 y 1, siendo 0 un ajuste muy malo y 1 un ajuste perfecto. Como se observa, el valor de este parámetro es $0.1377$, lo cual quiere decir que el ajuste es malo; y con ello se puede concluir que el radio no explica la densidad de los planetas.\\
+			 
+			 Una vez visto en detalle el cálculo y valoración de la recta de regresión se va a ver cómo se pueden identificar sucesos anómalos mediante la técnica de regresión. El proceso por lo general sigue 5 pasos:
+			 
+			 \begin{enumerate}[label = \textbf{\arabic*.}]
+			 	\item Determinar el grado de outlier \texttt{d}
+			 	\item Obtener la ecuación de la recta de regresión
+			 	\item Obtener el error estándar $s_r$ del vector de residuos
+			 	\item Calcular el límite para los valores típicos como $d \cdot s_r$
+			 	\item Identificar como outliers los residuos (en valor absoluto) que superen ese límite
+			 \end{enumerate}
+			 
+			 Hasta ahora se tiene la recta de regresión y el vector de residuos que está en \texttt{summary}. Para extraerlo y poder operar con él se hace de la siguiente forma:
+			 
+			 <<>>=
+			 (res=summary(regresion)$residuals)
+			 @
+			 
+			 Una vez se tiene el vector de residuos se calcula el error estándar del mismo:
+			 
+			 <<>>=
+			 (sr = sqrt(sum(res^2)/4))
+			 @
+			 
+			 Con ello se puede plantear un bucle el cual compruebe qué elemento o elementos se presentan como anomalías. Se va a elegir como grado de outlier $d = 3$
+			 
+			 <<>>=
+			 for (i in 1:length(res)){
+			 	if(res[i]>3*sr){
+			 		print("el suceso");
+			 		print(res[i]);
+			 		print("es un suceso anómalo o outlier")
+		 		}
 			 }
-		 }
-		 printCentroids(df_sample, centroids, assig_matrix)
-		 cat("Vector de clusterización\n")
-		 create_clust_vector(assig_matrix)
-	 } 
-	 @
-	}
+			 @
+			 
+			 Este bucle comprueba por cada elemento del vector de residuos si supera o no el límite establecido para outliers; en caso afirmativo lo imprime por pantalla. En la salida anterior se puede observar que no hay ningún outlier, ya que ningún residuo supera el umbral establecido.\\ 
+			 
+			 Se va a probar con otro conjunto de datos para demostrar que por medio de este método podemos identificar las anomalías. En primer lugar, se vuelve a confeccionar un archivo de texto (\texttt{.txt}) atendiendo a las normas previamente expuestas. Este archivo de texto se llamará \texttt{planetas2.txt} para evitar problemas de sobrescritura. 
+			
+			 <<>>=
+			 (muestra = read.table("data/planetas2.txt"))
+			 @
+			 
+			 Una vez hecho esto se invoca a la función \texttt{lm} para sacar la regresión y se guarda el vector de residuos tal y como se ha hecho previamente.
+			 
+			 {\small
+			 <<>>=
+			 (dfr=lm(D~R, data=muestra))
+			 (res=summary(dfr)$residuals)
+			 @
+			}
+			 Se vuelve a calcular el error estándar de los residuos. Atendiendo a la fórmula hay que dividir entre 7, ya que se tienen 7 entradas en el conjunto de datos del fichero. 
+			 
+			 <<>>=
+			 (sr = sqrt(sum(res^2)/7))
+			 @ 
+			 
+			 Una vez se tienen todos los datos necesarios, se pone a prueba el código visto previamente para detectar anomalías. Esta vez se cambiará el grado de outlier $d = 2$.
+			 
+			 <<>>=
+			 for (i in 1:length(res)){
+			 	if(res[i]>2*sr){
+			 		print("el suceso");
+			 		print(res[i]);
+			 		print("es un suceso anómalo o outlier");
+				 }
+			 }
+			 @
+			 
+			 Se observa en la salida del código que el suceso 2 es un outlier. Atendiendo a los parámetros que se han ido obteniendo, se observa a simple vista que el suceso 2 supera el límite establecido. 
 	 
-	 Un aspecto a destacar es el uso de la función \texttt{identical} contenida en el paquete \texttt{base}. Esta función permite comparar si dos dataframes son iguales. Esto sirve en el algoritmo para ver si la matriz de asignaciones de la anterior iteración es igual que la actual. Esta condición será la que se deba cumplir para que el algoritmo finalice.\\
+	 \chapter{Ejercicios autónomos}
 	 
-	 Con esto ya estaría el algoritmo implementado. Ahora se va a llamar a la función \texttt{fcd\_kmeans} con los datos leídos al principio. Se va a optar por una salida detallada.
-	 
-	 {\small
-	 <<>>=
-	 fcd_kmeans(data, centroides, TRUE)
-	 @
-	}
-	 
-	 Se ha optado por tres centroides que más o menos se encuentran entre el conjunto total de puntos. Han sido necesarios 4 pasos para llegar a una solución. Se puede ver cómo se han ido calculando las matrices de distancias y asignaciones, así como los nuevos centroides, hasta que se ha llegado a los resultados finales. En estos se aprecian las coordenadas de los tres centroides así como los puntos que contienen cada uno. Por último, se devuelve el vector de clusterización que también se puede ver en la salida de la función realizada.
+		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
+		 
+		 \section{Clasificación no supervisada}
+		 
+		 	\subsection{$k-$means}
+		 
+				 \begin{exercise}
+					 	El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con $k-$means, estará formado por los siguientes 15 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: 1.\{3.5, 4.5\}; 2.\{0.75, 3.25\}; 3.\{0, 3\}; 4.\{1.75, 0.75\}; 5.\{3, 3.75\}; 6.\{3.75, 4.5\}; 7.\{1.25, 0.75\}; 8.\{0.25, 3\}; 9.\{3.5, 4.25\}; 10.\{1.5, 0.5\}; 11.\{1, 1\}; 12.\{3, 4\}; 13.\{0.5, 3\}; 14.\{2, 0.25\}; 15.\{0, 2.5\}. Del análisis visual de los datos se ha concluido que hay una alta probabilidad que sean tres clústers.
+				 \end{exercise}
+				 
+				 Los datos que se proponen en el enunciado del ejercicio van a ser introducidos en un fichero Excel (\texttt{.xlsx}), de tal forma que estos se van a obtener leyendo este fichero desde R. Para ello, se hará uso de la función \texttt{read.xlsx} contenida en el paquete \texttt{openxlsx} que se ha visto previamente. Con esta función se puede pasar como parámetro la ruta del archivo que contiene los datos, devolviendo los mismos en un dataframe.\\
+				 
+				 Para este ejercicio en concreto se hará uso de dos ficheros, uno con los datos de velocidad y temperatura (dispuestos cada uno en una columna del Excel), y otro fichero que contenga las coordenadas de los centroides iniciales que se van a utilizar en el algoritmo. En la primera fila de ambos ficheros deberá ir el título de cada columna. Primeramente se leen los datos del ejercicio. A partir de ahora, a cada uno de estos datos se les conocerán como puntos.
+				 
+				 <<>>=
+				 (data = data.frame(read.xlsx("data/datosKMeans.xlsx")))
+				 @
+				 
+				 Posteriormente se lee el fichero con los centroides iniciales. En la clasificación final se tendrán tantos clústers como centroides se hayan introducido, ya que al final un centroide representa un clúster.
+				 
+				 <<>>=
+				 (centroides = data.frame(read.xlsx("data/centroides.xlsx")))
+				 @
+				 
+				 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. Previo a ello se necesitan dos funciones auxiliares que ya se han visto en la anterior práctica. Estas son la función \texttt{len} para determinar la longitud de una lista y \texttt{euc\_distance}, a la cual se pasan dos puntos y devuelve la distancia euclídea entre los mismos.
+				 
+				 <<>>=
+				 len = function(list) {
+					count = 0
+				 	for (element in list) {
+				 		count = count + 1
+				 	}
+				 	count
+				 }
+				 
+				 euc_distance = function(p1, p2) {
+				 	sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
+				 }
+				 @
+				 
+				 El primer paso del algoritmo consiste en realizar una matriz de distancias. Esta matriz tendrá tantas filas como centroides se hayan declarado y tantas columnas como puntos se hayan introducido. Esta matriz recoge las distancias euclídeas de todos los puntos a todos los centroides. Para realizar esta tabla se ha programado la siguiente función, la cual va rellenando una matriz con las distancias euclídeas de cada punto a cada clúster.
+				 
+				 {\small
+				 	<<>>=
+				 	create_distance_matrix = function(points, centroids) {
+				 		n_pts = nrow(points)
+				 		n_cent = nrow(centroids)
+				 		distances = data.frame(matrix(ncol = n_pts, nrow = n_cent))
+				 		for (cent in 1:n_cent) {
+				 			for (pt in 1:n_pts) {
+				 				distances[cent, pt] =
+				 					euc_distance(points[pt,], centroids[cent,])
+							}
+						}
+						distances            
+				 	}
+				 	@
+				 }
+				 
+				 Una vez se tiene la matriz de distancias se debe realizar una matriz de asignaciones. Esta matriz será de las mismas dimensiones que la anterior, pero ahora no contendrá las distancias euclídeas. Por cada punto (columna) tendremos un 0 o un 1. Si aparece un 1 en una posición, la distancia del punto a ese clúster que representa la fila es la mínima. Por ejemplo; si el punto 1 esta más cerca del clúster 2 que del resto de clústers, la posición \texttt{$a_{12}$} tendrá un 1, y el resto de la columna un 0.\\
+				 
+				 Para realizar esta tabla se itera punto por punto, y por cada uno se observa la distancia del mismo a todos los clústers. Se debe poner un 1 en el lugar donde se encuentra la distancia euclídea mínima y un 0 en el resto de celdas de la columna. Es por ello que primero se inicializa a 0 toda la matriz y se va buscando por cada punto el clúster que está a menos distancia, para poner un 1 en su celda correspondiente. El código que recoge esta funcionalidad es el siguiente:
+				 
+				 {\small
+				 <<>>=
+				 create_assigment_matrix = function(dist_matrix) {
+					 n_pts = ncol(dist_matrix)
+					 n_cent = nrow(dist_matrix)
+					 assig_matrix = data.frame(matrix(0, ncol = n_pts, nrow = n_cent))
+					 for (col in 1:n_pts) {
+						 minimum_centroid = 1
+						 for (cent in 2:n_cent) {
+							 if (dist_matrix[cent, col] < 
+					   dist_matrix[minimum_centroid, col]) {
+								 	minimum_centroid = cent
+							 	}
+						 }
+						 assig_matrix[minimum_centroid, col] = 1
+					 }
+					 assig_matrix            
+				 }
+				 @
+					}
+				 
+				 Por último, una vez se han asignado los puntos más próximos a cada clúster, se deben recalcular los centroides del mismo. Para recalcular un centroide en específico se deben tener en cuenta todos los puntos asociados al mismo. Las nuevas coordenadas del centroide se calculan realizando la media de los puntos que tiene asignados. El resultado de este algoritmo resulta en un nuevo dataframe donde, por cada fila, se van a tener las nuevas componentes del centroide correspondiente, y que serán usados para continuar con la ejecución del algoritmo.\\
+				 
+				 Antes de ver el código, se ha de considerar que un centroide puede no tener ningún punto asociado, por lo que el cálculo que se propone arriba no sería posible (ya que se tendría que dividir entre cero a la hora de calcular la media). Es por ello que si un centroide no tiene ningún punto asociado, este se quedará igual (sus componentes no se verán alteradas). Esto resultará en que el centroide propuesto no se ha definido muy bien, y desemboca en una clasificación diferente a la esperada.
+				 
+				 {\small
+				 <<>>=
+				 update_cent = function(df_sample, centroids, assig_matrix) {
+					 n_pts = ncol(assig_matrix)
+					 n_cent = nrow(assig_matrix)
+					 new_centroids = c()
+					 for (cent in 1:n_cent) {
+						 centroid_x = 0
+						 centroid_y = 0
+						 count = 0
+						 for (pt in 1:n_pts) {
+							 if (assig_matrix[cent, pt] == 1) {
+								 centroid_x = centroid_x + df_sample[pt, 1]
+								 centroid_y = centroid_y + df_sample[pt, 2]
+								 count = count + 1
+							 }
+						 }
+						 if (count == 0){
+							 	new_centroids = append(append(new_centroids, 
+				 	   centroids[cent,1]),centroids[cent,2])
+						 }
+						 else {
+							 	new_centroids = append(append(new_centroids, 
+				 	   centroid_x/count), centroid_y/count)
+						 }
+					 }
+					 data.frame(t(matrix(new_centroids, 2, n_cent, 
+			    dimnames=list(c("X","Y")))))
+				 }
+				 @
+					}
+				 
+				 El algoritmo se ejecutará hasta que la matriz de asignaciones sea la misma en una iteración con respecto a su anterior. Para visualizar el resultado o clasificación final se propone una función que tomará la matriz de asignaciones final y el valor de los centroides finales. Este método imprimirá las coordenadas de cada centroide, así como los puntos que conforman el clúster representado por ese centroide.
+				 
+				 {\tiny
+				 <<>>=
+				 printCentroids = function(df_sample, centroids, assig_matrix){
+					 n_cents = nrow(assig_matrix)
+					 n_pts = ncol(assig_matrix)
+					 cat("\n--RESULTADOS--\n")
+					 for (cent in 1:n_cents){
+						 cat("Centroide", cent, "(", centroids[cent,1], ",", centroids[cent,2],") \n")
+						 for(pt in 1:n_pts){
+							 if (assig_matrix[cent,pt] == 1){
+								 	cat("  - Punto", pt, "(", df_sample[pt, 1], ",", df_sample[pt,2], ")\n")
+							 }
+						 }
+						 cat("\n")
+					 }
+				 }
+				 @
+					}
+				 
+				 De todo este algoritmo, se ha considerado que la salida mas útil para el analista es un vector de clústerización. Este consiste en un vector de tantos elementos como puntos se hayan introducido, de tal forma que la posición $i-$ésima del mismo corresponda con el clúster asociado al punto $i$. Se itera la matriz de asignaciones final por puntos, y por cada uno de ellos se devuelve el valor de la fila que contiene un 1 (el número del centroide al que se ha asociado en la clasificación final)
+				 
+				 {\small
+				 <<>>=
+				 create_clust_vector = function(assig_matrix){
+					 n_pts = ncol(assig_matrix)
+					 n_cents = nrow(assig_matrix)
+					 clust_vector = c()
+					 for(pt in 1:n_pts){
+						 for(cent in 1:n_cents){
+							 if (assig_matrix[cent,pt] == 1){
+								 	clust_vector = append(clust_vector, cent)
+							 }
+						 }
+					 }
+					 clust_vector
+				 }
+				 @
+					}
+				 
+				 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clústerización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clústerización.
+				 
+				 {\small
+				 <<>>=
+				 fcd_kmeans = function(df_sample, centroids, details = FALSE) {
+					 n_pts = nrow(df_sample)
+					 n_cent = nrow(centroids)
+					 
+					 prev_assig_matrix = data.frame(
+			     matrix(0, ncol = n_pts, nrow = n_cent))
+					 
+					 step = 1
+					 dist_matrix = create_distance_matrix(df_sample, centroids)
+					 assig_matrix = create_assigment_matrix(dist_matrix)
+					 if(details){
+						 cat("PASO", step, "\n------- \n")
+						 cat("Matriz de distancias \n")
+						 print(dist_matrix)
+						 cat("Matriz de asignaciones \n")
+						 print(assig_matrix)
+					 }
+					 
+					 while (!identical(prev_assig_matrix, assig_matrix)) {
+						 prev_assig_matrix = assig_matrix
+						 centroids = update_cent(df_sample, centroids, assig_matrix)
+						 dist_matrix = create_distance_matrix(df_sample, centroids)
+						 assig_matrix = create_assigment_matrix(dist_matrix)
+						 
+						 if(details) {
+							 cat("Los nuevos centroides son:\n")
+							 print(centroids)
+							 step = step + 1
+							 cat("PASO", step, "\n------- \n")
+							 cat("Matriz de distancias \n")
+							 print(dist_matrix)
+							 cat("Matriz de asignaciones \n")
+							 print(assig_matrix)
+						 }
+					 }
+					 printCentroids(df_sample, centroids, assig_matrix)
+					 cat("Vector de clústerización\n")
+					 create_clust_vector(assig_matrix)
+				 } 
+				 @
+					}
+				 
+				 Un aspecto a destacar es el uso de la función \texttt{identical} contenida en el paquete \texttt{base}. Esta función permite comparar si dos dataframes son iguales. Esto sirve en el algoritmo para ver si la matriz de asignaciones de la anterior iteración es igual que la actual. Esta condición será la que se deba cumplir para que el algoritmo finalice.\\
+				 
+				 Con esto ya estaría el algoritmo implementado. Ahora se va a llamar a la función \texttt{fcd\_kmeans} con los datos leídos al principio. Se va a optar por una salida detallada.
+				 
+				 {\small
+				 <<>>=
+				 fcd_kmeans(data, centroides, TRUE)
+				 @
+				 }
+				 
+				 Se ha optado por tres centroides que más o menos se encuentran entre el conjunto total de puntos. Han sido necesarios 4 pasos para llegar a una solución. Se puede ver cómo se han ido calculando las matrices de distancias y asignaciones, así como los nuevos centroides, hasta que se ha llegado a los resultados finales. En estos se aprecian las coordenadas de los tres centroides así como los puntos que contienen cada uno. Por último, se devuelve el vector de clústerización que también se puede ver en la salida de la función realizada.
+				 
+ 		\section{Clasificación supervisada}
+ 		
+ 			\subsection{Regresión lineal}
+ 			
+ 				\begin{exercise}
+ 					El cuarto conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando regresión, estará formado por los siguientes 4 subconjuntos de datos: 1. \{10, 8.04; 8, 6.95; 13, 7.58; 9, 8.81; 11, 8.33; 14, 9.96; 6, 7.24; 4, 4.26; 12, 10.84; 7, 4.82; 5, 5.68\}; 2. \{10, 9.14; 8, 8.14; 13, 8.74; 9, 8.77; 11, 9.26; 14, 8.1; 6, 6.13; 4, 3.1; 12, 9.13; 7, 7.26; 5, 4.74\}; 3. \{10, 7.46; 8, 6.77; 13, 12.74; 9, 7.11; 11, 7.81; 14, 8.84; 6, 6.08; 4, 5.39; 12, 8.15; 7, 6.42; 5, 5.73\}; 4. \{8, 6.58; 8, 5.76; 8, 7.71; 8, 8.84; 8, 8.47; 8, 7.04; 8, 5.25; 19, 12.5; 8, 5.56; 8, 7.91; 8, 6.89\}. Se deben calcular las rectas de regresión de los cuatro subconjuntos y sus parámetros de ajuste.
+ 				\end{exercise}
+ 				
+ 				Para la resolución de este ejercicio, se hará uso de la recta de regresión lineal de la forma $\hat{y} = a + bx$ donde los parámetros $a$ y $b$ obedecen a las siguiente ecuaciones. 
+ 				
+ 				\begin{equation}\label{ec:reg_param}
+ 					\begin{gathered}
+ 						b = \frac{S_{xy}}{S^2_x}\\
+ 						a = \bar{y} - b \bar{x}
+ 					\end{gathered}
+ 				\end{equation}
+ 				
+ 				Para el cálculo de estos parámetros se necesita hacer uso de funciones ya implementadas en la práctica anterior como la media aritmética, la desviación típica y la varianza, se recuerda el código a continuación. 
+ 				
+ 				<<>>=
+ 				fcd_mean = function(list) {
+ 					add = 0
+ 					for (i in 1:len(list)) {
+ 						add = add + list[i]
+ 					}
+ 					add / len(list)
+ 				}
+ 				
+ 				standard_dev = function(list) {
+ 					mean = fcd_mean(list)
+ 					n = len(list)
+ 					add = 0
+ 					for (i in 1:n) {
+ 						add = add + ((list[i] - mean)^2)
+ 					}
+ 					sqrt(add/n)
+ 				}
+ 				
+ 				variance = function(list) {
+ 					dev = standard_dev(list)
+ 					var = dev^2
+ 					var
+ 				}
+ 				@
+ 				
+ 				El siguiente cálculo será hallar el valor de la covarianza de la siguiente manera
+ 				
+ 				\begin{equation}\label{ec:reg_cov}
+ 					S_{xy} = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
+ 				\end{equation}
+ 				
+ 				y quedará reflejado en la función \texttt{covariance} que recibe dos vectores que representan los datos y sus valores correspondientes: 
+ 				
+ 				$$
+ 				\begin{gathered}
+ 					\textbf{X} = (x_1, x_2, \hdots, x_n)\\
+ 					\textbf{Y} = (y_1, y_2, \hdots, y_n)
+ 				\end{gathered}
+ 				$$
+ 				
+ 				La función realiza el cálculo de la \Cref{ec:reg_cov} usando \texttt{\%*\%}, que en este caso realiza el producto escalar de \textbf{X} e \textbf{Y}. También se verifica que estos vectores compartan dimensiones, pues de lo contrario no se podrá calcular. 
+ 				
+ 				<<>>=
+ 				covariance = function(x, y) {
+ 					if (len(x) != len(y)) {
+ 						stop("X e Y deben tener la misma dimensión")
+ 					} 
+ 					else {
+ 						sum = x %*% y
+ 						(sum/len(x))-(fcd_mean(x)*fcd_mean(y))
+ 					}
+ 				}
+ 				@
+ 				
+ 				Finalmente, la función \texttt{regression\_line} calcula los parámetros $a$ y $b$ mediante la \Cref{ec:reg_param}. Devuelve el resultado de forma matricial para más tarde trabajar de forma más cómoda. 
+ 				
+ 				$$
+ 				\textbf{P} = \begin{pmatrix}
+ 					a\\
+ 					b
+ 				\end{pmatrix}
+ 				$$
+ 				
+ 				<<>>=
+ 				regression_line = function(x, y) {
+ 					b = covariance(x, y) / variance(x)
+ 					a = fcd_mean(y) - b * fcd_mean(x)
+ 					matrix(c(a, b), ncol = 1)
+ 				}
+ 				@
+ 				
+ 				Una vez se tienen calculados los parámetros de la recta de regresión lineal, es momento de evaluar cómo de buena es la aproximación. Para ello se emplea la métrica $R^2$. Su valor depende de otros dos, $SSR$ y $SSY$, que obedecen a las siguientes ecuaciones. 
+ 				
+ 				$$
+ 				\begin{gathered}
+ 					SSR = \sum_{i=1}^n(\hat{y}_i - \bar{y})^2\\
+ 					SSY = \sum_{i=1}^n(y_i - \bar{y})^2
+ 				\end{gathered}
+ 				$$
+ 				
+ 				Estos cálculos quedan recogidos en las funciones \texttt{ssr} y \texttt{ssy}. La primera de ellas calcula el valor requerido de forma matricial, recibiendo \textbf{P}, \textbf{X}, e \textbf{Y} como parámetros, y realiza las siguientes operaciones, donde el cuadrado se realiza elemento a elemento, en vez de forma matricial. En este caso, \texttt{\%*\%} funciona como el producto de matrices usual. 
+ 				
+ 				$$
+ 				\begin{gathered}
+ 					\hat{\textbf{Y}} = \begin{pmatrix}
+ 						1 & x_1\\
+ 						1 & x_2\\
+ 						\vdots & \vdots\\
+ 						1 & x_n
+ 					\end{pmatrix}\begin{pmatrix}
+ 						a\\
+ 						b
+ 					\end{pmatrix}\\
+ 					SSR = \sum_{i=1}^n (\hat{\textbf{Y}_i} - \bar{\textbf{Y}}_i)^2
+ 				\end{gathered}
+ 				$$
+ 				
+ 				De la manera similar, se calcula el $SSY$ como $\sum_{i=1}^n (\textbf{Y}_i - \bar{\textbf{Y}}_i)^2$. Además se conoce que la relación entre estos dos parámetros y $R^2$ es la siguiente. 
+ 				
+ 				$$
+ 				R^2 = \frac{SSR}{SSY}
+ 				$$
+ 				
+ 				<<>>=
+ 				ssr = function(p, x, y) {
+ 					X = matrix(c(rep(1, times = len(x)), x), ncol = 2)
+ 					y_hat = X %*% p
+ 					sum((y_hat - rep(fcd_mean(y)))^2)
+ 				}
+ 				
+ 				ssy = function(y) {
+ 					sum((y - rep(fcd_mean(y)))^2)
+ 				}
+ 				
+ 				r2 = function(sr, sy) {
+ 					sr/sy
+ 				}
+ 				@
+ 				
+ 				Finalmente se encapsula todo en una única función llamada \texttt{fcd\_regression} que muestra por consola la ecuación de $\hat{y}$ y el valor de $R^2$, además de una gráfica con la recta y los puntos. 
+ 				
+ 				<<>>=
+ 				fcd_regression = function(sample) {
+ 					X = sample[, 1]
+ 					Y = sample[, 2]
+ 				
+ 					param = regression_line(X, Y)
+ 					r = r2(ssr(param, X, Y), ssy(Y))
+ 					
+ 					a = param[1, 1]
+ 					b = param[2, 1]
+ 				
+ 					print(sprintf("y = %.3fx + %.3f", b, a))
+ 					print(sprintf("R2 = %.3f", r))
+ 				
+ 					plot(X, Y, col = "blue", main = "Recta de regresión", 
+ 						xlab = "Eje X", ylab = "Eje Y")
+ 					abline(a=a, b=b, col="red")
+ 				}
+ 				@
+ 				
+ 				De la siguiente forma, se prueba para los casos del profesor. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} se dan diferentes valores a $y$ para un mismo $x$ lo que hace que la pendiente de esta recta tienda a infinito. %explicar la carga de datos
+ 				
+ 				<<recta1, fig.cap = "Datos no correlacionados">>=
+ 				sample1 = read.xlsx("../Memoria/data/conj1.xlsx", colNames=FALSE)
+ 				fcd_regression(sample1)
+ 				@
+ 				
+ 				<<recta2, fig.cap = "Relación cuadrática">>=
+ 				sample2 = read.xlsx("../Memoria/data/conj2.xlsx", colNames=FALSE)
+ 				fcd_regression(sample2)
+ 				@
+ 				
+ 				<<recta3, fig.cap = "Relación lineal con outlier">>=
+ 				sample3 = read.xlsx("../Memoria/data/conj3.xlsx", colNames=FALSE)
+ 				fcd_regression(sample3)
+ 				@
+ 				
+ 				<<recta4, fig.cap = "Recta con pendiente infinita">>=
+ 				sample4 = read.xlsx("../Memoria/data/conj4.xlsx", colNames=FALSE)
+ 				fcd_regression(sample4)
+ 				@
+ 				
 \end{document}

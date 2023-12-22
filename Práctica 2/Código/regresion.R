@@ -33,11 +33,9 @@ variance = function(list) {
 covariance = function(x, y) {
   if (len(x) != len(y)) {
     stop("X e Y deben tener la misma dimensión")
-  } else {
-    sum = 0
-    for (i in 1:len(x)) {
-      sum = sum + (x[i] * y[i])
-    }
+  } 
+  else {
+    sum = x %*% y
     (sum/len(x))-(fcd_mean(x)*fcd_mean(y))
   }
 }
@@ -49,11 +47,8 @@ regression_line = function(x, y) {
 }
 
 ssr = function(p, x, y) {
-  y_hat = c()
-  for (xi in x) {
-    Xi = matrix(c(1, xi), nrow = 1)
-    y_hat = c(y_hat, Xi %*% p)
-  }
+  X = matrix(c(rep(1, times = len(x)), x), ncol = 2)
+  y_hat = X %*% p
   sum((y_hat - rep(fcd_mean(y)))^2)
 }
 
