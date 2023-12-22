@@ -276,7 +276,7 @@
 		Ss\}, donde las características de las calificaciones son: \{Teoría, Laboratorio, Prácticas, Calificación Global).
 	\end{exercise}
 	
-	El primer paso a ejecutar para poder realizar la clasificación supervisada con árboles de decisión es introducir los datos en un archivo de texto (\texttt{.txt}) que será posteriormente leído con el lenguaje R. Para ello, es necesario que el archivo de texto cumpla con un formato en concreto:
+	El primer paso a ejecutar para poder realizar la clasificación supervisada con árboles de decisión es introducir los datos en un archivo de texto (\texttt{.txt}), que será posteriormente leído con el lenguaje R. Para ello, es necesario que el archivo de texto cumpla con un formato en concreto:
 	
 	\begin{itemize}
 		\item La primera fila contendrá los nombres de las columnas, iniciando la fila con un tabulado o espacio e introduciendo otro entre cada una de las columnas.
@@ -285,9 +285,7 @@
 		\item El archivo de texto debe finalizar con una fila vacía.
 	\end{itemize}
 	
-	Este archivo de texto se llamará \texttt{aprobados.txt} y será guardado en la carpeta \texttt{data}.
-	
-	El archivo es cargado en R de la siguiente forma:
+	Este archivo de texto se llamará \texttt{aprobados.txt} y será guardado en la carpeta \texttt{data}. El archivo es cargado en R de la siguiente forma:
 	
 	<<>>=
 	(calificaciones=read.table("data/aprobados.txt"))
@@ -301,9 +299,7 @@
 	clasificacion = rpart(CG~T+L+P, data=muestra, method="class", minsplit=1)
 	@
 	
-	El primer argumento que se le pasa es \texttt{CG~T+L+P}, que contiene como primer elemento (a la izquierda de \texttt{~}) el criterio que se desea clasificar, y a la derecha de la virgulilla, aparecen las columnas sobre las que se desea clasificar. También es posible poner un punto (\texttt{.}) a la derecha, lo cual significa que se clasificaría en base a todas las columnas que no fueran el criterio de clasificación. El segundo parámetro es, como ya se ha mencionado, la muestra en un dataframe, el tercer parámetro \texttt{ method="class"} indica que se está abordando un problema de clasificación, y el último parámetro \texttt{minsplit=1} es necesario ya que se está trabajando sobre un conjunto de datos pequeño. 
-	
-	La salida de la función es la siguiente:
+	El primer argumento que se le pasa es \texttt{CG~T+L+P}, que contiene como primer elemento (a la izquierda de \texttt{\~}) el criterio que se desea clasificar, y a la derecha de la virgulilla, aparecen las columnas sobre las que se desea clasificar. También es posible poner un punto (\texttt{.}) a la derecha, lo cual significa que se clasificaría en base a todas las columnas que no fueran el criterio de clasificación. El segundo parámetro es, como ya se ha mencionado, la muestra en un dataframe; el tercer parámetro \texttt{ method="class"} indica que se está abordando un problema de clasificación; y el último parámetro \texttt{minsplit=1} es necesario ya que se está trabajando sobre un conjunto de datos pequeño. La salida de la función es la siguiente:
 	
 	<<>>=
 	clasificacion
