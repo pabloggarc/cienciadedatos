@@ -79,12 +79,12 @@ detect_outlier = function(p, x, y, d) {
 print_outliers = function(x, y, outliers) {
   for (i in 1:len(outliers)) {
     if (outliers[i]) {
-      print(sprintf("Outlier: (%.3f, %.3f)", x[i], y[i]))
+      cat(paste0("Outlier: (", x[i], ", ", y[i], ")\n"))
     }
   }
 }
 
-fcd_regression = function(sample) {
+fcd_regression = function(sample, d) {
   X = sample[, 1]
   Y = sample[, 2]
   
@@ -94,25 +94,29 @@ fcd_regression = function(sample) {
   a = param[1, 1]
   b = param[2, 1]
   
-  print(sprintf("y = %.3fx + %.3f", b, a))
-  print(sprintf("R2 = %.3f", r))
+  cat("Recta de regresión\n")
+  cat("y =", round(b, 3), "x +", round(a, 3), "\n")
+  cat("R2 =", round(r, 3), "\n")
   
-  plot(X, Y, col="blue", main="Recta de regresión", xlab="Eje X", ylab="Eje Y")
+  outliers = detect_outlier(param, X, Y, d)
   
-  abline(a=a, b=b, col="red")
+  colors = rep("green", length(X))
+  colors[outliers] = "red"
+  plot(X, Y, col=colors, pch=21, bg=colors, main="Recta de regresión", xlab="Eje X", ylab="Eje Y")
+  abline(a=a, b=b, col="blue")
   
-  print_outliers(X, Y, detect_outlier(param, X, Y, 2))
+  print_outliers(X, Y, outliers)
 }
 
 
 sample1 = read.xlsx("../Memoria/data/conj1.xlsx", colNames=FALSE)
-fcd_regression(sample1)
+fcd_regression(sample1, 2)
 
 sample2 = read.xlsx("../Memoria/data/conj2.xlsx", colNames=FALSE)
-fcd_regression(sample2)
+fcd_regression(sample2, 1.5)
 
 sample3 = read.xlsx("../Memoria/data/conj3.xlsx", colNames=FALSE)
-fcd_regression(sample3)
+fcd_regression(sample3, 2)
 
 sample4 = read.xlsx("../Memoria/data/conj4.xlsx", colNames=FALSE)
-fcd_regression(sample4)
+fcd_regression(sample4, 33)
