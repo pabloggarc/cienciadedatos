@@ -6,6 +6,14 @@ len = function(list) {
   count
 }
 
+fcd_mean = function(list) {
+  add = 0
+  for (i in 1:len(list)) {
+    add = add + list[i]
+  }
+  add / len(list)
+}
+
 euc_distance = function(p1, p2) {
   sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
 }
@@ -60,19 +68,41 @@ choose_distance = function(distances, chosen, distance){
   chosen
 }
 
-coltags_2_update = function(distances, chosen, distance){
-  cols = c()
-  for(i in 1:nrow(distances)) {
-    for(j in 1:i) {
-      if (distances[i, j] == distance) {
-        cols = c(cols, i, j)
+update_distance_matrix = function(initial_dm, actual_dm, forest, new_cluster_points, criteria_name) {
+  updated_cols = c(rep(0, times = len(forest)))
+  updated_cols[new_cluster_points] = 1
+  
+  for (i in 1:len(forest)) {
+    if (!updated_cols[i]) {
+      tree_points = sapply(Traverse(forest[[i]], filterFun = isLeaf), function(x){as.integer(substring(x$name, 2))})
+      new_distance = func_criteria(initial_dm, new_cluster_points, tree_points, criteria_name)
+      
+      for (i in new_cluster_points) {
+        for (j in tree_points) {
+          minor = min(i, j)
+          mayor = max(i, j)
+          actual_dm[mayor, minor] = new_distance
+        }
       }
+      updated_cols[tree_points] = 1
     }
   }
-  cols
+  actual_dm
 }
 
-fcd_ahc = function(data){
+func_criteria = function(initial_dm, new_cluster_points, tree_points, criteria_name) {
+  distances = c()
+  for (i in new_cluster_points) {
+    for (j in tree_points) {
+      minor = min(i, j)
+      mayor = max(i, j)
+      distances = c(distances, initial_dm[mayor, minor])
+    }
+  }
+  criteria_name(distances)
+}
+
+fcd_ahc = function(data, criteria, details = FALSE) {
   
   dist_matrix = create_distance_matrix(data)
   chosen_matrix = create_chosen_matrix(data)
@@ -81,10 +111,6 @@ fcd_ahc = function(data){
   forest = sapply(colnames(dist_matrix), function(root){Node$new(root)})
   
   while(sum(chosen_matrix, na.rm = TRUE) != (len(dist_matrix) * (len(dist_matrix) - 1) / 2)){
-    print(dist_matrix)
-    print(chosen_matrix)
-    print(forest)
-    
     #Buscar y marcar distancia mínima
     min_index = min_ahc(dist_matrix, chosen_matrix)
     chosen_matrix = choose_distance(dist_matrix, chosen_matrix, dist_matrix[min_index[1], min_index[2]])
@@ -101,12 +127,27 @@ fcd_ahc = function(data){
     }
     next_cluster = next_cluster + 1
     
-    #Se actualiza la matriz de distancias (TODO)
+    criteria_name = switch(criteria, "MIN" = min, "MAX" = max, "AVG" = fcd_mean)
     
-    if(next_cluster == 5) break
+    dist_matrix = update_distance_matrix(first_dist_matrix, dist_matrix, forest, trees_2_update, criteria_name)
+    
+    if (details) {
+      print(dist_matrix)
+      print(chosen_matrix)
+      print(forest)
+    }
   }
-}
+  print(dist_matrix)
+  print(forest[[1]])
   
+  cpcc = calculate_cpcc(first_dist_matrix, dist_matrix)
+}
+
 
 df_sample = data.frame(t(matrix(c(0.89, 2.94, 4.36, 5.21, 3.75, 1.12, 6.25, 3.14, 4.1, 1.8, 3.9, 4.27), 2, 6, dimnames=list(c("X","Y")))))
-fcd_ahc(df_sample)
+fcd_ahc(df_sample, "AVG")
+
+
+
+
+
