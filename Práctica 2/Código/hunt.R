@@ -66,9 +66,7 @@ gini = function(frec) {
 }
 
 get_impurity = function(sample, col, elements, criteria, equivalence_clases, measure) {
-	if (is.null(elements)) {
-		0
-	}
+
 	frec = get_frec(sample, col, criteria, elements, equivalence_clases)
 	switch(measure, "entropy" = entropy(frec), "error" = error(frec), "gini" = gini(frec))
 }
@@ -107,13 +105,62 @@ create_classification = function(sample, col, right_element, criteria, measure) 
 	}
 	right = dif(get_elements(sample, col), left)
 
-	if(len(right) > 0) {
+	if(len(right) > 0 && len(left) > 0) {
 		gain = get_gain(sample, left, right, criteria, right_element, col, measure)
+		
 	} else {
 		gain = 0
 	}
 
 	data.frame(parent=col, right_element, left=I(list(left)), right=I(list(right)), gain)
+}
+
+df_2_tree = function(df, final, criteria, rowIndex = 1) {
+  
+  if (rowIndex > nrow(df)) {
+    return(NULL)
+  }
+  
+  new_tree_tag = Node$new(df[rowIndex, "parent"])
+  
+  if (rowIndex == nrow(df)) {
+    new_tree_tag$AddChild(paste(get_elements(final, criteria)), info=final[nrow(final), df[nrow(df), "parent"]])
+    new_tree_tag$AddChild(df[rowIndex, "right_element"], info=df[nrow(df), "right"])
+  } else {
+    left = Node$new(df_2_tree(df, final, criteria, rowIndex + 1), info=df[rowIndex, "left"])
+    new_tree_tag$AddChildNode(left)
+    new_tree_tag$AddChild(df[rowIndex, "right_element"], info=df[rowIndex, "right"])
+  }
+  
+  return(new_tree_tag)
+}
+
+df_2_tree33 = function(df, final, criteria) {
+  
+  last_tree = Node$new(df[nrow(df), "parent"], info="hola")
+  
+  leftNode = Node$new(paste(get_elements(final, criteria)), info=final[nrow(final), df[nrow(df), "parent"]])
+  last_tree$AddChildNode(leftNode)
+  
+  rightNode = Node$new(df[nrow(df), "right_element"], info=df[nrow(df), "right"], info=df[nrow(df), "right"])
+  last_tree$AddChildNode(rightNode)
+  
+  print(leftNode$attributes)
+  print(leftNode$info)
+  
+  for (rowIndex in (nrow(df)-1):1) {
+    new_tree = Node$new(df[rowIndex, "parent"])
+    
+    last_tree$Set(info=df[rowIndex, "left"])
+    new_tree$AddChildNode(last_tree)
+    
+    rightNode = Node$new(df[rowIndex, "right_element"], info=df[rowIndex, "right"])
+    new_tree$AddChildNode(rightNode)
+    
+    last_tree = new_tree
+  }
+  
+  return(last_tree)
 }
 
 hunt = function(sample, classes, criteria, measure) {
@@ -141,15 +188,19 @@ hunt = function(sample, classes, criteria, measure) {
 		if (best_gain != 0) {
 			sample = subset(sample, sample[, best_clasification$parent] %in% unlist(best_clasification$left))
 			final_clasification = rbind(final_clasification, best_clasification)
-			rownames(sample) = NULL
 		}
-		print("11")
-		print(sample)
-		print("***")
-		print(best_clasification)
-		print("22")
 	}
 	print(final_clasification)
+	print("***")
+	print(sample)
+	
+	s = df_2_tree33(final_clasification, sample, criteria)
+	
+	print(s$"info")
+	plot(s)
+	#plot(as.dendrogram(s), center = TRUE, yaxt='n')
+	
+	final_clasification
 }
 
 #(sample = read.xlsx("../Memoria/data/calificaciones.xlsx"))
@@ -157,3 +208,16 @@ hunt = function(sample, classes, criteria, measure) {
 
 #a = hunt(sample, c("T", "L", "P"), "C.G", "error")
 a = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "error")
+
+
+
+
+
+
+
+
+
+
+
+
+
