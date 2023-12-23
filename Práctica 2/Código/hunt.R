@@ -17,77 +17,76 @@ union = function(c1, c2) {
 }
 
 dif = function(c1, c2) {
-  res = list()
+  res = c()
   for (element in c1) {
     if (!(element %in% c2)) {
-      res = append(res, element)
+      res = c(res, element)
     }
   }
   res
 }
 
-get_frec = function(data, col, branch, criteria, values) {
+get_frec = function(sample, col, criteria, elements, values) {
   n = 0
-  frecs = c()
+  frecs = setNames(data.frame(matrix(rep(0, times = length(values)), nrow = 1)), values)
   
-  for () {
-    
+  for (i in 1:len(sample[, col])) {
+    if (sample[i, col] %in% elements) {
+      
+      frecs[1, sample[i, criteria]] = frecs[1, sample[i, criteria]] + 1
+      n = n + 1
+    }
   }
-  
-  #lo de abajo esta mal, iterar en col y hacer un contador de las veces que aparece cada elemento de branch
-  
-  
-  
-    p = 0
-    for (i in 1:n) {
-      if (data[i, col] == value) {
-        p = p + 1
-      }
-    }
-    if (p==0 || n==0) {
-      return(0)
-    }
-    frecs = append(frecs, p / n)
+  frecs / n
 }
 
 entropy = function(frec) {
-  if (frec == 0 || frec == 1) {
-    return(0)
-  } else {
-    return(-frec * log(frec, 2) - (1 - frec) * log(1 - frec, 2))
+  acum = 0
+  for (i in 1:len(frec)) {
+    f = frec[1, i]
+    if (f != 0 && f != 1) {
+      acum = acum - f * log(f, 2)
+    }
   }
+  acum
 }
 
 error = function(frec) {
-    return(1 - max(frec, 1 - frec))
+  return(1 - max(frec))
 }
 
 gini = function(frec) {
-    return(1 - frec^2 + (1 - frec)^2)
+  acum = 0
+  
+  for (i in 1:len(frec)) {
+    f = frec[1, i]
+    acum = acum + f^2
+    }
+  1 - acum
 }
 
-get_impurity = function(data, col, elements, criteria, equivalence_clases, measure) {
-  frec = get_frec(data, classes, element)############
-  switch(measure,
-       "entropy" = entropy(frec),
-       "error" = error(frec),
-       "gini" = gini(frec))
+get_impurity = function(sample, col, elements, criteria, equivalence_clases, measure) {
+  if (is.null(elements)) {
+    return(0)
+  }
+  frec = get_frec(sample, col, criteria, elements, equivalence_clases)
+  switch(measure, "entropy" = entropy(frec), "error" = error(frec), "gini" = gini(frec))
 }
 
-get_gain = function(data, left, right, criteria, right_element, col, measure) {
-  n = len(data)
-  equivalence_clases = get_elements(criteria)
-  impurity_father = get_impurity(data, col, union(left, right), criteria, equivalence_clases, measure)
-  impurity_left = get_impurity(data, col, left, criteria, equivalence_clases, measure)
-  impurity_right = get_impurity(data, col, right, criteria, equivalence_clases, measure)
+get_gain = function(sample, left, right, criteria, right_element, col, measure) {
+  n = len(sample)
+  equivalence_clases = get_elements(sample, criteria)
   
+  impurity_father = get_impurity(sample, col, union(left, right), criteria, equivalence_clases, measure)
+  impurity_left = get_impurity(sample, col, left, criteria, equivalence_clases, measure)
+  impurity_right = get_impurity(sample, col, right, criteria, equivalence_clases, measure)
   
-  
+  return(impurity_father - (len(left) / n * impurity_left + len(right) / n * impurity_right))
 }
 
-get_elements  = function(data, col) {
+get_elements  = function(sample, col) {
   elements = c()
-  for (element in data[, col]) {
+  for (element in sample[, col]) {
     if (!(element %in% elements)) {
       elements = c(elements, element)
     }
@@ -95,48 +94,61 @@ get_elements  = function(data, col) {
   elements
 }
 
-create_classification = function(data, col, right_element, criteria) {
+create_classification = function(sample, col, right_element, criteria, measure) {
 
-  left = list()
+  left = c()
   
-  for (i in 1:len(data[, col])) {
-    element = data[i, col]
-    if (!(element %in% left) && data[i, criteria] != right_element) {
-      left = append(left, element)
+  for (i in 1:len(sample[, col])) {
+    element = sample[i, col]
+    
+    if (!(element %in% left) && sample[i, criteria] != right_element) {
+      left = unlist(append(left, element))
     }
   }
-  right = dif(get_elements(data, col), left)
+  right = dif(get_elements(sample, col), left)
   
-  gain = get_gain(data, criteria, classes, measure)
+  gain = get_gain(sample, left, right, criteria, right_element, col, measure)
   
-  data.frame(parent=col, right_element, left=I(list(left)), right=I(list(right))), gain)
+  data.frame(parent=col, right_element, left=I(list(left)), right=I(list(right)), gain)
 }
 
-hunt = function(data, classes, criteria, measure) {
+hunt = function(sample, classes, criteria, measure) {
   
-  gain = -1
+  final_clasification = data.frame()
+  best_gain = -1
+  best_clasification = NULL
   
-  for (col in classes) {
-    for (element in get_elements(data, criteria)) {
-      
-      clasification = create_classification(data, col, element)
-      
-      actual_gain = get_gain(data, classes, criteria, measure)
-      
-      if (actual_gain > gain) {
-        left = actual_left
-        right = actual_right
-        gain = actual_gain
+  while (nrow(sample) > 0 && best_gain != 0) {
+    best_gain = -1
+    for (col in classes) {
+      for (element in get_elements(sample, criteria)) {
+        
+        clasification = create_classification(sample, col, element, criteria, measure)
+        
+        actual_gain = clasification$gain
+        
+        if (actual_gain > best_gain) {
+          best_gain = actual_gain
+          best_clasification = clasification
+        }
       }
     }
     
+    if (best_gain != 0) {
+      sample = subset(sample, sample[, best_clasification$parent] %in% unlist(best_clasification$left))
+      final_clasification = rbind(final_clasification, best_clasification)
+      rownames(sample) = NULL
+    }
+    print("11")
+    print(sample)
+    print("***")
+    print(best_clasification)
+    print("22")
   }
-  
+  print(final_clasification)
 }
 
-(data = read.xlsx("../data/calificaciones.xlsx"))
+#(sample = read.xlsx("../Memoria/data/calificaciones.xlsx"))
+(sample = read.xlsx("../Memoria/data/vehiculos.xlsx"))
 
-#hunt(data, c("T", "L", "P"), "C.G", "entropy")
-
-create_classification(data, "T", "Ap", "C.G")
-
+a = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "gini")

@@ -18,6 +18,26 @@ euc_distance = function(p1, p2) {
   sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
 }
 
+standard_dev = function(list) {
+  mean = fcd_mean(list)
+  n = len(list)
+  add = 0
+  for (i in 1:n) {
+    add = add + ((list[i] - mean)^2)
+  }
+  sqrt(add/n)
+}
+
+covariance = function(x, y) {
+  if (len(x) != len(y)) {
+    stop("X e Y deben tener la misma dimensión")
+  }
+  else {
+    sum = x %*% y
+    (sum/len(x))-(fcd_mean(x)*fcd_mean(y))
+  }
+}
+
 create_distance_matrix = function(df) {
   n = len(df[,1])
   empty_matrix = matrix(0, ncol = n, nrow = n)
@@ -102,6 +122,20 @@ func_criteria = function(initial_dm, new_cluster_points, tree_points, criteria_n
   criteria_name(distances)
 }
 
+calculate_cpcc = function(first_dist_matrix, dist_matrix) {
+  x = unlist(first_dist_matrix)
+  x = x[!is.na(x) & x != 0]
+  
+  y = unlist(dist_matrix)
+  y = y[!is.na(y) & y != 0]
+  
+  sx = standard_dev(x)
+  sy = standard_dev(y)
+  sxy = covariance(x, y)
+  
+  sxy / (sx * sy)
+}
+
 fcd_ahc = function(data, criteria, details = FALSE) {
   
   dist_matrix = create_distance_matrix(data)
@@ -141,11 +175,14 @@ fcd_ahc = function(data, criteria, details = FALSE) {
   print(forest[[1]])
   
   cpcc = calculate_cpcc(first_dist_matrix, dist_matrix)
+  
+  plot(forest[[1]])
+  plot(as.dendrogram(forest[[1]]), center = TRUE, yaxt='n')
 }
 
 
 df_sample = data.frame(t(matrix(c(0.89, 2.94, 4.36, 5.21, 3.75, 1.12, 6.25, 3.14, 4.1, 1.8, 3.9, 4.27), 2, 6, dimnames=list(c("X","Y")))))
-fcd_ahc(df_sample, "AVG")
+fcd_ahc(df_sample, "MIN")
 
 
 
