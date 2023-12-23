@@ -6,25 +6,36 @@ len = function(list) {
   count
 }
 
+fcd_mean = function(list) {
+  add = 0
+  for (i in 1:len(list)) {
+    add = add + list[i]
+  }
+  add / len(list)
+}
+
 euc_distance = function(p1, p2) {
   sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
 }
 
-fcd_min = function(distances, chosen) {
-  print(distances)
-  min_y = 2
-  min_x = 1
-  min_v = distances[2, 1]
-  for (i in 2:len(distances[,1])) {
-    for (j in 1:(i-1)) {
-      if (!chosen[i, j] && distances[i, j] < min_v) {
-        min_v = distances[i,j]
-        min_y = i
-        min_x = j
-      }
-    }
+standard_dev = function(list) {
+  mean = fcd_mean(list)
+  n = len(list)
+  add = 0
+  for (i in 1:n) {
+    add = add + ((list[i] - mean)^2)
   }
-  c(min_v, min_y, min_x)
+  sqrt(add/n)
+}
+
+covariance = function(x, y) {
+  if (len(x) != len(y)) {
+    stop("X e Y deben tener la misma dimensión")
+  }
+  else {
+    sum = x %*% y
+    (sum/len(x))-(fcd_mean(x)*fcd_mean(y))
+  }
 }
 
 create_distance_matrix = function(df) {
@@ -32,67 +43,148 @@ create_distance_matrix = function(df) {
   empty_matrix = matrix(0, ncol = n, nrow = n)
   distances = data.frame(empty_matrix)
   for (i in 1:n) {
-    for (j in i:n) {
-      distances[j, i] = euc_distance(df[i,], df[j,])
+    for (j in 1:i) {
+      distances[i, j] = euc_distance(df[i,], df[j,])
+      if (i != j) distances[j, i] = NA
     }
   }
   distances
 }
 
-update_clusters = function(clusters, min_y, min_x) {
-  new_clusters = clusters
-  new_clusters[min_x] = paste0("C",iter, "{", clusters[min_x], ",", clusters[min_y], "}")
-  new_clusters[min_y] = ""
-  new_clusters
+create_chosen_matrix = function(df) {
+  n = len(df[,1])
+  empty_matrix = matrix(0, ncol = n, nrow = n)
+  chosen = data.frame(empty_matrix)
+  for (i in 1:n) {
+    for (j in 1:i) {
+      chosen[j, i] = NA
+    }
+  }
+  chosen
 }
 
-ahc = function(df) {
-  n = len(df[,1])
-  distances = create_distance_matrix(df)
-  updated_distances = distances
-  clusters = 1:n
-  chosen = data.frame(matrix(0, ncol = n, nrow = n))
-  iter = 1
-  while(iter < n) {
-    my_min = fcd_min(updated_distances, chosen)
-    min_v = my_min[1]
-    min_y = my_min[2]
-    min_x = my_min[3]
-    new_cluster = paste0("C",iter, "{", clusters[min_x], ",", clusters[min_y], "}")
-    print(new_cluster)
-    
-    chosen[min_y, min_x] = 1
-    
-    clusters = update_clusters(clusters, min_y, min_x)
-    
-    iter = iter + 1
+min_ahc = function(distances, chosen) {
+  min_d = Inf
+  min_c = c()
+  for(i in 1:nrow(distances)) {
+    for(j in 1:i) {
+      if (distances[i, j] < min_d && distances[i, j] != 0 && chosen[i, j] == 0) {
+        min_d = distances[i, j]
+        min_c = c(i, j)
+      }
+    }
   }
+  min_c
+}
+
+choose_distance = function(distances, chosen, distance){
+  for(i in 1:nrow(distances)) {
+    for(j in 1:i) {
+      if (distances[i, j] == distance) {
+        chosen[i, j] = 1
+      }
+    }
+  }
+  chosen
+}
+
+update_distance_matrix = function(initial_dm, actual_dm, forest, new_cluster_points, criteria_name) {
+  updated_cols = c(rep(0, times = len(forest)))
+  updated_cols[new_cluster_points] = 1
+  
+  for (i in 1:len(forest)) {
+    if (!updated_cols[i]) {
+      tree_points = sapply(Traverse(forest[[i]], filterFun = isLeaf), function(x){as.integer(substring(x$name, 2))})
+      new_distance = func_criteria(initial_dm, new_cluster_points, tree_points, criteria_name)
+      
+      for (i in new_cluster_points) {
+        for (j in tree_points) {
+          minor = min(i, j)
+          mayor = max(i, j)
+          actual_dm[mayor, minor] = new_distance
+        }
+      }
+      updated_cols[tree_points] = 1
+    }
+  }
+  actual_dm
+}
+
+func_criteria = function(initial_dm, new_cluster_points, tree_points, criteria_name) {
+  distances = c()
+  for (i in new_cluster_points) {
+    for (j in tree_points) {
+      minor = min(i, j)
+      mayor = max(i, j)
+      distances = c(distances, initial_dm[mayor, minor])
+    }
+  }
+  criteria_name(distances)
+}
+
+calculate_cpcc = function(first_dist_matrix, dist_matrix) {
+  x = unlist(first_dist_matrix)
+  x = x[!is.na(x) & x != 0]
+  
+  y = unlist(dist_matrix)
+  y = y[!is.na(y) & y != 0]
+  
+  sx = standard_dev(x)
+  sy = standard_dev(y)
+  sxy = covariance(x, y)
+  
+  sxy / (sx * sy)
+}
+
+fcd_ahc = function(data, criteria, details = FALSE) {
+  
+  dist_matrix = create_distance_matrix(data)
+  chosen_matrix = create_chosen_matrix(data)
+  first_dist_matrix = dist_matrix
+  next_cluster = 1
+  forest = sapply(colnames(dist_matrix), function(root){Node$new(root)})
+  
+  while(sum(chosen_matrix, na.rm = TRUE) != (len(dist_matrix) * (len(dist_matrix) - 1) / 2)){
+    #Buscar y marcar distancia mínima
+    min_index = min_ahc(dist_matrix, chosen_matrix)
+    chosen_matrix = choose_distance(dist_matrix, chosen_matrix, dist_matrix[min_index[1], min_index[2]])
+    
+    #Se actualizan las etiquetas de la matriz
+    new_tree_tag = Node$new(paste0("C", next_cluster))
+    new_tree_tag$AddChildNode(forest[[min_index[1]]])
+    new_tree_tag$AddChildNode(forest[[min_index[2]]])
+    trees_2_update = sapply(Traverse(new_tree_tag, filterFun = isLeaf), function(x){as.integer(substring(x$name, 2))})
+    for(i in 1:len(forest)){
+      if(i %in% trees_2_update){
+        forest[[i]] = new_tree_tag
+      }
+    }
+    next_cluster = next_cluster + 1
+    
+    criteria_name = switch(criteria, "MIN" = min, "MAX" = max, "AVG" = fcd_mean)
+    
+    dist_matrix = update_distance_matrix(first_dist_matrix, dist_matrix, forest, trees_2_update, criteria_name)
+    
+    if (details) {
+      print(dist_matrix)
+      print(chosen_matrix)
+      print(forest)
+    }
+  }
+  print(dist_matrix)
+  print(forest[[1]])
+  
+  cpcc = calculate_cpcc(first_dist_matrix, dist_matrix)
+  
+  plot(forest[[1]])
+  plot(as.dendrogram(forest[[1]]), center = TRUE, yaxt='n')
 }
 
 
 df_sample = data.frame(t(matrix(c(0.89, 2.94, 4.36, 5.21, 3.75, 1.12, 6.25, 3.14, 4.1, 1.8, 3.9, 4.27), 2, 6, dimnames=list(c("X","Y")))))
+fcd_ahc(df_sample, "MIN")
 
 
-ahc(df_sample)
 
 
-# Primero, instala e importa el paquete data.tree
-#install.packages("data.tree")
-library(data.tree)
-
-# Crea un nodo raíz
-raiz <- Node$new("C")
-
-# Agrega hijos al nodo raíz
-raiz$AddChild("C4")
-raiz$AddChild("1")
-
-# Agrega un nieto al primer hijo
-raiz$children[[1]]$AddChild("Nieto 1")
-raiz$children[[1]]$AddChild("Nieto 1")
-
-raiz$children[[[1]]]$AddChild("Nieto 3")
-
-# Imprime el árbol
-print(raiz)
 
