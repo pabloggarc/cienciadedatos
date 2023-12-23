@@ -118,9 +118,8 @@ create_classification = function(sample, col, right_element, criteria, measure) 
 df_2_tree = function(df, final, criteria) {
   
   last_tree = Node$new(df[nrow(df), "parent"])
-  print(paste(get_elements(final, criteria)))
   new_left_leaf = Node$new(paste(get_elements(final, criteria)))
-  new_left_leaf$label = final[nrow(final), df[nrow(df), "parent"]]  
+  new_left_leaf$label = final[nrow(final), df[nrow(df), "parent"]]
   last_tree$AddChildNode(new_left_leaf)
   
   new_right_leaf = Node$new(df[nrow(df), "right_element"])
@@ -130,27 +129,27 @@ df_2_tree = function(df, final, criteria) {
   SetEdgeStyle(new_left_leaf, label = new_left_leaf$label, fontsize = 10)
   SetEdgeStyle(new_right_leaf, label = new_right_leaf$label, fontsize = 10)
   
-  for (rowIndex in (nrow(df)-1):1) {
-    last_tree$label = df[rowIndex, "left"]
-    new_tree = Node$new(df[rowIndex, "parent"])
+  for (row_index in (nrow(df)-1):1) {
+    last_tree$label = df[row_index, "left"]
+    new_tree = Node$new(df[row_index, "parent"])
     new_tree$AddChildNode(last_tree)
     
-    rightNode = Node$new(df[rowIndex, "right_element"])
-    rightNode$label = df[rowIndex, "right"]
-    new_tree$AddChildNode(rightNode)
+    right_node = Node$new(df[row_index, "right_element"])
+    right_node$label = df[row_index, "right"]
+    new_tree$AddChildNode(right_node)
     
-    SetEdgeStyle(rightNode, label = rightNode$label, fontsize = 10)
+    SetEdgeStyle(right_node, label = right_node$label, fontsize = 10)
     SetEdgeStyle(last_tree, label = last_tree$label, fontsize = 10)
     
     last_tree = new_tree
   }
   
-  plot(last_tree)
+  #plot(last_tree)#mirar si va en latex
   
   return(last_tree)
 }
 
-hunt = function(sample, classes, criteria, measure) {
+hunt = function(sample, classes, criteria, measure, details = FALSE) {
 
 	final_clasification = data.frame()
 	best_gain = -1
@@ -175,15 +174,24 @@ hunt = function(sample, classes, criteria, measure) {
 		if (best_gain != 0) {
 			sample = subset(sample, sample[, best_clasification$parent] %in% unlist(best_clasification$left))
 			final_clasification = rbind(final_clasification, best_clasification)
+			
+			if (details) {
+			  cat("\nIteración", nrow(final_clasification))
+			  cat("\n============\n")
+			  cat("Se escoge el nodo", best_clasification$parent, "con una ganacia de", best_gain)
+			  cat("\nLos sucesos que tengan el/los valor/es", paste(best_clasification$right), "en ese nodo se clasifican como", best_clasification$right_element)
+			  cat("\nLa nueva muestra es:\n")
+			  print(sample)
+			  cat("\n")
+			}
 		}
 	}
-	print(final_clasification)
-	print("***")
-	print(sample)
 	
 	tree = df_2_tree(final_clasification, sample, criteria)
 	
+	cat("\n\nÁrbol de decisión\n=================\n")
 	print(tree, "label")
+	
 	tree
 }
 
@@ -191,5 +199,5 @@ hunt = function(sample, classes, criteria, measure) {
 (sample = read.xlsx("../Memoria/data/vehiculos.xlsx"))
 
 #tree = hunt(sample, c("T", "L", "P"), "C.G", "error")
-tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "error")
+tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehículo", "error", TRUE)
 plot(tree)

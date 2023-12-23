@@ -145,6 +145,7 @@ fcd_ahc = function(data, criteria, details = FALSE) {
   forest = sapply(colnames(dist_matrix), function(root){Node$new(root)})
   
   while(sum(chosen_matrix, na.rm = TRUE) != (len(dist_matrix) * (len(dist_matrix) - 1) / 2)){
+    
     #Buscar y marcar distancia mínima
     min_index = min_ahc(dist_matrix, chosen_matrix)
     chosen_matrix = choose_distance(dist_matrix, chosen_matrix, dist_matrix[min_index[1], min_index[2]])
@@ -166,23 +167,36 @@ fcd_ahc = function(data, criteria, details = FALSE) {
     dist_matrix = update_distance_matrix(first_dist_matrix, dist_matrix, forest, trees_2_update, criteria_name)
     
     if (details) {
+      cat("\nIteración", next_cluster - 1)
+      cat("============\n")
+      
+      cat("\n\nMatriz de distancias\n")
       print(dist_matrix)
+      
+      cat("\n\nMatriz de distancias elegidas\n")
       print(chosen_matrix)
+      
+      cat("\n\nDendrogramas\n")
       print(forest)
     }
   }
+  
+  cat("\n\nMatriz cofenética\n")
   print(dist_matrix)
+  
+  cat("\nDendrograma final\n")
   print(forest[[1]])
   
   cpcc = calculate_cpcc(first_dist_matrix, dist_matrix)
+  cat("\n\nCoeficiente de CPCC: ", cpcc)
   
   plot(forest[[1]])
   plot(as.dendrogram(forest[[1]]), center = TRUE, yaxt='n')
 }
 
+(sample = read.xlsx("../Memoria/data/datosKMeans.xlsx"))
 
-df_sample = data.frame(t(matrix(c(0.89, 2.94, 4.36, 5.21, 3.75, 1.12, 6.25, 3.14, 4.1, 1.8, 3.9, 4.27), 2, 6, dimnames=list(c("X","Y")))))
-fcd_ahc(df_sample, "MIN")
+fcd_ahc(sample, "MIN")
 
 
 
