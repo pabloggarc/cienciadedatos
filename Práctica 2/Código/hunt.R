@@ -80,7 +80,7 @@ get_gain = function(sample, left, right, criteria, right_element, col, measure) 
   impurity_father = get_impurity(sample, col, union(left, right), criteria, equivalence_clases, measure)
   impurity_left = get_impurity(sample, col, left, criteria, equivalence_clases, measure)
   impurity_right = get_impurity(sample, col, right, criteria, equivalence_clases, measure)
-  
+
   return(impurity_father - (len(left) / n * impurity_left + len(right) / n * impurity_right))
 }
 
@@ -107,7 +107,12 @@ create_classification = function(sample, col, right_element, criteria, measure) 
   }
   right = dif(get_elements(sample, col), left)
   
-  gain = get_gain(sample, left, right, criteria, right_element, col, measure)
+  if(len(right) > 0){
+    gain = get_gain(sample, left, right, criteria, right_element, col, measure)
+  }
+  else {
+    gain = 0
+  }
   
   data.frame(parent=col, right_element, left=I(list(left)), right=I(list(right)), gain)
 }
@@ -151,4 +156,4 @@ hunt = function(sample, classes, criteria, measure) {
 #(sample = read.xlsx("../Memoria/data/calificaciones.xlsx"))
 (sample = read.xlsx("../Memoria/data/vehiculos.xlsx"))
 
-a = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "gini")
+a = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "error")
