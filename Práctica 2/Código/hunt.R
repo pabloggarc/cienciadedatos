@@ -115,50 +115,37 @@ create_classification = function(sample, col, right_element, criteria, measure) 
 	data.frame(parent=col, right_element, left=I(list(left)), right=I(list(right)), gain)
 }
 
-df_2_tree = function(df, final, criteria, rowIndex = 1) {
+df_2_tree = function(df, final, criteria) {
   
-  if (rowIndex > nrow(df)) {
-    return(NULL)
-  }
+  last_tree = Node$new(df[nrow(df), "parent"])
+  print(paste(get_elements(final, criteria)))
+  new_left_leaf = Node$new(paste(get_elements(final, criteria)))
+  new_left_leaf$label = final[nrow(final), df[nrow(df), "parent"]]  
+  last_tree$AddChildNode(new_left_leaf)
   
-  new_tree_tag = Node$new(df[rowIndex, "parent"])
+  new_right_leaf = Node$new(df[nrow(df), "right_element"])
+  new_right_leaf$label = df[nrow(df), "right"]
+  last_tree$AddChildNode(new_right_leaf)
   
-  if (rowIndex == nrow(df)) {
-    new_tree_tag$AddChild(paste(get_elements(final, criteria)), info=final[nrow(final), df[nrow(df), "parent"]])
-    new_tree_tag$AddChild(df[rowIndex, "right_element"], info=df[nrow(df), "right"])
-  } else {
-    left = Node$new(df_2_tree(df, final, criteria, rowIndex + 1), info=df[rowIndex, "left"])
-    new_tree_tag$AddChildNode(left)
-    new_tree_tag$AddChild(df[rowIndex, "right_element"], info=df[rowIndex, "right"])
-  }
-  
-  return(new_tree_tag)
-}
-
-df_2_tree33 = function(df, final, criteria) {
-  
-  last_tree = Node$new(df[nrow(df), "parent"], info="hola")
-  
-  leftNode = Node$new(paste(get_elements(final, criteria)), info=final[nrow(final), df[nrow(df), "parent"]])
-  last_tree$AddChildNode(leftNode)
-  
-  rightNode = Node$new(df[nrow(df), "right_element"], info=df[nrow(df), "right"], info=df[nrow(df), "right"])
-  last_tree$AddChildNode(rightNode)
-  
-  print(leftNode$attributes)
-  print(leftNode$info)
+  SetEdgeStyle(new_left_leaf, label = new_left_leaf$label, fontsize = 10)
+  SetEdgeStyle(new_right_leaf, label = new_right_leaf$label, fontsize = 10)
   
   for (rowIndex in (nrow(df)-1):1) {
+    last_tree$label = df[rowIndex, "left"]
     new_tree = Node$new(df[rowIndex, "parent"])
-    
-    last_tree$Set(info=df[rowIndex, "left"])
     new_tree$AddChildNode(last_tree)
     
-    rightNode = Node$new(df[rowIndex, "right_element"], info=df[rowIndex, "right"])
+    rightNode = Node$new(df[rowIndex, "right_element"])
+    rightNode$label = df[rowIndex, "right"]
     new_tree$AddChildNode(rightNode)
+    
+    SetEdgeStyle(rightNode, label = rightNode$label, fontsize = 10)
+    SetEdgeStyle(last_tree, label = last_tree$label, fontsize = 10)
     
     last_tree = new_tree
   }
+  
+  plot(last_tree)
   
   return(last_tree)
 }
@@ -194,30 +181,15 @@ hunt = function(sample, classes, criteria, measure) {
 	print("***")
 	print(sample)
 	
-	s = df_2_tree33(final_clasification, sample, criteria)
+	tree = df_2_tree(final_clasification, sample, criteria)
 	
-	print(s$"info")
-	plot(s)
-	#plot(as.dendrogram(s), center = TRUE, yaxt='n')
-	
-	final_clasification
+	print(tree, "label")
+	tree
 }
 
 #(sample = read.xlsx("../Memoria/data/calificaciones.xlsx"))
 (sample = read.xlsx("../Memoria/data/vehiculos.xlsx"))
 
-#a = hunt(sample, c("T", "L", "P"), "C.G", "error")
-a = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "error")
-
-
-
-
-
-
-
-
-
-
-
-
-
+#tree = hunt(sample, c("T", "L", "P"), "C.G", "error")
+tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehiculo", "error")
+plot(tree)
