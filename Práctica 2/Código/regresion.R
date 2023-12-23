@@ -60,6 +60,30 @@ r2 = function(sr, sy) {
   sr/sy
 }
 
+get_residuals = function(p, x, y) {
+  X = matrix(c(rep(1, times = len(x)), x), ncol = 2)
+  y_hat = X %*% p
+  abs(y - y_hat)
+}
+
+standard_error = function(p, x, y) {
+  sqrt(sum(get_residuals(p, x, y)^2) / len(x))
+}
+
+detect_outlier = function(p, x, y, d) {
+  X = matrix(c(rep(1, times = len(x)), x), ncol = 2)
+  y_hat = X %*% p
+  abs(y - y_hat) > d * standard_error(p, x, y)
+}
+
+print_outliers = function(x, y, outliers) {
+  for (i in 1:len(outliers)) {
+    if (outliers[i]) {
+      print(sprintf("Outlier: (%.3f, %.3f)", x[i], y[i]))
+    }
+  }
+}
+
 fcd_regression = function(sample) {
   X = sample[, 1]
   Y = sample[, 2]
@@ -76,6 +100,8 @@ fcd_regression = function(sample) {
   plot(X, Y, col="blue", main="Recta de regresión", xlab="Eje X", ylab="Eje Y")
   
   abline(a=a, b=b, col="red")
+  
+  print_outliers(X, Y, detect_outlier(param, X, Y, 2))
 }
 
 

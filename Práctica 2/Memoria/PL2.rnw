@@ -479,7 +479,7 @@
 				 
 				 <<>>=
 				 len = function(list) {
-					count = 0
+				 	count = 0
 				 	for (element in list) {
 				 		count = count + 1
 				 	}
