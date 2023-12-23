@@ -118,8 +118,8 @@ create_classification = function(sample, col, right_element, criteria, measure) 
 df_2_tree = function(df, final, criteria) {
   
   last_tree = Node$new(df[nrow(df), "parent"])
-  last_tree$gain = df[nrow(df), "gain"]
-  SetNodeStyle(last_tree, label = paste(last_tree$name, "\n", round(last_tree$gain, 3)))
+  last_tree$gain = round(df[nrow(df), "gain"], 3)
+  SetNodeStyle(last_tree, label = paste(last_tree$name, "\n ΔI =", last_tree$gain))
   
   new_left_leaf = Node$new(paste(get_elements(final, criteria)))
   new_left_leaf$label = final[nrow(final), df[nrow(df), "parent"]]
@@ -131,11 +131,11 @@ df_2_tree = function(df, final, criteria) {
   new_right_leaf$gain = ""
   last_tree$AddChildNode(new_right_leaf)
   
-  SetEdgeStyle(new_left_leaf, label = new_left_leaf$label, fontsize = 10)
-  SetEdgeStyle(new_right_leaf, label = new_right_leaf$label, fontsize = 10)
+  SetEdgeStyle(new_left_leaf, label = new_left_leaf$label, fontsize = 11)
+  SetEdgeStyle(new_right_leaf, label = new_right_leaf$label, fontsize = 11)
   
-  SetNodeStyle(new_left_leaf, label = paste(new_left_leaf$name, "\n", new_left_leaf$gain))
-  SetNodeStyle(new_right_leaf, label = paste(new_right_leaf$name, "\n", new_right_leaf$gain))
+  SetNodeStyle(new_left_leaf, label = paste(new_left_leaf$name))
+  SetNodeStyle(new_right_leaf, label = paste(new_right_leaf$name))
   
   for (row_index in (nrow(df)-1):1) {
     last_tree$label = df[row_index, "left"]
@@ -147,14 +147,14 @@ df_2_tree = function(df, final, criteria) {
     right_node$gain = ""
     new_tree$AddChildNode(right_node)
     
-    SetEdgeStyle(right_node, label = right_node$label, fontsize = 10)
-    SetEdgeStyle(last_tree, label = last_tree$label, fontsize = 10)
+    SetEdgeStyle(right_node, label = right_node$label, fontsize = 11)
+    SetEdgeStyle(last_tree, label = last_tree$label, fontsize = 11)
     
     last_tree = new_tree
     
-    last_tree$gain = df[row_index, "gain"]
-    SetNodeStyle(last_tree, label = paste(last_tree$name, "\n", round(last_tree$gain, 3)))
-    SetNodeStyle(right_node, label = paste(right_node$name, "\n", right_node$gain))
+    last_tree$gain = round(df[row_index, "gain"], 3)
+    SetNodeStyle(last_tree, label = paste(last_tree$name, "\n ΔI =", last_tree$gain))
+    SetNodeStyle(right_node, label = paste(right_node$name))
   }
   
   #plot(last_tree)#mirar si va en latex
@@ -202,7 +202,7 @@ hunt = function(sample, classes, criteria, measure, details = FALSE) {
 	
 	tree = df_2_tree(final_clasification, sample, criteria)
 	
-	cat("\n\nÁrbol de decisión\n=================\n")
+	cat("\nÁrbol de decisión\n=================\n")
 	print(tree, "label", "gain")
 	
 	tree
