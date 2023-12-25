@@ -672,6 +672,83 @@
 				 
  		\section{Clasificación supervisada}
  		
+ 			\subsection{Árboles de decisión}
+ 			
+ 				\begin{exercise}
+ 					El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por el siguiente conjunto de 10 sucesos constituidos por los valores de cuatro características de vehículos: 1. \{B, 4, 5, Coche\}; 2. \{A, 2, 2, Moto\}; 3. \{N, 2, 1, Bicicleta\}; 4. \{B, 6, 4, Camión\};
+ 					5. \{B, 4, 6, Coche\}; 6. \{B, 4, 4, Coche\}; 7.\{N, 2, 2, Bicicleta\}; 8. \{B, 2, 1, Moto\}; 9. \{B, 6, 2, Camión\}; 10. \{N, 2, 1, Bicicleta\}, donde las características de cada suceso son: \{TipoCarnet, NúmeroRuedas, NúmeroPasajeros, TipoVehículo\}. Se debe clasificar el tipo de vehículo en función del resto de características. TipoCarnet, es el
+ 					tipo de carnet necesario para conducir el vehículo.
+ 				\end{exercise}
+ 				
+ 				Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor del resto de características. 
+ 				
+ 				Como se necesita una muestra, lo primero que se va a realizar es la lectura del fichero Excel (\texttt{.xlsx}) por medio de la función \texttt{read.xlsx} del paquete \texttt{openxlsx}. Al igual que en el resto de ejercicios, se deberá pasar la ruta del fichero. En él se encuentra contenido el conjunto de daos propuesto para el ejercicio.
+ 				
+ 				<<>>=
+ 				(sample = read.xlsx("data/vehiculos.xlsx"))
+ 				@
+ 				
+ 				Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar el tipo de vehículo (tVehiculo) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
+ 				
+ 				\begin{enumerate}
+ 					\item \textbf{Selección de nodo}: Para el primer paso se elige una característica, que compondrá la raíz del árbol. En el resto de pasos, esta selección formará los nodos intermedios del mismo. La característica que forme el nodo nunca podrá ser el clasificador (\texttt{tVehiculo} en este caso). El objetivo de este árbol, una vez formado, es ver en cada nodo una característica. De cada nodo saldrán hijos cuya diferencia será el valor de la característica del nodo padre. Los hijos contendrán, o bien un valor del clasificador (lo que permitirá clasificar directamente un suceso de la muestra), o bien un subárbol del que dependerá la clasificación del resto de la muestra (habrá que recorrerlo para poder clasificar un suceso de la muestra). 
+ 					
+ 					Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\vartriangle_i$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será implementar a la clasificación la división con mayor $\vartriangle_i$. La ganancia de información se calcula de la siguiente forma:
+ 					
+ 					\begin{center}
+ 						$\vartriangle_i = I_{padre} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)$
+ 					\end{center}
+ 					
+ 					\begin{itemize}
+ 						\item $I_{padre}$ = Impureza del nodo padre
+ 						\item $k$ = Número total de hijos (en esta implementación siempre será 2)
+ 						\item $N(n_j)$ = Número de sucesos de la muestra asociados al nodo hijo $j$
+ 						\item $N$ = Número total de sucesos de la muestra actual
+ 						\item $I(n_j)$ = Impureza del nodo hijo $j$
+ 					\end{itemize}
+ 					
+ 					Como se puede ver, para calcular la ganancia de información, se necesita la impureza $I$ del nodo padre y de sus hijos. Esta puede ser calculada de diferentes formas en función del método que se utilice. Todas ellas utilizan las frecuencias relativas ($f_i$) de las clases de equivalencia $c$ del clasificador. Se distinguen tres:
+ 					
+ 					\begin{itemize}
+ 						\item \textbf{Entropía}
+ 								
+ 								\begin{center}
+ 									$ I_{nodo} = - \sum_{i=1}^{c} f_i \cdot log_2(f_i)$
+ 								\end{center}
+ 								
+ 						\item \textbf{Error}
+ 						
+ 								\begin{center}
+ 									$I_{nodo} = 1 - max(f_i)$
+ 								\end{center}
+ 						
+ 						\item \textbf{Gini}
+ 						
+ 								\begin{center}
+ 									$I_{nodo} = 1 - \sum_{i=1}^{c} (f_i)^2$
+ 								\end{center}
+ 					\end{itemize}
+ 					
+ 					\item \textbf{Clasificación de los sucesos:} Una vez se ha elegido la característica que va a conformar el nodo, se clasifica. Si se pueden clasificar completamente los sucesos de la muestra (que en cada hijo solo haya un valor del clasificador posible) se trata de un nodo final y termina la clasificación. Si no lo permite, se trata de un nodo interno, por lo que hay que volver al primer paso.  
+ 					
+ 					Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\vartriangle_i = I_{padre}$), ya que significa que las impurezas de los hijos son 0. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). 
+ 					
+ 					Puede darse el caso en el que el algoritmo no pueda seguir clasificando porque la ganancia de información sea 0 en todos los escenarios de clasificación posibles. En ese caso, el algoritmo finalizará habiendo clasificado todo lo anterior pero dejando el nodo final abierto, es decir, sin una clasificación concreta.
+ 					
+ 				\end{enumerate}
+ 				
+ 				En esta implementación se utilizarán árboles binarios (cada nodo con 2 hijos) tal y como se ha mencionado previamente. Esto condiciona la forma de actuar en el algoritmo, así que la metodología a seguir se resume en los siguientes pasos:
+ 				
+ 				\begin{enumerate}
+ 					\item \textbf{Selección del mejor nodo}: Se realizará la clasificación en base a 
+ 					\item \textbf{Unión de la clasificación actual al resto de clasificación}:
+ 					\item \textbf{Recorte de la muestra}:
+ 				\end{enumerate}
+ 				
+ 				Estos paso se realizarán hasta que el algoritmo finalice. Este finalizará atendiendo a las siguientes condiciones:
+ 				
+ 				
+ 				Con esta base teórica se procede a explicar la implementación del algoritmo en R. En primer lugar...
  			\subsection{Regresión lineal}
  			
  				\begin{exercise}
