@@ -7,6 +7,8 @@
 \usepackage{amssymb, amsthm, array, cancel, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, qtree, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
+\usetikzlibrary{babel, tikzmark}
+
 \pagestyle{fancy}
 \lhead{\footnotesize \leftmark}
 \rhead{\footnotesize \rightmark}
@@ -83,6 +85,7 @@
 	
 	%Configuración para los gráficos de R
 	<<setup, include = FALSE>>=
+		knitr::opts_chunk$set(tab.size = 2)
 		knitr::opts_chunk$set(fig.align = 'center')
 		knitr::opts_chunk$set(fig.width = 4)
 		knitr::opts_chunk$set(fig.height = 4)
@@ -96,6 +99,7 @@
 	
 	\setcounter{tocdepth}{3}
 	\tableofcontents
+	\listoffigures
 	
 	\chapter*{Introducción}\addcontentsline{toc}{chapter}{Introducción}\pagestyle{plain}
 	
@@ -457,7 +461,7 @@
 		 
 		 	\subsection{$k-$means}
 		 
-				 \begin{exercise}
+				 \begin{exercise}\label{ex:kmeans}
 					 	El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con $k-$means, estará formado por los siguientes 15 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: 1.\{3.5, 4.5\}; 2.\{0.75, 3.25\}; 3.\{0, 3\}; 4.\{1.75, 0.75\}; 5.\{3, 3.75\}; 6.\{3.75, 4.5\}; 7.\{1.25, 0.75\}; 8.\{0.25, 3\}; 9.\{3.5, 4.25\}; 10.\{1.5, 0.5\}; 11.\{1, 1\}; 12.\{3, 4\}; 13.\{0.5, 3\}; 14.\{2, 0.25\}; 15.\{0, 2.5\}. Del análisis visual de los datos se ha concluido que hay una alta probabilidad que sean tres clústers.
 				 \end{exercise}
 				 
@@ -670,6 +674,375 @@
 				 
 				 Se ha optado por tres centroides que más o menos se encuentran entre el conjunto total de puntos. Han sido necesarios 4 pasos para llegar a una solución. Se puede ver cómo se han ido calculando las matrices de distancias y asignaciones, así como los nuevos centroides, hasta que se ha llegado a los resultados finales. En estos se aprecian las coordenadas de los tres centroides así como los puntos que contienen cada uno. Por último, se devuelve el vector de clústerización que también se puede ver en la salida de la función realizada.
 				 
+		 	\subsection{Clusterización jerárquica algomerativa}
+		 	
+		 		\begin{exercise}
+		 			El conjunto de datos de datos que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa será el mismo que el utilizado en el \Cref{ex:kmeans}, pero el este ejercicio le denominaremos segundo conjunto de datos.
+		 		\end{exercise}
+		 		
+		 		Para la resolución de este ejercicio se implementará una variación del algoritmo visto en clase, que ayudará a simplificar la codificación y el entendimiento del algoritmo. Se utilizarán algunas funciones ya explicadas en otros ejercicios y prácticas, como \texttt{len}, la media, la distancia euclídea, la desviación típica, y la covarianza. El primer paso del algoritmo consiste en calcular la distancia entre cada posible pareja de puntos. 
+		 		
+		 		<<>>=
+		 		create_distance_matrix = function(df) {
+		 			n = len(df[,1])
+		 			empty_matrix = matrix(0, ncol = n, nrow = n)
+		 			distances = data.frame(empty_matrix)
+		 			for (i in 1:n) {
+		 				for (j in 1:i) {
+		 					distances[i, j] = euc_distance(df[i,], df[j,])
+		 					if (i != j) distances[j, i] = NA
+		 				}
+		 			}
+		 			distances
+		 		}
+		 		@
+		 		
+		 		Esto se logra mediante la función \texttt{create\_distance\_matrix} donde la entrada $a_{ij}$ representa el valor de $\dt(x_i, x_j)$. Nótese que $\dt(x_i, x_j) = \dt(x_j, x_i)$, por lo que $a_{ij} = a_{ji}$, y por tanto la matriz es simétrica. Para ahorrar cálculos y simplificar el problema, se ignorarán las entradas $a_{ij}$ con $j > i$. Durante la explicación de este ejercicio se ejemplificará con los datos del ejercicio visto en teoría, pues los datos de laboratorio son mucho más extensos. De acuerdo a esto, la matriz de distancias se vería como la siguiente. 
+		 		
+		 		$$
+		 		\bordermatrix{
+		 			& x_1 & x_2 & x_3 & x_4 & x_5 & x_6 \cr
+		 			x_1 & 0 & \times & \times & \times & \times & \times\cr
+		 			x_2 & 4.15 & 0 & \times & \times & \times & \times\cr
+		 			x_3 & 3.39 & 4.13 & 0 & \times & \times & \times\cr
+		 			x_4 & 5.36 & 2.8 & 3.21 & 0 & \times & \times\cr
+		 			x_5 & 3.41 & 3.42 & 0.76 & 2.53 & 0 & \times\cr
+		 			x_6 & 3.29 & 1.05 & 3.15 & 2.61 & 2.48 & 0
+		 		}
+		 		$$
+		 		
+		 		Además, en cada iteración del algoritmo se elegirán una/s serie de distancias de esta última matriz mostrada, necesitando saber cuáles han sido ya elegidas en iteraciones previas. Para ello se emplea una matriz de las mismas dimensiones que almacena ceros y unos indicando si dicha entrada ha sido seleccionada previamente. La creación de esta matriz inicial queda recogida en la función \texttt{create\_chosen\_matrix}, y un ejemplo de esta matriz sería el siguiente. 
+		 		
+		 		$$
+		 		\bordermatrix{
+		 			& x_1 & x_2 & x_3 & x_4 & x_5 & x_6 \cr
+		 			x_1 & 0 & \times & \times & \times & \times & \times\cr
+		 			x_2 & 4.15 & 0 & \times & \times & \times & \times\cr
+		 			x_3 & 3.39 & 4.13 & 0 & \times & \times & \times\cr
+		 			x_4 & 5.36 & 2.8 & 3.21 & 0 & \times & \times\cr
+		 			x_5 & 3.41 & 3.42 & \boxed{0.76} & 2.53 & 0 & \times\cr
+		 			x_6 & 3.29 & 1.05 & 3.15 & 2.61 & 2.48 & 0
+		 		}
+		 		\bordermatrix{
+		 			& x_1 & x_2 & x_3 & x_4 & x_5 & x_6 \cr
+		 			x_1 & \times & \times & \times & \times & \times & \times\cr
+		 			x_2 & 0 & \times & \times & \times & \times & \times\cr
+		 			x_3 & 0 & 0 & \times & \times & \times & \times\cr
+		 			x_4 & 0 & 0 & 0 & \times & \times & \times\cr
+		 			x_5 & 0 & 0 & 1 & 0 & \times & \times\cr
+		 			x_6 & 0 & 0 & 0 & 0 & 0 & \times
+		 		}
+		 		$$
+		 		
+		 		<<>>=
+		 		create_chosen_matrix = function(df) {
+		 			n = len(df[, 1])
+		 			empty_matrix = matrix(0, ncol = n, nrow = n)
+		 			chosen = data.frame(empty_matrix)
+		 			for (i in 1:n) {
+		 				for (j in 1:i) {
+		 					chosen[j, i] = NA
+		 				}
+		 			}
+		 			chosen
+		 		}
+		 		@
+		 		
+		 		Finalmente, el último elemento que falta para poder dar comienzo al algoritmo es buscar una forma de llevar un control de la estructura de los clústers, mostrado en el siguiente ejemplo como etiquetas en las filas y las columnas de las matrices. 
+		 		
+		 		\begin{equation}\label{eq:dist_matrix}
+		 		\bordermatrix{
+		 			& x_1 & C_3 \supset C_2 \supset x_2 & C_1 \supset x_3 & C_3 \supset x_4 & C_1 \supset x_5 & C_3 \supset C_2 \supset x_6 \cr
+		 			x_1 & 0 & \times & \times & \times & \times & \times\cr
+		 			C_3 \supset C_2 \supset x_2 & 4.27 & 0 & \times & \times & \times & \times\cr
+		 			C_1 \supset x_3 & 3.4 & 3.15 & 0 & \times & \times & \times\cr
+		 			C_3 \supset x_4 & 4.27 & \boxed{2.71} & 3.15 & 0 & \times & \times\cr
+		 			C_1 \supset x_5 & 3.4 & 3.15 & \boxed{0.76} & 3.15 & 0 & \times\cr
+		 			C_3 \supset C_2 \supset x_6 & 4.27 & \boxed{1.05} & 3.15 & \boxed{2.71} & 3.15 & 0
+		 		}
+		 		\end{equation}
+		 		
+		 		Se puede observar que aunque los clústers se comporten como conjuntos, la estructura de datos más adecuada para almacenar cada una de las etiquetas es un árbol. Como se tiene que trabajar con un conjunto de $n$ árboles, se estará trabajando con un bosque (vector de árboles). Para hacer esto posible se hará uso del paquete \texttt{data.tree}. Al ser la matriz simétrica, el bosque de las filas será igual al de las columnas. Para el último ejemplo mostrado, el bosque tendría el aspecto del mostrado a continuación. Obsérvese que al finalizar el algoritmo, todos los árboles del bosque deberán ser el mismo. 
+		 		
+		 		\begin{equation}\label{eq:forest}
+		 			\texttt{forest = }\left[\Tree[.$x_1$ ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ], \Tree[.$C_1$ $x_3$ $x_5$ ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ], \Tree[.$C_1$ $x_3$ $x_5$ ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ]\right]
+		 		\end{equation}
+		 		
+		 		Una vez se han presentado las estructuras necesarias para realizar el algoritmo, se explicará el funcionamiento de este. El flujo principal queda recogido en la función \texttt{fcd\_ahc}. 
+		 		
+		 		<<>>=
+		 		fcd_ahc = function(data, criteria, details = FALSE) {
+		 			dist_matrix = create_distance_matrix(data)
+		 			chosen_matrix = create_chosen_matrix(data)
+		 			first_dist_matrix = dist_matrix
+		 			next_cluster = 1
+		 			forest = sapply(colnames(dist_matrix), function(root){Node$new(root)})
+		 			while(sum(chosen_matrix, na.rm = TRUE) != 
+		 				(len(dist_matrix) * (len(dist_matrix) - 1) / 2)){    
+		 				min_index = min_ahc(dist_matrix, chosen_matrix)
+		 				chosen_matrix = choose_distance(dist_matrix, chosen_matrix,
+		 					 dist_matrix[min_index[1], min_index[2]])
+		 				new_tree_tag = Node$new(paste0("C", next_cluster))
+		 				new_tree_tag$AddChildNode(forest[[min_index[1]]])
+		 				new_tree_tag$AddChildNode(forest[[min_index[2]]])
+		 				trees_2_update = sapply(Traverse(new_tree_tag, 
+		 				filterFun = isLeaf), function(x){
+		 					as.integer(substring(x$name, 2))
+		 					})
+		 				for(i in 1:len(forest)){
+		 					if(i %in% trees_2_update){
+		 						forest[[i]] = new_tree_tag
+		 					}
+		 				}
+		 				next_cluster = next_cluster + 1  
+		 				criteria_name = switch(
+		 					criteria, "MIN" = min, "MAX" = max, "AVG" = fcd_mean)   
+		 				dist_matrix = update_distance_matrix(first_dist_matrix, 
+		 					dist_matrix, forest, trees_2_update, criteria_name)   
+		 				if (details) {
+		 					cat("\nIteración", next_cluster - 1)
+		 					cat("============\n")   
+		 					cat("\n\nMatriz de distancias\n")
+		 					print(dist_matrix)    
+		 					cat("\n\nMatriz de distancias elegidas\n")
+		 					print(chosen_matrix)     
+		 					cat("\n\nDendrogramas\n")
+		 					print(forest)
+		 				}
+		 			}
+		 			cat("\n\nMatriz cofenética\n")
+		 			print(dist_matrix)
+		 			cat("\nDendrograma final\n")
+		 			print(forest[[1]])
+		 			cpcc = calculate_cpcc(first_dist_matrix, dist_matrix)
+		 			cat("\n\nCoeficiente de CPCC: ", cpcc)
+		 			plot(forest[[1]])
+		 			plot(as.dendrogram(forest[[1]]), center = TRUE, yaxt='n')
+		 		}
+		 		@
+		 		
+		 		A continuación se irá explicando esta función paso a paso  de manera que se entienda cómo funciona el algoritmo. En primer lugar se inician las estructuras de datos comentadas anteriormente. Se observa que el instante inicial, el bosque debe ser de la forma $[x_1, x_2, \hdots, x_n]$. Además, en la variable \texttt{next\_cluster} se almacena el índice del siguiente clúster que se creará. \\
+		 		
+		 		El cuerpo del algoritmo transcurre en un bucle. El algoritmo finaliza cuando todos los elementos de la triangular inferior de la matriz han sido seleccionados. Como tanto la matriz de distancias, como la de elegidos son matrices $n \times n$ y solo se trabaja con la triangular inferior, una forma sencilla de comprobar si el algoritmo se encuentra en este punto es comprobar si la suma de la triangular inferior de la matriz de elegidos es igual al número de elementos de la triangular inferior de la matriz de distancias. Como las matrices son cuadradas, la primera columna tendrá $n$ elementos, la segunda $n-1$, y así hasta la última que tendrá un único elemento. Haciendo uso de la igualdad
+		 		
+		 		$$
+		 		\sum_{k=1}^n k = \frac{n(n+1)}{2}, 
+		 		$$ 
+		 		
+		 		\noindent se puede deducir que el algoritmo finaliza cuando la suma de los elementos de la triangular inferior de la matriz de elegidos sea igual a $\frac{n(n-1)}{2}$, pues se ignoran los elementos de la diagonal principal. \\
+		 		
+		 		En cada iteración del algoritmo se elige la menor de las distancias que no haya sido elegida previamente y se marca. Si la misma distancia aparece más de una vez, se marcan todas sus apariciones en una misma iteración. Las funciones \texttt{min\_ahc} y \texttt{choose\_distance} realizan esta tarea. 
+		 		
+		 		<<>>=
+		 		min_ahc = function(distances, chosen) {
+		 			min_d = Inf
+		 			min_c = c()
+		 			for(i in 1:nrow(distances)) {
+		 				for(j in 1:i) {
+		 					if (distances[i, j] < min_d
+		 					 && distances[i, j] != 0 && chosen[i, j] == 0) {
+		 						min_d = distances[i, j]
+		 						min_c = c(i, j)
+		 					}
+		 				}
+		 			}
+		 			min_c
+		 		}
+		 		
+		 		choose_distance = function(distances, chosen, distance){
+		 			for(i in 1:nrow(distances)) {
+		 				for(j in 1:i) {
+		 					if (distances[i, j] == distance) {
+		 						chosen[i, j] = 1
+		 					}
+		 				}
+		 			}
+		 			chosen
+		 		}
+		 		@
+		 		
+		 		La primera de las funciones devuelve el índice de fila y columna de la menor de las distancias, y la siguiente, marca en la matriz de elegidos todas las apariciones de esta distancia. Que se haya seleccionado el valor $a_{ij}$ indica que el nuevo clúster $C_i$, contendrá a las raíces de los árboles $A_i$ y $A_j$, sustituyéndose los árboles $A_i$ y $A_j$ por este. \\
+		 		
+		 		Sin embargo, esto sólo sucede así en el caso base de que $A_i$ y $A_j$ son árboles que solo contienen a un único $x_i$. En caso contrario, se puede observar que deberán ser actualizadas todas las etiquetas de la matriz cuya columna esté en el árbol de la entrada seleccionada (es decir, si se elige $a_{35}$ pero $x_2$ estaba involucrado, también deberá actualizarse la etiqueta de la segunda columna además de la de la tercera y la quinta). Veamos en el ejemplo de la \Cref{eq:forest} qué sucedería si se selecciona la entrada $a_{13}$ (ignorando si esto es correcto). En primer lugar, los árboles $A_1$ y $A_3$ se sustituyen por aquel formado por ambos. Sin embargo, también deberá asignarse este nuevo árbol a $A_5$, pues $x_5$ está también en este nuevo árbol. En general, para saber qué etiquetas han de actualizarse, si se marca $a_{ij}$, se crea un nuevo árbol con $A_i$ y $A_j$, se recorre, y para cada una de los nodos $n_k$ si $n_k$ es hoja y contiene a $x_m$, el nuevo árbol es asignado a $A_m$. 
+		 		
+		 		$$
+		 		\begin{align*}
+		 			&\left[\tikzmarknode{t1}{\Tree[.$x_1$ ]}, \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ], \tikzmarknode{t3}{\Tree[.$C_1$ $x_3$ $x_5$ ]}, \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ], \Tree[.$C_1$ $x_3$ $x_5$ ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ]\right]\\
+		 			&\\
+		 			&\Tree[.\tikzmarknode{new_t}{$C_4$} [.\tikzmarknode{new_t_x1}{$x_1$} ] [.$C_1$ \tikzmarknode{new_t_x3}{$x_3$} \tikzmarknode{new_t_x5}{$x_5$} ] ]\\
+		 			&\\
+		 			&\left[\Tree[.\tikzmarknode{new_t2}{$C_4$} [.$x_1$ ] [.$C_1$ $x_3$ $x_5$ ] ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ], \Tree[.\tikzmarknode{new_t3}{$C_4$} [.$x_1$ ] [.$C_1$ $x_3$ $x_5$ ] ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ], \Tree[.\tikzmarknode{new_t4}{$C_4$} [.$x_1$ ] [.$C_1$ $x_3$ $x_5$ ] ], \Tree[.$C_3$ $x_4$ [.$C_2$ $x_2$ $x_6$ ] ]\right]\\
+		 		\end{align*}
+		 		\begin{tikzpicture}[remember picture, overlay, thick]
+		 			\path[->] (t1) edge[bend right = 15] (new_t);
+		 			\path[->] (t3) edge[bend left = 40] (new_t);
+		 			\path[->] (new_t_x1) edge[bend right = 40] (new_t2);
+		 			\path[->] (new_t_x3) edge[bend right = 20] (new_t3);
+		 			\path[->] (new_t_x5) edge[bend left = 10] (new_t4);
+		 		\end{tikzpicture}
+		 		$$
+		 		
+		 		Una vez definida la estructura de los clústers en este punto, es momento de actualizar los valores de la matriz de distancias. Se puede observar que los valores marcados nunca deberán cambiar, y que deberán ser actualizadas aquellas entradas cuya etiqueta de fila o columna haya sido actualizada, pues de lo contrario, se tratará de un punto que no ha intervenido en la última fusión de clústers. Esta actualización se realiza en la función \texttt{update\_distance\_matrix}. 
+		 		
+		 		<<>>=
+		 		update_distance_matrix = function(
+		 			initial_dm, actual_dm, forest, new_cluster_points, criteria_name) {
+		 			updated_cols = c(rep(0, times = len(forest)))
+		 			updated_cols[new_cluster_points] = 1
+		 		
+		 			for (i in 1:len(forest)) {
+		 				if (!updated_cols[i]) {
+		 					tree_points = sapply(Traverse(forest[[i]], 
+		 						filterFun = isLeaf), function(x){
+		 						as.integer(substring(x$name, 2))})
+		 					new_distance = func_criteria(initial_dm, 
+		 						new_cluster_points, tree_points, 
+		 						criteria_name)
+		 		
+		 					for (i in new_cluster_points) {
+		 						for (j in tree_points) {
+		 							minor = min(i, j)
+		 							mayor = max(i, j)
+		 							actual_dm[mayor, minor] = 
+		 								new_distance
+		 						}
+		 					}
+		 					updated_cols[tree_points] = 1
+	 					}
+	 				}
+		 			actual_dm
+		 		}
+		 		@
+		 		
+		 		Esta función calcula las entradas cuyas distancias deberán ser actualizadas, y de entre ellas, va asignando a cada una aquellas cuyas distancias deberán ser iguales. A la hora de calcular las nuevas distancias se puede elegir entre tres criterios: 
+		 		
+		 		\begin{itemize}
+		 			\item \texttt{MIN}: 
+		 			$$
+		 			\dt(C_i, C_j) = \min_{(x, y) \in C_i \times C_j}\{\dt(x, y)\}
+		 			$$
+		 			\item \texttt{MAX}: 
+		 			$$
+		 			\dt(C_i, C_j) = \max_{(x, y) \in C_i \times C_j}\{\dt(x, y)\}
+		 			$$
+		 			\item \texttt{AVG}: 
+		 			$$
+		 			\dt(C_i, C_j) = \frac{\displaystyle\sum_{x \in C_i}\sum_{y \in C_j} \dt(x, y)}{|C_i \times C_j|}
+		 			$$
+		 		\end{itemize}
+		 		
+		 		El cálculo según diferentes criterios se realiza en la siguiente función. 
+		 		
+		 		<<>>=
+		 		func_criteria = function(initial_dm, new_cluster_points, 
+		 			tree_points, criteria_name) {
+		 			distances = c()
+		 			for (i in new_cluster_points) {
+		 				for (j in tree_points) {
+		 					minor = min(i, j)
+		 					mayor = max(i, j)
+		 					distances = c(distances, initial_dm[mayor, minor])
+		 				}
+		 			}
+		 			criteria_name(distances)
+		 		}
+		 		@
+		 		
+		 		Adicionalmente, en caso de que el usuario lo desee, se va mostrando la traza del algoritmo para ver paso a paso qué sucede. Cuando acaba el bucle \texttt{while} en la variable que almacenaba la matriz de distancias, queda la matriz cofenética, muy útil para calcular el CPCC, que indica cómo de buena ha sido la clusterización. Se calcula mediante las ecuaciones mostradas a continuación y dichos cálculos se realizan en la función \texttt{calculate\_cpcc}. 
+		 		
+		 		$$
+		 		\begin{gathered}
+		 			CPCC = \frac{S_{xy}}{S_xS_y}\\
+		 			S_{xy} = \sum_{i=1}^n \frac{x_iy_i}{n} - \bar{x}\bar{y}\\
+		 			S_x = \sqrt{\sum_{i=1}^n \frac{(x_i - \bar{x})^2}{n}}\\
+		 			S_y = \sqrt{\sum_{i=1}^n \frac{(y_i - \bar{y})^2}{n}}
+		 		\end{gathered}
+		 		$$
+		 		
+		 		Queda por definir quiénes son las variables $x$ e $y$. Estas representan los valores de la matriz de distancias inicial y final. Cada $x_i$ tiene un $y_i$ asociado, por ejemplo, supongamos que estas son la matriz inicial y final de una ejecución del algoritmo: 
+		 		
+		 		\vspace{.5cm}
+		 		$$
+		 		\left(\begin{array}{cccccc|cccccc}
+		 			0 & \times & \times & \times & \times & \times & 0 & \times & \times & \times & \times & \times\\
+		 			\tikzmarknode{a1}{4.15} & 0 & \times & \times & \times & \times & \tikzmarknode{a2}{3.92} & 0 & \times & \times & \times & \times\\
+		 			3.39 & 4.13 & 0 & \times & \times & \times & 3.92 & 3.15 & 0 & \times & \times & \times\\
+		 			5.36 & 2.8 & 3.21 & 0 & \times & \times & 3.92 & 2.71 & 3.15 & 0 & \times & \times\\
+		 			3.41 & 3.42 & 0.76 & 2.53 & 0 & \times & 3.92 & 3.15 & 0.76 & 3.15 & 0 & \times\\
+		 			3.29 & 1.05 & 3.15 & 2.61 & \tikzmarknode{a3}{2.48} & 0 & 3.92 & 1.05 & 3.15 & 2.71 & \tikzmarknode{a4}{3.15} & 0
+		 		\end{array}\right)
+		 		\begin{tikzpicture}[remember picture, overlay, thick]
+		 			\path[->] (a1) edge[bend left=30]  node[above, inner sep=1.85pt] {$x_i \mapsto y_i$} (a2);
+		 			\path[->] (a3) edge[bend right=20]  node[below, inner sep=1.85pt] {$x_j \mapsto y_j$} (a4);
+		 		\end{tikzpicture}
+		 		\vspace{.5cm}
+		 		$$
+		 		
+		 		<<>>=
+		 		calculate_cpcc = function(first_dist_matrix, dist_matrix) {
+		 			x = unlist(first_dist_matrix)
+		 			x = x[!is.na(x) & x != 0]
+		 		
+		 			y = unlist(dist_matrix)
+		 			y = y[!is.na(y) & y != 0]
+		 		
+		 			sx = standard_dev(x)
+		 			sy = standard_dev(y)
+		 			sxy = covariance(x, y)
+		 		
+		 			sxy / (sx * sy)
+		 		}
+		 		@
+		 		
+		 		Para finalizar, se muestra un gráfico del árbol final (los $n$ árboles acaban igual) y un dendrograma de la clusterización resultante. 
+		 		
+		 		%quitar más tarde estas al meter la libreria y arreglar plots
+		 		
+		 		<<echo = FALSE>>=
+		 		standard_dev = function(list) {
+		 		mean = fcd_mean(list)
+		 		n = len(list)
+		 		add = 0
+		 		for (i in 1:n) {
+		 		add = add + ((list[i] - mean)^2)
+		 		}
+		 		sqrt(add/n)
+		 		}
+		 		fcd_mean = function(list) {
+		 		add = 0
+		 		for (i in 1:len(list)) {
+		 		add = add + list[i]
+		 		}
+		 		add / len(list)
+		 		}
+		 		covariance = function(x, y) {
+		 		if (len(x) != len(y)) {
+		 		stop("X e Y deben tener la misma dimensión")
+		 		}
+		 		else {
+		 		sum = x %*% y
+		 		(sum/len(x))-(fcd_mean(x)*fcd_mean(y))
+		 		}
+		 		}
+		 		@
+		 		
+		 		{\small
+		 			<<dendrograma1, fig.cap = 'Clusterización con \\texttt{MIN}'>>=
+		 			(sample = read.xlsx("data/datosKMeans.xlsx"))
+		 			fcd_ahc(sample, "MIN")
+			 		@
+		 		}
+		 		{\small
+		 			<<dendrograma2, fig.cap = 'Clusterización con \\texttt{MAX}'>>=
+		 			fcd_ahc(sample, "MAX")
+		 			@
+		 		}
+		 		{\small
+		 			<<dendrograma3, fig.cap = 'Clusterización con \\texttt{AVG}'>>=
+		 			fcd_ahc(sample, "AVG")
+		 			@
+		 		}
+				 
  		\section{Clasificación supervisada}
  		
  			\subsection{Árboles de decisión}
@@ -680,7 +1053,7 @@
  					tipo de carnet necesario para conducir el vehículo.
  				\end{exercise}
  				
- 				Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor del resto de características. 
+ 				Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor del resto de características. \\
  				
  				Como se necesita una muestra, lo primero que se va a realizar es la lectura del fichero Excel (\texttt{.xlsx}) por medio de la función \texttt{read.xlsx} del paquete \texttt{openxlsx}. Al igual que en el resto de ejercicios, se deberá pasar la ruta del fichero. En él se encuentra contenido el conjunto de daos propuesto para el ejercicio.
  				
@@ -688,50 +1061,48 @@
  				(sample = read.xlsx("data/vehiculos.xlsx"))
  				@
  				
- 				Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar el tipo de vehículo (tVehiculo) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
+ 				Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar el tipo de vehículo (\texttt{tVehiculo}) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
  				
- 				\begin{enumerate}
+ 				\begin{enumerate}[label = \textbf{\arabic*.}]
  					\item \textbf{Selección de nodo}: Para el primer paso se elige una característica, que compondrá la raíz del árbol. En el resto de pasos, esta selección formará los nodos intermedios del mismo. La característica que forme el nodo nunca podrá ser el clasificador (\texttt{tVehiculo} en este caso). El objetivo de este árbol, una vez formado, es ver en cada nodo una característica. De cada nodo saldrán hijos cuya diferencia será el valor de la característica del nodo padre. Los hijos contendrán, o bien un valor del clasificador (lo que permitirá clasificar directamente un suceso de la muestra), o bien un subárbol del que dependerá la clasificación del resto de la muestra (habrá que recorrerlo para poder clasificar un suceso de la muestra). 
  					
- 					Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\vartriangle_i$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será implementar a la clasificación la división con mayor $\vartriangle_i$. La ganancia de información se calcula de la siguiente forma:
+ 					Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\Delta_I$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será implementar a la clasificación la división con mayor $\Delta_I$. La ganancia de información se calcula de la siguiente forma:
  					
- 					\begin{center}
- 						$\vartriangle_i = I_{padre} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)$
- 					\end{center}
+ 					
+					$$
+					\Delta_i = I_{\text{padre}} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)
+					$$
  					
  					\begin{itemize}
- 						\item $I_{padre}$ = Impureza del nodo padre
- 						\item $k$ = Número total de hijos (en esta implementación siempre será 2)
- 						\item $N(n_j)$ = Número de sucesos de la muestra asociados al nodo hijo $j$
- 						\item $N$ = Número total de sucesos de la muestra actual
- 						\item $I(n_j)$ = Impureza del nodo hijo $j$
+ 						\item $I_{\text{padre}}$: Impureza del nodo padre
+ 						\item $k$: Número total de hijos (en esta implementación siempre será 2)
+ 						\item $N(n_j)$: Número de sucesos de la muestra asociados al nodo hijo $j$
+ 						\item $N$: Número total de sucesos de la muestra actual
+ 						\item $I(n_j)$: Impureza del nodo hijo $j$
  					\end{itemize}
  					
  					Como se puede ver, para calcular la ganancia de información, se necesita la impureza $I$ del nodo padre y de sus hijos. Esta puede ser calculada de diferentes formas en función del método que se utilice. Todas ellas utilizan las frecuencias relativas ($f_i$) de las clases de equivalencia $c$ del clasificador. Se distinguen tres:
  					
  					\begin{itemize}
  						\item \textbf{Entropía}
- 								
- 								\begin{center}
- 									$ I_{nodo} = - \sum_{i=1}^{c} f_i \cdot log_2(f_i)$
- 								\end{center}
+ 						$$
+ 						I= - \sum_{i=1}^{c} f_i\log_{c}(f_i)
+ 						$$
  								
  						\item \textbf{Error}
- 						
- 								\begin{center}
- 									$I_{nodo} = 1 - max(f_i)$
- 								\end{center}
+						$$
+						I = 1 - \max\{f_i\}_{i=1}^c
+						$$
  						
  						\item \textbf{Gini}
- 						
- 								\begin{center}
- 									$I_{nodo} = 1 - \sum_{i=1}^{c} (f_i)^2$
- 								\end{center}
+						$$
+						I = 1 - \sum_{i=1}^{c} f_i^2
+						$$
  					\end{itemize}
  					
  					\item \textbf{Clasificación de los sucesos:} Una vez se ha elegido la característica que va a conformar el nodo, se clasifica. Si se pueden clasificar completamente los sucesos de la muestra (que en cada hijo solo haya un valor del clasificador posible) se trata de un nodo final y termina la clasificación. Si no lo permite, se trata de un nodo interno, por lo que hay que volver al primer paso.  
  					
- 					Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\vartriangle_i = I_{padre}$), ya que significa que las impurezas de los hijos son 0. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). 
+ 					Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\Delta_I = I_{\text{padre}}$), ya que significa que las impurezas de los hijos son 0. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). 
  					
  					Puede darse el caso en el que el algoritmo no pueda seguir clasificando porque la ganancia de información sea 0 en todos los escenarios de clasificación posibles. En ese caso, el algoritmo finalizará habiendo clasificado todo lo anterior pero dejando el nodo final abierto, es decir, sin una clasificación concreta.
  					
