@@ -85,8 +85,8 @@
 	
 	%Configuración para los gráficos de R
 	<<setup, include = FALSE>>=
-		knitr::opts_chunk$set(tab.size = 2)
 		knitr::opts_chunk$set(fig.align = 'center')
+		knitr::opts_chunk$set(fig.pos = 'H')
 		knitr::opts_chunk$set(fig.width = 4)
 		knitr::opts_chunk$set(fig.height = 4)
 	@
@@ -259,7 +259,7 @@
 					
 					\item El segundo es el número de puntos que se han introducido, mediante el atributo \texttt{\$dendrogram}, en este caso 6.
 					
-					\item El tercer apartado es una lista que muestra las coordenadas de todos los clústers al finalizar la ejecución, los 6 primeros son los puntos introducidos y los 5 siguientes son los formados por cada una de las iteraciones uniendo dos clústers anteriores hasta tener todos unidos en el mismo clúster, momento en el que finaliza el algoritmo. Se puede ver en el atributo \texttt{\$clústers}.
+					\item El tercer apartado es una lista que muestra las coordenadas de todos los clústers al finalizar la ejecución, los 6 primeros son los puntos introducidos y los 5 siguientes son los formados por cada una de las iteraciones uniendo dos clústers anteriores hasta tener todos unidos en el mismo clúster, momento en el que finaliza el algoritmo. Se puede ver en el atributo \texttt{\$clusters}.
 					
 					\item El cuarto apartado es el proceso que se realiza en cada iteración, se pueden ver en el apartado \texttt{\$groupedClusters}.
 					
@@ -352,7 +352,7 @@
 			(muestra = read.table("data/planetas.txt"))
 			@
 			
-			Una vez se tienen los datos en R, se procede a hacer uso de la función \texttt{lm} contenida en los paquetes básicos (concretamente en el paquete \texttt{stats}). Esta función recibe dos parámetros. El primero de ellos es la fórmula en donde se va a decir en función de qué parámetro se quiere otro parámetro. En este caso se tiene la columna \texttt{R} que representa el radio y la columna \texttt{D} que representa la densidad. Como se quiere la densidad en función del radio, el primer parámetro tendrá que ser formula=D$\sim$R. Se indica de esta forma que se pretende obtener la columna \texttt{D} en función de la columna \texttt{R}; o lo que es lo mismo, la densidad en función del radio.\\ %No entiendo qué es lo de formula=...
+			Una vez se tienen los datos en R, se procede a hacer uso de la función \texttt{lm} contenida en los paquetes básicos (concretamente en el paquete \texttt{stats}). Esta función recibe dos parámetros. El primero de ellos es la fórmula en donde se va a decir en función de qué parámetro se quiere otro parámetro. En este caso se tiene la columna \texttt{R} que representa el radio y la columna \texttt{D} que representa la densidad. Como se quiere la densidad en función del radio, el primer parámetro tendrá que ser \texttt{formula=D$\tilde{\phantom{.}}$R}. Se indica de esta forma que se pretende obtener la columna \texttt{D} en función de la columna \texttt{R}; o lo que es lo mismo, la densidad en función del radio.\\ 
 			
 			El segundo parámetro que entra a la función es la estructura que contiene los datos que se pretenden estudiar. En este caso, el parámetro \texttt{data} será la variable \texttt{muestra}, confeccionada previamente. Con los parámetros de la función \texttt{lm} claros, se invoca a la misma de la siguiente forma:
 			
@@ -455,13 +455,11 @@
 	 
 	 \chapter{Ejercicios autónomos}
 	 
-		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica. Para resolver estos ejercicios, se ha creado una librería con las funciones que se repetían entre los algoritmos y que eran de la PL1 o que no formaban parte del algoritmo en sí. Todas las funciones de la librería se explican en el \Cref{App:Libreria}. Es necesario por tanto importar la librería.
+		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica. Para resolver estos ejercicios, se ha creado una librería con las funciones que se repetían entre los algoritmos y que eran de la PL1 o que no formaban parte del algoritmo en sí. Todas las funciones de la librería se explican en el \Cref{ap:Libreria}. Es necesario por tanto importar la librería. Además, se han utilizado cuatro paquetes del \texttt{CRAN}, que quedan explicados en el \Cref{ap:PaquetesExternos}
 		 
 		 <<>>=
 		 source("data/aux_functions.R")
 		 @
-		 
-		 Además, se han utilizado 3 paquetes del \texttt{CRAN}, que quedan explicados en el \Cref{App:PaquetesExternos}
 		 
 		 \section{Clasificación no supervisada}
 		 
@@ -471,7 +469,7 @@
 					 	El primer conjunto de datos, que se empleará para realizar el análisis de clasificación no supervisada con $k-$means, estará formado por los siguientes 15 valores de velocidades de respuesta y temperaturas normalizadas de un microprocesador \{Velocidad, Temperatura\}: 1.\{3.5, 4.5\}; 2.\{0.75, 3.25\}; 3.\{0, 3\}; 4.\{1.75, 0.75\}; 5.\{3, 3.75\}; 6.\{3.75, 4.5\}; 7.\{1.25, 0.75\}; 8.\{0.25, 3\}; 9.\{3.5, 4.25\}; 10.\{1.5, 0.5\}; 11.\{1, 1\}; 12.\{3, 4\}; 13.\{0.5, 3\}; 14.\{2, 0.25\}; 15.\{0, 2.5\}. Del análisis visual de los datos se ha concluido que hay una alta probabilidad que sean tres clústers.
 				 \end{exercise}
 				 
-				 Los datos que se proponen en el enunciado del ejercicio van a ser introducidos en un fichero Excel (\texttt{.xlsx}), de tal forma que estos se van a obtener leyendo este fichero desde R. Para ello, se hará uso de la función \texttt{read.xlsx} contenida en el paquete \texttt{openxlsx} que se ha visto previamente. Con esta función se puede pasar como parámetro la ruta del archivo que contiene los datos, devolviendo los mismos en un dataframe.\\
+				 Los datos que se proponen en el enunciado del ejercicio van a ser introducidos en un fichero Excel (\texttt{.xlsx}), de tal forma que estos se van a obtener leyendo este fichero desde R. Para ello, se hará uso de la función \texttt{read.xlsx} contenida en el paquete \texttt{openxlsx} que se explica en el \Cref{ap:PaquetesExternos}. Con esta función se puede pasar como parámetro la ruta del archivo que contiene los datos, devolviendo los mismos en un dataframe.\\
 				 
 				 Para este ejercicio en concreto se hará uso de dos ficheros, uno con los datos de velocidad y temperatura (dispuestos cada uno en una columna del Excel), y otro fichero que contenga las coordenadas de los centroides iniciales que se van a utilizar en el algoritmo. En la primera fila de ambos ficheros deberá ir el título de cada columna. Primeramente se leen los datos del ejercicio. A partir de ahora, a cada uno de estos datos se les conocerán como puntos.
 				 
@@ -537,7 +535,7 @@
 				 <<>>=
 				 update_cent = function(df_sample, centroids, assig_matrix) {
 				 	n_pts = ncol(assig_matrix)
-					n_cent = nrow(assig_matrix)
+				 	n_cent = nrow(assig_matrix)
 				 	new_centroids = c()
 				 	for (cent in 1:n_cent) {
 				 		centroid_x = 0
@@ -565,7 +563,7 @@
 				 
 				 El algoritmo se ejecutará hasta que la matriz de asignaciones sea la misma en una iteración con respecto a su anterior. Para visualizar el resultado o clasificación final se propone una función que tomará la matriz de asignaciones final y el valor de los centroides finales. Este método imprimirá las coordenadas de cada centroide, así como los puntos que conforman el clúster representado por ese centroide.
 				 
-				 {\tiny
+				 {\small
 				 <<>>=
 				 printCentroids = function(df_sample, centroids, assig_matrix){
 				 	n_cents = nrow(assig_matrix)
@@ -577,7 +575,8 @@
 				 		for(pt in 1:n_pts){
 				 			if (assig_matrix[cent,pt] == 1){
 				 				cat(paste0("  - Punto ", pt, " (", 
-				 					df_sample[pt, 1], ", ", df_sample[pt,2], ")\n"))
+				 					df_sample[pt, 1], ", ", 
+				 					df_sample[pt,2], ")\n"))
 				 			}
 				 		}
 				 		cat("\n")
@@ -606,7 +605,7 @@
 				 @
 				}
 				 
-				 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clústerización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clústerización.
+				 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clusterización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clusterización.
 				 
 				 {\small
 				 <<>>=
@@ -803,8 +802,7 @@
 		 			print(forest[[1]])
 		 			cpcc = calculate_cpcc(first_dist_matrix, dist_matrix)
 		 			cat("\n\nCoeficiente de CPCC: ", cpcc)
-		 			plot(forest[[1]])
-		 			plot(as.dendrogram(forest[[1]]), center = TRUE, yaxt='n')
+		 			forest[[1]]
 		 		}
 		 		@
 		 		
@@ -986,17 +984,31 @@
 		 		{\small
 		 			<<dendrograma1, fig.cap = 'Clusterización con \\texttt{MIN}'>>=
 		 			(sample = read.xlsx("data/datosKMeans.xlsx"))
-		 			fcd_ahc(sample, "MIN")
+		 			tree = fcd_ahc(sample, "MIN")
+		 			plot(as.dendrogram(tree), center = TRUE, yaxt='n')
+			 		@
+			 		<<arbol1, fig.cap = 'Clusterización con \\texttt{MIN} como árbol'>>=
+			 		plot(tree)
 			 		@
 		 		}
 		 		{\small
 		 			<<dendrograma2, fig.cap = 'Clusterización con \\texttt{MAX}'>>=
-		 			fcd_ahc(sample, "MAX")
+		 			(sample = read.xlsx("data/datosKMeans.xlsx"))
+		 			tree2 = fcd_ahc(sample, "MAX")
+		 			plot(as.dendrogram(tree2), center = TRUE, yaxt='n')
+		 			@
+		 			<<arbol2, fig.cap = 'Clusterización con \\texttt{MAX} como árbol'>>=
+		 			plot(tree2)
 		 			@
 		 		}
 		 		{\small
 		 			<<dendrograma3, fig.cap = 'Clusterización con \\texttt{AVG}'>>=
-		 			fcd_ahc(sample, "AVG")
+		 			(sample = read.xlsx("data/datosKMeans.xlsx"))
+		 			tree3 = fcd_ahc(sample, "AVG")
+		 			plot(as.dendrogram(tree3), center = TRUE, yaxt='n')
+		 			@
+		 			<<arbol3, fig.cap = 'Clusterización con \\texttt{AVG} como árbol'>>=
+		 			plot(tree3)
 		 			@
 		 		}
 				 
@@ -1004,388 +1016,393 @@
  		
  			\subsection{Árboles de decisión}
  			
- 			\begin{exercise}
- 				El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por el siguiente conjunto de 10 sucesos constituidos por los valores de cuatro características de vehículos: 1. \{B, 4, 5, Coche\}; 2. \{A, 2, 2, Moto\}; 3. \{N, 2, 1, Bicicleta\}; 4. \{B, 6, 4, Camión\};
- 				5. \{B, 4, 6, Coche\}; 6. \{B, 4, 4, Coche\}; 7.\{N, 2, 2, Bicicleta\}; 8. \{B, 2, 1, Moto\}; 9. \{B, 6, 2, Camión\}; 10. \{N, 2, 1, Bicicleta\}, donde las características de cada suceso son: \{TipoCarnet, NúmeroRuedas, NúmeroPasajeros, TipoVehículo\}. Se debe clasificar el tipo de vehículo en función del resto de características. TipoCarnet, es el
- 				tipo de carnet necesario para conducir el vehículo.
- 			\end{exercise}
- 			
- 			Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor de otras características que componen un suceso de la muestra. \\
- 			
- 			Como se necesita una muestra, lo primero que se va a realizar es la lectura del fichero Excel (\texttt{.xlsx}) por medio de la función \texttt{read.xlsx} del paquete \texttt{openxlsx}. Al igual que en el resto de ejercicios, se deberá pasar la ruta del fichero. En él se encuentra contenido el conjunto de datos propuesto para el ejercicio.
- 			
- 			<<>>=
- 			(sample = read.xlsx("data/vehiculos.xlsx"))
- 			@
- 			
- 			Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar la característica que define el tipo de vehículo (tVehiculo) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
- 			
- 			\begin{enumerate}
- 				\item \textbf{Selección de nodo}: Para el primer paso se elige una característica, que compondrá la raíz del árbol. En el resto de pasos, esta selección formará los nodos intermedios del mismo. La característica que forme el nodo nunca podrá ser el clasificador (\texttt{tVehiculo} en este caso).\\
- 				
- 				El árbol con el que se va a trabajar en esta implementación será de naturaleza binaria; es decir, cada nodo tendrá dos hijos. En función del valor de la característica del nodo raíz salen dos nodos hijo. El objetivo de esto es que en base a ese valor que diferencia ambos nodos hijo, se pueda determinar el valor del clasificador. En el hijo de la derecha siempre habrá un nodo hoja, y en el izquierdo podrá haber un nodo hoja o un subárbol. En caso de ser un nodo hoja, se podrá determinar el valor de la característica clasificadora (que será el valor que aparezca en ese nodo). En caso de tener un subárbol, significa que el valor de la característica clasificadora no se puede determinar aún, por lo que será necesario fijarse en más criterios además del ya visto para sacar el valor de la característica clasificadora. Un ejemplo de árbol es el siguiente:
- 				
- 				\begin{center}
-
- 				\end{center}
- 				
- 				En este ejemplo se encuentran dos divisiones. Primeramente se clasifica o divide por número de pasajeros. Aquellos vehículos con un número de pasajeros igual a 2 se clasifican como Moto (valor del clasificador). En caso de tener 4 se clasifica por medio de la característica que define el número de ruedas. Si se tienen 4 ruedas, el valor del clasificador es Coche, y si tiene 6 es Camión.\\
- 				
- 				Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\vartriangle_i$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será añadir a la clasificación, la división con mayor $\vartriangle_i$. La ganancia de información se calcula de la siguiente forma:
- 				
- 				\begin{center}
- 					$\vartriangle_i = I_{padre} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)$
- 				\end{center}
- 				
- 				\begin{itemize}
- 					\item $I_{padre}$ = Impureza del nodo padre
- 					\item $k$ = Número total de hijos (en esta implementación siempre será 2)
- 					\item $N(n_j)$ = Número de sucesos de la muestra asociados al nodo hijo $j$
- 					\item $N$ = Número total de sucesos de la muestra actual
- 					\item $I(n_j)$ = Impureza del nodo hijo $j$
- 				\end{itemize}
- 				
- 				Como se puede ver, para calcular la ganancia de información, se necesita la impureza $I$ del nodo padre y de sus hijos. Esta puede ser calculada de diferentes formas en función del método que se utilice. Todas ellas utilizan las frecuencias relativas ($f_i$) de las clases de equivalencia $c$ del clasificador. Se distinguen tres:
- 				
- 				\begin{itemize}
- 					\item \textbf{Entropía}
- 					
- 					\begin{center}
- 						$ I_{nodo} = - \sum_{i=1}^{c} f_i \cdot log_2(f_i)$
- 					\end{center}
- 					
- 					\item \textbf{Error}
- 					
- 					\begin{center}
- 						$I_{nodo} = 1 - max(f_i)$
- 					\end{center}
- 					
- 					\item \textbf{Gini}
- 					
- 					\begin{center}
- 						$I_{nodo} = 1 - \sum_{i=1}^{c} (f_i)^2$
- 					\end{center}
- 				\end{itemize}
- 				
- 				\item \textbf{Clasificación de los sucesos:} Una vez se ha elegido la característica que va a conformar el nodo raíz, se clasifica. Si se pueden clasificar completamente los sucesos de la muestra (que en cada hijo solo haya un valor del clasificador posible) se tendrán dos nodos hoja y termina la clasificación. Si no lo permite, se trata de un nodo interno, por lo que hay que volver al primer paso y enlazar al nodo hijo de la izquierda un nuevo árbol. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). \\
- 				
- 				Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\vartriangle_i = I_{padre}$), ya que significa que las impurezas de los hijos son 0. \\
- 				
- 				Puede darse el caso en el que el algoritmo no pueda seguir clasificando porque la ganancia de información sea 0 en todos los escenarios de clasificación posibles. En ese caso, el algoritmo finalizará habiendo clasificado todo lo anterior pero dejando el nodo final abierto, es decir, sin una clasificación concreta. Los valores del nodo izquierdo en la última serán todos los valores del clasificador que quedan en la muestra.
- 			\end{enumerate}
- 			
- 			En esta implementación se utilizarán árboles binarios (cada nodo con 2 hijos) tal y como se ha mencionado previamente. Esto condiciona la forma de actuar en el algoritmo, así que la metodología a seguir se resume en los siguientes pasos:
- 			
- 			\begin{enumerate}
- 				\item \textbf{Selección del mejor nodo}: Para determinar el mejor nodo se calcula la ganancia de información para todas las divisiones posibles y se escoge la mejor. Las divisiones posibles son todas las combinaciones que resultan de elegir una característica concreta como nodo raíz, y dentro de cada característica elegir un valor de la misma que se utilizará para clasificar en el nodo de la derecha. Si se tienen $n$ características y $m$ posibles valores para cada característica, se tienen un total de $n \cdot m$ escenarios
- 				\item \textbf{Unión de la clasificación actual al resto de clasificación}: Una vez se ha encontrado la mejor clasificación, esta se une a la clasificación previa.
- 				\item \textbf{Recorte de la muestra}: Todos los sucesos de la muestra cuyo valor en la característica del nodo raíz sea igual al que define el nodo de la derecha son eliminados de la muestra. Se repiten los tres pasos anteriores con la nueva muestra hasta que el algoritmo finalice.
- 			\end{enumerate}
- 			
- 			El algoritmo finalizará si no se tienen más datos en la muestra (es decir, ya se ha clasificado todo), o si la mejor ganancia de información es 0 (esto equivale a decir que no se puede encontrar ningún criterio de clasificación).\\
- 			
- 			Con esta base teórica se procede a explicar la implementación del algoritmo en R. Primeramente, para seleccionar el mejor nodo se necesita calcular la ganancia de información. Esta a su vez sale de las impurezas, obtenidas en base a las frecuencias relativas en cada nodo de las clases de equivalencia del clasificador. Es por ello que lo primero que se plantea es una función \texttt{get\_frec} que permita obtener las frecuencias relativas para el cálculo de la impureza de cada nodo. A esta función habrá que pasarle los siguientes parámetros:
- 			
- 			\begin{itemize}
- 				\item \textbf{sample}: La muestra de datos pendientes de clasificar.
- 				\item \textbf{col}: Columna que representa la característica del nodo raíz.
- 				\item \textbf{elements}: Clases de equivalencia de \texttt{col} que se tendrán en cuenta a la hora de calcular las frecuencias relativas. Si un suceso tiene uno de estos valores en la columna \texttt{col} se tiene en cuenta para las frecuencias relativas, sino se omite. 
- 				\item \textbf{criteria}: Columna de la característica clasificadora.
- 				\item \textbf{values}: Todas las clases de equivalencia de la columna clasificadora.
- 			\end{itemize}
- 			
- 			Se empieza con una lista de ceros. Cada índice de esta lista representará las veces que aparece un valor del clasificador (es decir, las veces que aparece Moto, Camión, Coche y Bicicleta en este ejercicio). En el nodo raíz basta con contar las veces que aparece cada uno en toda la muestra, pero en los nodos hijo la muestra se divide. Por ello, es importante pasar el parámetro \texttt{elements}, para determinar qué sucesos contabilizarán para las frecuencias en cada caso.\\
- 			
- 			El código es sencillo, se crea la lista con todo 0 y de longitud determinada por los posibles valores del clasificador, se comprueban todos los sucesos de la muestra y, si ese suceso está dentro del nodo que se está analizando, se incrementa en uno la frecuencia que corresponda. Finalmente se deben devolver frecuencias relativas, por lo que se dividen todos los valores entre los sucesos asociados al nodo. Nótese que la suma de esta lista deberá dar 1 en cualquier caso. El código es el siguiente:
- 			
- 			{\small
- 			<<>>=
- 			get_frec = function(sample, col, criteria, elements, values) {
- 				n = 0
- 				frecs = setNames(data.frame(matrix(rep(0, times = len(values))
- 					, nrow = 1)), values)
- 				for (i in 1:len(sample[, col])) {
- 					if (sample[i, col] %in% elements) {
- 						frecs[1, sample[i, criteria]] = 
- 							frecs[1, sample[i, criteria]] + 1
- 						n = n + 1
- 					}
- 				}
- 				frecs / n
- 			}
- 			@
+	 			\begin{exercise}
+	 				El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por el siguiente conjunto de 10 sucesos constituidos por los valores de cuatro características de vehículos: 1. \{B, 4, 5, Coche\}; 2. \{A, 2, 2, Moto\}; 3. \{N, 2, 1, Bicicleta\}; 4. \{B, 6, 4, Camión\};
+	 				5. \{B, 4, 6, Coche\}; 6. \{B, 4, 4, Coche\}; 7.\{N, 2, 2, Bicicleta\}; 8. \{B, 2, 1, Moto\}; 9. \{B, 6, 2, Camión\}; 10. \{N, 2, 1, Bicicleta\}, donde las características de cada suceso son: \{TipoCarnet, NúmeroRuedas, NúmeroPasajeros, TipoVehículo\}. Se debe clasificar el tipo de vehículo en función del resto de características. TipoCarnet, es el
+	 				tipo de carnet necesario para conducir el vehículo.
+	 			\end{exercise}
+	 			
+	 			Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor de otras características que componen un suceso de la muestra. \\
+	 			
+	 			Como se necesita una muestra, lo primero que se va a realizar es la lectura del fichero Excel (\texttt{.xlsx}) por medio de la función \texttt{read.xlsx} del paquete \texttt{openxlsx}. Al igual que en el resto de ejercicios, se deberá pasar la ruta del fichero. En él se encuentra contenido el conjunto de datos propuesto para el ejercicio.
+	 			
+	 			<<>>=
+	 			(sample = read.xlsx("data/vehiculos.xlsx"))
+	 			@
+	 			
+	 			Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar la característica que define el tipo de vehículo (\texttt{tVehiculo}) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
+	 			
+	 			\begin{enumerate}[label = \textbf{\arabic*.}]
+	 				\item \textbf{Selección de nodo}: Para el primer paso se elige una característica, que compondrá la raíz del árbol. En el resto de pasos, esta selección formará los nodos intermedios del mismo. La característica que forme el nodo nunca podrá ser el clasificador (\texttt{tVehiculo} en este caso).
+	 				
+	 				El árbol con el que se va a trabajar en esta implementación será de naturaleza binaria; es decir, cada nodo tendrá dos hijos. En función del valor de la característica del nodo raíz salen dos nodos hijo. El objetivo de esto es que en base a ese valor que diferencia ambos nodos hijo, se pueda determinar el valor del clasificador. En el hijo de la derecha siempre habrá un nodo hoja, y en el izquierdo podrá haber un nodo hoja o un subárbol. En caso de ser un nodo hoja, se podrá determinar el valor de la característica clasificadora (que será el valor que aparezca en ese nodo). En caso de tener un subárbol, significa que el valor de la característica clasificadora no se puede determinar aún, por lo que será necesario fijarse en más criterios además del ya visto para sacar el valor de la característica clasificadora. Un ejemplo de árbol es el siguiente:
+	 				
+	 				\begin{center}
+	 					\begin{tikzcd}
+	 						&                                                   & \texttt{nPasajeros} \arrow[rd, "2"] \arrow[ld, "4"'] &             \\
+	 						& \texttt{nRuedas} \arrow[rd, "6"] \arrow[ld, "4"'] &                                                      & \text{Moto} \\
+	 						\text{Coche} &                                                   & \text{Camión}                                        &            
+	 					\end{tikzcd}
+	 				\end{center}
+	 				
+	 				En este ejemplo se encuentran dos divisiones. Primeramente se clasifica o divide por número de pasajeros. Aquellos vehículos con un número de pasajeros igual a 2 se clasifican como Moto (valor del clasificador). En caso de tener 4 se clasifica por medio de la característica que define el número de ruedas. Si se tienen 4 ruedas, el valor del clasificador es Coche, y si tiene 6 es Camión.\\
+	 				
+	 				Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\Delta_I$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será añadir a la clasificación, la división con mayor $\vartriangle_i$. La ganancia de información se calcula de la siguiente forma:
+	 				
+	 				$$
+	 				\Delta_I = I_{\text{padre}} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)
+ 					$$
+	 				
+	 				\begin{itemize}
+	 					\item $I_{\text{padre}}$: Impureza del nodo padre
+	 					\item $k$: Número total de hijos (en esta implementación siempre será 2)
+	 					\item $N(n_j)$: Número de sucesos de la muestra asociados al nodo hijo $j$
+	 					\item $N$: Número total de sucesos de la muestra actual
+	 					\item $I(n_j)$: Impureza del nodo hijo $j$
+	 				\end{itemize}
+	 				
+	 				Como se puede ver, para calcular la ganancia de información, se necesita la impureza $I$ del nodo padre y de sus hijos. Esta puede ser calculada de diferentes formas en función del método que se utilice. Todas ellas utilizan las frecuencias relativas ($f_i$) de las clases de equivalencia $c$ del clasificador. Se distinguen tres:
+	 				
+	 				\begin{itemize}
+	 					\item \textbf{Entropía}
+ 						$$
+ 						I_{\text{nodo}} = - \sum_{i=1}^{c} f_i \log_2(f_i)
+ 						$$
+	 					
+	 					\item \textbf{Error}
+ 						$$
+ 						I_{\text{nodo}} = 1 - \max\{f_i\}_{i=1}^c
+ 						$$
+	 					
+	 					\item \textbf{Gini}
+ 						$$
+ 						I_{\text{nodo}} = 1 - \sum_{i=1}^{c} f_i^2
+ 						$$
+	 				\end{itemize}
+	 				
+	 				\item \textbf{Clasificación de los sucesos:} Una vez se ha elegido la característica que va a conformar el nodo raíz, se clasifica. Si se pueden clasificar completamente los sucesos de la muestra (que en cada hijo solo haya un valor del clasificador posible) se tendrán dos nodos hoja y termina la clasificación. Si no lo permite, se trata de un nodo interno, por lo que hay que volver al primer paso y enlazar al nodo hijo de la izquierda un nuevo árbol. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). \\
+	 				
+	 				Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\Delta_I = I_{\text{padre}}$), ya que significa que las impurezas de los hijos son 0. \\
+	 				
+	 				Puede darse el caso en el que el algoritmo no pueda seguir clasificando porque la ganancia de información sea 0 en todos los escenarios de clasificación posibles. En ese caso, el algoritmo finalizará habiendo clasificado todo lo anterior pero dejando el nodo final abierto, es decir, sin una clasificación concreta. Los valores del nodo izquierdo en la última serán todos los valores del clasificador que quedan en la muestra.
+	 			\end{enumerate}
+	 			
+	 			En esta implementación se utilizarán árboles binarios (cada nodo con 2 hijos) tal y como se ha mencionado previamente. Esto condiciona la forma de actuar en el algoritmo, así que la metodología a seguir se resume en los siguientes pasos:
+	 			
+	 			\begin{enumerate}[label = \textbf{\arabic*.}]
+	 				\item \textbf{Selección del mejor nodo}: Para determinar el mejor nodo se calcula la ganancia de información para todas las divisiones posibles y se escoge la mejor. Las divisiones posibles son todas las combinaciones que resultan de elegir una característica concreta como nodo raíz, y dentro de cada característica elegir un valor de la misma que se utilizará para clasificar en el nodo de la derecha. Si se tienen $n$ características y $m$ posibles valores para cada característica, se tienen un total de $n \cdot m$ escenarios
+	 				\item \textbf{Unión de la clasificación actual al resto de clasificación}: Una vez se ha encontrado la mejor clasificación, esta se une a la clasificación previa.
+	 				\item \textbf{Recorte de la muestra}: Todos los sucesos de la muestra cuyo valor en la característica del nodo raíz sea igual al que define el nodo de la derecha son eliminados de la muestra. Se repiten los tres pasos anteriores con la nueva muestra hasta que el algoritmo finalice.
+	 			\end{enumerate}
+	 			
+	 			El algoritmo finalizará si no se tienen más datos en la muestra (es decir, ya se ha clasificado todo), o si la mejor ganancia de información es 0 (esto equivale a decir que no se puede encontrar ningún criterio de clasificación).\\
+	 			
+	 			Con esta base teórica se procede a explicar la implementación del algoritmo en R. Primeramente, para seleccionar el mejor nodo se necesita calcular la ganancia de información. Esta a su vez sale de las impurezas, obtenidas en base a las frecuencias relativas en cada nodo de las clases de equivalencia del clasificador. Es por ello que lo primero que se plantea es una función \texttt{get\_frec} que permita obtener las frecuencias relativas para el cálculo de la impureza de cada nodo. A esta función habrá que pasarle los siguientes parámetros:
+	 			
+	 			\begin{itemize}
+	 				\item \texttt{sample}: La muestra de datos pendientes de clasificar.
+	 				\item \texttt{col}: Columna que representa la característica del nodo raíz.
+	 				\item \texttt{elements}: Clases de equivalencia de \texttt{col} que se tendrán en cuenta a la hora de calcular las frecuencias relativas. Si un suceso tiene uno de estos valores en la columna \texttt{col} se tiene en cuenta para las frecuencias relativas, sino se omite. 
+	 				\item \texttt{criteria}: Columna de la característica clasificadora.
+	 				\item \texttt{values}: Todas las clases de equivalencia de la columna clasificadora.
+	 			\end{itemize}
+	 			
+	 			Se empieza con una lista de ceros. Cada índice de esta lista representará las veces que aparece un valor del clasificador (es decir, las veces que aparece Moto, Camión, Coche y Bicicleta en este ejercicio). En el nodo raíz basta con contar las veces que aparece cada uno en toda la muestra, pero en los nodos hijo la muestra se divide. Por ello, es importante pasar el parámetro \texttt{elements}, para determinar qué sucesos contabilizarán para las frecuencias en cada caso.\\
+	 			
+	 			El código es sencillo, se crea la lista con todo 0 y de longitud determinada por los posibles valores del clasificador, se comprueban todos los sucesos de la muestra y, si ese suceso está dentro del nodo que se está analizando, se incrementa en uno la frecuencia que corresponda. Finalmente se deben devolver frecuencias relativas, por lo que se dividen todos los valores entre los sucesos asociados al nodo. Nótese que la suma de esta lista deberá dar 1 en cualquier caso. El código es el siguiente:
+	 			
+	 			{\small
+	 			<<>>=
+	 			get_frec = function(sample, col, criteria, elements, values) {
+	 				n = 0
+	 				frecs = setNames(data.frame(matrix(rep(0, times = len(values))
+	 					, nrow = 1)), values)
+	 				for (i in 1:len(sample[, col])) {
+	 					if (sample[i, col] %in% elements) {
+	 						frecs[1, sample[i, criteria]] = 
+	 							frecs[1, sample[i, criteria]] + 1
+	 						n = n + 1
+	 					}
+	 				}
+	 				frecs / n
+	 			}
+	 			@
+		 		}
+	 			
+	 			Una vez se tienen las frecuencias de los nodos, hay que calcular la impureza de los mismos. Para ello, se ha visto previamente que existen tres métodos diferentes (entropía, error y gini). El cálculo de la impureza se realiza en función de las frecuencias en cualquier caso, por lo que será un parámetro obligatorio en las tres funciones. Se tiene una por cada método.\\
+	 			
+	 			El código de la entropía implementa el cálculo visto previamente. Un matiz importante en esta función es que se controla que, en caso de haber frecuencias con valor 0 o 1, se presentaría un cálculo matemáticamente imposible. Es por ello que en caso de encontrar esos números, el resultado de la operación correspondiente con esa frecuencia será 0.
+	 			
+	 			<<>>=
+	 			entropy = function(frec) {
+	 				acum = 0
+	 				for (i in 1:len(frec)) {
+	 					f = frec[1, i]
+	 					if (f != 0 && f != 1) {
+	 						acum = acum - f * log(f, 2)
+	 					}
+	 				}
+	 				acum
+	 			}
+	 			@
+	 			
+	 			El código del método de error:
+	 			
+	 			<<>>=
+	 			error = function(frec) {
+	 				1 - max(frec)
+	 			}
+	 			@
+	 			
+	 			Y el del método Gini:
+	 			
+	 			<<>>=
+	 			gini = function(frec) {
+	 				acum = 0
+	 				for (i in 1:len(frec)) {
+	 					f = frec[1, i]
+	 					acum = acum + f^2
+	 				}
+	 				1 - acum
+	 			}
+	 			@
+	 			
+	 			Con estas funciones auxiliares se puede confeccionar una función \texttt{get\_impurity} que llame adecuadamente a estas anteriores y permita obtener el valor de la impureza de un nodo. Los parámetros que deberá tener esta función son los mismos que la función \texttt{get\_frec} y un parámetro adicional que indique la medida con la que se quiere calcular la impureza. La función recoge las frecuencias del nodo y llama a una de las tres últimas funciones que se han visto, la cual regresa el valor de la impureza de un nodo.
+	 			
+	 			{\small
+	 			<<>>=
+	 			get_impurity = function(sample, col, elements, criteria,
+	 					 equivalence_clases, measure) {
+	 				frec = get_frec(sample, col, criteria, 
+	 					elements, equivalence_clases)
+	 				switch(measure, 
+	 						"entropy" = entropy(frec), 
+	 						"error" = error(frec), 
+	 						"gini" = gini(frec))
+	 			}
+	 			@
+	 			}
+	 			
+	 			Una consideración es que se necesitan todas las clases de equivalencia (\texttt{equivalence\_classes}) de la característica clasificadora, para que este código pueda funcionar. Al final, la función \texttt{get\_impurity} será llamada por otra de nivel superior que analice todos los nodos que conforman una división, pero esta necesita una lista con todos los valores que puede adquirir, en este caso, \texttt{tVehiculo}. Para ello, se ha hecho una función \texttt{get\_elements}, la cual recibe la muestra completa de datos y la columna de la que se quieren sacar las clases de equivalencia. El código es muy sencillo, se itera toda la columna y se sacan todos los valores a una lista auxiliar, la cual será devuelta una vez se haya iterado todo.
+	 			
+	 			<<>>=
+	 			get_elements  = function(sample, col) {
+	 				elements = c()
+	 				for (element in sample[, col]) {
+	 					if (!(element %in% elements)) {
+	 						elements = c(elements, element)
+	 					}
+	 				}
+	 				elements
+	 			}
+	 			@
+	 			
+	 			La función de nivel superior de la que se hablaba será evidentemente \texttt{get\_gain}, la cual será llamada para obtener la ganancia de información de una división concreta. Esta función es crucial en el algoritmo, ya que de ella dependerá la selección del siguiente nodo. La función llama a \texttt{get\_elements} y a la función \texttt{get\_impurity} para calcular la impureza del padre y de los hijos. Con todas las impurezas, se puede aplicar la fórmula definida al principio de esta sección. Los parámetros que recibe la función son los siguientes:
+	 			
+	 			\begin{itemize}
+	 				\item \texttt{sample}: Muestra de datos actual.
+	 				\item \texttt{left}: Valores de la característica del nodo raíz que conforman el nodo hijo de la izquierda. Este estará compuesto por sucesos que contengan alguno de estos valores en la característica.
+	 				\item \texttt{right}: Valores de la característica del nodo raíz que conforman el nodo hijo de la derecha. Este estará compuesto por sucesos que contengan alguno de estos valores en la característica.
+	 				\item \texttt{criteria}: Nombre de la columna que representa la característica clasificadora en la muestra.
+	 				\item \texttt{col}: Nombre de la columna que representa la característica del nodo raíz en la muestra.
+	 				\item  \texttt{measure}: Medida de la impureza. Este parámetro podrá adquirir los siguientes valores: ``\texttt{entropy}'', ``\texttt{error}'', ``\texttt{gini}''.
+	 			\end{itemize}
+	 			
+	 			{\small
+	 			<<>>=
+	 			get_gain = function(sample, left, right, criteria, col, measure) {
+	 				n = len(sample)
+	 				equivalence_clases = get_elements(sample, criteria)
+	 				impurity_father = get_impurity(sample, col, union(left, right), 
+	 					criteria, equivalence_clases, measure)
+	 				impurity_left = get_impurity(sample, col, left, 
+	 					criteria, equivalence_clases, measure)
+	 				impurity_right = get_impurity(sample, col, right, 
+	 					criteria, equivalence_clases, measure)
+	 				impurity_father - (len(left) / n * impurity_left + 
+	 					len(right) / n * impurity_right)
+	 			}
+	 			@
+	 			}
+	 			
+	 			Una vez se tiene cómo calcular la ganancia de información de una división concreta hay que dar formato a esas divisiones. La pregunta que se plantea es: \textit{¿Cómo se puede representar un árbol con dos nodos hijo y un nodo raíz?}. La estructura de datos que se ha escogido es un \texttt{data.frame}. Esta estructura contendrá columnas que internamente tendrán todos los atributos necesarios para definir una división o clasificación concreta. Estos atributos son los siguientes:
+	 			
+	 			\begin{itemize}
+	 				\item \texttt{parent}: Define la característica del nodo raíz.
+	 				\item \texttt{right\_element}: El valor del clasificador que va a aparecer en el nodo de la derecha (el nodo de la derecha solo estará formado por sucesos con este valor en el clasificador).
+	 				\item \texttt{left}: Valores de la característica del nodo raíz para los cuales un suceso se clasifica en el nodo de la izquierda.
+	 				\item \texttt{right}: Valores de la característica del nodo raíz para los cuales un suceso se clasifica en el nodo de la derecha.
+	 				\item \texttt{gain}. Ganancia de información ($\Delta_I$) de la división.
+	 			\end{itemize}
+	 			
+	 			
+	 			\noindent Además esta función recibe los siguientes parámetros:
+	 			
+	 			\begin{itemize}
+	 				\item \textbf{sample}: Muestra de datos con la que se trabaja para hacer la clasificación.
+	 				\item \textbf{col}: Característica que conformará el nodo raíz de la nueva clasificación.
+	 				\item \textbf{right\_element}: Valor de la columna clasificadora que tendrán los suceso del nodo hijo de la derecha.
+	 				\item \textbf{criteria}: Característica clasificadora.
+	 				\item \textbf{measure}: Medida de impureza que se usará para calcular la ganancia de información.
+	 			\end{itemize}
+	 			
+	 			\noindent El código que crea la nueva clasificación es el siguiente:
+	 			
+	 			{\small
+	 			<<>>=
+	 			create_classification = function(sample, col, right_element, criteria, measure) {
+	 				left = c()
+	 				for (i in 1:len(sample[, col])) {
+	 					element = sample[i, col]
+	 					if (!(element %in% left) && sample[i, criteria] != right_element) {
+	 						left = unlist(append(left, element))
+	 					}
+	 				}
+	 				right = dif(get_elements(sample, col), left)
+	 				if(len(right) > 0 && len(left) > 0) {
+	 					gain = get_gain(sample, left, right, criteria, col, measure)
+	 				} else {
+	 					gain = 0
+	 				}
+	 				data.frame(parent=col, right_element, 
+	 					left=I(list(left)), right=I(list(right)), gain)
+	 			}
+	 			@
+	 			}
+	 			
+	 			La clasificación final va a representarse como un \texttt{data.frame} con el conjunto de divisiones realizadas a lo largo del algoritmo, donde cada fila (o clasificación) representa un nivel del árbol. La característica del nodo raíz se saca con la columna \texttt{parent}, el valor deducido del clasificador en el nodo de la derecha con \texttt{right\_element}, y los valores de la característica del nodo raíz que definen los hijos izquierdo y derecho se sacan con \texttt{left} y \texttt{right}. El nodo de la izquierda estará definido por la siguiente fila del \texttt{data.frame} y así sucesivamente hasta llegar al último árbol que contiene dos hojas. El nodo de la izquierda de este árbol estará definido por los valores restantes en la columna clasificadora de la muestra.\\
+	 			
+	 			En términos prácticos, un \texttt{data.frame} como salida que representa un árbol de decisión no es viable, ya que requiere de un esfuerzo por parte del usuario para entender el resultado de la ejecución. Lo que se busca en esta implementación es proporcionar una salida visual que no requiera de ningún esfuerzo por parte del usuario para entenderla. Es por ello que se ha decidido elaborar una función \texttt{df\_2\_tree}, la cual pasará la información del \texttt{data.frame} a una estructura de árbol, pudiendo ofrecer una salida visual del árbol de decisión final, fruto de la ejecución realizada sobre la muestra introducida. Esta función se ha basado principalmente en el paquete \texttt{data.tree}, explicado en el anexo del documento.\\
+	 			
+	 			Para empezar, la forma en la que se construye la estructura del árbol es de abajo arriba. Esto evidentemente implica un recorrido del \texttt{data.frame} desde la última fila hasta la primera. La función recibe como parámetros el \texttt{data.frame} que define el árbol de decisión, la muestra final de datos y el nombre de la característica clasificadora.\\
+	 			
+	 			Para construir un árbol primero se define el nombre del nodo raíz (con \texttt{Node\$new}), el cual contendrá el valor de la columna \texttt{parent}. Además, se define un atributo \texttt{gain} dentro de ese nuevo nodo que almacena la ganancia de información de la división. Posteriormente, se declara el estilo del nodo, indicando que este debe mostrar visualmente el nombre y la ganancia de información. Esto se hace con la función \texttt{SetNodeStyle}.\\
+	 			
+	 			El nodo de la derecha se define indicando en el atributo del nombre el valor del clasificador que representa ese nodo. Para asociarlo al nodo raíz se hace uso de la función \texttt{AddChildNode} aplicada al nodo raíz. Además, se define un atributo \texttt{label} con los valores de \texttt{right}.\\
+	 			
+	 			El nodo de la izquierda se definirá de dos formas distintas. En la primera iteración, el nombre del mismo serán todos los elementos que quedan en la muestra; mientras que en el resto de iteraciones, en vez de declarar un nodo nuevo, se define como hijo izquierdo el árbol de la anterior iteración. De esta forma, los árboles que vamos creando se van encadenando con el de la iteración siguiente sucesivamente hasta llegar a la raíz. En ambos casos, se define un atributo \texttt{label} con los valores de \texttt{left}.\\
+	 			
+	 			Este atributo \texttt{label} permite que a la hora de mostrar el árbol salgan los valores del nodo raíz que clasifican el nodo izquierdo y el nodo derecho en la arista. Para ello hacemos uso de la función \texttt{SetEdgeStyle}. Una vez se ha terminado de construir la estructura del árbol, con la función \texttt{plot} se muestra todo lo que se ha definido previamente. El código de la función es el siguiente: 
+	 			
+	 			{\small
+	 			<<>>=
+	 			df_2_tree = function(df, final, criteria) {
+	 				last_tree = Node$new(df[nrow(df), "parent"])
+	 				last_tree$gain = round(df[nrow(df), "gain"], 3)
+	 				SetNodeStyle(last_tree, label = paste(last_tree$name, "\n", last_tree$gain))
+	 				new_left_leaf = Node$new(paste(get_elements(final, criteria)))
+	 				new_left_leaf$label = final[nrow(final), df[nrow(df), "parent"]]
+	 				new_left_leaf$gain = ""
+	 				last_tree$AddChildNode(new_left_leaf)
+	 				new_right_leaf = Node$new(df[nrow(df), "right_element"])
+	 				new_right_leaf$label = df[nrow(df), "right"]
+	 				new_right_leaf$gain = ""
+	 				last_tree$AddChildNode(new_right_leaf)
+	 				SetEdgeStyle(new_left_leaf, label = new_left_leaf$label, fontsize = 11)
+	 				SetEdgeStyle(new_right_leaf, label = new_right_leaf$label, fontsize = 11)
+	 				SetNodeStyle(new_left_leaf, label = paste(new_left_leaf$name))
+	 				SetNodeStyle(new_right_leaf, label = paste(new_right_leaf$name))
+	 			
+	 				for (row_index in (nrow(df)-1):1) {
+	 					last_tree$label = df[row_index, "left"]
+	 					new_tree = Node$new(df[row_index, "parent"])
+	 					new_tree$AddChildNode(last_tree)
+	 					right_node = Node$new(df[row_index, "right_element"])
+	 					right_node$label = df[row_index, "right"]
+	 					right_node$gain = ""
+	 					new_tree$AddChildNode(right_node)
+	 					SetEdgeStyle(right_node, label = right_node$label, fontsize = 11)
+	 					SetEdgeStyle(last_tree, label = last_tree$label, fontsize = 11)
+	 					last_tree = new_tree
+	 					last_tree$gain = round(df[row_index, "gain"], 3)
+	 					SetNodeStyle(last_tree, label = 
+	 							paste(last_tree$name, "\n", last_tree$gain))
+	 					SetNodeStyle(right_node, label = paste(right_node$name))
+	 				}
+	 				return(last_tree)
+	 			}
+	 			@
 	 		}
- 			
- 			Una vez se tienen las frecuencias de los nodos, hay que calcular la impureza de los mismos. Para ello, se ha visto previamente que existen tres métodos diferentes (entropía, error y gini). El cálculo de la impureza se realiza en función de las frecuencias en cualquier caso, por lo que será un parámetro obligatorio en las tres funciones. Se tiene una por cada método.\\
- 			
- 			El código de la entropía implementa el cálculo visto previamente. Un matiz importante en esta función es que se controla que, en caso de haber frecuencias con valor 0 o 1, se presentaría un cálculo matemáticamente imposible. Es por ello que en caso de encontrar esos números, el resultado de la operación correspondiente con esa frecuencia será 0.
- 			
- 			<<>>=
- 			entropy = function(frec) {
- 				acum = 0
- 				for (i in 1:len(frec)) {
- 					f = frec[1, i]
- 					if (f != 0 && f != 1) {
- 						acum = acum - f * log(f, 2)
- 					}
- 				}
- 				acum
- 			}
- 			@
- 			
- 			El código del método de error:
- 			
- 			<<>>=
- 			error = function(frec) {
- 				1 - max(frec)
- 			}
- 			@
- 			
- 			Y el del método Gini:
- 			
- 			<<>>=
- 			gini = function(frec) {
- 				acum = 0
- 				for (i in 1:len(frec)) {
- 					f = frec[1, i]
- 					acum = acum + f^2
- 				}
- 				1 - acum
- 			}
- 			@
- 			
- 			Con estas funciones auxiliares se puede confeccionar una función \texttt{get\_impurity} que llame adecuadamente a estas anteriores y permita obtener el valor de la impureza de un nodo. Los parámetros que deberá tener esta función son los mismos que la función \texttt{get\_frec} y un parámetro adicional que indique la medida con la que se quiere calcular la impureza. La función recoge las frecuencias del nodo y llama a una de las tres últimas funciones que se han visto, la cual regresa el valor de la impureza de un nodo.
- 			
- 			{\small
- 			<<>>=
- 			get_impurity = function(sample, col, elements, criteria,
- 					 equivalence_clases, measure) {
- 				frec = get_frec(sample, col, criteria, 
- 					elements, equivalence_clases)
- 				switch(measure, 
- 						"entropy" = entropy(frec), 
- 						"error" = error(frec), 
- 						"gini" = gini(frec))
- 			}
- 			@
- 			}
- 			
- 			Una consideración es que se necesitan todas las clases de equivalencia (\texttt{equivalence\_classes}) de la característica clasificadora, para que este código pueda funcionar. Al final, la función \texttt{get\_impurity} será llamada por otra de nivel superior que analice todos los nodos que conforman una división, pero esta necesita una lista con todos los valores que puede adquirir, en este caso, \texttt{tVehiculo}. Para ello, se ha hecho una función \texttt{get\_elements}, la cual recibe la muestra completa de datos y la columna de la que se quieren sacar las clases de equivalencia. El código es muy sencillo, se itera toda la columna y se sacan todos los valores a una lista auxiliar, la cual será devuelta una vez se haya iterado todo.
- 			
- 			<<>>=
- 			get_elements  = function(sample, col) {
- 				elements = c()
- 				for (element in sample[, col]) {
- 					if (!(element %in% elements)) {
- 						elements = c(elements, element)
- 					}
- 				}
- 				elements
- 			}
- 			@
- 			
- 			La función de nivel superior de la que se hablaba será evidentemente \texttt{get\_gain}, la cual será llamada para obtener la ganancia de información de una división concreta. Esta función es crucial en el algoritmo, ya que de ella dependerá la selección del siguiente nodo. La función llama a \texttt{get\_elements} y a la función \texttt{get\_impurity} para calcular la impureza del padre y de los hijos. Con todas las impurezas, se puede aplicar la fórmula definida al principio de esta sección. Los parámetros que recibe la función son los siguientes:
- 			
- 			\begin{itemize}
- 				\item \textbf{sample}: Muestra de datos actual.
- 				\item \textbf{left}: Valores de la característica del nodo raíz que conforman el nodo hijo de la izquierda. Este estará compuesto por sucesos que contengan alguno de estos valores en la característica.
- 				\item \textbf{right}: Valores de la característica del nodo raíz que conforman el nodo hijo de la derecha. Este estará compuesto por sucesos que contengan alguno de estos valores en la característica.
- 				\item \textbf{criteria}: Nombre de la columna que representa la característica clasificadora en la muestra.
- 				\item \textbf{col}: Nombre de la columna que representa la característica del nodo raíz en la muestra.
- 				\item  \textbf{measure}: Medida de la impureza. Este parámetro podrá adquirir los siguientes valores: ``entropy'', ``error'', ``gini''.
- 			\end{itemize}
- 			
- 			{\tiny
- 			<<>>=
- 			get_gain = function(sample, left, right, criteria, col, measure) {
- 				n = len(sample)
- 				equivalence_clases = get_elements(sample, criteria)
- 				impurity_father = get_impurity(sample, col, union(left, right), criteria, equivalence_clases, measure)
- 				impurity_left = get_impurity(sample, col, left, criteria, equivalence_clases, measure)
- 				impurity_right = get_impurity(sample, col, right, criteria, equivalence_clases, measure)
- 				impurity_father - (len(left) / n * impurity_left + len(right) / n * impurity_right)
- 			}
- 			@
- 			}
- 			
- 			Una vez se tiene cómo calcular la ganancia de información de una división concreta hay que dar formato a esas divisiones. La pregunta que se plantea es: \textit{¿Cómo se puede representar un árbol con dos nodos hijo y un nodo raíz?}. La estructura de datos que se ha escogido es un \texttt{data.frame}. Esta estructura contendrá columnas que internamente tendrán todos los atributos necesarios para definir una división o clasificación concreta. Estos atributos son los siguientes:
- 			
- 			\begin{itemize}
- 				\item \textbf{parent}: Define la característica del nodo raíz.
- 				\item \textbf{right\_element}: El valor del clasificador que va a aparecer en el nodo de la derecha (el nodo de la derecha solo estará formado por sucesos con este valor en el clasificador).
- 				\item \textbf{left}: Valores de la característica del nodo raíz para los cuales un suceso se clasifica en el nodo de la izquierda.
- 				\item \textbf{right}: Valores de la característica del nodo raíz para los cuales un suceso se clasifica en el nodo de la derecha.
- 				\item \textbf{gain}. Ganancia de información ($\vartriangle_i$) de la división.
- 			\end{itemize}
- 			
- 			
- 			Además esta función recibe los siguientes parámetros:
- 			
- 			\begin{itemize}
- 				\item \textbf{sample}: Muestra de datos con la que se trabaja para hacer la clasificación.
- 				\item \textbf{col}: Característica que conformará el nodo raíz de la nueva clasificación.
- 				\item \textbf{right\_element}: Valor de la columna clasificadora que tendrán los suceso del nodo hijo de la derecha.
- 				\item \textbf{criteria}: Característica clasificadora.
- 				\item \textbf{measure}: Medida de impureza que se usará para calcular la ganancia de información.
- 			\end{itemize}
- 			
- 			El código que crea la nueva clasificación es el siguiente:
- 			
- 			{\small
- 			<<>>=
- 			create_classification = function(sample, col, right_element, criteria, measure) {
- 				left = c()
- 				for (i in 1:len(sample[, col])) {
- 					element = sample[i, col]
- 					if (!(element %in% left) && sample[i, criteria] != right_element) {
- 						left = unlist(append(left, element))
- 					}
- 				}
- 				right = dif(get_elements(sample, col), left)
- 				if(len(right) > 0 && len(left) > 0) {
- 					gain = get_gain(sample, left, right, criteria, col, measure)
- 				} else {
- 					gain = 0
- 				}
- 				data.frame(parent=col, right_element, 
- 					left=I(list(left)), right=I(list(right)), gain)
- 			}
- 			@
- 			}
- 			
- 			La clasificación final va a representarse como un \texttt{data.frame} con el conjunto de divisiones realizadas a lo largo del algoritmo, donde cada fila (o clasificación) representa un nivel del árbol. La característica del nodo raíz se saca con la columna \texttt{parent}, el valor deducido del clasificador en el nodo de la derecha con \texttt{right\_element}, y los valores de la característica del nodo raíz que definen los hijos izquierdo y derecho se sacan con \texttt{left} y \texttt{right}. El nodo de la izquierda estará definido por la siguiente fila del \texttt{data.frame} y así sucesivamente hasta llegar al último árbol que contiene dos hojas. El nodo de la izquierda de este árbol estará definido por los valores restantes en la columna clasificadora de la muestra.\\
- 			
- 			En términos prácticos, un \texttt{data.frame} como salida que representa un árbol de decisión no es viable, ya que requiere de un esfuerzo por parte del usuario para entender el resultado de la ejecución. Lo que se busca en esta implementación es proporcionar una salida visual que no requiera de ningún esfuerzo por parte del usuario para entenderla. Es por ello que se ha decidido elaborar una función \texttt{df\_2\_tree}, la cual pasará la información del \texttt{data.frame} a una estructura de árbol, pudiendo ofrecer una salida visual del árbol de decisión final, fruto de la ejecución realizada sobre la muestra introducida. Esta función se ha basado principalmente en el paquete \texttt{data.tree}, explicado en el anexo del documento.\\
- 			
- 			Para empezar, la forma en la que se construye la estructura del árbol es de abajo arriba. Esto evidentemente implica un recorrido del \texttt{data.frame} desde la última fila hasta la primera. La función recibe como parámetros el \texttt{data.frame} que define el árbol de decisión, la muestra final de datos y el nombre de la característica clasificadora.\\
- 			
- 			Para construir un árbol primero se define el nombre del nodo raíz (con \texttt{Node\$new}), el cual contendrá el valor de la columna \texttt{parent}. Además, se define un atributo \texttt{gain} dentro de ese nuevo nodo que almacena la ganancia de información de la división. Posteriormente, se declara el estilo del nodo, indicando que este debe mostrar visualmente el nombre y la ganancia de información. Esto se hace con la función \texttt{SetNodeStyle}.\\
- 			
- 			El nodo de la derecha se define indicando en el atributo del nombre el valor del clasificador que representa ese nodo. Para asociarlo al nodo raíz se hace uso de la función \texttt{AddChildNode} aplicada al nodo raíz. Además, se define un atributo \texttt{label} con los valores de \texttt{right}.\\
- 			
- 			El nodo de la izquierda se definirá de dos formas distintas. En la primera iteración, el nombre del mismo serán todos los elementos que quedan en la muestra; mientras que en el resto de iteraciones, en vez de declarar un nodo nuevo, se define como hijo izquierdo el árbol de la anterior iteración. De esta forma, los árboles que vamos creando se van encadenando con el de la iteración siguiente sucesivamente hasta llegar a la raíz. En ambos casos, se define un atributo \texttt{label} con los valores de \texttt{left}.\\
- 			
- 			Este atributo \texttt{label} permite que a la hora de mostrar el árbol salgan los valores del nodo raíz que clasifican el nodo izquierdo y el nodo derecho en la arista. Para ello hacemos uso de la función \texttt{SetEdgeStyle}. Una vez se ha terminado de construir la estructura del árbol, con la función \texttt{plot} se muestra todo lo que se ha definido previamente. El código de la función es el siguiente: 
- 			
- 			{\small
- 			<<>>=
- 			df_2_tree = function(df, final, criteria) {
- 				last_tree = Node$new(df[nrow(df), "parent"])
- 				last_tree$gain = round(df[nrow(df), "gain"], 3)
- 				SetNodeStyle(last_tree, label = paste(last_tree$name, "\n", last_tree$gain))
- 				new_left_leaf = Node$new(paste(get_elements(final, criteria)))
- 				new_left_leaf$label = final[nrow(final), df[nrow(df), "parent"]]
- 				new_left_leaf$gain = ""
- 				last_tree$AddChildNode(new_left_leaf)
- 				new_right_leaf = Node$new(df[nrow(df), "right_element"])
- 				new_right_leaf$label = df[nrow(df), "right"]
- 				new_right_leaf$gain = ""
- 				last_tree$AddChildNode(new_right_leaf)
- 				SetEdgeStyle(new_left_leaf, label = new_left_leaf$label, fontsize = 11)
- 				SetEdgeStyle(new_right_leaf, label = new_right_leaf$label, fontsize = 11)
- 				SetNodeStyle(new_left_leaf, label = paste(new_left_leaf$name))
- 				SetNodeStyle(new_right_leaf, label = paste(new_right_leaf$name))
- 			
- 				for (row_index in (nrow(df)-1):1) {
- 					last_tree$label = df[row_index, "left"]
- 					new_tree = Node$new(df[row_index, "parent"])
- 					new_tree$AddChildNode(last_tree)
- 					right_node = Node$new(df[row_index, "right_element"])
- 					right_node$label = df[row_index, "right"]
- 					right_node$gain = ""
- 					new_tree$AddChildNode(right_node)
- 					SetEdgeStyle(right_node, label = right_node$label, fontsize = 11)
- 					SetEdgeStyle(last_tree, label = last_tree$label, fontsize = 11)
- 					last_tree = new_tree
- 					last_tree$gain = round(df[row_index, "gain"], 3)
- 					SetNodeStyle(last_tree, label = 
- 							paste(last_tree$name, "\n", last_tree$gain))
- 					SetNodeStyle(right_node, label = paste(right_node$name))
- 				}
- 				return(last_tree)
- 			}
- 			@
- 		}
- 			
- 			Todas esta funciones van a trabajar conjuntamente para proporcionar la salida de la ejecución del algoritmo. El usuario llamará a una función, pasando la muestra de datos, las características con las que se va a clasificar, el clasificador y el método de cálculo de la impureza de los nodos. Esta función \texttt{hunt} será la encargada de la ejecución completa del algoritmo. 
- 			
- 			Primeramente se va a ver el código:
- 			
- 			{\tiny
- 			<<>>=
- 			hunt = function(sample, classes, criteria, measure, details = FALSE) {
- 				final_clasification = data.frame()
- 				best_gain = -1
- 				best_clasification = NULL
- 				while (nrow(sample) > 0 && best_gain != 0) {
- 					best_gain = -1
- 					for (col in classes) {
- 						for (element in get_elements(sample, criteria)) {
- 							clasification = create_classification(sample, col, element, criteria, measure)
- 							actual_gain = clasification$gain
- 							if (actual_gain > best_gain) {
- 								best_gain = actual_gain
- 								best_clasification = clasification
- 							}
- 						}
- 					}
- 					if (best_gain != 0) {
- 						sample = subset(sample, sample[, best_clasification$parent] %in% unlist(best_clasification$left))
- 						final_clasification = rbind(final_clasification, best_clasification)
- 						if (details) {
- 							cat("\nIteración", nrow(final_clasification))
- 							cat("\n============\n")
- 							cat("Se escoge el nodo", best_clasification$parent, "con una ganancia de", best_gain)
- 							cat("\nLos sucesos que tengan el/los valor/es", paste(best_clasification$right),
- 							 "en ese nodo se clasifican como", best_clasification$right_element)
- 							cat("\nLa nueva muestra es:\n")
- 							print(sample)
- 							cat("\n")
- 						}
- 					}
- 				}
- 			
- 				tree = df_2_tree(final_clasification, sample, criteria)
- 				cat("\nÁrbol de decisión\n=================\n")
- 				print(tree, "label", "gain")
- 				tree
- 			}
- 			@
- 			}
- 			
- 			El código selecciona la mejor división en base a la muestra actual de datos. Para ello se hacen todas las divisiones posibles con todas las características, y en cada una de ellas, se hace una división por cada valor que puede adquirir el clasificador, dejando este en el nodo de la derecha. En la muestra del ejercicio se hacen divisiones por \texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}. Dentro de cada característica se hacen divisiones dejando como elemento de la derecha Moto, Camión, Coche y Bicicleta. De todas estas posibles divisiones se calcula la ganancia de información de cada una de ellas, y se coge la división que devuelve la mayor ganancia de información. Esta será conocida como \texttt{best\_clasification}. \\
- 			
- 			Si la mejor clasificación tiene una ganancia de información mayor que 0 (es decir, que clasifique algo), se debe recortar la muestra. Para ello, se hace uso de la función \texttt{subset}, la cual devuelve un \texttt{data.frame} con los sucesos de la muestra que no han sido aún clasificados (que su valor en la característica del nodo raíz es cualquiera de los del nodo izquierdo). Además, se añade al conjunto de clasificaciones la nueva clasificación.\\
- 			
- 			Este procedimiento se repite hasta que no se tengan más sucesos en la muestra (no hay nada más que clasificar) o hasta que la mejor ganancia de información sea 0 (lo que querrá decir que no se puede clasificar nada más en la muestra restante).\\
- 			
- 			Una vez se tiene el \texttt{data.frame} final representando el árbol de decisión, se llama a la función \texttt{data\_2\_tree} para pasar el mismo a una estructura de árbol.\\ 
- 			
- 			La función cuenta con un parámetro \texttt{details} (inicialmente establecido a \texttt{FALSE}), el cual si se pone a \texttt{TRUE} indica al usuario que división se ha escogido en cada paso (con su $\vartriangle_i$) y qué muestra se queda después de haber dividido.
- 			
- 			Si se ejecuta la función con la muestra del ejercicio se obtiene la siguiente salida:
- 			
- 			{\small
- 			<<>>=
- 			tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"),
- 			 "tVehículo", "error", TRUE)
- 			@
- 			}
- 			
- 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en html, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en el pdf. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
- 			
- 			<<fig.cap="Árbol de datos">>=
- 			plot(tree)
- 			@
- 			
- 			Por lo tanto, se pueden sacar las siguientes conclusiones del ejercicio:
- 			
- 			\begin{itemize}
- 				\item Si un vehículo tiene carnet N es una bicicleta.
- 				\item En caso contrario, si un vehículo tiene carnet A se trata de una moto.
- 				\item Si el tipo de carnet es B y el vehículo tiene 6 ruedas, es un camión.
- 				\item En cualquier otro caso, si el vehículo tiene 4 ruedas es un coche y si tiene 2 ruedas es una moto.
- 			\end{itemize}				
+	 			
+	 			Todas esta funciones van a trabajar conjuntamente para proporcionar la salida de la ejecución del algoritmo. El usuario llamará a una función, pasando la muestra de datos, las características con las que se va a clasificar, el clasificador y el método de cálculo de la impureza de los nodos. Esta función \texttt{hunt} será la encargada de la ejecución completa del algoritmo. Primeramente se va a ver el código:
+	 			
+	 			{\small
+	 			<<>>=
+	 			hunt = function(sample, classes, criteria, measure, details = FALSE) {
+	 				final_clasification = data.frame()
+	 				best_gain = -1
+	 				best_clasification = NULL
+	 				while (nrow(sample) > 0 && best_gain != 0) {
+	 					best_gain = -1
+	 					for (col in classes) {
+	 						for (element in get_elements(sample, criteria)) {
+	 							clasification = create_classification(sample, col, 
+	 								element, criteria, measure)
+	 							actual_gain = clasification$gain
+	 							if (actual_gain > best_gain) {
+	 								best_gain = actual_gain
+	 								best_clasification = clasification
+	 							}
+	 						}
+	 					}
+	 					if (best_gain != 0) {
+	 						sample = subset(sample, sample[,best_clasification$parent] 
+	 							%in% unlist(best_clasification$left))
+	 						final_clasification = rbind(final_clasification, 
+	 							best_clasification)
+	 						if (details) {
+	 							cat("\nIteración", nrow(final_clasification))
+	 							cat("\n============\n")
+	 							cat("Se escoge el nodo", best_clasification$parent,
+	 								 "con una ganancia de", best_gain)
+	 							cat("\nLos sucesos que tengan el/los valor/es",
+	 								 paste(best_clasification$right),
+	 							 "en ese nodo se clasifican como", 
+	 							 	best_clasification$right_element)
+	 							cat("\nLa nueva muestra es:\n")
+	 							print(sample)
+	 							cat("\n")
+	 						}
+	 					}
+	 				}
+	 			
+	 				tree = df_2_tree(final_clasification, sample, criteria)
+	 				cat("\nÁrbol de decisión\n=================\n")
+	 				print(tree, "label", "gain")
+	 				tree
+	 			}
+	 			@
+	 			}
+	 			
+	 			El código selecciona la mejor división en base a la muestra actual de datos. Para ello se hacen todas las divisiones posibles con todas las características, y en cada una de ellas, se hace una división por cada valor que puede adquirir el clasificador, dejando este en el nodo de la derecha. En la muestra del ejercicio se hacen divisiones por \texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}. Dentro de cada característica se hacen divisiones dejando como elemento de la derecha Moto, Camión, Coche y Bicicleta. De todas estas posibles divisiones se calcula la ganancia de información de cada una de ellas, y se coge la división que devuelve la mayor ganancia de información. Esta será conocida como \texttt{best\_clasification}. \\
+	 			
+	 			Si la mejor clasificación tiene una ganancia de información mayor que 0 (es decir, que clasifique algo), se debe recortar la muestra. Para ello, se hace uso de la función \texttt{subset}, la cual devuelve un \texttt{data.frame} con los sucesos de la muestra que no han sido aún clasificados (que su valor en la característica del nodo raíz es cualquiera de los del nodo izquierdo). Además, se añade al conjunto de clasificaciones la nueva clasificación.\\
+	 			
+	 			Este procedimiento se repite hasta que no se tengan más sucesos en la muestra (no hay nada más que clasificar) o hasta que la mejor ganancia de información sea 0 (lo que querrá decir que no se puede clasificar nada más en la muestra restante). Una vez se tiene el \texttt{data.frame} final representando el árbol de decisión, se llama a la función \texttt{data\_2\_tree} para pasar el mismo a una estructura de árbol.\\ 
+	 			
+	 			La función cuenta con un parámetro \texttt{details} (inicialmente establecido a \texttt{FALSE}), el cual si se pone a \texttt{TRUE} indica al usuario que división se ha escogido en cada paso (con su $\Delta_I$) y qué muestra se queda después de haber dividido. Si se ejecuta la función con la muestra del ejercicio se obtiene la siguiente salida:
+	 			
+	 			{\small
+	 			<<>>=
+	 			tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"),
+	 			 "tVehículo", "error", TRUE)
+	 			@
+	 			}
+	 			
+	 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en html, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en el pdf. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
+	 			
+	 			<<fig.cap="Árbol de datos">>=
+	 			plot(tree)
+	 			@
+	 			
+	 			Por lo tanto, se pueden sacar las siguientes conclusiones del ejercicio:
+	 			
+	 			\begin{itemize}
+	 				\item Si un vehículo tiene carnet N es una bicicleta.
+	 				\item En caso contrario, si un vehículo tiene carnet A se trata de una moto.
+	 				\item Si el tipo de carnet es B y el vehículo tiene 6 ruedas, es un camión.
+	 				\item En cualquier otro caso, si el vehículo tiene 4 ruedas es un coche y si tiene 2 ruedas es una moto.
+	 			\end{itemize}				
  			
  			\subsection{Regresión lineal}
  			
@@ -1402,9 +1419,7 @@
  					\end{gathered}
  				\end{equation}
  				
- 				Para el cálculo de estos parámetros se necesita hacer uso de funciones del \Cref{App:Libreria} la media aritmética, la desviación típica, la varianza y la covarianza. 
- 				
- 				Finalmente, la función \texttt{regression\_line} calcula los parámetros $a$ y $b$ mediante la \Cref{ec:reg_param}. Devuelve el resultado de forma matricial para más tarde trabajar de forma más cómoda. 
+ 				Para el cálculo de estos parámetros se necesita hacer uso de funciones del \Cref{ap:Libreria} la media aritmética, la desviación típica, la varianza y la covarianza. Finalmente, la función \texttt{regression\_line} calcula los parámetros $a$ y $b$ mediante la \Cref{ec:reg_param}. Devuelve el resultado de forma matricial para más tarde trabajar de forma más cómoda. 
  				
  				$$
  				\textbf{P} = \begin{pmatrix}
@@ -1515,318 +1530,308 @@
  				
  	\appendix
  	
- 	\chapter{Librería de Funciones Auxiliares}\label{App:Libreria}
+ 	\chapter{Librería de funciones auxiliares}\label{ap:Libreria}
  	
 	 	Para finalizar, se explicará la librería externa realizada (\texttt{data/aux\_functions.R}), en la que se encuentran funciones auxiliares que ya fueron programadas en la PL1 o que no forman parte de un algoritmo en sí, y que además se reutilizan en varios de ellos.
 	 	
 	 	\section{Funciones de la PL1}
 	 	
-	 	Se han reutilizado las siguientes funciones de la PL1:
-	 	
-	 	\begin{enumerate}
-	 		\item \texttt{len}. Esta función calcula la longitud de una lista dada.
-	 		
- 		<<>>=
- 		len = function(list) {
- 			count = 0
- 			for (element in list) {
- 				count = count + 1
- 			}
- 			count
- 		}
- 		@
- 		
- 		\item \texttt{fcd\_mean}. Esta función calcula la media aritmética de una lista dada. Es equivalente a la función \texttt{mean} del paquete \texttt{base} de R. Se define la media aritmética como:
- 		
- 		$$
- 		fcd\_mean = \frac{\displaystyle\sum_{i=1}^n (x_i)}{n}
- 		$$
- 		
- 		<<>>=
- 		fcd_mean = function(list) {
- 			add = 0
- 			for (i in 1:len(list)) {
- 				add = add + list[i]
- 			}
- 			add / len(list)
- 		}
- 		@
- 		
- 		\item \texttt{union}. Realiza la unión de dos conjuntoss $A \cup B$ que resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$.
- 		
- 		<<>>=
- 		union = function(c1, c2) {
- 			if (len(c1) == 0) {
- 				c2
- 			} else if (is.element(c1[1], c2)) {
- 				union(c1[-1], c2)
- 			} else {
- 				union(c1[-1], append(c2, c1[1]))
-	 		}
- 		}
- 		@
- 		
- 		\item \texttt{dif}. Realiza la diferencia de dos conjuntos $A \backslash B$ que da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.
- 		
- 		<<>>=
- 		dif = function(c1, c2) {
- 			res = c()
- 			for (element in c1) {
- 				if (!(element %in% c2)) {
- 					res = c(res, element)
- 				}
- 			}
- 			res
- 		}
- 		@
- 		
- 		\item \texttt{standard\_dev}. Esta función calcula la desviación típica de un conjunto de datos. No es posible utilizar la función \texttt{sd} del paquete \texttt{base} ya que la fórmula interna que utiliza divide entre \texttt{N-1} en lugar de entre \texttt{N}, siendo \texttt{N} la longitud del conjunto. Se define la desviación típica como:
- 		
- 		$$
- 		standard\_dev = \sqrt{\frac{\displaystyle\sum_{i=1}^n (x_i-\bar{x})^2}{n}}
- 		$$
- 		
- 		<<>>=
- 		standard_dev = function(list) {
- 			mean = fcd_mean(list)
- 			n = len(list)
- 			add = 0
- 			for (i in 1:n) {
- 				add = add + ((list[i] - mean)^2)
- 			}
- 			sqrt(add/n)
- 		}		
- 		@
- 		
- 		\item \texttt{variance}. Calcula la varianza de un conjunto de elementos dado. Nuevamente, no es posible utilizar la función \texttt{var} del paquete \texttt{base} por la misma razón que la desviación típica. Se define la varianza como el cuadrado de la desviación típica.
- 		
- 		$$
- 		variance = sd^2
- 		$$
- 		
- 		<<>>=
- 		variance = function(list) {
- 			dev = standard_dev(list)
- 			var = dev^2
- 			var
- 		}
- 		@
- 		
-	 	\end{enumerate}
+		 	Se han reutilizado las siguientes funciones de la PL1:
+		 	
+		 	\begin{enumerate}[label = \textbf{\arabic*.}]
+		 		\item \texttt{len}. Esta función calcula la longitud de una lista dada.
+			 		
+		 		<<>>=
+		 		len = function(list) {
+		 			count = 0
+		 			for (element in list) {
+		 				count = count + 1
+		 			}
+		 			count
+		 		}
+		 		@
+		 		
+		 		\item \texttt{fcd\_mean}. Esta función calcula la media aritmética de una lista dada. Es equivalente a la función \texttt{mean} del paquete \texttt{base} de R. Se define la media aritmética como:
+		 		
+		 		$$
+		 		\bar{x} = \frac{\displaystyle\sum_{i=1}^n x_i}{n}
+		 		$$
+		 		
+		 		<<>>=
+		 		fcd_mean = function(list) {
+		 			add = 0
+		 			for (i in 1:len(list)) {
+		 				add = add + list[i]
+		 			}
+		 			add / len(list)
+		 		}
+		 		@
+		 		
+		 		\item \texttt{union}. Realiza la unión de dos conjuntos $A \cup B$ que resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$.
+		 		
+		 		<<>>=
+		 		union = function(c1, c2) {
+		 			if (len(c1) == 0) {
+		 				c2
+		 			} else if (is.element(c1[1], c2)) {
+		 				union(c1[-1], c2)
+		 			} else {
+		 				union(c1[-1], append(c2, c1[1]))
+	 				}
+		 		}
+		 		@
+		 		
+		 		\item \texttt{dif}. Realiza la diferencia de dos conjuntos $A \backslash B$ que da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.
+		 		
+		 		<<>>=
+		 		dif = function(c1, c2) {
+		 			res = c()
+		 			for (element in c1) {
+		 				if (!(element %in% c2)) {
+		 					res = c(res, element)
+		 				}
+		 			}
+		 			res
+		 		}
+		 		@
+		 		
+		 		\item \texttt{standard\_dev}. Esta función calcula la desviación típica de un conjunto de datos. No es posible utilizar la función \texttt{sd} del paquete \texttt{base} ya que la fórmula interna que utiliza divide entre $n-1$ en lugar de entre $n$, siendo $n$ la longitud del conjunto. Se define la desviación típica como:
+		 		
+		 		$$
+		 		s = \sqrt{\frac{\displaystyle\sum_{i=1}^n (x_i-\bar{x})^2}{n}}
+		 		$$
+		 		
+		 		<<>>=
+		 		standard_dev = function(list) {
+		 			mean = fcd_mean(list)
+		 			n = len(list)
+		 			add = 0
+		 			for (i in 1:n) {
+		 				add = add + ((list[i] - mean)^2)
+		 			}
+		 			sqrt(add/n)
+		 		}		
+		 		@
+		 		
+		 		\item \texttt{variance}. Calcula la varianza de un conjunto de elementos dado. Nuevamente, no es posible utilizar la función \texttt{var} del paquete \texttt{base} por la misma razón que la desviación típica. Se define la varianza como el cuadrado de la desviación típica.
+		 		
+		 		$$
+		 		s^2
+		 		$$
+		 		
+		 		<<>>=
+		 		variance = function(list) {
+		 			dev = standard_dev(list)
+		 			var = dev^2
+		 			var
+		 		}
+		 		@
+		 		
+		 	\end{enumerate}
 	 	
 	 	\section{Nuevas funciones}
 	 	
-	 	Se han creado dos nuevas funciones que se reutilizan en distintos algoritmos.
+		 	Se han creado dos nuevas funciones que se reutilizan en distintos algoritmos.
+		 	
+		 	\begin{enumerate}[label = \textbf{\arabic*.}]
+		 		
+		 		\item \texttt{euc\_distance}. Esta función calcula la distancia euclídea entre dos puntos de dos coordenadas. Se define la distancia euclídea como:
+			 		
+		 		$$
+		 		\dt(p_i, p_j) = \sqrt{(p_{i_1}-p_{j_1})^2 + (p_{i_2}-p_{j_2})^2}
+		 		$$
+		 		
+		 		<<>>=
+		 		euc_distance = function(p1, p2) {
+		 			sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
+		 		}
+		 		@
+		 		
+		 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Para calcular la covarianza es necesario realizar un producto escalar, que en R se realiza con el operador \texttt{\%*\%}. Se define la covarianza como:
+		 		
+		 		$$
+		 		S_{xy} = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}
+		 		$$
+		 		
+		 		<<>>=
+		 		covariance = function(x, y) {
+		 			if (len(x) != len(y)) {
+		 				stop("X e Y deben tener la misma dimensión")
+		 			}
+		 			else {
+		 				sum = x %*% y
+		 				(sum/len(x))-(fcd_mean(x)*fcd_mean(y))
+		 			}
+		 		}
+		 		@
+	 		
+	 	\end{enumerate}
+ 	
+ 	
+ 	\chapter{Paquetes externos}\label{ap:PaquetesExternos}
+ 	
+	 	\section{\texttt{openxlsx}}
 	 	
-	 	\begin{enumerate}
-	 		
-	 		\item \texttt{euc\_distance}. Esta función calcula la distancia euclídea entre dos puntos de dos coordenadas. Se define la distancia euclídea como:
-	 		
-	 		$$
-	 		euc\_distance(p_i, p_j) = \sqrt{(p_{i_1}-p_{j_1})^2 + (p_{i_2}-p_{j_2})^2}
-	 		$$
- 		
- 		<<>>=
- 		euc_distance = function(p1, p2) {
- 			sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
- 		}
- 		@
- 		
- 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Para calcular la covarianza es necesario realizar un producto escalar, que en R se realiza con el operador \texttt{\%*\%}. Se define la covarianza como:
- 		
- 		$$
- 		covariance(x,y) = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
- 		$$
- 		
- 		<<>>=
- 		covariance = function(x, y) {
- 			if (len(x) != len(y)) {
- 				stop("X e Y deben tener la misma dimensión")
- 			}
- 			else {
- 				sum = x %*% y
- 				(sum/len(x))-(fcd_mean(x)*fcd_mean(y))
- 			}
- 		}
- 		@
- 		
- 	\end{enumerate}
+		 	El paquete \texttt{openxlsx} de R es una herramienta para manejar archivos Excel en formato \texttt{xlsx}. Proporciona funciones para leer, escribir, y modificar estos archivos sin depender de Java. Una de sus funciones más importantes es \texttt{read.xlsx}, que permite leer hojas de cálculo Excel en R. Esta función es útil para importar datos complejos, ofreciendo opciones para manejar diferentes tipos de datos y formatos.\\
+		 	
+		 	La función \texttt{read.xlsx} tiene argumentos clave que determinan cómo se lee una hoja de cálculo de Excel:
+		 	
+		 	\begin{itemize}
+		 		\item \texttt{xlsxFile}: Ruta al archivo Excel, objeto Workbook o URL.
+		 		\item \texttt{sheet}: Especifica la hoja de cálculo a leer, por nombre o índice.
+		 		\item \texttt{startRow}: Define la primera fila de datos a leer, ignorando las anteriores.
+		 		\item \texttt{colNames}: Si es \texttt{TRUE}, la primera fila de datos se utiliza como nombres de columna.
+		 		\item \texttt{rowNames}: Si es \texttt{TRUE}, la primera columna se usa para los nombres de fila.
+		 		\item \texttt{skipEmptyRows / skipEmptyCols}: Determinan si se ignoran filas o columnas vacías.
+		 		\item \texttt{cols}: Un vector numérico que especifica qué columnas leer.
+		 		\item \texttt{rows}: Un vector numérico que especifica qué filas leer.
+		 		\item \texttt{detectDates}: Si es \texttt{TRUE}, intenta convertir cadenas de texto que parecen fechas en fechas de R.
+		 		\item \texttt{na.strings}: Define qué cadenas se interpretarán como \texttt{NA}.
+		 	\end{itemize}
+		 	
+		 	Estos argumentos ofrecen flexibilidad para manejar datos de Excel en R. Además, \texttt{openxlsx} incluye funciones para escribir datos en Excel, personalizar el estilo de las celdas, y manejar las hojas de cálculo, entre otras capacidades. La documentación del paquete en CRAN brinda ejemplos prácticos y guías detalladas para su uso eficiente.
  	
+ 		\section{\texttt{data.tree}}
  	
- 	\chapter{Paquetes externos}\label{App:PaquetesExternos}
+		 	El paquete \texttt{data.tree} de R es una estructura de datos para manejar datos jerárquicos. Permite a los usuarios de R crear estructuras de árbol a partir de datos jerárquicos y recorrer el árbol en varios órdenes. Es posible agregar y acumular valores, imprimir y trazar el árbol, convertir a y desde \texttt{data.frame}, entre otras funcionalidades. El paquete es útil en una variedad de aplicaciones, incluyendo árboles de decisión, aprendizaje automático, finanzas y la conversión de y hacia JSON, por nombrar algunos.\\
+		 	
+		 	El paquete provee herramientas para convertir estructuras de datos entre diferentes formatos como \texttt{data.frame}, listas de listas, dendrogramas, etc. Los usuarios pueden construir árboles de datos de manera programática o mediante conversión de otros formatos. Además, \texttt{data.tree} facilita la visualización de datos jerárquicos y puede integrarse con widgets HTML para una presentación más interactiva.\\
+		 	
+		 	Una característica distintiva de \texttt{data.tree} es su capacidad para manejar grandes volúmenes de datos jerárquicos de manera eficiente, lo cual a menudo puede ser complicado con las estructuras de datos básicas en R. Esto lo hace particularmente valioso para prototipos rápidos de algoritmos de búsqueda, pruebas de nuevas ideas de clasificación y más. Algunas de las funciones que se han utilizado en la realización de la práctica son los siguientes.
  	
- 	\section{openxlsx}
+ 			\subsection{\texttt{Traverse}}
  	
- 	El paquete \texttt{openxlsx} de R es una herramienta para manejar archivos Excel en formato \texttt{xlsx}. Proporciona funciones para leer, escribir, y modificar estos archivos sin depender de Java. Una de sus funciones más importantes es \texttt{read.xlsx}, que permite leer hojas de cálculo Excel en R. Esta función es útil para importar datos complejos, ofreciendo opciones para manejar diferentes tipos de datos y formatos.\\
+			 	La función \texttt{Traverse} se utiliza para recorrer un árbol o un subárbol de \texttt{Node} en un orden específico. Devuelve una lista de objetos \texttt{Node} que han sido filtrados y podados por las funciones \texttt{filterFun} y \texttt{pruneFun}. Los argumentos más importantes son:
+			 	
+			 	\begin{itemize}
+			 		\item \texttt{node}: Es el nodo raíz del árbol o subárbol que se va a recorrer.
+			 		\item \texttt{traversal}: Define el orden en el que se recorre el árbol. Los valores posibles son pre-order, post-order, in-order, level, ancestor, o una función personalizada. Cada uno de estos términos se refiere a un método específico de recorrido del árbol.
+			 		
+			 		\begin{itemize}
+			 			\item \texttt{pre-order}: Visita primero el nodo, luego recorre cada subárbol de izquierda a derecha.
+			 			\item \texttt{post-order}: Recorre primero los subárboles de izquierda a derecha y visita el nodo después.
+			 			\item \texttt{in-order}: Recorre el primer subárbol, visita el nodo, luego recorre el segundo subárbol.
+			 			\item \texttt{level}: Recorre los nodos nivel por nivel, empezando por la raíz.
+			 			\item \texttt{ancestor}: Visita un nodo y luego todos sus ancestros hasta la raíz.
+			 		\end{itemize}
+			 		
+			 		\item \texttt{pruneFun}: Una función que toma un \texttt{Node} como entrada y devuelve \texttt{TRUE} o \texttt{FALSE}. Si devuelve \texttt{FALSE} para un nodo, dicho nodo y todo su subárbol se excluyen del recorrido.
+			 		\item \texttt{filterFun}: Similar a \texttt{pruneFun}, pero en este caso, si la función devuelve \texttt{FALSE} para un nodo, solo ese nodo se excluye del resultado, no así todo el subárbol.
+			 	\end{itemize}
+			 	
+			 	Estas funciones permiten una gran flexibilidad al trabajar con datos jerárquicos, ya que se pueden recoger o excluir nodos específicos basándose en criterios definidos por el usuario. Esto es útil en una variedad de aplicaciones, desde la manipulación de datos hasta la visualización y la creación de algoritmos específicos para recorrer y trabajar con estructuras de árbol.
  	
- 	La función \texttt{read.xlsx} tiene argumentos clave que determinan cómo se lee una hoja de cálculo de Excel:
+			\subsection{\texttt{Node\$new}}
  	
- 	\begin{itemize}
- 		\item \textbf{xlsxFile}: Ruta al archivo Excel, objeto Workbook o URL.
- 		\item \textbf{sheet}: Especifica la hoja de cálculo a leer, por nombre o índice.
- 		\item \textbf{startRow}: Define la primera fila de datos a leer, ignorando las anteriores.
- 		\item \textbf{colNames}: Si es TRUE, la primera fila de datos se utiliza como nombres de columna.
- 		\item \textbf{rowNames}: Si es TRUE, la primera columna se usa para los nombres de fila.
- 		\item \textbf{skipEmptyRows / skipEmptyCols}: Determinan si se ignoran filas o columnas vacías.
- 		\item \textbf{cols}: Un vector numérico que especifica qué columnas leer.
- 		\item \textbf{rows}: Un vector numérico que especifica qué filas leer.
- 		\item \textbf{detectDates}: Si es TRUE, intenta convertir cadenas de texto que parecen fechas en fechas de R.
- 		\item \textbf{na.strings}: Define qué cadenas se interpretarán como \texttt{NA}.
- 	\end{itemize}
+			 	La función \texttt{Node\$new} se utiliza para crear un nuevo objeto \texttt{Node}. Este es a menudo el punto de partida para construir un árbol jerárquico de datos desde cero, típicamente comenzando con la creación del nodo raíz. Aquí están los argumentos más importantes de esta función:
+			 	
+			 	\begin{itemize}
+			 		\item \texttt{name}: El nombre del nodo a crear. Este es un argumento obligatorio y define la identidad del nodo dentro del árbol.
+			 		\item \texttt{check}: Este argumento controla cómo se manejan los nombres de los nodos en cuanto a su conformidad con las reglas de nomenclatura. Los valores posibles incluyen:
+			 		\item \texttt{check}: Es el valor predeterminado. Si se proporciona un nombre que no se ajusta a las normas, se emitirá una advertencia.
+			 		\item \texttt{no-warn}: Se comprobará la conformidad del nombre, pero no se emitirán advertencias si hay un problema.
+			 		\item \texttt{no-check o FALSE}: No se comprobará la conformidad del nombre. Se debe usar si el rendimiento es crítico y se está seguro de que los nombres son conformes. En caso de no conformidad, se pueden esperar errores más difíciles de diagnosticar.
+			 		\item \texttt{...}: Este es un lugar para pasar atributos adicionales al nodo. Pueden ser pares de nombres y valores que definen las propiedades del nodo.
+			 	\end{itemize}
+			 	
+			 	Al llamar a \texttt{Node\$new}, se crea un nuevo objeto \texttt{Node} con el nombre y los atributos especificados. Posteriormente, se pueden agregar hijos a este nodo o establecer más propiedades para construir un árbol de datos completo.
+			 	
+		 	\subsection{\texttt{Node\$AddChildNode}}
+			 	
+			 	La función \texttt{AddChildNode} se utiliza para añadir un nodo hijo a un nodo existente. Esto es esencial para construir la estructura jerárquica de un árbol. El único argumento de la función es \texttt{child}, el nodo hijo que se va a añadir al nodo actual. Debe ser un objeto \texttt{Node} que ya haya sido creado, típicamente con \texttt{Node\$new}. Cuando se llama a \texttt{AddChildNode(child)}, el nodo especificado en \texttt{child} se adjunta al nodo desde el cual se llama al método. El método devuelve el nodo hijo, lo que permite la posibilidad de encadenar llamadas para una construcción más fluida del árbol.
+			 	
+		 	\subsection{\texttt{SetNodeStyle}}
+			 	
+			 	La función \texttt{SetNodeStyle} se utiliza para definir el estilo de los nodos en la representación gráfica de un árbol. Esta función es importante para personalizar la apariencia de los nodos cuando se visualizan árboles jerárquicos. Los argumentos más importantes de la función son:
+			 	
+			 	\begin{enumerate}[label = \textbf{\arabic*.}]
+			 		\item \texttt{tree o node}: Se refiere al árbol o nodo al que se aplicará el estilo.
+			 		
+			 		\item \texttt{label}: Función que define cómo se generará la etiqueta de texto para cada nodo. Por ejemplo, puede combinar el nombre del nodo y otro atributo del nodo para crear una etiqueta más informativa.
+			 		
+			 		\item \texttt{tooltip}: Similar a \texttt{label}, pero para definir el texto que aparecerá como un tooltip (información emergente) cuando se pase el cursor sobre el nodo en una visualización interactiva.
+			 		
+			 		\item \texttt{fontname}: El nombre de la fuente que se utilizará para el texto del nodo.
+			 		
+			 		\item \texttt{inherit}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que determina si el nodo heredará los estilos de su nodo padre.
+			 		
+			 		\item \texttt{keepExisting}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que especifica si se deben mantener los estilos existentes que ya se han definido para los nodos.
+		 		\end{enumerate}
+		 		\noindent Además de estos argumentos, hay otros estilos que se pueden configurar, como:
+		 		\begin{enumerate}[label = \textbf{\arabic*.}]
+			 		\item \texttt{color}: El color del texto del nodo.
+			 		\item \texttt{fillcolor}: El color de fondo del nodo.
+			 		\item \texttt{fontcolor}: El color de la fuente del nodo.
+			 		\item \texttt{fontsize}: El tamaño de la fuente del nodo.
+			 		\item \texttt{height / width}: Altura y anchura del nodo.
+			 		\item \texttt{penwidth}: El ancho del borde del nodo.
+			 		\item \texttt{shape}: La forma del nodo (por ejemplo, caja, elipse, círculo).
+			 	\end{enumerate}
+			 	
+			 	Estos estilos permiten una personalización detallada de cómo se presentan los nodos en una visualización, lo que puede ser útil para resaltar ciertos aspectos de los datos o hacer que la visualización sea más legible y estéticamente agradable.
+			 	
+		 	\subsection{\texttt{SetEdgeStyle}}
+			 	
+			 	La función \texttt{SetEdgeStyle} permite personalizar el estilo de las aristas en la representación gráfica de un árbol. Esta personalización es útil para hacer que la visualización de un árbol sea más informativa y estéticamente agradable. Aquí están los argumentos más importantes de esta función:
+			 	
+			 	\begin{enumerate}
+			 		\item \texttt{tree}: Se refiere al árbol completo al que se aplicarán los estilos de las aristas.
+			 		
+			 		\item \texttt{arrowhead}: Define el estilo del extremo de la arista que apunta al nodo hijo. Por ejemplo, ``none'' significa que no habrá flecha.
+			 		
+			 		\item \texttt{label}: Una función que toma un nodo como argumento y devuelve el texto que se usará como etiqueta en la arista.
+			 		
+			 		\item \texttt{fontname}: El nombre de la fuente que se usará para el texto de las etiquetas de las aristas.
+			 		
+			 		\item \texttt{penwidth}: Una función que toma un nodo como argumento y devuelve el ancho de la línea de la arista. Esto puede variar dependiendo de los atributos del nodo, por ejemplo, el tamaño del nodo o el valor de un dato asociado al mismo.
+			 		
+			 		\item \texttt{color}: Una función que toma un nodo como argumento y devuelve el color de la arista. Esto permite, por ejemplo, variar el color de las aristas basándose en ciertas propiedades de los nodos o sus datos asociados.
+			 		
+			 		\item \texttt{inherit}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que determina si las aristas heredarán los estilos de las aristas de su nodo padre.
+			 		
+			 		\item \texttt{keepExisting}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que especifica si se deben mantener los estilos existentes que ya se han definido para las aristas.
+			 	\end{enumerate}
+			 	
+			 	\noindent Además de estos argumentos, se pueden establecer otros estilos comunes en las aristas, como:
+			 	
+			 	\begin{itemize}
+			 		\item \texttt{color}: El color de la arista.
+			 		\item \texttt{fontcolor}: El color de la fuente de la etiqueta de la arista.
+			 		\item \texttt{fontsize}: El tamaño de la fuente de la etiqueta de la arista.
+			 		\item \texttt{dir}: La dirección de la arista (por ejemplo, hacia adelante, hacia atrás, ambos, ninguno).
+			 	\end{itemize}
+			 	
+			 	Estos estilos son importantes para controlar la apariencia visual de cómo se conectan los nodos en el árbol y pueden ser útiles para resaltar o diferenciar rutas o relaciones dentro de la estructura del árbol.
+			 	
+		 	\subsection{Otros métodos}
+			 	
+			 	Algunos otros métodos del paquete \texttt{data.tree} de R son funciones que permiten manipular y gestionar estructuras de datos jerárquicas. Aquí hay una breve explicación de algunos de los métodos disponibles (estos no han sido utilizados en la práctica).
+			 	
+			 	\begin{enumerate}
+			 		\item \texttt{Node\$addChild}: Añade un nodo hijo al nodo actual.
+			 		\item \texttt{Node\$addSibling}: Añade un nuevo nodo hermano al mismo nivel que el nodo actual.
+			 		\item \texttt{Node\$addSiblingNode}: Añade un nodo hermano ya existente como objeto \texttt{Node} al mismo nivel que el nodo actual.
+			 		\item \texttt{Node\$removeChild}: Elimina un nodo hijo del nodo actual.
+			 		\item \texttt{Node\$removeAttribute}: Elimina un atributo del nodo actual.
+			 		\item \texttt{Node\$sort}: Ordena los hijos de un nodo basándose en una función o un criterio de ordenación.
+			 		\item \texttt{Node\$revert}: Invierte el orden de los hijos del nodo actual.
+			 		\item \texttt{Node\$prune}: Elimina todos los nodos hijos del nodo actual, simplificando el árbol.
+			 		\item \texttt{Node\$climb}: Se mueve hacia arriba en la jerarquía del árbol, generalmente para llegar al nodo padre o ancestros.
+			 		\item \texttt{Node\$navigate}: Navega a otro nodo utilizando una ruta relativa desde el nodo actual.
+			 		\item \texttt{Node\$get}: Recupera valores o atributos de los nodos del árbol.
+			 		\item \texttt{Node\$do}: Ejecuta una función sobre un conjunto de nodos.
+			 		\item \texttt{Node\$set}: Asigna valores o atributos a los nodos del árbol.
+			 		\item \texttt{Node\$clone}: Crea una copia completa del nodo y su subárbol.
+			 	\end{enumerate}
+			 	
+			 	Estos métodos permiten un control detallado y una manipulación flexible de los datos jerárquicos, lo que los hace fundamentales para una amplia gama de tareas analíticas y de visualización de datos.
  	
- 	Estos argumentos ofrecen flexibilidad para manejar datos de Excel en R.
+ 		\section{DiagrammeR}
  	
- 	Además, \texttt{openxlsx} incluye funciones para escribir datos en Excel, personalizar el estilo de las celdas, y manejar las hojas de cálculo, entre otras capacidades. La documentación del paquete en CRAN brinda ejemplos prácticos y guías detalladas para su uso eficiente.
- 	
- 	\section{data.tree}
- 	
- 	El paquete \texttt{data.tree} de R es una estructura de datos para manejar datos jerárquicos. Permite a los usuarios de R crear estructuras de árbol a partir de datos jerárquicos y recorrer el árbol en varios órdenes. Es posible agregar y acumular valores, imprimir y trazar el árbol, convertir a y desde \texttt{data.frame}, entre otras funcionalidades. El paquete es útil en una variedad de aplicaciones, incluyendo árboles de decisión, aprendizaje automático, finanzas y la conversión de y hacia JSON, por nombrar algunos.\\
- 	
- 	El paquete provee herramientas para convertir estructuras de datos entre diferentes formatos como \texttt{data.frame}, listas de listas, dendrogramas, etc. Los usuarios pueden construir árboles de datos de manera programática o mediante conversión de otros formatos. Además, \texttt{data.tree} facilita la visualización de datos jerárquicos y puede integrarse con widgets HTML para una presentación más interactiva.\\
- 	
- 	Una característica distintiva de \texttt{data.tree} es su capacidad para manejar grandes volúmenes de datos jerárquicos de manera eficiente, lo cual a menudo puede ser complicado con las estructuras de datos básicas en R. Esto lo hace particularmente valioso para prototipos rápidos de algoritmos de búsqueda, pruebas de nuevas ideas de clasificación y más.\\
- 	
- 	Algunas de las funciones que se han utilizado en la realización de la práctica son los siguientes.
- 	
- 	\subsection{Traverse}
- 	
- 	La función \texttt{Traverse} se utiliza para recorrer un árbol o un subárbol de \texttt{Node} en un orden específico. Devuelve una lista de objetos \texttt{Node} que han sido filtrados y podados por las funciones \texttt{filterFun} y \texttt{pruneFun}. Los argumentos más importantes son:
- 	
- 	\begin{itemize}
- 		\item \textbf{node}: Es el nodo raíz del árbol o subárbol que se va a recorrer.
- 		\item \textbf{traversal}: Define el orden en el que se recorre el árbol. Los valores posibles son pre-order, post-order, in-order, level, ancestor, o una función personalizada. Cada uno de estos términos se refiere a un método específico de recorrido del árbol.
- 		
- 		\begin{itemize}
- 			\item \textbf{pre-order}: Visita primero el nodo, luego recorre cada subárbol de izquierda a derecha.
- 			\item \textbf{post-order}: Recorre primero los subárboles de izquierda a derecha y visita el nodo después.
- 			\item \textbf{in-order}: Recorre el primer subárbol, visita el nodo, luego recorre el segundo subárbol.
- 			\item \textbf{level}: Recorre los nodos nivel por nivel, empezando por la raíz.
- 			\item \textbf{ancestor}: Visita un nodo y luego todos sus ancestros hasta la raíz.
- 		\end{itemize}
- 		
- 		\item \textbf{pruneFun}: Una función que toma un \texttt{Node} como entrada y devuelve \texttt{TRUE} o \texttt{FALSE}. Si devuelve \texttt{FALSE} para un nodo, dicho nodo y todo su subárbol se excluyen del recorrido.
- 		\item \textbf{filterFun}: Similar a \texttt{pruneFun}, pero en este caso, si la función devuelve \texttt{FALSE} para un nodo, solo ese nodo se excluye del resultado, no así todo el subárbol.
- 	\end{itemize}
- 	
- 	Estas funciones permiten una gran flexibilidad al trabajar con datos jerárquicos, ya que se pueden recoger o excluir nodos específicos basándose en criterios definidos por el usuario. Esto es útil en una variedad de aplicaciones, desde la manipulación de datos hasta la visualización y la creación de algoritmos específicos para recorrer y trabajar con estructuras de árbol.
- 	
- 	\subsection{Node\$new}
- 	
- 	La función \texttt{Node\$new} se utiliza para crear un nuevo objeto \texttt{Node}. Este es a menudo el punto de partida para construir un árbol jerárquico de datos desde cero, típicamente comenzando con la creación del nodo raíz. Aquí están los argumentos más importantes de esta función:
- 	
- 	\begin{itemize}
- 		\item \textbf{name}: El nombre del nodo a crear. Este es un argumento obligatorio y define la identidad del nodo dentro del árbol.
- 		\item \textbf{check}: Este argumento controla cómo se manejan los nombres de los nodos en cuanto a su conformidad con las reglas de nomenclatura. Los valores posibles incluyen:
- 		\item \textbf{check}: Es el valor predeterminado. Si se proporciona un nombre que no se ajusta a las normas, se emitirá una advertencia.
- 		\item \textbf{no-warn}: Se comprobará la conformidad del nombre, pero no se emitirán advertencias si hay un problema.
- 		\item \textbf{no-check o FALSE}: No se comprobará la conformidad del nombre. Se debe usar si el rendimiento es crítico y se está seguro de que los nombres son conformes. En caso de no conformidad, se pueden esperar errores más difíciles de diagnosticar.
- 		\item \textbf{...}: Este es un lugar para pasar atributos adicionales al nodo. Pueden ser pares de nombres y valores que definen las propiedades del nodo.
- 	\end{itemize}
- 	
- 	Al llamar a \texttt{Node\$new}, se crea un nuevo objeto \texttt{Node} con el nombre y los atributos especificados. Posteriormente, se pueden agregar hijos a este nodo o establecer más propiedades para construir un árbol de datos completo.
- 	
- 	\subsection{Node\$AddChildNode}
- 	
- 	La función \texttt{AddChildNode} se utiliza para añadir un nodo hijo a un nodo existente. Esto es esencial para construir la estructura jerárquica de un árbol.\\
- 	
- 	El único argumento de la función es \texttt{child}, el nodo hijo que se va a añadir al nodo actual. Debe ser un objeto \texttt{Node} que ya haya sido creado, típicamente con \texttt{Node\$new}.\\
- 	
- 	Cuando se llama a \texttt{AddChildNode(child)}, el nodo especificado en \texttt{child} se adjunta al nodo desde el cual se llama al método. El método devuelve el nodo hijo, lo que permite la posibilidad de encadenar llamadas para una construcción más fluida del árbol.
- 	
- 	\subsection{SetNodeStyle}
- 	
- 	La función \texttt{SetNodeStyle} se utiliza para definir el estilo de los nodos en la representación gráfica de un árbol. Esta función es importante para personalizar la apariencia de los nodos cuando se visualizan árboles jerárquicos.\\
- 	
- 	Los argumentos más importantes de la función son:
- 	
- 	\begin{enumerate}
- 		\item \textbf{tree o node}: Se refiere al árbol o nodo al que se aplicará el estilo.
- 		
- 		\item \textbf{label}: Función que define cómo se generará la etiqueta de texto para cada nodo. Por ejemplo, puede combinar el nombre del nodo y otro atributo del nodo para crear una etiqueta más informativa.
- 		
- 		\item \textbf{tooltip}: Similar a \texttt{label}, pero para definir el texto que aparecerá como un tooltip (información emergente) cuando se pase el cursor sobre el nodo en una visualización interactiva.
- 		
- 		\item \textbf{fontname}: El nombre de la fuente que se utilizará para el texto del nodo.
- 		
- 		\item \textbf{inherit}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que determina si el nodo heredará los estilos de su nodo padre.
- 		
- 		\item \textbf{keepExisting}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que especifica si se deben mantener los estilos existentes que ya se han definido para los nodos.
- 		
- 		Además de estos argumentos, hay otros estilos que se pueden configurar, como:
- 		
- 		\item \textbf{color}: El color del texto del nodo.
- 		\item \textbf{fillcolor}: El color de fondo del nodo.
- 		\item \textbf{fontcolor}: El color de la fuente del nodo.
- 		\item \textbf{fontsize}: El tamaño de la fuente del nodo.
- 		\item \textbf{height / width}: Altura y anchura del nodo.
- 		\item \textbf{penwidth}: El ancho del borde del nodo.
- 		\item \textbf{shape}: La forma del nodo (por ejemplo, caja, elipse, círculo).
- 	\end{enumerate}
- 	
- 	Estos estilos permiten una personalización detallada de cómo se presentan los nodos en una visualización, lo que puede ser útil para resaltar ciertos aspectos de los datos o hacer que la visualización sea más legible y estéticamente agradable.
- 	
- 	\subsection{SetEdgeStyle}
- 	
- 	La función \texttt{SetEdgeStyle} permite personalizar el estilo de las aristas en la representación gráfica de un árbol. Esta personalización es útil para hacer que la visualización de un árbol sea más informativa y estéticamente agradable. Aquí están los argumentos más importantes de esta función:
- 	
- 	\begin{enumerate}
- 		\item \textbf{tree}: Se refiere al árbol completo al que se aplicarán los estilos de las aristas.
- 		
- 		\item \textbf{arrowhead}: Define el estilo del extremo de la arista que apunta al nodo hijo. Por ejemplo, "none" significa que no habrá flecha.
- 		
- 		\item \textbf{label}: Una función que toma un nodo como argumento y devuelve el texto que se usará como etiqueta en la arista.
- 		
- 		\item \textbf{fontname}: El nombre de la fuente que se usará para el texto de las etiquetas de las aristas.
- 		
- 		\item \textbf{penwidth}: Una función que toma un nodo como argumento y devuelve el ancho de la línea de la arista. Esto puede variar dependiendo de los atributos del nodo, por ejemplo, el tamaño del nodo o el valor de un dato asociado al mismo.
- 		
- 		\item \textbf{color}: Una función que toma un nodo como argumento y devuelve el color de la arista. Esto permite, por ejemplo, variar el color de las aristas basándose en ciertas propiedades de los nodos o sus datos asociados.
- 		
- 		\item \textbf{inherit}: Un parámetro lógico (TRUE o FALSE) que determina si las aristas heredarán los estilos de las aristas de su nodo padre.
- 		
- 		\item \textbf{keepExisting}: Un parámetro lógico (TRUE o FALSE) que especifica si se deben mantener los estilos existentes que ya se han definido para las aristas.
- 	\end{enumerate}
- 	
- 	Además de estos argumentos, se pueden establecer otros estilos comunes en las aristas, como:
- 	
- 	\begin{itemize}
- 		\item \textbf{color}: El color de la arista.
- 		\item \textbf{fontcolor}: El color de la fuente de la etiqueta de la arista.
- 		\item \textbf{fontsize}: El tamaño de la fuente de la etiqueta de la arista.
- 		\item \textbf{dir}: La dirección de la arista (por ejemplo, hacia adelante, hacia atrás, ambos, ninguno).
- 	\end{itemize}
- 	
- 	Estos estilos son importantes para controlar la apariencia visual de cómo se conectan los nodos en el árbol y pueden ser útiles para resaltar o diferenciar rutas o relaciones dentro de la estructura del árbol.
- 	
- 	\subsection{Otros métodos}
- 	
- 	Algunos otros métodos del paquete \texttt{data.tree} de R son funciones que permiten manipular y gestionar estructuras de datos jerárquicas. Aquí hay una breve explicación de algunos de los métodos disponibles (estos no han sido utilizados en la práctica).
- 	
- 	\begin{enumerate}
- 		\item \textbf{Node\$addChild}: Añade un nodo hijo al nodo actual.
- 		\item \textbf{Node\$addSibling}: Añade un nuevo nodo hermano al mismo nivel que el nodo actual.
- 		\item \textbf{Node\$addSiblingNode}: Añade un nodo hermano ya existente como objeto \texttt{Node} al mismo nivel que el nodo actual.
- 		\item \textbf{Node\$removeChild}: Elimina un nodo hijo del nodo actual.
- 		\item \textbf{Node\$removeAttribute}: Elimina un atributo del nodo actual.
- 		\item \textbf{Node\$sort}: Ordena los hijos de un nodo basándose en una función o un criterio de ordenación.
- 		\item \textbf{Node\$revert}: Invierte el orden de los hijos del nodo actual.
- 		\item \textbf{Node\$prune}: Elimina todos los nodos hijos del nodo actual, simplificando el árbol.
- 		\item \textbf{Node\$climb}: Se mueve hacia arriba en la jerarquía del árbol, generalmente para llegar al nodo padre o ancestros.
- 		\item \textbf{Node\$navigate}: Navega a otro nodo utilizando una ruta relativa desde el nodo actual.
- 		\item \textbf{Node\$get}: Recupera valores o atributos de los nodos del árbol.
- 		\item \textbf{Node\$do}: Ejecuta una función sobre un conjunto de nodos.
- 		\item \textbf{Node\$set}: Asigna valores o atributos a los nodos del árbol.
- 		\item \textbf{Node\$clone}: Crea una copia completa del nodo y su subárbol.
- 	\end{enumerate}
- 	
- 	Estos métodos permiten un control detallado y una manipulación flexible de los datos jerárquicos, lo que los hace fundamentales para una amplia gama de tareas analíticas y de visualización de datos.
- 	
- 	\section{DiagrammeR}
- 	
- 	El paquete \texttt{DiagrammeR} de R es una herramienta para la creación, modificación, análisis y visualización de gráficos de redes y estructuras de grafos. Permite la adición y eliminación paso a paso de nodos y aristas, y trabaja con datos en tablas para la adición masiva de nodos, aristas y metadatos asociados. Una selección de algoritmos de gráficos está disponible para el análisis de estas estructuras, y las visualizaciones pueden aprovechar las propiedades estéticas asignadas a nodos y aristas.\\
- 	
- 	Este paquete se relaciona con \texttt{data.tree} en la capacidad de visualizar estructuras de datos jerárquicos. Mientras \texttt{data.tree} es eficiente para crear y manipular datos jerárquicos, \texttt{DiagrammeR} puede tomar estos datos y representarlos visualmente como gráficos o redes, lo que puede ser particularmente útil para la visualización de árboles de decisiones o estructuras organizativas.\\
- 	
- 	Por ejemplo, \texttt{data.tree} podría usarse para estructurar y manipular datos jerárquicos, y luego dicha estructura podría ser convertida a un formato adecuado para \texttt{DiagrammeR} para su visualización como un gráfico de nodos y aristas. La capacidad de \texttt{DiagrammeR} para utilizar datos de tablas para generar gráficos es especialmente útil, ya que las estructuras de \texttt{data.tree} pueden ser transformadas en tablas (nodos y aristas) y luego visualizadas utilizando \texttt{DiagrammeR}.
+		 	El paquete \texttt{DiagrammeR} de R es una herramienta para la creación, modificación, análisis y visualización de gráficos de redes y estructuras de grafos. Permite la adición y eliminación paso a paso de nodos y aristas, y trabaja con datos en tablas para la adición masiva de nodos, aristas y metadatos asociados. Una selección de algoritmos de gráficos está disponible para el análisis de estas estructuras, y las visualizaciones pueden aprovechar las propiedades estéticas asignadas a nodos y aristas.\\
+		 	
+		 	Este paquete se relaciona con \texttt{data.tree} en la capacidad de visualizar estructuras de datos jerárquicos. Mientras \texttt{data.tree} es eficiente para crear y manipular datos jerárquicos, \texttt{DiagrammeR} puede tomar estos datos y representarlos visualmente como gráficos o redes, lo que puede ser particularmente útil para la visualización de árboles de decisiones o estructuras organizativas.\\
+		 	
+		 	Por ejemplo, \texttt{data.tree} podría usarse para estructurar y manipular datos jerárquicos, y luego dicha estructura podría ser convertida a un formato adecuado para \texttt{DiagrammeR} para su visualización como un gráfico de nodos y aristas. La capacidad de \texttt{DiagrammeR} para utilizar datos de tablas para generar gráficos es especialmente útil, ya que las estructuras de \texttt{data.tree} pueden ser transformadas en tablas (nodos y aristas) y luego visualizadas utilizando \texttt{DiagrammeR}.
  	
 \end{document}

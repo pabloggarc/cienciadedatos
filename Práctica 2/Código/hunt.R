@@ -1,31 +1,5 @@
-len = function(list) {
-	count = 0
-	for (element in list) {
-		count = count + 1
-	}
-	count
-}
 
-union = function(c1, c2) {
-	if (len(c1) == 0) {
-		c2
-	} else if (is.element(c1[1], c2)) {
-		union(c1[-1], c2)
-	} else {
-		union(c1[-1], append(c2, c1[1]))
-	}
-}
-
-dif = function(c1, c2) {
-	res = c()
-	for (element in c1) {
-		if (!(element %in% c2)) {
-			res = c(res, element)
-		}
-	}
-	res
-}
-
+source("aux_functions.R")
 get_frec = function(sample, col, criteria, elements, values) {
 	n = 0
 	frecs = setNames(data.frame(matrix(rep(0, times = length(values)), nrow = 1)), values)
@@ -71,7 +45,7 @@ get_impurity = function(sample, col, elements, criteria, equivalence_clases, mea
 	switch(measure, "entropy" = entropy(frec), "error" = error(frec), "gini" = gini(frec))
 }
 
-get_gain = function(sample, left, right, criteria, right_element, col, measure) {
+get_gain = function(sample, left, right, criteria, col, measure) {
 	n = len(sample)
 	equivalence_clases = get_elements(sample, criteria)
 
@@ -106,7 +80,7 @@ create_classification = function(sample, col, right_element, criteria, measure) 
 	right = dif(get_elements(sample, col), left)
 
 	if(len(right) > 0 && len(left) > 0) {
-		gain = get_gain(sample, left, right, criteria, right_element, col, measure)
+		gain = get_gain(sample, left, right, criteria, col, measure)
 		
 	} else {
 		gain = 0
@@ -156,8 +130,7 @@ df_2_tree = function(df, final, criteria) {
     SetNodeStyle(last_tree, label = paste(last_tree$name, "\n ΔI =", last_tree$gain))
     SetNodeStyle(right_node, label = paste(right_node$name))
   }
-  
-  #plot(last_tree)#mirar si va en latex
+
   
   return(last_tree)
 }
@@ -208,9 +181,7 @@ hunt = function(sample, classes, criteria, measure, details = FALSE) {
 	tree
 }
 
-#(sample = read.xlsx("../Memoria/data/calificaciones.xlsx"))
 (sample = read.xlsx("../Memoria/data/vehiculos.xlsx"))
 
-#tree = hunt(sample, c("T", "L", "P"), "C.G", "error")
 tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"), "tVehículo", "error", TRUE)
 plot(tree)
