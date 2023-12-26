@@ -1,14 +1,4 @@
-len = function(list) {
-  count = 0
-  for (element in list) {
-    count = count + 1
-  }
-  count
-}
-
-euc_distance = function(p1, p2) {
-  sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
-}
+source("aux_functions.R")
 
 create_distance_matrix = function(points, centroids) {
   n_pts = nrow(points)

@@ -1,44 +1,4 @@
-len = function(list) {
-  count = 0
-  for (element in list) {
-    count = count + 1
-  }
-  count
-}
-
-fcd_mean = function(list) {
-  add = 0
-  for (i in 1:len(list)) {
-    add = add + list[i]
-  }
-  add / len(list)
-}
-
-standard_dev = function(list) {
-  mean = fcd_mean(list)
-  n = len(list)
-  add = 0
-  for (i in 1:n) {
-    add = add + ((list[i] - mean)^2)
-  }
-  sqrt(add/n)
-}
-
-variance = function(list) {
-  dev = standard_dev(list)
-  var = dev^2
-  var
-}
-
-covariance = function(x, y) {
-  if (len(x) != len(y)) {
-    stop("X e Y deben tener la misma dimensión")
-  } 
-  else {
-    sum = x %*% y
-    (sum/len(x))-(fcd_mean(x)*fcd_mean(y))
-  }
-}
+source("aux_functions.R")
 
 regression_line = function(x, y) {
   b = covariance(x, y) / variance(x)

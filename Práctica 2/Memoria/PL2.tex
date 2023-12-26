@@ -1069,6 +1069,14 @@
 	 
 		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
 		 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{source}\hlstd{(}\hlstr{"data/aux_functions.R"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+		 
 		 \section{Clasificación no supervisada}
 		 
 		 	\subsection{$k-$means}
@@ -1123,27 +1131,7 @@
 \end{kframe}
 \end{knitrout}
 				 
-				 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. Previo a ello se necesitan dos funciones auxiliares que ya se han visto en la anterior práctica. Estas son la función \texttt{len} para determinar la longitud de una lista y \texttt{euc\_distance}, a la cual se pasan dos puntos y devuelve la distancia euclídea entre los mismos.
-				 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
-        \hlstd{count} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list) \{}
-                \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
-        \hlstd{\}}
-        \hlstd{count}
-\hlstd{\}}
-
-\hlstd{euc_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,} \hlkwc{p2}\hlstd{) \{}
-        \hlkwd{sqrt}\hlstd{(((p1[}\hlnum{1}\hlstd{]} \hlopt{-} \hlstd{p2[}\hlnum{1}\hlstd{])}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{+} \hlstd{((p1[}\hlnum{2}\hlstd{]} \hlopt{-} \hlstd{p2[}\hlnum{2}\hlstd{])}\hlopt{^}\hlnum{2}\hlstd{))}
-\hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-				 
-				 El primer paso del algoritmo consiste en realizar una matriz de distancias. Esta matriz tendrá tantas filas como centroides se hayan declarado y tantas columnas como puntos se hayan introducido. Esta matriz recoge las distancias euclídeas de todos los puntos a todos los centroides. Para realizar esta tabla se ha programado la siguiente función, la cual va rellenando una matriz con las distancias euclídeas de cada punto a cada clúster.
+				 Una vez se tienen todos los datos en el entorno de trabajo se va a proceder a explicar la implementación del algoritmo. El primer paso del algoritmo consiste en realizar una matriz de distancias. Esta matriz tendrá tantas filas como centroides se hayan declarado y tantas columnas como puntos se hayan introducido. Esta matriz recoge las distancias euclídeas de todos los puntos a todos los centroides. Para realizar esta tabla se ha programado la siguiente función, la cual va rellenando una matriz con las distancias euclídeas de cada punto a cada clúster.
 				 
 				 {\small
 \begin{knitrout}
@@ -1157,9 +1145,9 @@
                 \hlkwa{for} \hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
                         \hlstd{distances[cent, pt]} \hlkwb{=}
                                 \hlkwd{euc_distance}\hlstd{(points[pt,], centroids[cent,])}
-                                                        \hlstd{\}}
-                                                \hlstd{\}}
-                                                \hlstd{distances}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{distances}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1175,20 +1163,20 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{create_assigment_matrix} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{dist_matrix}\hlstd{) \{}
-                                         \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(dist_matrix)}
-                                         \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(dist_matrix)}
-                                         \hlstd{assig_matrix} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
-                                         \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
-                                                 \hlstd{minimum_centroid} \hlkwb{=} \hlnum{1}
-                                                 \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n_cent) \{}
-                                                         \hlkwa{if} \hlstd{(dist_matrix[cent, col]} \hlopt{<}
-                                           \hlstd{dist_matrix[minimum_centroid, col]) \{}
-                                                                        \hlstd{minimum_centroid} \hlkwb{=} \hlstd{cent}
-                                                                \hlstd{\}}
+        \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(dist_matrix)}
+        \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(dist_matrix)}
+        \hlstd{assig_matrix} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
+        \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
+                \hlstd{minimum_centroid} \hlkwb{=} \hlnum{1}
+                \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{2}\hlopt{:}\hlstd{n_cent) \{}
+                        \hlkwa{if} \hlstd{(dist_matrix[cent, col]} \hlopt{<}
+                                \hlstd{dist_matrix[minimum_centroid, col]) \{}
+                                \hlstd{minimum_centroid} \hlkwb{=} \hlstd{cent}
+                        \hlstd{\}}
                                                  \hlstd{\}}
-                                                 \hlstd{assig_matrix[minimum_centroid, col]} \hlkwb{=} \hlnum{1}
-                                         \hlstd{\}}
-                                         \hlstd{assig_matrix}
+                \hlstd{assig_matrix[minimum_centroid, col]} \hlkwb{=} \hlnum{1}
+        \hlstd{\}}
+        \hlstd{assig_matrix}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1204,36 +1192,34 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{update_cent} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df_sample}\hlstd{,} \hlkwc{centroids}\hlstd{,} \hlkwc{assig_matrix}\hlstd{) \{}
-                                         \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
-                                         \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
-                                         \hlstd{new_centroids} \hlkwb{=} \hlkwd{c}\hlstd{()}
-                                         \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cent) \{}
-                                                 \hlstd{centroid_x} \hlkwb{=} \hlnum{0}
-                                                 \hlstd{centroid_y} \hlkwb{=} \hlnum{0}
-                                                 \hlstd{count} \hlkwb{=} \hlnum{0}
-                                                 \hlkwa{for} \hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
-                                                         \hlkwa{if} \hlstd{(assig_matrix[cent, pt]} \hlopt{==} \hlnum{1}\hlstd{) \{}
-                                                                 \hlstd{centroid_x} \hlkwb{=} \hlstd{centroid_x} \hlopt{+} \hlstd{df_sample[pt,} \hlnum{1}\hlstd{]}
-                                                                 \hlstd{centroid_y} \hlkwb{=} \hlstd{centroid_y} \hlopt{+} \hlstd{df_sample[pt,} \hlnum{2}\hlstd{]}
-                                                                 \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
-                                                         \hlstd{\}}
-                                                 \hlstd{\}}
-                                                 \hlkwa{if} \hlstd{(count} \hlopt{==} \hlnum{0}\hlstd{)\{}
-                                                                \hlstd{new_centroids} \hlkwb{=} \hlkwd{append}\hlstd{(}\hlkwd{append}\hlstd{(new_centroids,}
-           \hlstd{centroids[cent,}\hlnum{1}\hlstd{]),centroids[cent,}\hlnum{2}\hlstd{])}
-                                                 \hlstd{\}}
-                                                 \hlkwa{else} \hlstd{\{}
-                                                                \hlstd{new_centroids} \hlkwb{=} \hlkwd{append}\hlstd{(}\hlkwd{append}\hlstd{(new_centroids,}
-           \hlstd{centroid_x}\hlopt{/}\hlstd{count), centroid_y}\hlopt{/}\hlstd{count)}
-                                                 \hlstd{\}}
-                                         \hlstd{\}}
-                                         \hlkwd{data.frame}\hlstd{(}\hlkwd{t}\hlstd{(}\hlkwd{matrix}\hlstd{(new_centroids,} \hlnum{2}\hlstd{, n_cent,}
-                            \hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,}\hlstr{"Y"}\hlstd{)))))}
+        \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
+                                        \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
+        \hlstd{new_centroids} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cent) \{}
+                \hlstd{centroid_x} \hlkwb{=} \hlnum{0}
+                \hlstd{centroid_y} \hlkwb{=} \hlnum{0}
+                \hlstd{count} \hlkwb{=} \hlnum{0}
+                \hlkwa{for} \hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts) \{}
+                        \hlkwa{if} \hlstd{(assig_matrix[cent, pt]} \hlopt{==} \hlnum{1}\hlstd{) \{}
+                                \hlstd{centroid_x} \hlkwb{=} \hlstd{centroid_x} \hlopt{+} \hlstd{df_sample[pt,} \hlnum{1}\hlstd{]}
+                                \hlstd{centroid_y} \hlkwb{=} \hlstd{centroid_y} \hlopt{+} \hlstd{df_sample[pt,} \hlnum{2}\hlstd{]}
+                                \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
+                        \hlstd{\}}
+                \hlstd{\}}
+                \hlkwa{if} \hlstd{(count} \hlopt{==} \hlnum{0}\hlstd{)\{}
+                        \hlstd{new_centroids} \hlkwb{=} \hlkwd{append}\hlstd{(}\hlkwd{append}\hlstd{(new_centroids,}
+                         \hlstd{centroids[cent,}\hlnum{1}\hlstd{]),centroids[cent,}\hlnum{2}\hlstd{])}
+                \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                        \hlstd{new_centroids} \hlkwb{=} \hlkwd{append}\hlstd{(}\hlkwd{append}\hlstd{(new_centroids,}
+                                \hlstd{centroid_x}\hlopt{/}\hlstd{count), centroid_y}\hlopt{/}\hlstd{count)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlkwd{data.frame}\hlstd{(}\hlkwd{t}\hlstd{(}\hlkwd{matrix}\hlstd{(new_centroids,} \hlnum{2}\hlstd{, n_cent,} \hlkwc{dimnames}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"X"}\hlstd{,}\hlstr{"Y"}\hlstd{)))))}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-					}
+				}
 				 
 				 El algoritmo se ejecutará hasta que la matriz de asignaciones sea la misma en una iteración con respecto a su anterior. Para visualizar el resultado o clasificación final se propone una función que tomará la matriz de asignaciones final y el valor de los centroides finales. Este método imprimirá las coordenadas de cada centroide, así como los puntos que conforman el clúster representado por ese centroide.
 				 
@@ -1242,18 +1228,20 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{printCentroids} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df_sample}\hlstd{,} \hlkwc{centroids}\hlstd{,} \hlkwc{assig_matrix}\hlstd{)\{}
-                                         \hlstd{n_cents} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
-                                         \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
-                                         \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n--RESULTADOS--\textbackslash{}n"}\hlstd{)}
-                                         \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cents)\{}
-                                                 \hlkwd{cat}\hlstd{(}\hlstr{"Centroide"}\hlstd{, cent,} \hlstr{"("}\hlstd{, centroids[cent,}\hlnum{1}\hlstd{],} \hlstr{","}\hlstd{, centroids[cent,}\hlnum{2}\hlstd{],}\hlstr{") \textbackslash{}n"}\hlstd{)}
-                                                 \hlkwa{for}\hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts)\{}
-                                                         \hlkwa{if} \hlstd{(assig_matrix[cent,pt]} \hlopt{==} \hlnum{1}\hlstd{)\{}
-                                                                        \hlkwd{cat}\hlstd{(}\hlstr{"  - Punto"}\hlstd{, pt,} \hlstr{"("}\hlstd{, df_sample[pt,} \hlnum{1}\hlstd{],} \hlstr{","}\hlstd{, df_sample[pt,}\hlnum{2}\hlstd{],} \hlstr{")\textbackslash{}n"}\hlstd{)}
-                                                         \hlstd{\}}
-                                                 \hlstd{\}}
-                                                 \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
-                                         \hlstd{\}}
+        \hlstd{n_cents} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
+        \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n--RESULTADOS--\textbackslash{}n"}\hlstd{)}
+        \hlkwa{for} \hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cents)\{}
+                \hlkwd{cat}\hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{"Centroide "}\hlstd{, cent,} \hlstr{" ("}\hlstd{,}
+                        \hlstd{centroids[cent,}\hlnum{1}\hlstd{],} \hlstr{", "}\hlstd{, centroids[cent,}\hlnum{2}\hlstd{],}\hlstr{") \textbackslash{}n"}\hlstd{))}
+                \hlkwa{for}\hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts)\{}
+                        \hlkwa{if} \hlstd{(assig_matrix[cent,pt]} \hlopt{==} \hlnum{1}\hlstd{)\{}
+                                \hlkwd{cat}\hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{"  - Punto "}\hlstd{, pt,} \hlstr{" ("}\hlstd{,}
+                                        \hlstd{df_sample[pt,} \hlnum{1}\hlstd{],} \hlstr{", "}\hlstd{, df_sample[pt,}\hlnum{2}\hlstd{],} \hlstr{")\textbackslash{}n"}\hlstd{))}
+                        \hlstd{\}}
+                \hlstd{\}}
+                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
+        \hlstd{\}}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
@@ -1267,22 +1255,22 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{create_clust_vector} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{assig_matrix}\hlstd{)\{}
-                                         \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
-                                         \hlstd{n_cents} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
-                                         \hlstd{clust_vector} \hlkwb{=} \hlkwd{c}\hlstd{()}
-                                         \hlkwa{for}\hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts)\{}
-                                                 \hlkwa{for}\hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cents)\{}
-                                                         \hlkwa{if} \hlstd{(assig_matrix[cent,pt]} \hlopt{==} \hlnum{1}\hlstd{)\{}
-                                                                        \hlstd{clust_vector} \hlkwb{=} \hlkwd{append}\hlstd{(clust_vector, cent)}
-                                                         \hlstd{\}}
-                                                 \hlstd{\}}
-                                         \hlstd{\}}
-                                         \hlstd{clust_vector}
+        \hlstd{n_pts} \hlkwb{=} \hlkwd{ncol}\hlstd{(assig_matrix)}
+        \hlstd{n_cents} \hlkwb{=} \hlkwd{nrow}\hlstd{(assig_matrix)}
+        \hlstd{clust_vector} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for}\hlstd{(pt} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_pts)\{}
+                \hlkwa{for}\hlstd{(cent} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n_cents)\{}
+                        \hlkwa{if} \hlstd{(assig_matrix[cent,pt]} \hlopt{==} \hlnum{1}\hlstd{)\{}
+                                \hlstd{clust_vector} \hlkwb{=} \hlkwd{append}\hlstd{(clust_vector, cent)}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{clust_vector}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-					}
+				}
 				 
 				 Todas estas funciones se recogen en la función \texttt{fcd\_kmeans}. Esta función será la que implemente el algoritmo y a la que se deberá llamar. Recibirá como parámetros un dataframe con los datos de la muestra, otro dataframe con los centroides iniciales y un booleano \texttt{details} el cual se usará para recibir una salida más o menos detallada. En caso de que se quiera una salida detallada, se imprimirán paso por paso la matriz de distancias, la matriz de asignaciones y los valores de los nuevos centroides en ese paso concreto. En caso contrario simplemente se imprimirá la clasificación final (se llama a la función \texttt{printCentroids}) y se devolverá el vector de clústerización. Por defecto, \texttt{details} se encuentra a \texttt{FALSE}, ofreciendo una salida no detallada en caso de no indicar este parámetro en la llamada. El usuario podrá asignar a una variable la llamada a la función, recibiendo en la misma el vector de clústerización.
 				 
@@ -1291,48 +1279,45 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{fcd_kmeans} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df_sample}\hlstd{,} \hlkwc{centroids}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
-                                         \hlstd{n_pts} \hlkwb{=} \hlkwd{nrow}\hlstd{(df_sample)}
-                                         \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(centroids)}
-
-                                         \hlstd{prev_assig_matrix} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}
-                             \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
-
-                                         \hlstd{step} \hlkwb{=} \hlnum{1}
-                                         \hlstd{dist_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df_sample, centroids)}
-                                         \hlstd{assig_matrix} \hlkwb{=} \hlkwd{create_assigment_matrix}\hlstd{(dist_matrix)}
-                                         \hlkwa{if}\hlstd{(details)\{}
-                                                 \hlkwd{cat}\hlstd{(}\hlstr{"PASO"}\hlstd{, step,} \hlstr{"\textbackslash{}n------- \textbackslash{}n"}\hlstd{)}
-                                                 \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de distancias \textbackslash{}n"}\hlstd{)}
-                                                 \hlkwd{print}\hlstd{(dist_matrix)}
-                                                 \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de asignaciones \textbackslash{}n"}\hlstd{)}
-                                                 \hlkwd{print}\hlstd{(assig_matrix)}
-                                         \hlstd{\}}
-
-                                         \hlkwa{while} \hlstd{(}\hlopt{!}\hlkwd{identical}\hlstd{(prev_assig_matrix, assig_matrix)) \{}
-                                                 \hlstd{prev_assig_matrix} \hlkwb{=} \hlstd{assig_matrix}
-                                                 \hlstd{centroids} \hlkwb{=} \hlkwd{update_cent}\hlstd{(df_sample, centroids, assig_matrix)}
-                                                 \hlstd{dist_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df_sample, centroids)}
-                                                 \hlstd{assig_matrix} \hlkwb{=} \hlkwd{create_assigment_matrix}\hlstd{(dist_matrix)}
-
-                                                 \hlkwa{if}\hlstd{(details) \{}
-                                                         \hlkwd{cat}\hlstd{(}\hlstr{"Los nuevos centroides son:\textbackslash{}n"}\hlstd{)}
-                                                         \hlkwd{print}\hlstd{(centroids)}
-                                                         \hlstd{step} \hlkwb{=} \hlstd{step} \hlopt{+} \hlnum{1}
-                                                         \hlkwd{cat}\hlstd{(}\hlstr{"PASO"}\hlstd{, step,} \hlstr{"\textbackslash{}n------- \textbackslash{}n"}\hlstd{)}
-                                                         \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de distancias \textbackslash{}n"}\hlstd{)}
-                                                         \hlkwd{print}\hlstd{(dist_matrix)}
-                                                         \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de asignaciones \textbackslash{}n"}\hlstd{)}
-                                                         \hlkwd{print}\hlstd{(assig_matrix)}
-                                                 \hlstd{\}}
-                                         \hlstd{\}}
-                                         \hlkwd{printCentroids}\hlstd{(df_sample, centroids, assig_matrix)}
-                                         \hlkwd{cat}\hlstd{(}\hlstr{"Vector de clústerización\textbackslash{}n"}\hlstd{)}
-                                         \hlkwd{create_clust_vector}\hlstd{(assig_matrix)}
+        \hlstd{n_pts} \hlkwb{=} \hlkwd{nrow}\hlstd{(df_sample)}
+        \hlstd{n_cent} \hlkwb{=} \hlkwd{nrow}\hlstd{(centroids)}
+        \hlstd{prev_assig_matrix} \hlkwb{=} \hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{ncol} \hlstd{= n_pts,} \hlkwc{nrow} \hlstd{= n_cent))}
+        \hlstd{step} \hlkwb{=} \hlnum{1}
+        \hlstd{dist_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df_sample, centroids)}
+        \hlstd{assig_matrix} \hlkwb{=} \hlkwd{create_assigment_matrix}\hlstd{(dist_matrix)}
+        \hlkwa{if}\hlstd{(details)\{}
+                \hlkwd{cat}\hlstd{(}\hlstr{"PASO"}\hlstd{, step,} \hlstr{"\textbackslash{}n------- \textbackslash{}n"}\hlstd{)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de distancias \textbackslash{}n"}\hlstd{)}
+                \hlkwd{print}\hlstd{(dist_matrix)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nMatriz de asignaciones \textbackslash{}n"}\hlstd{)}
+                \hlkwd{print}\hlstd{(assig_matrix)}
+                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
+        \hlstd{\}}
+        \hlkwa{while} \hlstd{(}\hlopt{!}\hlkwd{identical}\hlstd{(prev_assig_matrix, assig_matrix)) \{}
+                \hlstd{prev_assig_matrix} \hlkwb{=} \hlstd{assig_matrix}
+                \hlstd{centroids} \hlkwb{=} \hlkwd{update_cent}\hlstd{(df_sample, centroids, assig_matrix)}
+                \hlstd{dist_matrix} \hlkwb{=} \hlkwd{create_distance_matrix}\hlstd{(df_sample, centroids)}
+                \hlstd{assig_matrix} \hlkwb{=} \hlkwd{create_assigment_matrix}\hlstd{(dist_matrix)}
+                \hlkwa{if}\hlstd{(details) \{}
+                        \hlkwd{cat}\hlstd{(}\hlstr{"Los nuevos centroides son:\textbackslash{}n"}\hlstd{)}
+                                                        \hlkwd{print}\hlstd{(centroids)}
+                        \hlstd{step} \hlkwb{=} \hlstd{step} \hlopt{+} \hlnum{1}
+                        \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nPASO"}\hlstd{, step,} \hlstr{"\textbackslash{}n------- \textbackslash{}n"}\hlstd{)}
+                        \hlkwd{cat}\hlstd{(}\hlstr{"Matriz de distancias \textbackslash{}n"}\hlstd{)}
+                        \hlkwd{print}\hlstd{(dist_matrix)}
+                        \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nMatriz de asignaciones \textbackslash{}n"}\hlstd{)}
+                        \hlkwd{print}\hlstd{(assig_matrix)}
+                        \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlkwd{printCentroids}\hlstd{(df_sample, centroids, assig_matrix)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"Vector de clusterización\textbackslash{}n"}\hlstd{)}
+        \hlkwd{create_clust_vector}\hlstd{(assig_matrix)}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-					}
+				}
 				 
 				 Un aspecto a destacar es el uso de la función \texttt{identical} contenida en el paquete \texttt{base}. Esta función permite comparar si dos dataframes son iguales. Esto sirve en el algoritmo para ver si la matriz de asignaciones de la anterior iteración es igual que la actual. Esta condición será la que se deba cumplir para que el algoritmo finalice.\\
 				 
@@ -1356,16 +1341,19 @@
 ## 1 4.802343 1.0000000 0.7071068 4.301163 2.500000 1.520691 2.061553
 ## 2 3.363406 1.5811388 1.0000000 2.828427 1.118034 2.015564 1.118034
 ## 3 3.579455 0.7071068 1.0000000 3.162278 2.500000 0.750000 2.500000
+## 
 ## Matriz de asignaciones 
 ##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
 ## 1  0  0  0  0  0  0  1  0  0   0   1   0   0   0   0
 ## 2  1  1  1  0  1  1  0  1  1   0   0   1   1   0   1
 ## 3  0  0  0  1  0  0  0  0  0   1   0   0   0   1   0
+## 
 ## Los nuevos centroides son:
 ##       X     Y
 ## 1 1.125 0.875
 ## 2 1.825 3.575
 ## 3 1.750 0.500
+## 
 ## PASO 2 
 ## ------- 
 ## Matriz de distancias 
@@ -1377,16 +1365,19 @@
 ## 1 4.126894 0.5303301 0.1767767 3.644345 2.215006 1.0752907 1.976424
 ## 2 1.805893 3.0921271 2.7039323 1.249500 1.444386 3.3296021 2.118077
 ## 3 4.138236 0.2500000 0.9013878 3.716517 2.795085 0.3535534 2.657536
+## 
 ## Matriz de asignaciones 
 ##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
 ## 1  0  0  0  0  0  0  1  0  0   0   1   0   0   0   1
 ## 2  1  1  1  0  1  1  0  1  1   0   0   1   1   0   0
 ## 3  0  0  0  1  0  0  0  0  0   1   0   0   0   1   0
+## 
 ## Los nuevos centroides son:
 ##          X        Y
 ## 1 0.750000 1.416667
 ## 2 2.027778 3.694444
 ## 3 1.750000 0.500000
+## 
 ## PASO 3 
 ## ------- 
 ## Matriz de distancias 
@@ -1398,16 +1389,19 @@
 ## 1 3.948453 1.184389 0.4859127 3.425801 1.602949 1.7098570 1.317616
 ## 2 1.573557 3.237750 2.8838096 1.019108 1.678201 3.4445564 2.353419
 ## 3 4.138236 0.250000 0.9013878 3.716517 2.795085 0.3535534 2.657536
+## 
 ## Matriz de asignaciones 
 ##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
 ## 1  0  0  1  0  0  0  0  1  0   0   1   0   1   0   1
 ## 2  1  1  0  0  1  1  0  0  1   0   0   1   0   0   0
 ## 3  0  0  0  1  0  0  1  0  0   1   0   0   0   1   0
+## 
 ## Los nuevos centroides son:
 ##          X        Y
 ## 1 0.350000 2.500000
 ## 2 2.916667 4.041667
 ## 3 1.625000 0.562500
+## 
 ## PASO 4 
 ## ------- 
 ## Matriz de distancias 
@@ -1419,16 +1413,19 @@
 ## 1 3.6034705 2.3070544 1.6347783 3.0450780 0.5220153 2.7901613 0.350000
 ## 2 0.6194195 3.8144917 3.5951839 0.0931695 2.6316054 3.9008991 3.299042
 ## 3 4.1368202 0.1397542 0.7629097 3.7023008 2.6845914 0.4881406 2.528741
+## 
 ## Matriz de asignaciones 
 ##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
 ## 1  0  1  1  0  0  0  0  1  0   0   0   0   1   0   1
 ## 2  1  0  0  0  1  1  0  0  1   0   0   1   0   0   0
 ## 3  0  0  0  1  0  0  1  0  0   1   1   0   0   1   0
+## 
 ## Los nuevos centroides son:
 ##      X    Y
 ## 1 0.30 2.95
 ## 2 3.35 4.20
 ## 3 1.50 0.65
+## 
 ## PASO 5 
 ## ------- 
 ## Matriz de distancias 
@@ -1444,35 +1441,37 @@
 ## 1 0.5408327
 ## 2 3.7566608
 ## 3 2.3817011
+## 
 ## Matriz de asignaciones 
 ##   X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15
 ## 1  0  1  1  0  0  0  0  1  0   0   0   0   1   0   1
 ## 2  1  0  0  0  1  1  0  0  1   0   0   1   0   0   0
 ## 3  0  0  0  1  0  0  1  0  0   1   1   0   0   1   0
 ## 
+## 
 ## --RESULTADOS--
-## Centroide 1 ( 0.3 , 2.95 ) 
-##   - Punto 2 ( 0.75 , 3.25 )
-##   - Punto 3 ( 0 , 3 )
-##   - Punto 8 ( 0.25 , 3 )
-##   - Punto 13 ( 0.5 , 3 )
-##   - Punto 15 ( 0 , 2.5 )
+## Centroide 1 (0.3, 2.95) 
+##   - Punto 2 (0.75, 3.25)
+##   - Punto 3 (0, 3)
+##   - Punto 8 (0.25, 3)
+##   - Punto 13 (0.5, 3)
+##   - Punto 15 (0, 2.5)
 ## 
-## Centroide 2 ( 3.35 , 4.2 ) 
-##   - Punto 1 ( 3.5 , 4.5 )
-##   - Punto 5 ( 3 , 3.75 )
-##   - Punto 6 ( 3.75 , 4.5 )
-##   - Punto 9 ( 3.5 , 4.25 )
-##   - Punto 12 ( 3 , 4 )
+## Centroide 2 (3.35, 4.2) 
+##   - Punto 1 (3.5, 4.5)
+##   - Punto 5 (3, 3.75)
+##   - Punto 6 (3.75, 4.5)
+##   - Punto 9 (3.5, 4.25)
+##   - Punto 12 (3, 4)
 ## 
-## Centroide 3 ( 1.5 , 0.65 ) 
-##   - Punto 4 ( 1.75 , 0.75 )
-##   - Punto 7 ( 1.25 , 0.75 )
-##   - Punto 10 ( 1.5 , 0.5 )
-##   - Punto 11 ( 1 , 1 )
-##   - Punto 14 ( 2 , 0.25 )
+## Centroide 3 (1.5, 0.65) 
+##   - Punto 4 (1.75, 0.75)
+##   - Punto 7 (1.25, 0.75)
+##   - Punto 10 (1.5, 0.5)
+##   - Punto 11 (1, 1)
+##   - Punto 14 (2, 0.25)
 ## 
-## Vector de clústerización
+## Vector de clusterización
 ##  [1] 2 1 1 3 2 2 3 1 2 3 3 2 1 3 1
 \end{verbatim}
 \end{kframe}
@@ -2128,16 +2127,16 @@
  		
  			\subsection{Árboles de decisión}
  			
- 				\begin{exercise}
- 					El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por el siguiente conjunto de 10 sucesos constituidos por los valores de cuatro características de vehículos: 1. \{B, 4, 5, Coche\}; 2. \{A, 2, 2, Moto\}; 3. \{N, 2, 1, Bicicleta\}; 4. \{B, 6, 4, Camión\};
- 					5. \{B, 4, 6, Coche\}; 6. \{B, 4, 4, Coche\}; 7.\{N, 2, 2, Bicicleta\}; 8. \{B, 2, 1, Moto\}; 9. \{B, 6, 2, Camión\}; 10. \{N, 2, 1, Bicicleta\}, donde las características de cada suceso son: \{TipoCarnet, NúmeroRuedas, NúmeroPasajeros, TipoVehículo\}. Se debe clasificar el tipo de vehículo en función del resto de características. TipoCarnet, es el
- 					tipo de carnet necesario para conducir el vehículo.
- 				\end{exercise}
- 				
- 				Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor del resto de características. \\
- 				
- 				Como se necesita una muestra, lo primero que se va a realizar es la lectura del fichero Excel (\texttt{.xlsx}) por medio de la función \texttt{read.xlsx} del paquete \texttt{openxlsx}. Al igual que en el resto de ejercicios, se deberá pasar la ruta del fichero. En él se encuentra contenido el conjunto de daos propuesto para el ejercicio.
- 				
+ 			\begin{exercise}
+ 				El tercer conjunto de datos, que se empleará para realizar el análisis de clasificación supervisada utilizando árboles de decisión, estará formado por el siguiente conjunto de 10 sucesos constituidos por los valores de cuatro características de vehículos: 1. \{B, 4, 5, Coche\}; 2. \{A, 2, 2, Moto\}; 3. \{N, 2, 1, Bicicleta\}; 4. \{B, 6, 4, Camión\};
+ 				5. \{B, 4, 6, Coche\}; 6. \{B, 4, 4, Coche\}; 7.\{N, 2, 2, Bicicleta\}; 8. \{B, 2, 1, Moto\}; 9. \{B, 6, 2, Camión\}; 10. \{N, 2, 1, Bicicleta\}, donde las características de cada suceso son: \{TipoCarnet, NúmeroRuedas, NúmeroPasajeros, TipoVehículo\}. Se debe clasificar el tipo de vehículo en función del resto de características. TipoCarnet, es el
+ 				tipo de carnet necesario para conducir el vehículo.
+ 			\end{exercise}
+ 			
+ 			Para este conjunto de datos se va a plantear un estudio de clasificación supervisada utilizando como técnica los árboles de decisión. Se buscará definir, a partir de la muestra, un modelo de clasificación que permita obtener el valor de una característica a partir del valor de otras características que componen un suceso de la muestra. \\
+ 			
+ 			Como se necesita una muestra, lo primero que se va a realizar es la lectura del fichero Excel (\texttt{.xlsx}) por medio de la función \texttt{read.xlsx} del paquete \texttt{openxlsx}. Al igual que en el resto de ejercicios, se deberá pasar la ruta del fichero. En él se encuentra contenido el conjunto de datos propuesto para el ejercicio.
+ 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2158,66 +2157,505 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+ 			
+ 			Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar la característica que define el tipo de vehículo (tVehiculo) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
+ 			
+ 			\begin{enumerate}
+ 				\item \textbf{Selección de nodo}: Para el primer paso se elige una característica, que compondrá la raíz del árbol. En el resto de pasos, esta selección formará los nodos intermedios del mismo. La característica que forme el nodo nunca podrá ser el clasificador (\texttt{tVehiculo} en este caso).\\
  				
- 				Una vez tenemos los datos leídos hay que plantear el problema. En este caso, se pretende sacar el tipo de vehículo (\texttt{tVehiculo}) a partir del resto de características (\texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}). Al primero le llamaremos a partir de ahora clasificador. Se va a hacer uso del algoritmo de Hunt. Este algoritmo de clasificación supervisada basada en árboles de decisión se compone de dos pasos fundamentales:
+ 				El árbol con el que se va a trabajar en esta implementación será de naturaleza binaria; es decir, cada nodo tendrá dos hijos. En función del valor de la característica del nodo raíz salen dos nodos hijo. El objetivo de esto es que en base a ese valor que diferencia ambos nodos hijo, se pueda determinar el valor del clasificador. En el hijo de la derecha siempre habrá un nodo hoja, y en el izquierdo podrá haber un nodo hoja o un subárbol. En caso de ser un nodo hoja, se podrá determinar el valor de la característica clasificadora (que será el valor que aparezca en ese nodo). En caso de tener un subárbol, significa que el valor de la característica clasificadora no se puede determinar aún, por lo que será necesario fijarse en más criterios además del ya visto para sacar el valor de la característica clasificadora. Un ejemplo de árbol es el siguiente:
  				
- 				\begin{enumerate}[label = \textbf{\arabic*.}]
- 					\item \textbf{Selección de nodo}: Para el primer paso se elige una característica, que compondrá la raíz del árbol. En el resto de pasos, esta selección formará los nodos intermedios del mismo. La característica que forme el nodo nunca podrá ser el clasificador (\texttt{tVehiculo} en este caso). El objetivo de este árbol, una vez formado, es ver en cada nodo una característica. De cada nodo saldrán hijos cuya diferencia será el valor de la característica del nodo padre. Los hijos contendrán, o bien un valor del clasificador (lo que permitirá clasificar directamente un suceso de la muestra), o bien un subárbol del que dependerá la clasificación del resto de la muestra (habrá que recorrerlo para poder clasificar un suceso de la muestra). 
- 					
- 					Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\Delta_I$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será implementar a la clasificación la división con mayor $\Delta_I$. La ganancia de información se calcula de la siguiente forma:
- 					
- 					
-					$$
-					\Delta_i = I_{\text{padre}} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)
-					$$
- 					
- 					\begin{itemize}
- 						\item $I_{\text{padre}}$: Impureza del nodo padre
- 						\item $k$: Número total de hijos (en esta implementación siempre será 2)
- 						\item $N(n_j)$: Número de sucesos de la muestra asociados al nodo hijo $j$
- 						\item $N$: Número total de sucesos de la muestra actual
- 						\item $I(n_j)$: Impureza del nodo hijo $j$
- 					\end{itemize}
- 					
- 					Como se puede ver, para calcular la ganancia de información, se necesita la impureza $I$ del nodo padre y de sus hijos. Esta puede ser calculada de diferentes formas en función del método que se utilice. Todas ellas utilizan las frecuencias relativas ($f_i$) de las clases de equivalencia $c$ del clasificador. Se distinguen tres:
- 					
- 					\begin{itemize}
- 						\item \textbf{Entropía}
- 						$$
- 						I= - \sum_{i=1}^{c} f_i\log_{c}(f_i)
- 						$$
- 								
- 						\item \textbf{Error}
-						$$
-						I = 1 - \max\{f_i\}_{i=1}^c
-						$$
- 						
- 						\item \textbf{Gini}
-						$$
-						I = 1 - \sum_{i=1}^{c} f_i^2
-						$$
- 					\end{itemize}
- 					
- 					\item \textbf{Clasificación de los sucesos:} Una vez se ha elegido la característica que va a conformar el nodo, se clasifica. Si se pueden clasificar completamente los sucesos de la muestra (que en cada hijo solo haya un valor del clasificador posible) se trata de un nodo final y termina la clasificación. Si no lo permite, se trata de un nodo interno, por lo que hay que volver al primer paso.  
- 					
- 					Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\Delta_I = I_{\text{padre}}$), ya que significa que las impurezas de los hijos son 0. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). 
- 					
- 					Puede darse el caso en el que el algoritmo no pueda seguir clasificando porque la ganancia de información sea 0 en todos los escenarios de clasificación posibles. En ese caso, el algoritmo finalizará habiendo clasificado todo lo anterior pero dejando el nodo final abierto, es decir, sin una clasificación concreta.
- 					
- 				\end{enumerate}
+ 				\begin{center}
+
+ 				\end{center}
  				
- 				En esta implementación se utilizarán árboles binarios (cada nodo con 2 hijos) tal y como se ha mencionado previamente. Esto condiciona la forma de actuar en el algoritmo, así que la metodología a seguir se resume en los siguientes pasos:
+ 				En este ejemplo se encuentran dos divisiones. Primeramente se clasifica o divide por número de pasajeros. Aquellos vehículos con un número de pasajeros igual a 2 se clasifican como Moto (valor del clasificador). En caso de tener 4 se clasifica por medio de la característica que define el número de ruedas. Si se tienen 4 ruedas, el valor del clasificador es Coche, y si tiene 6 es Camión.\\
  				
- 				\begin{enumerate}
- 					\item \textbf{Selección del mejor nodo}: Se realizará la clasificación en base a 
- 					\item \textbf{Unión de la clasificación actual al resto de clasificación}:
- 					\item \textbf{Recorte de la muestra}:
- 				\end{enumerate}
+ 				Con el fin de poder optimizar estos árboles, se ha de encontrar la característica que mejor clasifique en base a la muestra con la que se está trabajando. Esto se va a realizar con la medida de ganancia de información ($\vartriangle_i$). Esta medida mide de una división, la diferencia de impureza entre el nodo padre y los nodos hijos una vez realizada esa división. A mayor ganancia de información, mejor división se habrá realizado, por lo que el objetivo será añadir a la clasificación, la división con mayor $\vartriangle_i$. La ganancia de información se calcula de la siguiente forma:
  				
- 				Estos paso se realizarán hasta que el algoritmo finalice. Este finalizará atendiendo a las siguientes condiciones:
+ 				\begin{center}
+ 					$\vartriangle_i = I_{padre} - \sum_{j=1}^k \frac{N(n_j)}{N} \cdot I(n_j)$
+ 				\end{center}
  				
+ 				\begin{itemize}
+ 					\item $I_{padre}$ = Impureza del nodo padre
+ 					\item $k$ = Número total de hijos (en esta implementación siempre será 2)
+ 					\item $N(n_j)$ = Número de sucesos de la muestra asociados al nodo hijo $j$
+ 					\item $N$ = Número total de sucesos de la muestra actual
+ 					\item $I(n_j)$ = Impureza del nodo hijo $j$
+ 				\end{itemize}
  				
- 				Con esta base teórica se procede a explicar la implementación del algoritmo en R. En primer lugar...
+ 				Como se puede ver, para calcular la ganancia de información, se necesita la impureza $I$ del nodo padre y de sus hijos. Esta puede ser calculada de diferentes formas en función del método que se utilice. Todas ellas utilizan las frecuencias relativas ($f_i$) de las clases de equivalencia $c$ del clasificador. Se distinguen tres:
+ 				
+ 				\begin{itemize}
+ 					\item \textbf{Entropía}
+ 					
+ 					\begin{center}
+ 						$ I_{nodo} = - \sum_{i=1}^{c} f_i \cdot log_2(f_i)$
+ 					\end{center}
+ 					
+ 					\item \textbf{Error}
+ 					
+ 					\begin{center}
+ 						$I_{nodo} = 1 - max(f_i)$
+ 					\end{center}
+ 					
+ 					\item \textbf{Gini}
+ 					
+ 					\begin{center}
+ 						$I_{nodo} = 1 - \sum_{i=1}^{c} (f_i)^2$
+ 					\end{center}
+ 				\end{itemize}
+ 				
+ 				\item \textbf{Clasificación de los sucesos:} Una vez se ha elegido la característica que va a conformar el nodo raíz, se clasifica. Si se pueden clasificar completamente los sucesos de la muestra (que en cada hijo solo haya un valor del clasificador posible) se tendrán dos nodos hoja y termina la clasificación. Si no lo permite, se trata de un nodo interno, por lo que hay que volver al primer paso y enlazar al nodo hijo de la izquierda un nuevo árbol. Cada vez que se clasifique con un criterio determinado, todas las filas de la muestra que contengan ese o esos valores en la característica del nodo se deben eliminar (ya que se considera que han sido clasificadas). \\
+ 				
+ 				Una observación a tener en cuenta es que un nodo ha clasificado completamente cuando la impureza del padre es igual a la ganancia de información ($\vartriangle_i = I_{padre}$), ya que significa que las impurezas de los hijos son 0. \\
+ 				
+ 				Puede darse el caso en el que el algoritmo no pueda seguir clasificando porque la ganancia de información sea 0 en todos los escenarios de clasificación posibles. En ese caso, el algoritmo finalizará habiendo clasificado todo lo anterior pero dejando el nodo final abierto, es decir, sin una clasificación concreta. Los valores del nodo izquierdo en la última serán todos los valores del clasificador que quedan en la muestra.
+ 			\end{enumerate}
+ 			
+ 			En esta implementación se utilizarán árboles binarios (cada nodo con 2 hijos) tal y como se ha mencionado previamente. Esto condiciona la forma de actuar en el algoritmo, así que la metodología a seguir se resume en los siguientes pasos:
+ 			
+ 			\begin{enumerate}
+ 				\item \textbf{Selección del mejor nodo}: Para determinar el mejor nodo se calcula la ganancia de información para todas las divisiones posibles y se escoge la mejor. Las divisiones posibles son todas las combinaciones que resultan de elegir una característica concreta como nodo raíz, y dentro de cada característica elegir un valor de la misma que se utilizará para clasificar en el nodo de la derecha. Si se tienen $n$ características y $m$ posibles valores para cada característica, se tienen un total de $n \cdot m$ escenarios
+ 				\item \textbf{Unión de la clasificación actual al resto de clasificación}: Una vez se ha encontrado la mejor clasificación, esta se une a la clasificación previa.
+ 				\item \textbf{Recorte de la muestra}: Todos los sucesos de la muestra cuyo valor en la característica del nodo raíz sea igual al que define el nodo de la derecha son eliminados de la muestra. Se repiten los tres pasos anteriores con la nueva muestra hasta que el algoritmo finalice.
+ 			\end{enumerate}
+ 			
+ 			El algoritmo finalizará si no se tienen más datos en la muestra (es decir, ya se ha clasificado todo), o si la mejor ganancia de información es 0 (esto equivale a decir que no se puede encontrar ningún criterio de clasificación).\\
+ 			
+ 			Con esta base teórica se procede a explicar la implementación del algoritmo en R. Primeramente, para seleccionar el mejor nodo se necesita calcular la ganancia de información. Esta a su vez sale de las impurezas, obtenidas en base a las frecuencias relativas en cada nodo de las clases de equivalencia del clasificador. Es por ello que lo primero que se plantea es una función \texttt{get\_frec} que permita obtener las frecuencias relativas para el cálculo de la impureza de cada nodo. A esta función habrá que pasarle los siguientes parámetros:
+ 			
+ 			\begin{itemize}
+ 				\item \textbf{sample}: La muestra de datos pendientes de clasificar.
+ 				\item \textbf{col}: Columna que representa la característica del nodo raíz.
+ 				\item \textbf{elements}: Clases de equivalencia de \texttt{col} que se tendrán en cuenta a la hora de calcular las frecuencias relativas. Si un suceso tiene uno de estos valores en la columna \texttt{col} se tiene en cuenta para las frecuencias relativas, sino se omite. 
+ 				\item \textbf{criteria}: Columna de la característica clasificadora.
+ 				\item \textbf{values}: Todas las clases de equivalencia de la columna clasificadora.
+ 			\end{itemize}
+ 			
+ 			Se empieza con una lista de ceros. Cada índice de esta lista representará las veces que aparece un valor del clasificador (es decir, las veces que aparece Moto, Camión, Coche y Bicicleta en este ejercicio). En el nodo raíz basta con contar las veces que aparece cada uno en toda la muestra, pero en los nodos hijo la muestra se divide. Por ello, es importante pasar el parámetro \texttt{elements}, para determinar qué sucesos contabilizarán para las frecuencias en cada caso.\\
+ 			
+ 			El código es sencillo, se crea la lista con todo 0 y de longitud determinada por los posibles valores del clasificador, se comprueban todos los sucesos de la muestra y, si ese suceso está dentro del nodo que se está analizando, se incrementa en uno la frecuencia que corresponda. Finalmente se deben devolver frecuencias relativas, por lo que se dividen todos los valores entre los sucesos asociados al nodo. Nótese que la suma de esta lista deberá dar 1 en cualquier caso. El código es el siguiente:
+ 			
+ 			{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_frec} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{col}\hlstd{,} \hlkwc{criteria}\hlstd{,} \hlkwc{elements}\hlstd{,} \hlkwc{values}\hlstd{) \{}
+        \hlstd{n} \hlkwb{=} \hlnum{0}
+        \hlstd{frecs} \hlkwb{=} \hlkwd{setNames}\hlstd{(}\hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{times} \hlstd{=} \hlkwd{length}\hlstd{(values))}
+                \hlstd{,} \hlkwc{nrow} \hlstd{=} \hlnum{1}\hlstd{)), values)}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample[, col])) \{}
+                \hlkwa{if} \hlstd{(sample[i, col]} \hlopt{%in%} \hlstd{elements) \{}
+                        \hlstd{frecs[}\hlnum{1}\hlstd{, sample[i, criteria]]} \hlkwb{=}
+                                \hlstd{frecs[}\hlnum{1}\hlstd{, sample[i, criteria]]} \hlopt{+} \hlnum{1}
+                        \hlstd{n} \hlkwb{=} \hlstd{n} \hlopt{+} \hlnum{1}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{frecs} \hlopt{/} \hlstd{n}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+	 		}
+ 			
+ 			Una vez se tienen las frecuencias de los nodos, hay que calcular la impureza de los mismos. Para ello, se ha visto previamente que existen tres métodos diferentes (entropía, error y gini). El cálculo de la impureza se realiza en función de las frecuencias en cualquier caso, por lo que será un parámetro obligatorio en las tres funciones. Se tiene una por cada método.\\
+ 			
+ 			El código de la entropía implementa el cálculo visto previamente. Un matiz importante en esta función es que se controla que, en caso de haber frecuencias con valor 0 o 1, se presentaría un cálculo matemáticamente imposible. Es por ello que en caso de encontrar esos números, el resultado de la operación correspondiente con esa frecuencia será 0.
+ 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{entropy} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{frec}\hlstd{) \{}
+        \hlstd{acum} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(frec)) \{}
+                \hlstd{f} \hlkwb{=} \hlstd{frec[}\hlnum{1}\hlstd{, i]}
+                \hlkwa{if} \hlstd{(f} \hlopt{!=} \hlnum{0} \hlopt{&&} \hlstd{f} \hlopt{!=} \hlnum{1}\hlstd{) \{}
+                        \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{-} \hlstd{f} \hlopt{*} \hlkwd{log}\hlstd{(f,} \hlnum{2}\hlstd{)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{acum}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			
+ 			El código del método de error:
+ 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{error} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{frec}\hlstd{) \{}
+        \hlnum{1} \hlopt{-} \hlkwd{max}\hlstd{(frec)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			
+ 			Y el del método Gini:
+ 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{gini} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{frec}\hlstd{) \{}
+        \hlstd{acum} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(frec)) \{}
+                \hlstd{f} \hlkwb{=} \hlstd{frec[}\hlnum{1}\hlstd{, i]}
+                \hlstd{acum} \hlkwb{=} \hlstd{acum} \hlopt{+} \hlstd{f}\hlopt{^}\hlnum{2}
+        \hlstd{\}}
+        \hlnum{1} \hlopt{-} \hlstd{acum}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			
+ 			Con estas funciones auxiliares se puede confeccionar una función \texttt{get\_impurity} que llame adecuadamente a estas anteriores y permita obtener el valor de la impureza de un nodo. Los parámetros que deberá tener esta función son los mismos que la función \texttt{get\_frec} y un parámetro adicional que indique la medida con la que se quiere calcular la impureza. La función recoge las frecuencias del nodo y llama a una de las tres últimas funciones que se han visto, la cual regresa el valor de la impureza de un nodo.
+ 			
+ 			{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_impurity} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{col}\hlstd{,} \hlkwc{elements}\hlstd{,} \hlkwc{criteria}\hlstd{,}
+                 \hlkwc{equivalence_clases}\hlstd{,} \hlkwc{measure}\hlstd{) \{}
+        \hlstd{frec} \hlkwb{=} \hlkwd{get_frec}\hlstd{(sample, col, criteria,}
+                \hlstd{elements, equivalence_clases)}
+        \hlkwd{switch}\hlstd{(measure,}
+                        \hlstr{"entropy"} \hlstd{=} \hlkwd{entropy}\hlstd{(frec),}
+                        \hlstr{"error"} \hlstd{=} \hlkwd{error}\hlstd{(frec),}
+                        \hlstr{"gini"} \hlstd{=} \hlkwd{gini}\hlstd{(frec))}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			}
+ 			
+ 			Una consideración es que se necesitan todas las clases de equivalencia (\texttt{equivalence\_classes}) de la característica clasificadora, para que este código pueda funcionar. Al final, la función \texttt{get\_impurity} será llamada por otra de nivel superior que analice todos los nodos que conforman una división, pero esta necesita una lista con todos los valores que puede adquirir, en este caso, \texttt{tVehiculo}. Para ello, se ha hecho una función \texttt{get\_elements}, la cual recibe la muestra completa de datos y la columna de la que se quieren sacar las clases de equivalencia. El código es muy sencillo, se itera toda la columna y se sacan todos los valores a una lista auxiliar, la cual será devuelta una vez se haya iterado todo.
+ 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_elements}  \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{col}\hlstd{) \{}
+        \hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{sample[, col]) \{}
+                \hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(element} \hlopt{%in%} \hlstd{elements)) \{}
+                        \hlstd{elements} \hlkwb{=} \hlkwd{c}\hlstd{(elements, element)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{elements}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			
+ 			La función de nivel superior de la que se hablaba será evidentemente \texttt{get\_gain}, la cual será llamada para obtener la ganancia de información de una división concreta. Esta función es crucial en el algoritmo, ya que de ella dependerá la selección del siguiente nodo. La función llama a \texttt{get\_elements} y a la función \texttt{get\_impurity} para calcular la impureza del padre y de los hijos. Con todas las impurezas, se puede aplicar la fórmula definida al principio de esta sección. Los parámetros que recibe la función son los siguientes:
+ 			
+ 			\begin{itemize}
+ 				\item \textbf{sample}: Muestra de datos actual.
+ 				\item \textbf{left}: Valores de la característica del nodo raíz que conforman el nodo hijo de la izquierda. Este estará compuesto por sucesos que contengan alguno de estos valores en la característica.
+ 				\item \textbf{right}: Valores de la característica del nodo raíz que conforman el nodo hijo de la derecha. Este estará compuesto por sucesos que contengan alguno de estos valores en la característica.
+ 				\item \textbf{criteria}: Nombre de la columna que representa la característica clasificadora en la muestra.
+ 				\item \textbf{col}: Nombre de la columna que representa la característica del nodo raíz en la muestra.
+ 				\item  \textbf{measure}: Medida de la impureza. Este parámetro podrá adquirir los siguientes valores: ``entropy'', ``error'', ``gini''.
+ 			\end{itemize}
+ 			
+ 			{\tiny
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{get_gain} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{left}\hlstd{,} \hlkwc{right}\hlstd{,} \hlkwc{criteria}\hlstd{,} \hlkwc{col}\hlstd{,} \hlkwc{measure}\hlstd{) \{}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(sample)}
+        \hlstd{equivalence_clases} \hlkwb{=} \hlkwd{get_elements}\hlstd{(sample, criteria)}
+        \hlstd{impurity_father} \hlkwb{=} \hlkwd{get_impurity}\hlstd{(sample, col,} \hlkwd{union}\hlstd{(left, right), criteria, equivalence_clases, measure)}
+        \hlstd{impurity_left} \hlkwb{=} \hlkwd{get_impurity}\hlstd{(sample, col, left, criteria, equivalence_clases, measure)}
+        \hlstd{impurity_right} \hlkwb{=} \hlkwd{get_impurity}\hlstd{(sample, col, right, criteria, equivalence_clases, measure)}
+        \hlstd{impurity_father} \hlopt{-} \hlstd{(}\hlkwd{len}\hlstd{(left)} \hlopt{/} \hlstd{n} \hlopt{*} \hlstd{impurity_left} \hlopt{+} \hlkwd{len}\hlstd{(right)} \hlopt{/} \hlstd{n} \hlopt{*} \hlstd{impurity_right)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			}
+ 			
+ 			Una vez se tiene cómo calcular la ganancia de información de una división concreta hay que dar formato a esas divisiones. La pregunta que se plantea es: \textit{¿Cómo se puede representar un árbol con dos nodos hijo y un nodo raíz?}. La estructura de datos que se ha escogido es un \texttt{data.frame}. Esta estructura contendrá columnas que internamente tendrán todos los atributos necesarios para definir una división o clasificación concreta. Estos atributos son los siguientes:
+ 			
+ 			\begin{itemize}
+ 				\item \textbf{parent}: Define la característica del nodo raíz.
+ 				\item \textbf{right\_element}: El valor del clasificador que va a aparecer en el nodo de la derecha (el nodo de la derecha solo estará formado por sucesos con este valor en el clasificador).
+ 				\item \textbf{left}: Valores de la característica del nodo raíz para los cuales un suceso se clasifica en el nodo de la izquierda.
+ 				\item \textbf{right}: Valores de la característica del nodo raíz para los cuales un suceso se clasifica en el nodo de la derecha.
+ 				\item \textbf{gain}. Ganancia de información ($\vartriangle_i$) de la división.
+ 			\end{itemize}
+ 			
+ 			
+ 			Además esta función recibe los siguientes parámetros:
+ 			
+ 			\begin{itemize}
+ 				\item \textbf{sample}: Muestra de datos con la que se trabaja para hacer la clasificación.
+ 				\item \textbf{col}: Característica que conformará el nodo raíz de la nueva clasificación.
+ 				\item \textbf{right\_element}: Valor de la columna clasificadora que tendrán los suceso del nodo hijo de la derecha.
+ 				\item \textbf{criteria}: Característica clasificadora.
+ 				\item \textbf{measure}: Medida de impureza que se usará para calcular la ganancia de información.
+ 			\end{itemize}
+ 			
+ 			El código que crea la nueva clasificación es el siguiente:
+ 			
+ 			{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{create_classification} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{col}\hlstd{,} \hlkwc{right_element}\hlstd{,} \hlkwc{criteria}\hlstd{,} \hlkwc{measure}\hlstd{) \{}
+        \hlstd{left} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample[, col])) \{}
+                \hlstd{element} \hlkwb{=} \hlstd{sample[i, col]}
+                \hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(element} \hlopt{%in%} \hlstd{left)} \hlopt{&&} \hlstd{sample[i, criteria]} \hlopt{!=} \hlstd{right_element) \{}
+                        \hlstd{left} \hlkwb{=} \hlkwd{unlist}\hlstd{(}\hlkwd{append}\hlstd{(left, element))}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{right} \hlkwb{=} \hlkwd{dif}\hlstd{(}\hlkwd{get_elements}\hlstd{(sample, col), left)}
+        \hlkwa{if}\hlstd{(}\hlkwd{len}\hlstd{(right)} \hlopt{>} \hlnum{0} \hlopt{&&} \hlkwd{len}\hlstd{(left)} \hlopt{>} \hlnum{0}\hlstd{) \{}
+                \hlstd{gain} \hlkwb{=} \hlkwd{get_gain}\hlstd{(sample, left, right, criteria, col, measure)}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlstd{gain} \hlkwb{=} \hlnum{0}
+        \hlstd{\}}
+        \hlkwd{data.frame}\hlstd{(}\hlkwc{parent}\hlstd{=col, right_element,}
+                \hlkwc{left}\hlstd{=}\hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(left)),} \hlkwc{right}\hlstd{=}\hlkwd{I}\hlstd{(}\hlkwd{list}\hlstd{(right)), gain)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			}
+ 			
+ 			La clasificación final va a representarse como un \texttt{data.frame} con el conjunto de divisiones realizadas a lo largo del algoritmo, donde cada fila (o clasificación) representa un nivel del árbol. La característica del nodo raíz se saca con la columna \texttt{parent}, el valor deducido del clasificador en el nodo de la derecha con \texttt{right\_element}, y los valores de la característica del nodo raíz que definen los hijos izquierdo y derecho se sacan con \texttt{left} y \texttt{right}. El nodo de la izquierda estará definido por la siguiente fila del \texttt{data.frame} y así sucesivamente hasta llegar al último árbol que contiene dos hojas. El nodo de la izquierda de este árbol estará definido por los valores restantes en la columna clasificadora de la muestra.\\
+ 			
+ 			En términos prácticos, un \texttt{data.frame} como salida que representa un árbol de decisión no es viable, ya que requiere de un esfuerzo por parte del usuario para entender el resultado de la ejecución. Lo que se busca en esta implementación es proporcionar una salida visual que no requiera de ningún esfuerzo por parte del usuario para entenderla. Es por ello que se ha decidido elaborar una función \texttt{df\_2\_tree}, la cual pasará la información del \texttt{data.frame} a una estructura de árbol, pudiendo ofrecer una salida visual del árbol de decisión final, fruto de la ejecución realizada sobre la muestra introducida. Esta función se ha basado principalmente en el paquete \texttt{data.tree}, explicado en el anexo del documento.\\
+ 			
+ 			Para empezar, la forma en la que se construye la estructura del árbol es de abajo arriba. Esto evidentemente implica un recorrido del \texttt{data.frame} desde la última fila hasta la primera. La función recibe como parámetros el \texttt{data.frame} que define el árbol de decisión, la muestra final de datos y el nombre de la característica clasificadora.\\
+ 			
+ 			Para construir un árbol primero se define el nombre del nodo raíz (con \texttt{Node\$new}), el cual contendrá el valor de la columna \texttt{parent}. Además, se define un atributo \texttt{gain} dentro de ese nuevo nodo que almacena la ganancia de información de la división. Posteriormente, se declara el estilo del nodo, indicando que este debe mostrar visualmente el nombre y la ganancia de información. Esto se hace con la función \texttt{SetNodeStyle}.\\
+ 			
+ 			El nodo de la derecha se define indicando en el atributo del nombre el valor del clasificador que representa ese nodo. Para asociarlo al nodo raíz se hace uso de la función \texttt{AddChildNode} aplicada al nodo raíz. Además, se define un atributo \texttt{label} con los valores de \texttt{right}.\\
+ 			
+ 			El nodo de la izquierda se definirá de dos formas distintas. En la primera iteración, el nombre del mismo serán todos los elementos que quedan en la muestra; mientras que en el resto de iteraciones, en vez de declarar un nodo nuevo, se define como hijo izquierdo el árbol de la anterior iteración. De esta forma, los árboles que vamos creando se van encadenando con el de la iteración siguiente sucesivamente hasta llegar a la raíz. En ambos casos, se define un atributo \texttt{label} con los valores de \texttt{left}.\\
+ 			
+ 			Este atributo \texttt{label} permite que a la hora de mostrar el árbol salgan los valores del nodo raíz que clasifican el nodo izquierdo y el nodo derecho en la arista. Para ello hacemos uso de la función \texttt{SetEdgeStyle}. Una vez se ha terminado de construir la estructura del árbol, con la función \texttt{plot} se muestra todo lo que se ha definido previamente. El código de la función es el siguiente: 
+ 			
+ 			{\small
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{df_2_tree} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{df}\hlstd{,} \hlkwc{final}\hlstd{,} \hlkwc{criteria}\hlstd{) \{}
+        \hlstd{last_tree} \hlkwb{=} \hlstd{Node}\hlopt{$}\hlkwd{new}\hlstd{(df[}\hlkwd{nrow}\hlstd{(df),} \hlstr{"parent"}\hlstd{])}
+        \hlstd{last_tree}\hlopt{$}\hlstd{gain} \hlkwb{=} \hlkwd{round}\hlstd{(df[}\hlkwd{nrow}\hlstd{(df),} \hlstr{"gain"}\hlstd{],} \hlnum{3}\hlstd{)}
+        \hlkwd{SetNodeStyle}\hlstd{(last_tree,} \hlkwc{label} \hlstd{=} \hlkwd{paste}\hlstd{(last_tree}\hlopt{$}\hlstd{name,} \hlstr{"\textbackslash{}n"}\hlstd{, last_tree}\hlopt{$}\hlstd{gain))}
+        \hlstd{new_left_leaf} \hlkwb{=} \hlstd{Node}\hlopt{$}\hlkwd{new}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{get_elements}\hlstd{(final, criteria)))}
+        \hlstd{new_left_leaf}\hlopt{$}\hlstd{label} \hlkwb{=} \hlstd{final[}\hlkwd{nrow}\hlstd{(final), df[}\hlkwd{nrow}\hlstd{(df),} \hlstr{"parent"}\hlstd{]]}
+        \hlstd{new_left_leaf}\hlopt{$}\hlstd{gain} \hlkwb{=} \hlstr{""}
+        \hlstd{last_tree}\hlopt{$}\hlkwd{AddChildNode}\hlstd{(new_left_leaf)}
+        \hlstd{new_right_leaf} \hlkwb{=} \hlstd{Node}\hlopt{$}\hlkwd{new}\hlstd{(df[}\hlkwd{nrow}\hlstd{(df),} \hlstr{"right_element"}\hlstd{])}
+        \hlstd{new_right_leaf}\hlopt{$}\hlstd{label} \hlkwb{=} \hlstd{df[}\hlkwd{nrow}\hlstd{(df),} \hlstr{"right"}\hlstd{]}
+        \hlstd{new_right_leaf}\hlopt{$}\hlstd{gain} \hlkwb{=} \hlstr{""}
+        \hlstd{last_tree}\hlopt{$}\hlkwd{AddChildNode}\hlstd{(new_right_leaf)}
+        \hlkwd{SetEdgeStyle}\hlstd{(new_left_leaf,} \hlkwc{label} \hlstd{= new_left_leaf}\hlopt{$}\hlstd{label,} \hlkwc{fontsize} \hlstd{=} \hlnum{11}\hlstd{)}
+        \hlkwd{SetEdgeStyle}\hlstd{(new_right_leaf,} \hlkwc{label} \hlstd{= new_right_leaf}\hlopt{$}\hlstd{label,} \hlkwc{fontsize} \hlstd{=} \hlnum{11}\hlstd{)}
+        \hlkwd{SetNodeStyle}\hlstd{(new_left_leaf,} \hlkwc{label} \hlstd{=} \hlkwd{paste}\hlstd{(new_left_leaf}\hlopt{$}\hlstd{name))}
+        \hlkwd{SetNodeStyle}\hlstd{(new_right_leaf,} \hlkwc{label} \hlstd{=} \hlkwd{paste}\hlstd{(new_right_leaf}\hlopt{$}\hlstd{name))}
+
+        \hlkwa{for} \hlstd{(row_index} \hlkwa{in} \hlstd{(}\hlkwd{nrow}\hlstd{(df)}\hlopt{-}\hlnum{1}\hlstd{)}\hlopt{:}\hlnum{1}\hlstd{) \{}
+                \hlstd{last_tree}\hlopt{$}\hlstd{label} \hlkwb{=} \hlstd{df[row_index,} \hlstr{"left"}\hlstd{]}
+                \hlstd{new_tree} \hlkwb{=} \hlstd{Node}\hlopt{$}\hlkwd{new}\hlstd{(df[row_index,} \hlstr{"parent"}\hlstd{])}
+                \hlstd{new_tree}\hlopt{$}\hlkwd{AddChildNode}\hlstd{(last_tree)}
+                \hlstd{right_node} \hlkwb{=} \hlstd{Node}\hlopt{$}\hlkwd{new}\hlstd{(df[row_index,} \hlstr{"right_element"}\hlstd{])}
+                \hlstd{right_node}\hlopt{$}\hlstd{label} \hlkwb{=} \hlstd{df[row_index,} \hlstr{"right"}\hlstd{]}
+                \hlstd{right_node}\hlopt{$}\hlstd{gain} \hlkwb{=} \hlstr{""}
+                \hlstd{new_tree}\hlopt{$}\hlkwd{AddChildNode}\hlstd{(right_node)}
+                \hlkwd{SetEdgeStyle}\hlstd{(right_node,} \hlkwc{label} \hlstd{= right_node}\hlopt{$}\hlstd{label,} \hlkwc{fontsize} \hlstd{=} \hlnum{11}\hlstd{)}
+                \hlkwd{SetEdgeStyle}\hlstd{(last_tree,} \hlkwc{label} \hlstd{= last_tree}\hlopt{$}\hlstd{label,} \hlkwc{fontsize} \hlstd{=} \hlnum{11}\hlstd{)}
+                \hlstd{last_tree} \hlkwb{=} \hlstd{new_tree}
+                \hlstd{last_tree}\hlopt{$}\hlstd{gain} \hlkwb{=} \hlkwd{round}\hlstd{(df[row_index,} \hlstr{"gain"}\hlstd{],} \hlnum{3}\hlstd{)}
+                \hlkwd{SetNodeStyle}\hlstd{(last_tree,} \hlkwc{label} \hlstd{=}
+                                \hlkwd{paste}\hlstd{(last_tree}\hlopt{$}\hlstd{name,} \hlstr{"\textbackslash{}n"}\hlstd{, last_tree}\hlopt{$}\hlstd{gain))}
+                \hlkwd{SetNodeStyle}\hlstd{(right_node,} \hlkwc{label} \hlstd{=} \hlkwd{paste}\hlstd{(right_node}\hlopt{$}\hlstd{name))}
+        \hlstd{\}}
+        \hlkwd{return}\hlstd{(last_tree)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		}
+ 			
+ 			Todas esta funciones van a trabajar conjuntamente para proporcionar la salida de la ejecución del algoritmo. El usuario llamará a una función, pasando la muestra de datos, las características con las que se va a clasificar, el clasificador y el método de cálculo de la impureza de los nodos. Esta función \texttt{hunt} será la encargada de la ejecución completa del algoritmo. 
+ 			
+ 			Primeramente se va a ver el código:
+ 			
+ 			{\tiny
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{hunt} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{classes}\hlstd{,} \hlkwc{criteria}\hlstd{,} \hlkwc{measure}\hlstd{,} \hlkwc{details} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
+        \hlstd{final_clasification} \hlkwb{=} \hlkwd{data.frame}\hlstd{()}
+        \hlstd{best_gain} \hlkwb{=} \hlopt{-}\hlnum{1}
+        \hlstd{best_clasification} \hlkwb{=} \hlkwa{NULL}
+        \hlkwa{while} \hlstd{(}\hlkwd{nrow}\hlstd{(sample)} \hlopt{>} \hlnum{0} \hlopt{&&} \hlstd{best_gain} \hlopt{!=} \hlnum{0}\hlstd{) \{}
+                \hlstd{best_gain} \hlkwb{=} \hlopt{-}\hlnum{1}
+                \hlkwa{for} \hlstd{(col} \hlkwa{in} \hlstd{classes) \{}
+                        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlkwd{get_elements}\hlstd{(sample, criteria)) \{}
+                                \hlstd{clasification} \hlkwb{=} \hlkwd{create_classification}\hlstd{(sample, col, element, criteria, measure)}
+                                \hlstd{actual_gain} \hlkwb{=} \hlstd{clasification}\hlopt{$}\hlstd{gain}
+                                \hlkwa{if} \hlstd{(actual_gain} \hlopt{>} \hlstd{best_gain) \{}
+                                        \hlstd{best_gain} \hlkwb{=} \hlstd{actual_gain}
+                                        \hlstd{best_clasification} \hlkwb{=} \hlstd{clasification}
+                                \hlstd{\}}
+                        \hlstd{\}}
+                \hlstd{\}}
+                \hlkwa{if} \hlstd{(best_gain} \hlopt{!=} \hlnum{0}\hlstd{) \{}
+                        \hlstd{sample} \hlkwb{=} \hlkwd{subset}\hlstd{(sample, sample[, best_clasification}\hlopt{$}\hlstd{parent]} \hlopt{%in%} \hlkwd{unlist}\hlstd{(best_clasification}\hlopt{$}\hlstd{left))}
+                        \hlstd{final_clasification} \hlkwb{=} \hlkwd{rbind}\hlstd{(final_clasification, best_clasification)}
+                        \hlkwa{if} \hlstd{(details) \{}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nIteración"}\hlstd{,} \hlkwd{nrow}\hlstd{(final_clasification))}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n============\textbackslash{}n"}\hlstd{)}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"Se escoge el nodo"}\hlstd{, best_clasification}\hlopt{$}\hlstd{parent,} \hlstr{"con una ganancia de"}\hlstd{, best_gain)}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nLos sucesos que tengan el/los valor/es"}\hlstd{,} \hlkwd{paste}\hlstd{(best_clasification}\hlopt{$}\hlstd{right),}
+                                 \hlstr{"en ese nodo se clasifican como"}\hlstd{, best_clasification}\hlopt{$}\hlstd{right_element)}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nLa nueva muestra es:\textbackslash{}n"}\hlstd{)}
+                                \hlkwd{print}\hlstd{(sample)}
+                                \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}n"}\hlstd{)}
+                        \hlstd{\}}
+                \hlstd{\}}
+        \hlstd{\}}
+
+        \hlstd{tree} \hlkwb{=} \hlkwd{df_2_tree}\hlstd{(final_clasification, sample, criteria)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"\textbackslash{}nÁrbol de decisión\textbackslash{}n=================\textbackslash{}n"}\hlstd{)}
+        \hlkwd{print}\hlstd{(tree,} \hlstr{"label"}\hlstd{,} \hlstr{"gain"}\hlstd{)}
+        \hlstd{tree}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 			}
+ 			
+ 			El código selecciona la mejor división en base a la muestra actual de datos. Para ello se hacen todas las divisiones posibles con todas las características, y en cada una de ellas, se hace una división por cada valor que puede adquirir el clasificador, dejando este en el nodo de la derecha. En la muestra del ejercicio se hacen divisiones por \texttt{tCarnet}, \texttt{nRuedas} y \texttt{nPasajeros}. Dentro de cada característica se hacen divisiones dejando como elemento de la derecha Moto, Camión, Coche y Bicicleta. De todas estas posibles divisiones se calcula la ganancia de información de cada una de ellas, y se coge la división que devuelve la mayor ganancia de información. Esta será conocida como \texttt{best\_clasification}. \\
+ 			
+ 			Si la mejor clasificación tiene una ganancia de información mayor que 0 (es decir, que clasifique algo), se debe recortar la muestra. Para ello, se hace uso de la función \texttt{subset}, la cual devuelve un \texttt{data.frame} con los sucesos de la muestra que no han sido aún clasificados (que su valor en la característica del nodo raíz es cualquiera de los del nodo izquierdo). Además, se añade al conjunto de clasificaciones la nueva clasificación.\\
+ 			
+ 			Este procedimiento se repite hasta que no se tengan más sucesos en la muestra (no hay nada más que clasificar) o hasta que la mejor ganancia de información sea 0 (lo que querrá decir que no se puede clasificar nada más en la muestra restante).\\
+ 			
+ 			Una vez se tiene el \texttt{data.frame} final representando el árbol de decisión, se llama a la función \texttt{data\_2\_tree} para pasar el mismo a una estructura de árbol.\\ 
+ 			
+ 			La función cuenta con un parámetro \texttt{details} (inicialmente establecido a \texttt{FALSE}), el cual si se pone a \texttt{TRUE} indica al usuario que división se ha escogido en cada paso (con su $\vartriangle_i$) y qué muestra se queda después de haber dividido.
+ 			
+ 			Si se ejecuta la función con la muestra del ejercicio se obtiene la siguiente salida:
+ 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
+\hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
+\hlstd{c2}
+\hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
+\hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
+\hlstd{\}} \hlkwa{else} \hlstd{\{}
+\hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
+\hlstd{\}}
+\hlstd{\}}
+
+\hlstd{dif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
+\hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{()}
+\hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{c1) \{}
+\hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(element} \hlopt{%in%} \hlstd{c2)) \{}
+\hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{(res, element)}
+\hlstd{\}}
+\hlstd{\}}
+\hlstd{res}
+\hlstd{\}}
+\hlstd{tree} \hlkwb{=} \hlkwd{hunt}\hlstd{(sample,} \hlkwd{c}\hlstd{(}\hlstr{"tCarnet"}\hlstd{,} \hlstr{"nRuedas"}\hlstd{,} \hlstr{"nPasajeros"}\hlstd{),}
+ \hlstr{"tVehículo"}\hlstd{,} \hlstr{"error"}\hlstd{,} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Iteración 1
+## ============
+## Se escoge el nodo tCarnet con una ganancia de 0.4142857
+## Los sucesos que tengan el/los valor/es N en ese nodo se clasifican como Bicicleta
+## La nueva muestra es:
+##   tCarnet nRuedas nPasajeros tVehículo
+## 1       B       4          5     Coche
+## 2       A       2          2      Moto
+## 4       B       6          4    Camión
+## 5       B       4          6     Coche
+## 6       B       4          4     Coche
+## 8       B       2          1      Moto
+## 9       B       6          2    Camión
+## 
+## 
+## Iteración 2
+## ============
+## Se escoge el nodo tCarnet con una ganancia de 0.4464286
+## Los sucesos que tengan el/los valor/es A en ese nodo se clasifican como Moto
+## La nueva muestra es:
+##   tCarnet nRuedas nPasajeros tVehículo
+## 1       B       4          5     Coche
+## 4       B       6          4    Camión
+## 5       B       4          6     Coche
+## 6       B       4          4     Coche
+## 8       B       2          1      Moto
+## 9       B       6          2    Camión
+## 
+## 
+## Iteración 3
+## ============
+## Se escoge el nodo nRuedas con una ganancia de 0.375
+## Los sucesos que tengan el/los valor/es 6 en ese nodo se clasifican como Camión
+## La nueva muestra es:
+##   tCarnet nRuedas nPasajeros tVehículo
+## 1       B       4          5     Coche
+## 5       B       4          6     Coche
+## 6       B       4          4     Coche
+## 8       B       2          1      Moto
+## 
+## 
+## Iteración 4
+## ============
+## Se escoge el nodo nRuedas con una ganancia de 0.25
+## Los sucesos que tengan el/los valor/es 4 en ese nodo se clasifican como Coche
+## La nueva muestra es:
+##   tCarnet nRuedas nPasajeros tVehículo
+## 8       B       2          1      Moto
+## 
+## 
+## Árbol de decisión
+## =================
+##               levelName label  gain
+## 1 tCarnet                     0.414
+## 2  ¦--tCarnet            B, A 0.446
+## 3  ¦   ¦--nRuedas           B 0.375
+## 4  ¦   ¦   ¦--nRuedas    4, 2  0.25
+## 5  ¦   ¦   ¦   ¦--Moto      2      
+## 6  ¦   ¦   ¦   °--Coche     4      
+## 7  ¦   ¦   °--Camión        6      
+## 8  ¦   °--Moto              A      
+## 9  °--Bicicleta             N
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+ 			
+ 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función, obteniendo el siguiente gráfico visual.
+ 			
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in loadNamespace(name): there is no package called 'webshot'}}\end{kframe}
+\end{knitrout}
+ 			
+ 			Por lo tanto, se pueden sacar las siguientes conclusiones del ejercicio:
+ 			
+ 			\begin{itemize}
+ 				\item Si un vehículo tiene carnet N es una bicicleta.
+ 				\item En caso contrario, si un vehículo tiene carnet A se trata de una moto.
+ 				\item Si el tipo de carnet es B y el vehículo tiene 6 ruedas, es un camión.
+ 				\item En cualquier otro caso, si el vehículo tiene 4 ruedas es un coche y si tiene 2 ruedas es una moto.
+ 			\end{itemize}				
+ 			
  			\subsection{Regresión lineal}
  			
  				\begin{exercise}
@@ -2485,6 +2923,175 @@
 
 \end{knitrout}
  	\appendix
+ 	\chapter{Apéndice. Librería de Funciones Auxiliares}
+ 	
+	 	Para finalizar, se explicará la librería externa realizada (\texttt{data/aux\_functions.R}), en la que se encuentran funciones auxiliares que ya fueron programadas en la PL1 o que no forman parte de un algoritmo en sí, y que además se reutilizan en varios de ellos.
+	 	
+	 	\section{Funciones de la PL1}
+	 	
+	 	Se han reutilizado las siguientes funciones de la PL1:
+	 	
+	 	\begin{enumerate}
+	 		\item \texttt{len}. Esta función calcula la longitud de una lista dada.
+	 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{len} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
+        \hlstd{count} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{list) \{}
+                \hlstd{count} \hlkwb{=} \hlstd{count} \hlopt{+} \hlnum{1}
+        \hlstd{\}}
+        \hlstd{count}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 		\item \texttt{fcd\_mean}. Esta función calcula la media aritmética de una lista dada. Es equivalente a la función \texttt{mean} del paquete \texttt{base} de R. Se define la media aritmética como:
+ 		
+ 		$$
+ 		fcd\_mean = \frac{\displaystyle\sum_{i=1}^n (x_i)}{n}
+ 		$$
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fcd_mean} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
+        \hlstd{add} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(list)) \{}
+                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{list[i]}
+        \hlstd{\}}
+        \hlstd{add} \hlopt{/} \hlkwd{len}\hlstd{(list)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 		\item \texttt{union}. Realiza la unión de dos conjuntoss $A \cup B$ que resulta en un nuevo conjunto que contiene todos los elementos de $A$ y todos los elementos de $B$ que no están en $A$.
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
+                \hlstd{c2}
+        \hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
+                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+                \hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
+                        \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 		\item \texttt{dif}. Realiza la diferencia de dos conjuntos $A \backslash B$ que da como resultado un nuevo conjunto que contiene todos los elementos de $A$ que no formen parte de $B$.
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
+        \hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{()}
+        \hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{c1) \{}
+                \hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(element} \hlopt{%in%} \hlstd{c2)) \{}
+                        \hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{(res, element)}
+                \hlstd{\}}
+        \hlstd{\}}
+        \hlstd{res}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 		\item \texttt{standard\_dev}. Esta función calcula la desviación típica de un conjunto de datos. No es posible utilizar la función \texttt{sd} del paquete \texttt{base} ya que la fórmula interna que utiliza divide entre \texttt{N-1} en lugar de entre \texttt{N}, siendo \texttt{N} la longitud del conjunto. Se define la desviación típica como:
+ 		
+ 		$$
+ 		standard\_dev = \sqrt{\frac{\displaystyle\sum_{i=1}^n (x_i-\bar{x})^2}{n}}
+ 		$$
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{standard_dev} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
+        \hlstd{mean} \hlkwb{=} \hlkwd{fcd_mean}\hlstd{(list)}
+        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
+        \hlstd{add} \hlkwb{=} \hlnum{0}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
+                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{((list[i]} \hlopt{-} \hlstd{mean)}\hlopt{^}\hlnum{2}\hlstd{)}
+        \hlstd{\}}
+        \hlkwd{sqrt}\hlstd{(add}\hlopt{/}\hlstd{n)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 		\item \texttt{variance}. Calcula la varianza de un conjunto de elementos dado. Nuevamente, no es posible utilizar la función \texttt{var} del paquete \texttt{base} por la misma razón que la desviación típica. Se define la varianza como el cuadrado de la desviación típica.
+ 		
+ 		$$
+ 		variance = sd^2
+ 		$$
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
+        \hlstd{dev} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(list)}
+        \hlstd{var} \hlkwb{=} \hlstd{dev}\hlopt{^}\hlnum{2}
+        \hlstd{var}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+	 	\end{enumerate}
+	 	
+	 	\section{Nuevas funciones}
+	 	
+	 	Se han creado dos nuevas funciones que se reutilizan en distintos algoritmos.
+	 	
+	 	\begin{enumerate}
+	 		
+	 		\item \texttt{euc\_distance}. Esta función calcula la distancia euclídea entre dos puntos de dos coordenadas. Se define la distancia euclídea como:
+	 		
+	 		$$
+	 		euc\_distance(p_i, p_j) = \sqrt{(p_{i_1}-p_{j_1})^2 + (p_{i_2}-p_{j_2})^2}
+	 		$$
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{euc_distance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p1}\hlstd{,} \hlkwc{p2}\hlstd{) \{}
+        \hlkwd{sqrt}\hlstd{(((p1[}\hlnum{1}\hlstd{]} \hlopt{-} \hlstd{p2[}\hlnum{1}\hlstd{])}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{+} \hlstd{((p1[}\hlnum{2}\hlstd{]} \hlopt{-} \hlstd{p2[}\hlnum{2}\hlstd{])}\hlopt{^}\hlnum{2}\hlstd{))}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Se define la covarianza como:
+ 		
+ 		$$
+ 		covariance(x,y) = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
+ 		$$
+ 		
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{covariance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{) \{}
+        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(x)} \hlopt{!=} \hlkwd{len}\hlstd{(y)) \{}
+                \hlkwd{stop}\hlstd{(}\hlstr{"X e Y deben tener la misma dimensión"}\hlstd{)}
+        \hlstd{\}}
+        \hlkwa{else} \hlstd{\{}
+                \hlstd{sum} \hlkwb{=} \hlstd{x} \hlopt{%*%} \hlstd{y}
+                \hlstd{(sum}\hlopt{/}\hlkwd{len}\hlstd{(x))}\hlopt{-}\hlstd{(}\hlkwd{fcd_mean}\hlstd{(x)}\hlopt{*}\hlkwd{fcd_mean}\hlstd{(y))}
+        \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 		
+ 	\end{enumerate}
+ 	
  	
  	\chapter{Paquetes externos}
  	

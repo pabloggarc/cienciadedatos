@@ -1,42 +1,4 @@
-len = function(list) {
-  count = 0
-  for (element in list) {
-    count = count + 1
-  }
-  count
-}
-
-fcd_mean = function(list) {
-  add = 0
-  for (i in 1:len(list)) {
-    add = add + list[i]
-  }
-  add / len(list)
-}
-
-euc_distance = function(p1, p2) {
-  sqrt(((p1[1] - p2[1])^2) + ((p1[2] - p2[2])^2))
-}
-
-standard_dev = function(list) {
-  mean = fcd_mean(list)
-  n = len(list)
-  add = 0
-  for (i in 1:n) {
-    add = add + ((list[i] - mean)^2)
-  }
-  sqrt(add/n)
-}
-
-covariance = function(x, y) {
-  if (len(x) != len(y)) {
-    stop("X e Y deben tener la misma dimensión")
-  }
-  else {
-    sum = x %*% y
-    (sum/len(x))-(fcd_mean(x)*fcd_mean(y))
-  }
-}
+source("aux_functions.R")
 
 create_distance_matrix = function(df) {
   n = len(df[,1])
