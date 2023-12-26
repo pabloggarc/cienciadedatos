@@ -53,8 +53,7 @@
 \usepackage[spanish]{babel}
 \usepackage[margin = 2.54cm]{geometry}
 \usepackage[dvipsnames]{xcolor}
-\usepackage[most]{tcolorbox}
-\usepackage{amssymb, amsthm, array, cancel, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, qtree, tikz, tikz-cd}
+\usepackage{amssymb, amsthm, array, enumitem, fancyhdr, float, graphicx, hyperref, hologo, listings, mathtools, qtree, tikz, tikz-cd}
 \usepackage[spanish, noabbrev]{cleveref}
 
 \usetikzlibrary{babel, tikzmark}
@@ -121,15 +120,8 @@
 }
 
 \newtheorem{exercise}{Ejercicio}[section]
-\newtheorem{observation}{Observación}[section]
-\newtcbtheorem[number within = section, Crefname = {Teorema}{Teorema}]{teorema}{Teorema}{fonttitle = \bfseries}{th}
-\newtcbtheorem[number within = section, Crefname = {Definición}{Definición}]{definicion}{Definición}{fonttitle = \bfseries}{df}
 
 \newcommand{\dt}{\text{dist}}
-\newcommand{\ds}{\text{dens}}
-\newcommand{\drm}{\text{drm}}
-
-\newcommand{\rojo}[1]{\textcolor{Red}{#1}}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 	
@@ -143,7 +135,7 @@
 	\newpage
 	
 	\setcounter{tocdepth}{3}
-	\tableofcontents
+	{\small\tableofcontents}
 	\listoffigures
 	
 	\chapter*{Introducción}\addcontentsline{toc}{chapter}{Introducción}\pagestyle{plain}
@@ -2718,7 +2710,7 @@
 \end{knitrout}
 	 			}
 	 			
-	 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en html, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en el pdf. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
+	 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en HTML, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en el pdf. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
 	 			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2781,7 +2773,7 @@
 \end{kframe}
 \end{knitrout}
  				
- 				Una vez se tienen calculados los parámetros de la recta de regresión lineal, es momento de evaluar cómo de buena es la aproximación. Para ello se emplea la métrica $R^2$. Su valor depende de otros dos, $SSR$ y $SSY$, que obedecen a las siguientes ecuaciones. 
+ 				Una vez se tienen calculados los parámetros de la recta de regresión lineal, es momento de evaluar cómo de buena es la aproximación. Para ello se emplea la medida estadística $R^2$. Su valor depende de otros dos, $SSR$ y $SSY$, que obedecen a las siguientes ecuaciones. 
  				
  				$$
  				\begin{gathered}
@@ -2833,12 +2825,58 @@
 \end{kframe}
 \end{knitrout}
  				
- 				Finalmente se encapsula todo en una única función llamada \texttt{fcd\_regression} que muestra por consola la ecuación de $\hat{y}$ y el valor de $R^2$, además de una gráfica con la recta y los puntos. 
+ 				A continuación, se llevará a cabo un proceso de detección de outliers. Para ello se elige un valor de $d$, y se verifica si $|y_i - \hat{y}_i| > d \varepsilon$, donde $\varepsilon$ es el error estándar, obtenido mediante el cálculo de los residuos. 
+ 				
+ 				$$
+ 				\varepsilon = \sqrt{\frac{\displaystyle\sum_{i=1}^n|y_i - \hat{y}_i|^2}{n}}
+ 				$$
+ 				
+ 				Estos cálculos se recogen en dos funciones, \texttt{get\_residuals}, \texttt{standard\_error}, y finalmente, \texttt{detect\_outlier} que agrupa a las dos últimas. 
  				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{fcd_regression} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{) \{}
+\hlstd{get_residuals} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p}\hlstd{,} \hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{) \{}
+        \hlstd{X} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{times} \hlstd{=} \hlkwd{len}\hlstd{(x)), x),} \hlkwc{ncol} \hlstd{=} \hlnum{2}\hlstd{)}
+        \hlstd{y_hat} \hlkwb{=} \hlstd{X} \hlopt{%*%} \hlstd{p}
+        \hlkwd{abs}\hlstd{(y} \hlopt{-} \hlstd{y_hat)}
+\hlstd{\}}
+
+\hlstd{standard_error} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p}\hlstd{,} \hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{) \{}
+        \hlkwd{sqrt}\hlstd{(}\hlkwd{sum}\hlstd{(}\hlkwd{get_residuals}\hlstd{(p, x, y)}\hlopt{^}\hlnum{2}\hlstd{)} \hlopt{/} \hlkwd{len}\hlstd{(x))}
+\hlstd{\}}
+
+\hlstd{detect_outlier} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{p}\hlstd{,} \hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{,} \hlkwc{d}\hlstd{) \{}
+        \hlstd{X} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{times} \hlstd{=} \hlkwd{len}\hlstd{(x)), x),} \hlkwc{ncol} \hlstd{=} \hlnum{2}\hlstd{)}
+        \hlstd{y_hat} \hlkwb{=} \hlstd{X} \hlopt{%*%} \hlstd{p}
+        \hlkwd{abs}\hlstd{(y} \hlopt{-} \hlstd{y_hat)} \hlopt{>} \hlstd{d} \hlopt{*} \hlkwd{standard_error}\hlstd{(p, x, y)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 				
+ 				Además, la función \texttt{print\_outliers} permite imprimir por consola qué puntos son outliers. 
+ 				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{print_outliers} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{,} \hlkwc{outliers}\hlstd{) \{}
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(outliers)) \{}
+                \hlkwa{if} \hlstd{(outliers[i]) \{}
+                        \hlkwd{cat}\hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{"Outlier: ("}\hlstd{, x[i],} \hlstr{", "}\hlstd{, y[i],} \hlstr{")\textbackslash{}n"}\hlstd{))}
+                \hlstd{\}}
+        \hlstd{\}}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ 				
+ 				Finalmente se encapsula todo en una única función llamada \texttt{fcd\_regression} que muestra por consola la ecuación de $\hat{y}$ y el valor de $R^2$, además de una gráfica con la recta y los puntos, distinguiendo los outliers. 
+ 				
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{fcd_regression} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{d}\hlstd{) \{}
         \hlstd{X} \hlkwb{=} \hlstd{sample[,} \hlnum{1}\hlstd{]}
         \hlstd{Y} \hlkwb{=} \hlstd{sample[,} \hlnum{2}\hlstd{]}
 
@@ -2848,28 +2886,36 @@
         \hlstd{a} \hlkwb{=} \hlstd{param[}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{]}
         \hlstd{b} \hlkwb{=} \hlstd{param[}\hlnum{2}\hlstd{,} \hlnum{1}\hlstd{]}
 
-        \hlkwd{print}\hlstd{(}\hlkwd{sprintf}\hlstd{(}\hlstr{"y = %.3fx + %.3f"}\hlstd{, b, a))}
-        \hlkwd{print}\hlstd{(}\hlkwd{sprintf}\hlstd{(}\hlstr{"R2 = %.3f"}\hlstd{, r))}
+        \hlkwd{cat}\hlstd{(}\hlstr{"Recta de regresión\textbackslash{}n"}\hlstd{)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"y ="}\hlstd{,} \hlkwd{round}\hlstd{(b,} \hlnum{3}\hlstd{),} \hlstr{"x +"}\hlstd{,} \hlkwd{round}\hlstd{(a,} \hlnum{3}\hlstd{),} \hlstr{"\textbackslash{}n"}\hlstd{)}
+        \hlkwd{cat}\hlstd{(}\hlstr{"R2 ="}\hlstd{,} \hlkwd{round}\hlstd{(r,} \hlnum{3}\hlstd{),} \hlstr{"\textbackslash{}n"}\hlstd{)}
 
-        \hlkwd{plot}\hlstd{(X, Y,} \hlkwc{col} \hlstd{=} \hlstr{"blue"}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{"Recta de regresión"}\hlstd{,}
-                \hlkwc{xlab} \hlstd{=} \hlstr{"Eje X"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Eje Y"}\hlstd{)}
-        \hlkwd{abline}\hlstd{(}\hlkwc{a}\hlstd{=a,} \hlkwc{b}\hlstd{=b,} \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{)}
+        \hlstd{outliers} \hlkwb{=} \hlkwd{detect_outlier}\hlstd{(param, X, Y, d)}
+
+        \hlstd{colors} \hlkwb{=} \hlkwd{rep}\hlstd{(}\hlstr{"green"}\hlstd{,} \hlkwd{length}\hlstd{(X))}
+        \hlstd{colors[outliers]} \hlkwb{=} \hlstr{"red"}
+        \hlkwd{plot}\hlstd{(X, Y,} \hlkwc{col}\hlstd{=colors,} \hlkwc{pch}\hlstd{=}\hlnum{21}\hlstd{,} \hlkwc{bg}\hlstd{=colors,}
+                \hlkwc{main}\hlstd{=}\hlstr{"Recta de regresión"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"Eje X"}\hlstd{,} \hlkwc{ylab}\hlstd{=}\hlstr{"Eje Y"}\hlstd{)}
+        \hlkwd{abline}\hlstd{(}\hlkwc{a}\hlstd{=a,} \hlkwc{b}\hlstd{=b,} \hlkwc{col}\hlstd{=}\hlstr{"blue"}\hlstd{)}
+
+        \hlkwd{print_outliers}\hlstd{(X, Y, outliers)}
 \hlstd{\}}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
  				
- 				De la siguiente forma, se prueba para los casos del profesor. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} se dan diferentes valores a $y$ para un mismo $x$ lo que hace que la pendiente de esta recta tienda a infinito. %explicar la carga de datos
+ 				De la siguiente forma, se prueba para los casos del profesor. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} se dan diferentes valores a $y$ para un mismo $x$ lo que hace que la pendiente de esta recta tienda a infinito, pues al calcular el valor de $b$, se divide por $S^2_x$, pero es igual a 0 al no variar los $x_i$ y se obtendrá un error. La solución a este problema se corresponde con una recta del tipo $x=x_i$. 
  				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{sample1} \hlkwb{=} \hlkwd{read.xlsx}\hlstd{(}\hlstr{"../Memoria/data/conj1.xlsx"}\hlstd{,} \hlkwc{colNames}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-\hlkwd{fcd_regression}\hlstd{(sample1)}
+\hlkwd{fcd_regression}\hlstd{(sample1,} \hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "y = 0.500x + 3.000"
-## [1] "R2 = 0.667"
+## Recta de regresión
+## y = 0.5 x + 3 
+## R2 = 0.667
 \end{verbatim}
 \end{kframe}\begin{figure}[H]
 
@@ -2886,11 +2932,12 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{sample2} \hlkwb{=} \hlkwd{read.xlsx}\hlstd{(}\hlstr{"../Memoria/data/conj2.xlsx"}\hlstd{,} \hlkwc{colNames}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-\hlkwd{fcd_regression}\hlstd{(sample2)}
+\hlkwd{fcd_regression}\hlstd{(sample2,} \hlnum{1.5}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "y = 0.500x + 3.001"
-## [1] "R2 = 0.666"
+## Recta de regresión
+## y = 0.5 x + 3.001 
+## R2 = 0.666
 \end{verbatim}
 \end{kframe}\begin{figure}[H]
 
@@ -2901,17 +2948,23 @@
 \caption[Relación cuadrática]{Relación cuadrática}\label{fig:recta2}
 \end{figure}
 
+\begin{kframe}\begin{verbatim}
+## Outlier: (14, 8.1)
+## Outlier: (4, 3.1)
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
  				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{sample3} \hlkwb{=} \hlkwd{read.xlsx}\hlstd{(}\hlstr{"../Memoria/data/conj3.xlsx"}\hlstd{,} \hlkwc{colNames}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-\hlkwd{fcd_regression}\hlstd{(sample3)}
+\hlkwd{fcd_regression}\hlstd{(sample3,} \hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "y = 0.500x + 3.002"
-## [1] "R2 = 0.666"
+## Recta de regresión
+## y = 0.5 x + 3.002 
+## R2 = 0.666
 \end{verbatim}
 \end{kframe}\begin{figure}[H]
 
@@ -2922,17 +2975,22 @@
 \caption[Relación lineal con outlier]{Relación lineal con outlier}\label{fig:recta3}
 \end{figure}
 
+\begin{kframe}\begin{verbatim}
+## Outlier: (13, 12.74)
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
  				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{sample4} \hlkwb{=} \hlkwd{read.xlsx}\hlstd{(}\hlstr{"../Memoria/data/conj4.xlsx"}\hlstd{,} \hlkwc{colNames}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-\hlkwd{fcd_regression}\hlstd{(sample4)}
+\hlkwd{fcd_regression}\hlstd{(sample4,} \hlnum{33}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] "y = NaNx + NaN"
-## [1] "R2 = NaN"
+## Recta de regresión
+## y = NaN x + NaN 
+## R2 = NaN
 \end{verbatim}
 
 
@@ -3121,6 +3179,10 @@
  	
  	\chapter{Paquetes externos}\label{ap:PaquetesExternos}
  	
+ 		Para la correcta compilación del fichero \texttt{.Rnw} además de la configuración con \TeX Studio explicada en la PL1, se ha modificado el fichero \texttt{RProfile} para cargar de manera automática los paquetes externos necesarios. 
+ 		
+ 		\lstinputlisting[language = R, style = estilo_pablo, firstline = 46, lastline = 54, firstnumber = 46, caption = Modificación en fichero \texttt{Rprofile}, label = cod:rprofile]{C:/Program Files/R/R-4.3.1/library/base/R/Rprofile}
+ 	
 	 	\section{\texttt{openxlsx}}
 	 	
 		 	El paquete \texttt{openxlsx} de R es una herramienta para manejar archivos Excel en formato \texttt{xlsx}. Proporciona funciones para leer, escribir, y modificar estos archivos sin depender de Java. Una de sus funciones más importantes es \texttt{read.xlsx}, que permite leer hojas de cálculo Excel en R. Esta función es útil para importar datos complejos, ofreciendo opciones para manejar diferentes tipos de datos y formatos.\\
@@ -3277,12 +3339,20 @@
 			 	
 			 	Estos métodos permiten un control detallado y una manipulación flexible de los datos jerárquicos, lo que los hace fundamentales para una amplia gama de tareas analíticas y de visualización de datos.
  	
- 		\section{DiagrammeR}
+ 		\section{\texttt{DiagrammeR}}
  	
 		 	El paquete \texttt{DiagrammeR} de R es una herramienta para la creación, modificación, análisis y visualización de gráficos de redes y estructuras de grafos. Permite la adición y eliminación paso a paso de nodos y aristas, y trabaja con datos en tablas para la adición masiva de nodos, aristas y metadatos asociados. Una selección de algoritmos de gráficos está disponible para el análisis de estas estructuras, y las visualizaciones pueden aprovechar las propiedades estéticas asignadas a nodos y aristas.\\
 		 	
 		 	Este paquete se relaciona con \texttt{data.tree} en la capacidad de visualizar estructuras de datos jerárquicos. Mientras \texttt{data.tree} es eficiente para crear y manipular datos jerárquicos, \texttt{DiagrammeR} puede tomar estos datos y representarlos visualmente como gráficos o redes, lo que puede ser particularmente útil para la visualización de árboles de decisiones o estructuras organizativas.\\
 		 	
 		 	Por ejemplo, \texttt{data.tree} podría usarse para estructurar y manipular datos jerárquicos, y luego dicha estructura podría ser convertida a un formato adecuado para \texttt{DiagrammeR} para su visualización como un gráfico de nodos y aristas. La capacidad de \texttt{DiagrammeR} para utilizar datos de tablas para generar gráficos es especialmente útil, ya que las estructuras de \texttt{data.tree} pueden ser transformadas en tablas (nodos y aristas) y luego visualizadas utilizando \texttt{DiagrammeR}.
- 	
+		 	
+	 \section{\texttt{webshot}}
+	 
+	 	El paquete \texttt{webshot} es una herramienta para tomar capturas de pantalla de páginas web directamente desde R. Utiliza el programa externo \texttt{PhantomJS} (nevegador web sin interfaz) para realizar estas capturas. En relación con el paquete \texttt{data.tree}, \texttt{webshot} es útil para visualizar los diagramas generados por \texttt{DiagrammeR}, pues los devuelve como una página HTML. La primera vez, deberá ejecutarse el siguiente comando. 
+	 	
+	 	\begin{verbatim}
+	 		webshot::install_phantomjs()
+	 	\end{verbatim}
+	 		
 \end{document}
