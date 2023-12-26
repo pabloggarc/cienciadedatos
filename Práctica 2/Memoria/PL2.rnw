@@ -455,11 +455,13 @@
 	 
 	 \chapter{Ejercicios autónomos}
 	 
-		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
+		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica. Para resolver estos ejercicios, se ha creado una librería con las funciones que se repetían entre los algoritmos y que eran de la PL1 o que no formaban parte del algoritmo en sí. Todas las funciones de la librería se explican en el \Cref{App:Libreria}. Es necesario por tanto importar la librería.
 		 
 		 <<>>=
 		 source("data/aux_functions.R")
 		 @
+		 
+		 Además, se han utilizado 3 paquetes del \texttt{CRAN}, que quedan explicados en el \Cref{App:PaquetesExternos}
 		 
 		 \section{Clasificación no supervisada}
 		 
@@ -665,7 +667,7 @@
 		 			El conjunto de datos de datos que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa será el mismo que el utilizado en el \Cref{ex:kmeans}, pero el este ejercicio le denominaremos segundo conjunto de datos.
 		 		\end{exercise}
 		 		
-		 		Para la resolución de este ejercicio se implementará una variación del algoritmo visto en clase, que ayudará a simplificar la codificación y el entendimiento del algoritmo. Se utilizarán algunas funciones ya explicadas en otros ejercicios y prácticas, como \texttt{len}, la media, la distancia euclídea, la desviación típica, y la covarianza. El primer paso del algoritmo consiste en calcular la distancia entre cada posible pareja de puntos. 
+		 		Para la resolución de este ejercicio se implementará una variación del algoritmo visto en clase, que ayudará a simplificar la codificación y el entendimiento del algoritmo. Se utilizarán algunas funciones del , como \texttt{len}, la media, la distancia euclídea, la desviación típica, y la covarianza. El primer paso del algoritmo consiste en calcular la distancia entre cada posible pareja de puntos. 
 		 		
 		 		<<>>=
 		 		create_distance_matrix = function(df) {
@@ -981,36 +983,6 @@
 		 		
 		 		Para finalizar, se muestra un gráfico del árbol final (los $n$ árboles acaban igual) y un dendrograma de la clusterización resultante. 
 		 		
-		 		%quitar más tarde estas al meter la libreria y arreglar plots
-		 		
-		 		<<echo = FALSE>>=
-		 		standard_dev = function(list) {
-		 		mean = fcd_mean(list)
-		 		n = len(list)
-		 		add = 0
-		 		for (i in 1:n) {
-		 		add = add + ((list[i] - mean)^2)
-		 		}
-		 		sqrt(add/n)
-		 		}
-		 		fcd_mean = function(list) {
-		 		add = 0
-		 		for (i in 1:len(list)) {
-		 		add = add + list[i]
-		 		}
-		 		add / len(list)
-		 		}
-		 		covariance = function(x, y) {
-		 		if (len(x) != len(y)) {
-		 		stop("X e Y deben tener la misma dimensión")
-		 		}
-		 		else {
-		 		sum = x %*% y
-		 		(sum/len(x))-(fcd_mean(x)*fcd_mean(y))
-		 		}
-		 		}
-		 		@
-		 		
 		 		{\small
 		 			<<dendrograma1, fig.cap = 'Clusterización con \\texttt{MIN}'>>=
 		 			(sample = read.xlsx("data/datosKMeans.xlsx"))
@@ -1130,7 +1102,7 @@
  			<<>>=
  			get_frec = function(sample, col, criteria, elements, values) {
  				n = 0
- 				frecs = setNames(data.frame(matrix(rep(0, times = length(values))
+ 				frecs = setNames(data.frame(matrix(rep(0, times = len(values))
  					, nrow = 1)), values)
  				for (i in 1:len(sample[, col])) {
  					if (sample[i, col] %in% elements) {
@@ -1393,33 +1365,16 @@
  			
  			Si se ejecuta la función con la muestra del ejercicio se obtiene la siguiente salida:
  			
+ 			{\small
  			<<>>=
- 			union = function(c1, c2) {
- 			if (len(c1) == 0) {
- 			c2
- 			} else if (is.element(c1[1], c2)) {
- 			union(c1[-1], c2)
- 			} else {
- 			union(c1[-1], append(c2, c1[1]))
- 			}
- 			}
- 			
- 			dif = function(c1, c2) {
- 			res = c()
- 			for (element in c1) {
- 			if (!(element %in% c2)) {
- 			res = c(res, element)
- 			}
- 			}
- 			res
- 			}
  			tree = hunt(sample, c("tCarnet", "nRuedas", "nPasajeros"),
  			 "tVehículo", "error", TRUE)
  			@
+ 			}
  			
- 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función, obteniendo el siguiente gráfico visual.
+ 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en html, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en el pdf. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
  			
- 			<<plot_tree, echo=FALSE, fig.cap="Árbol de datos">>=
+ 			<<fig.cap="Árbol de datos">>=
  			plot(tree)
  			@
  			
@@ -1447,62 +1402,7 @@
  					\end{gathered}
  				\end{equation}
  				
- 				Para el cálculo de estos parámetros se necesita hacer uso de funciones ya implementadas en la práctica anterior como la media aritmética, la desviación típica y la varianza, se recuerda el código a continuación. 
- 				
- 				<<>>=
- 				fcd_mean = function(list) {
- 					add = 0
- 					for (i in 1:len(list)) {
- 						add = add + list[i]
- 					}
- 					add / len(list)
- 				}
- 				
- 				standard_dev = function(list) {
- 					mean = fcd_mean(list)
- 					n = len(list)
- 					add = 0
- 					for (i in 1:n) {
- 						add = add + ((list[i] - mean)^2)
- 					}
- 					sqrt(add/n)
- 				}
- 				
- 				variance = function(list) {
- 					dev = standard_dev(list)
- 					var = dev^2
- 					var
- 				}
- 				@
- 				
- 				El siguiente cálculo será hallar el valor de la covarianza de la siguiente manera
- 				
- 				\begin{equation}\label{ec:reg_cov}
- 					S_{xy} = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
- 				\end{equation}
- 				
- 				y quedará reflejado en la función \texttt{covariance} que recibe dos vectores que representan los datos y sus valores correspondientes: 
- 				
- 				$$
- 				\begin{gathered}
- 					\textbf{X} = (x_1, x_2, \hdots, x_n)\\
- 					\textbf{Y} = (y_1, y_2, \hdots, y_n)
- 				\end{gathered}
- 				$$
- 				
- 				La función realiza el cálculo de la \Cref{ec:reg_cov} usando \texttt{\%*\%}, que en este caso realiza el producto escalar de \textbf{X} e \textbf{Y}. También se verifica que estos vectores compartan dimensiones, pues de lo contrario no se podrá calcular. 
- 				
- 				<<>>=
- 				covariance = function(x, y) {
- 					if (len(x) != len(y)) {
- 						stop("X e Y deben tener la misma dimensión")
- 					} 
- 					else {
- 						sum = x %*% y
- 						(sum/len(x))-(fcd_mean(x)*fcd_mean(y))
- 					}
- 				}
- 				@
+ 				Para el cálculo de estos parámetros se necesita hacer uso de funciones del \Cref{App:Libreria} la media aritmética, la desviación típica, la varianza y la covarianza. 
  				
  				Finalmente, la función \texttt{regression\_line} calcula los parámetros $a$ y $b$ mediante la \Cref{ec:reg_param}. Devuelve el resultado de forma matricial para más tarde trabajar de forma más cómoda. 
  				
@@ -1612,8 +1512,10 @@
  				sample4 = read.xlsx("../Memoria/data/conj4.xlsx", colNames=FALSE)
  				fcd_regression(sample4)
  				@
+ 				
  	\appendix
- 	\chapter{Apéndice. Librería de Funciones Auxiliares}
+ 	
+ 	\chapter{Librería de Funciones Auxiliares}\label{App:Libreria}
  	
 	 	Para finalizar, se explicará la librería externa realizada (\texttt{data/aux\_functions.R}), en la que se encuentran funciones auxiliares que ya fueron programadas en la PL1 o que no forman parte de un algoritmo en sí, y que además se reutilizan en varios de ellos.
 	 	
@@ -1730,7 +1632,7 @@
  		}
  		@
  		
- 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Se define la covarianza como:
+ 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Para calcular la covarianza es necesario realizar un producto escalar, que en R se realiza con el operador \texttt{\%*\%}. Se define la covarianza como:
  		
  		$$
  		covariance(x,y) = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
@@ -1751,7 +1653,7 @@
  	\end{enumerate}
  	
  	
- 	\chapter{Paquetes externos}
+ 	\chapter{Paquetes externos}\label{App:PaquetesExternos}
  	
  	\section{openxlsx}
  	

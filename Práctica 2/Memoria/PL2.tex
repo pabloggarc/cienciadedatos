@@ -1067,7 +1067,7 @@
 	 
 	 \chapter{Ejercicios autónomos}
 	 
-		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica.
+		 En esta segunda parte de la práctica se implementarán los algoritmos vistos anteriormente, plasmando en el documento la explicación del código realizado, así como su aplicación a los enunciados propuestos para esta parte de la práctica. Para resolver estos ejercicios, se ha creado una librería con las funciones que se repetían entre los algoritmos y que eran de la PL1 o que no formaban parte del algoritmo en sí. Todas las funciones de la librería se explican en el \Cref{App:Libreria}. Es necesario por tanto importar la librería.
 		 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1076,6 +1076,8 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+		 
+		 Además, se han utilizado 3 paquetes del \texttt{CRAN}, que quedan explicados en el \Cref{App:PaquetesExternos}
 		 
 		 \section{Clasificación no supervisada}
 		 
@@ -1486,7 +1488,7 @@
 		 			El conjunto de datos de datos que se empleará para realizar el análisis de clasificación no supervisada con Clusterización Jerárquica Aglomerativa será el mismo que el utilizado en el \Cref{ex:kmeans}, pero el este ejercicio le denominaremos segundo conjunto de datos.
 		 		\end{exercise}
 		 		
-		 		Para la resolución de este ejercicio se implementará una variación del algoritmo visto en clase, que ayudará a simplificar la codificación y el entendimiento del algoritmo. Se utilizarán algunas funciones ya explicadas en otros ejercicios y prácticas, como \texttt{len}, la media, la distancia euclídea, la desviación típica, y la covarianza. El primer paso del algoritmo consiste en calcular la distancia entre cada posible pareja de puntos. 
+		 		Para la resolución de este ejercicio se implementará una variación del algoritmo visto en clase, que ayudará a simplificar la codificación y el entendimiento del algoritmo. Se utilizarán algunas funciones del , como \texttt{len}, la media, la distancia euclídea, la desviación típica, y la covarianza. El primer paso del algoritmo consiste en calcular la distancia entre cada posible pareja de puntos. 
 		 		
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1829,10 +1831,6 @@
 \end{knitrout}
 		 		
 		 		Para finalizar, se muestra un gráfico del árbol final (los $n$ árboles acaban igual) y un dendrograma de la clusterización resultante. 
-		 		
-		 		%quitar más tarde estas al meter la libreria y arreglar plots
-		 		
-
 		 		
 		 		{\small
 \begin{knitrout}
@@ -2244,7 +2242,7 @@
 \begin{alltt}
 \hlstd{get_frec} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{sample}\hlstd{,} \hlkwc{col}\hlstd{,} \hlkwc{criteria}\hlstd{,} \hlkwc{elements}\hlstd{,} \hlkwc{values}\hlstd{) \{}
         \hlstd{n} \hlkwb{=} \hlnum{0}
-        \hlstd{frecs} \hlkwb{=} \hlkwd{setNames}\hlstd{(}\hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{times} \hlstd{=} \hlkwd{length}\hlstd{(values))}
+        \hlstd{frecs} \hlkwb{=} \hlkwd{setNames}\hlstd{(}\hlkwd{data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{times} \hlstd{=} \hlkwd{len}\hlstd{(values))}
                 \hlstd{,} \hlkwc{nrow} \hlstd{=} \hlnum{1}\hlstd{)), values)}
         \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(sample[, col])) \{}
                 \hlkwa{if} \hlstd{(sample[i, col]} \hlopt{%in%} \hlstd{elements) \{}
@@ -2545,28 +2543,10 @@
  			
  			Si se ejecuta la función con la muestra del ejercicio se obtiene la siguiente salida:
  			
+ 			{\small
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{union} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
-\hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(c1)} \hlopt{==} \hlnum{0}\hlstd{) \{}
-\hlstd{c2}
-\hlstd{\}} \hlkwa{else if} \hlstd{(}\hlkwd{is.element}\hlstd{(c1[}\hlnum{1}\hlstd{], c2)) \{}
-\hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{], c2)}
-\hlstd{\}} \hlkwa{else} \hlstd{\{}
-\hlkwd{union}\hlstd{(c1[}\hlopt{-}\hlnum{1}\hlstd{],} \hlkwd{append}\hlstd{(c2, c1[}\hlnum{1}\hlstd{]))}
-\hlstd{\}}
-\hlstd{\}}
-
-\hlstd{dif} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{c1}\hlstd{,} \hlkwc{c2}\hlstd{) \{}
-\hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{()}
-\hlkwa{for} \hlstd{(element} \hlkwa{in} \hlstd{c1) \{}
-\hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(element} \hlopt{%in%} \hlstd{c2)) \{}
-\hlstd{res} \hlkwb{=} \hlkwd{c}\hlstd{(res, element)}
-\hlstd{\}}
-\hlstd{\}}
-\hlstd{res}
-\hlstd{\}}
 \hlstd{tree} \hlkwb{=} \hlkwd{hunt}\hlstd{(sample,} \hlkwd{c}\hlstd{(}\hlstr{"tCarnet"}\hlstd{,} \hlstr{"nRuedas"}\hlstd{,} \hlstr{"nPasajeros"}\hlstd{),}
  \hlstr{"tVehículo"}\hlstd{,} \hlstr{"error"}\hlstd{,} \hlnum{TRUE}\hlstd{)}
 \end{alltt}
@@ -2637,14 +2617,24 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+ 			}
  			
- 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función, obteniendo el siguiente gráfico visual.
+ 			Como se puede ver, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en html, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en el pdf. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
  			
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plot}\hlstd{(tree)}
+\end{alltt}
+\end{kframe}\begin{figure}
 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-52-1} 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in loadNamespace(name): there is no package called 'webshot'}}\end{kframe}
+}
+
+\caption[Árbol de datos]{Árbol de datos}\label{fig:unnamed-chunk-52}
+\end{figure}
+
 \end{knitrout}
  			
  			Por lo tanto, se pueden sacar las siguientes conclusiones del ejercicio:
@@ -2671,70 +2661,7 @@
  					\end{gathered}
  				\end{equation}
  				
- 				Para el cálculo de estos parámetros se necesita hacer uso de funciones ya implementadas en la práctica anterior como la media aritmética, la desviación típica y la varianza, se recuerda el código a continuación. 
- 				
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{fcd_mean} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
-        \hlstd{add} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{len}\hlstd{(list)) \{}
-                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{list[i]}
-        \hlstd{\}}
-        \hlstd{add} \hlopt{/} \hlkwd{len}\hlstd{(list)}
-\hlstd{\}}
-
-\hlstd{standard_dev} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
-        \hlstd{mean} \hlkwb{=} \hlkwd{fcd_mean}\hlstd{(list)}
-        \hlstd{n} \hlkwb{=} \hlkwd{len}\hlstd{(list)}
-        \hlstd{add} \hlkwb{=} \hlnum{0}
-        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
-                \hlstd{add} \hlkwb{=} \hlstd{add} \hlopt{+} \hlstd{((list[i]} \hlopt{-} \hlstd{mean)}\hlopt{^}\hlnum{2}\hlstd{)}
-        \hlstd{\}}
-        \hlkwd{sqrt}\hlstd{(add}\hlopt{/}\hlstd{n)}
-\hlstd{\}}
-
-\hlstd{variance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{list}\hlstd{) \{}
-        \hlstd{dev} \hlkwb{=} \hlkwd{standard_dev}\hlstd{(list)}
-        \hlstd{var} \hlkwb{=} \hlstd{dev}\hlopt{^}\hlnum{2}
-        \hlstd{var}
-\hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
- 				
- 				El siguiente cálculo será hallar el valor de la covarianza de la siguiente manera
- 				
- 				\begin{equation}\label{ec:reg_cov}
- 					S_{xy} = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
- 				\end{equation}
- 				
- 				y quedará reflejado en la función \texttt{covariance} que recibe dos vectores que representan los datos y sus valores correspondientes: 
- 				
- 				$$
- 				\begin{gathered}
- 					\textbf{X} = (x_1, x_2, \hdots, x_n)\\
- 					\textbf{Y} = (y_1, y_2, \hdots, y_n)
- 				\end{gathered}
- 				$$
- 				
- 				La función realiza el cálculo de la \Cref{ec:reg_cov} usando \texttt{\%*\%}, que en este caso realiza el producto escalar de \textbf{X} e \textbf{Y}. También se verifica que estos vectores compartan dimensiones, pues de lo contrario no se podrá calcular. 
- 				
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlstd{covariance} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{) \{}
-        \hlkwa{if} \hlstd{(}\hlkwd{len}\hlstd{(x)} \hlopt{!=} \hlkwd{len}\hlstd{(y)) \{}
-                \hlkwd{stop}\hlstd{(}\hlstr{"X e Y deben tener la misma dimensión"}\hlstd{)}
-        \hlstd{\}}
-        \hlkwa{else} \hlstd{\{}
-                \hlstd{sum} \hlkwb{=} \hlstd{x} \hlopt{%*%} \hlstd{y}
-                \hlstd{(sum}\hlopt{/}\hlkwd{len}\hlstd{(x))}\hlopt{-}\hlstd{(}\hlkwd{fcd_mean}\hlstd{(x)}\hlopt{*}\hlkwd{fcd_mean}\hlstd{(y))}
-        \hlstd{\}}
-\hlstd{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
+ 				Para el cálculo de estos parámetros se necesita hacer uso de funciones del \Cref{App:Libreria} la media aritmética, la desviación típica, la varianza y la covarianza. 
  				
  				Finalmente, la función \texttt{regression\_line} calcula los parámetros $a$ y $b$ mediante la \Cref{ec:reg_param}. Devuelve el resultado de forma matricial para más tarde trabajar de forma más cómoda. 
  				
@@ -2922,8 +2849,10 @@
 \end{figure}
 
 \end{knitrout}
+ 				
  	\appendix
- 	\chapter{Apéndice. Librería de Funciones Auxiliares}
+ 	
+ 	\chapter{Librería de Funciones Auxiliares}\label{App:Libreria}
  	
 	 	Para finalizar, se explicará la librería externa realizada (\texttt{data/aux\_functions.R}), en la que se encuentran funciones auxiliares que ya fueron programadas en la PL1 o que no forman parte de un algoritmo en sí, y que además se reutilizan en varios de ellos.
 	 	
@@ -3068,7 +2997,7 @@
 \end{kframe}
 \end{knitrout}
  		
- 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Se define la covarianza como:
+ 		\item \texttt{covariance}. Esta función calcula la covarianza entre dos conjuntos de datos. Para calcular la covarianza es necesario realizar un producto escalar, que en R se realiza con el operador \texttt{\%*\%}. Se define la covarianza como:
  		
  		$$
  		covariance(x,y) = \frac{\displaystyle\sum_{i=1}^nx_iy_i}{n} - \bar{x}\bar{y}, 
@@ -3093,7 +3022,7 @@
  	\end{enumerate}
  	
  	
- 	\chapter{Paquetes externos}
+ 	\chapter{Paquetes externos}\label{App:PaquetesExternos}
  	
  	\section{openxlsx}
  	
