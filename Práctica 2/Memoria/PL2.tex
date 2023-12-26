@@ -2484,5 +2484,182 @@
 \end{figure}
 
 \end{knitrout}
- 				
+ 	\appendix
+ 	
+ 	\chapter{Paquetes externos}
+ 	
+ 	\section{openxlsx}
+ 	
+ 	El paquete \texttt{openxlsx} de R es una herramienta para manejar archivos Excel en formato \texttt{xlsx}. Proporciona funciones para leer, escribir, y modificar estos archivos sin depender de Java. Una de sus funciones más importantes es \texttt{read.xlsx}, que permite leer hojas de cálculo Excel en R. Esta función es útil para importar datos complejos, ofreciendo opciones para manejar diferentes tipos de datos y formatos.\\
+ 	
+ 	La función \texttt{read.xlsx} tiene argumentos clave que determinan cómo se lee una hoja de cálculo de Excel:
+ 	
+ 	\begin{itemize}
+ 		\item \textbf{xlsxFile}: Ruta al archivo Excel, objeto Workbook o URL.
+ 		\item \textbf{sheet}: Especifica la hoja de cálculo a leer, por nombre o índice.
+ 		\item \textbf{startRow}: Define la primera fila de datos a leer, ignorando las anteriores.
+ 		\item \textbf{colNames}: Si es TRUE, la primera fila de datos se utiliza como nombres de columna.
+ 		\item \textbf{rowNames}: Si es TRUE, la primera columna se usa para los nombres de fila.
+ 		\item \textbf{skipEmptyRows / skipEmptyCols}: Determinan si se ignoran filas o columnas vacías.
+ 		\item \textbf{cols}: Un vector numérico que especifica qué columnas leer.
+ 		\item \textbf{rows}: Un vector numérico que especifica qué filas leer.
+ 		\item \textbf{detectDates}: Si es TRUE, intenta convertir cadenas de texto que parecen fechas en fechas de R.
+ 		\item \textbf{na.strings}: Define qué cadenas se interpretarán como \texttt{NA}.
+ 	\end{itemize}
+ 	
+ 	Estos argumentos ofrecen flexibilidad para manejar datos de Excel en R.
+ 	
+ 	Además, \texttt{openxlsx} incluye funciones para escribir datos en Excel, personalizar el estilo de las celdas, y manejar las hojas de cálculo, entre otras capacidades. La documentación del paquete en CRAN brinda ejemplos prácticos y guías detalladas para su uso eficiente.
+ 	
+ 	\section{data.tree}
+ 	
+ 	El paquete \texttt{data.tree} de R es una estructura de datos para manejar datos jerárquicos. Permite a los usuarios de R crear estructuras de árbol a partir de datos jerárquicos y recorrer el árbol en varios órdenes. Es posible agregar y acumular valores, imprimir y trazar el árbol, convertir a y desde \texttt{data.frame}, entre otras funcionalidades. El paquete es útil en una variedad de aplicaciones, incluyendo árboles de decisión, aprendizaje automático, finanzas y la conversión de y hacia JSON, por nombrar algunos.\\
+ 	
+ 	El paquete provee herramientas para convertir estructuras de datos entre diferentes formatos como \texttt{data.frame}, listas de listas, dendrogramas, etc. Los usuarios pueden construir árboles de datos de manera programática o mediante conversión de otros formatos. Además, \texttt{data.tree} facilita la visualización de datos jerárquicos y puede integrarse con widgets HTML para una presentación más interactiva.\\
+ 	
+ 	Una característica distintiva de \texttt{data.tree} es su capacidad para manejar grandes volúmenes de datos jerárquicos de manera eficiente, lo cual a menudo puede ser complicado con las estructuras de datos básicas en R. Esto lo hace particularmente valioso para prototipos rápidos de algoritmos de búsqueda, pruebas de nuevas ideas de clasificación y más.\\
+ 	
+ 	Algunas de las funciones que se han utilizado en la realización de la práctica son los siguientes.
+ 	
+ 	\subsection{Traverse}
+ 	
+ 	La función \texttt{Traverse} se utiliza para recorrer un árbol o un subárbol de \texttt{Node} en un orden específico. Devuelve una lista de objetos \texttt{Node} que han sido filtrados y podados por las funciones \texttt{filterFun} y \texttt{pruneFun}. Los argumentos más importantes son:
+ 	
+ 	\begin{itemize}
+ 		\item \textbf{node}: Es el nodo raíz del árbol o subárbol que se va a recorrer.
+ 		\item \textbf{traversal}: Define el orden en el que se recorre el árbol. Los valores posibles son pre-order, post-order, in-order, level, ancestor, o una función personalizada. Cada uno de estos términos se refiere a un método específico de recorrido del árbol.
+ 		
+ 		\begin{itemize}
+ 			\item \textbf{pre-order}: Visita primero el nodo, luego recorre cada subárbol de izquierda a derecha.
+ 			\item \textbf{post-order}: Recorre primero los subárboles de izquierda a derecha y visita el nodo después.
+ 			\item \textbf{in-order}: Recorre el primer subárbol, visita el nodo, luego recorre el segundo subárbol.
+ 			\item \textbf{level}: Recorre los nodos nivel por nivel, empezando por la raíz.
+ 			\item \textbf{ancestor}: Visita un nodo y luego todos sus ancestros hasta la raíz.
+ 		\end{itemize}
+ 		
+ 		\item \textbf{pruneFun}: Una función que toma un \texttt{Node} como entrada y devuelve \texttt{TRUE} o \texttt{FALSE}. Si devuelve \texttt{FALSE} para un nodo, dicho nodo y todo su subárbol se excluyen del recorrido.
+ 		\item \textbf{filterFun}: Similar a \texttt{pruneFun}, pero en este caso, si la función devuelve \texttt{FALSE} para un nodo, solo ese nodo se excluye del resultado, no así todo el subárbol.
+ 	\end{itemize}
+ 	
+ 	Estas funciones permiten una gran flexibilidad al trabajar con datos jerárquicos, ya que se pueden recoger o excluir nodos específicos basándose en criterios definidos por el usuario. Esto es útil en una variedad de aplicaciones, desde la manipulación de datos hasta la visualización y la creación de algoritmos específicos para recorrer y trabajar con estructuras de árbol.
+ 	
+ 	\subsection{Node\$new}
+ 	
+ 	La función \texttt{Node\$new} se utiliza para crear un nuevo objeto \texttt{Node}. Este es a menudo el punto de partida para construir un árbol jerárquico de datos desde cero, típicamente comenzando con la creación del nodo raíz. Aquí están los argumentos más importantes de esta función:
+ 	
+ 	\begin{itemize}
+ 		\item \textbf{name}: El nombre del nodo a crear. Este es un argumento obligatorio y define la identidad del nodo dentro del árbol.
+ 		\item \textbf{check}: Este argumento controla cómo se manejan los nombres de los nodos en cuanto a su conformidad con las reglas de nomenclatura. Los valores posibles incluyen:
+ 		\item \textbf{check}: Es el valor predeterminado. Si se proporciona un nombre que no se ajusta a las normas, se emitirá una advertencia.
+ 		\item \textbf{no-warn}: Se comprobará la conformidad del nombre, pero no se emitirán advertencias si hay un problema.
+ 		\item \textbf{no-check o FALSE}: No se comprobará la conformidad del nombre. Se debe usar si el rendimiento es crítico y se está seguro de que los nombres son conformes. En caso de no conformidad, se pueden esperar errores más difíciles de diagnosticar.
+ 		\item \textbf{...}: Este es un lugar para pasar atributos adicionales al nodo. Pueden ser pares de nombres y valores que definen las propiedades del nodo.
+ 	\end{itemize}
+ 	
+ 	Al llamar a \texttt{Node\$new}, se crea un nuevo objeto \texttt{Node} con el nombre y los atributos especificados. Posteriormente, se pueden agregar hijos a este nodo o establecer más propiedades para construir un árbol de datos completo.
+ 	
+ 	\subsection{Node\$AddChildNode}
+ 	
+ 	La función \texttt{AddChildNode} se utiliza para añadir un nodo hijo a un nodo existente. Esto es esencial para construir la estructura jerárquica de un árbol.\\
+ 	
+ 	El único argumento de la función es \texttt{child}, el nodo hijo que se va a añadir al nodo actual. Debe ser un objeto \texttt{Node} que ya haya sido creado, típicamente con \texttt{Node\$new}.\\
+ 	
+ 	Cuando se llama a \texttt{AddChildNode(child)}, el nodo especificado en \texttt{child} se adjunta al nodo desde el cual se llama al método. El método devuelve el nodo hijo, lo que permite la posibilidad de encadenar llamadas para una construcción más fluida del árbol.
+ 	
+ 	\subsection{SetNodeStyle}
+ 	
+ 	La función \texttt{SetNodeStyle} se utiliza para definir el estilo de los nodos en la representación gráfica de un árbol. Esta función es importante para personalizar la apariencia de los nodos cuando se visualizan árboles jerárquicos.\\
+ 	
+ 	Los argumentos más importantes de la función son:
+ 	
+ 	\begin{enumerate}
+ 		\item \textbf{tree o node}: Se refiere al árbol o nodo al que se aplicará el estilo.
+ 		
+ 		\item \textbf{label}: Función que define cómo se generará la etiqueta de texto para cada nodo. Por ejemplo, puede combinar el nombre del nodo y otro atributo del nodo para crear una etiqueta más informativa.
+ 		
+ 		\item \textbf{tooltip}: Similar a \texttt{label}, pero para definir el texto que aparecerá como un tooltip (información emergente) cuando se pase el cursor sobre el nodo en una visualización interactiva.
+ 		
+ 		\item \textbf{fontname}: El nombre de la fuente que se utilizará para el texto del nodo.
+ 		
+ 		\item \textbf{inherit}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que determina si el nodo heredará los estilos de su nodo padre.
+ 		
+ 		\item \textbf{keepExisting}: Un parámetro lógico (\texttt{TRUE} o \texttt{FALSE}) que especifica si se deben mantener los estilos existentes que ya se han definido para los nodos.
+ 		
+ 		Además de estos argumentos, hay otros estilos que se pueden configurar, como:
+ 		
+ 		\item \textbf{color}: El color del texto del nodo.
+ 		\item \textbf{fillcolor}: El color de fondo del nodo.
+ 		\item \textbf{fontcolor}: El color de la fuente del nodo.
+ 		\item \textbf{fontsize}: El tamaño de la fuente del nodo.
+ 		\item \textbf{height / width}: Altura y anchura del nodo.
+ 		\item \textbf{penwidth}: El ancho del borde del nodo.
+ 		\item \textbf{shape}: La forma del nodo (por ejemplo, caja, elipse, círculo).
+ 	\end{enumerate}
+ 	
+ 	Estos estilos permiten una personalización detallada de cómo se presentan los nodos en una visualización, lo que puede ser útil para resaltar ciertos aspectos de los datos o hacer que la visualización sea más legible y estéticamente agradable.
+ 	
+ 	\subsection{SetEdgeStyle}
+ 	
+ 	La función \texttt{SetEdgeStyle} permite personalizar el estilo de las aristas en la representación gráfica de un árbol. Esta personalización es útil para hacer que la visualización de un árbol sea más informativa y estéticamente agradable. Aquí están los argumentos más importantes de esta función:
+ 	
+ 	\begin{enumerate}
+ 		\item \textbf{tree}: Se refiere al árbol completo al que se aplicarán los estilos de las aristas.
+ 		
+ 		\item \textbf{arrowhead}: Define el estilo del extremo de la arista que apunta al nodo hijo. Por ejemplo, "none" significa que no habrá flecha.
+ 		
+ 		\item \textbf{label}: Una función que toma un nodo como argumento y devuelve el texto que se usará como etiqueta en la arista.
+ 		
+ 		\item \textbf{fontname}: El nombre de la fuente que se usará para el texto de las etiquetas de las aristas.
+ 		
+ 		\item \textbf{penwidth}: Una función que toma un nodo como argumento y devuelve el ancho de la línea de la arista. Esto puede variar dependiendo de los atributos del nodo, por ejemplo, el tamaño del nodo o el valor de un dato asociado al mismo.
+ 		
+ 		\item \textbf{color}: Una función que toma un nodo como argumento y devuelve el color de la arista. Esto permite, por ejemplo, variar el color de las aristas basándose en ciertas propiedades de los nodos o sus datos asociados.
+ 		
+ 		\item \textbf{inherit}: Un parámetro lógico (TRUE o FALSE) que determina si las aristas heredarán los estilos de las aristas de su nodo padre.
+ 		
+ 		\item \textbf{keepExisting}: Un parámetro lógico (TRUE o FALSE) que especifica si se deben mantener los estilos existentes que ya se han definido para las aristas.
+ 	\end{enumerate}
+ 	
+ 	Además de estos argumentos, se pueden establecer otros estilos comunes en las aristas, como:
+ 	
+ 	\begin{itemize}
+ 		\item \textbf{color}: El color de la arista.
+ 		\item \textbf{fontcolor}: El color de la fuente de la etiqueta de la arista.
+ 		\item \textbf{fontsize}: El tamaño de la fuente de la etiqueta de la arista.
+ 		\item \textbf{dir}: La dirección de la arista (por ejemplo, hacia adelante, hacia atrás, ambos, ninguno).
+ 	\end{itemize}
+ 	
+ 	Estos estilos son importantes para controlar la apariencia visual de cómo se conectan los nodos en el árbol y pueden ser útiles para resaltar o diferenciar rutas o relaciones dentro de la estructura del árbol.
+ 	
+ 	\subsection{Otros métodos}
+ 	
+ 	Algunos otros métodos del paquete \texttt{data.tree} de R son funciones que permiten manipular y gestionar estructuras de datos jerárquicas. Aquí hay una breve explicación de algunos de los métodos disponibles (estos no han sido utilizados en la práctica).
+ 	
+ 	\begin{enumerate}
+ 		\item \textbf{Node\$addChild}: Añade un nodo hijo al nodo actual.
+ 		\item \textbf{Node\$addSibling}: Añade un nuevo nodo hermano al mismo nivel que el nodo actual.
+ 		\item \textbf{Node\$addSiblingNode}: Añade un nodo hermano ya existente como objeto \texttt{Node} al mismo nivel que el nodo actual.
+ 		\item \textbf{Node\$removeChild}: Elimina un nodo hijo del nodo actual.
+ 		\item \textbf{Node\$removeAttribute}: Elimina un atributo del nodo actual.
+ 		\item \textbf{Node\$sort}: Ordena los hijos de un nodo basándose en una función o un criterio de ordenación.
+ 		\item \textbf{Node\$revert}: Invierte el orden de los hijos del nodo actual.
+ 		\item \textbf{Node\$prune}: Elimina todos los nodos hijos del nodo actual, simplificando el árbol.
+ 		\item \textbf{Node\$climb}: Se mueve hacia arriba en la jerarquía del árbol, generalmente para llegar al nodo padre o ancestros.
+ 		\item \textbf{Node\$navigate}: Navega a otro nodo utilizando una ruta relativa desde el nodo actual.
+ 		\item \textbf{Node\$get}: Recupera valores o atributos de los nodos del árbol.
+ 		\item \textbf{Node\$do}: Ejecuta una función sobre un conjunto de nodos.
+ 		\item \textbf{Node\$set}: Asigna valores o atributos a los nodos del árbol.
+ 		\item \textbf{Node\$clone}: Crea una copia completa del nodo y su subárbol.
+ 	\end{enumerate}
+ 	
+ 	Estos métodos permiten un control detallado y una manipulación flexible de los datos jerárquicos, lo que los hace fundamentales para una amplia gama de tareas analíticas y de visualización de datos.
+ 	
+ 	\section{DiagrammeR}
+ 	
+ 	El paquete \texttt{DiagrammeR} de R es una herramienta para la creación, modificación, análisis y visualización de gráficos de redes y estructuras de grafos. Permite la adición y eliminación paso a paso de nodos y aristas, y trabaja con datos en tablas para la adición masiva de nodos, aristas y metadatos asociados. Una selección de algoritmos de gráficos está disponible para el análisis de estas estructuras, y las visualizaciones pueden aprovechar las propiedades estéticas asignadas a nodos y aristas.\\
+ 	
+ 	Este paquete se relaciona con \texttt{data.tree} en la capacidad de visualizar estructuras de datos jerárquicos. Mientras \texttt{data.tree} es eficiente para crear y manipular datos jerárquicos, \texttt{DiagrammeR} puede tomar estos datos y representarlos visualmente como gráficos o redes, lo que puede ser particularmente útil para la visualización de árboles de decisiones o estructuras organizativas.\\
+ 	
+ 	Por ejemplo, \texttt{data.tree} podría usarse para estructurar y manipular datos jerárquicos, y luego dicha estructura podría ser convertida a un formato adecuado para \texttt{DiagrammeR} para su visualización como un gráfico de nodos y aristas. La capacidad de \texttt{DiagrammeR} para utilizar datos de tablas para generar gráficos es especialmente útil, ya que las estructuras de \texttt{data.tree} pueden ser transformadas en tablas (nodos y aristas) y luego visualizadas utilizando \texttt{DiagrammeR}.
+ 	
 \end{document}
