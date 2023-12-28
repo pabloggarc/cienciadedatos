@@ -1,5 +1,0 @@
-(m = t(matrix(c(0.89,2.94, 4.36,5.21, 3.75,1.12, 6.25,3.14, 4.1,1.18, 3.9,4.27), 2, 6)))
-agglomerativeHC(m, 'EUC', 'MIN')
-agglomerativeHC.details(m, 'EUC', 'MIN')
-agglomerativeHC.details(m, 'EUC', 'MAX')
-agglomerativeHC.details(m, 'EUC', 'AVG')

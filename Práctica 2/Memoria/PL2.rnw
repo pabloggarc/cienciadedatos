@@ -56,7 +56,7 @@
 }
 
 \date{
-	\large{\today}
+	\large{26 de diciembre de 2023}
 }
 
 \hypersetup{
@@ -1367,7 +1367,7 @@
 	 			
 	 			Como se puede observar, se ha optado por una salida detallada. Se imprimen las iteraciones que se han hecho, indicando el nodo raíz escogido así como su ganancia. Se imprimen las conclusiones de esa división y la muestra restante. Por último, se imprime el árbol final. Para poder visualizarlo de una mejor forma se puede hacer plot de la salida que ofrece la función. Al realizar un \texttt{plot} de un árbol, la salida se muestra en HTML, por lo que es necesario hacer uso del paquete \texttt{webshot} para poder visualizarlo en este documento. Se debe instalar la herramienta \texttt{PhantomJs} que realiza esta conversión. De esta forma, se obtiene el siguiente gráfico visual.
 	 			
-	 			<<fig.cap="Árbol de datos">>=
+	 			<<fig.cap="Árbol de clasificación">>=
 	 			plot(tree)
 	 			@
 	 			
@@ -1527,7 +1527,7 @@
  				}
  				@
  				
- 				De la siguiente forma, se prueba para los casos del ejercicio. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} se dan diferentes valores a $y$ para un mismo $x$ lo que hace que la \textbf{pendiente} de esta recta \textbf{tienda a infinito}, pues al calcular el valor de $b$, se divide por $S^2_x$, pero es igual a 0 al no variar los $x_i$ y \textbf{se obtendrá un error}. La solución a este problema se corresponde con una recta del tipo $x=x_i$. 
+ 				De la siguiente forma, se prueba para los casos del ejercicio. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} el problema viene ocasionado porque se tienen diferentes valores de $y$ para un mismo $x$, a excepción de un único punto, lo que permite calcular una recta que pase por dicho punto y por la media del resto. 
  				
  				<<recta1, fig.cap = "Datos no correlacionados">>=
  				sample1 = read.xlsx("../Memoria/data/conj1.xlsx", colNames=FALSE)
@@ -1544,10 +1544,12 @@
  				fcd_regression(sample3, 2)
  				@
  				
- 				<<recta4, fig.cap = "Recta con pendiente infinita">>=
+ 				<<recta4, fig.cap = "Recta con pendiente positiva">>=
  				sample4 = read.xlsx("../Memoria/data/conj4.xlsx", colNames=FALSE)
- 				fcd_regression(sample4, 33)
+ 				fcd_regression(sample4, 1.5)
  				@
+ 				
+ 				En conclusión, se puede decir que ninguna de las regresiones es óptima al no tener un valor próximo a 1 sus $R^2$ por los motivos ya expuestos. 
  				
  	\appendix
  	\chapter{Librería de funciones auxiliares}\label{ap:Libreria}

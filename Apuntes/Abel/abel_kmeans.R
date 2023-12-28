@@ -1,8 +1,0 @@
-(m = t(matrix(c(4,4, 3,5, 1,2, 5,5, 0,1, 2,2, 4,5, 2,1), 2, 8)))
-(ct = t(matrix(c(0,1,2,2),2,2)))
-(clasificacionns = kmeans(m, ct, 4))
-(m = cbind(clasificacionns$cluster, m))
-(mc1 = subset(m, m[,1]==1))
-(mc2 = subset(m, m[,1]==2))
-(mc1 = mc1[,-1])
-(mc2 = mc2[,-1])

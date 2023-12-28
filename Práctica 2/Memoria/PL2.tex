@@ -106,7 +106,7 @@
 }
 
 \date{
-	\large{\today}
+	\large{26 de diciembre de 2023}
 }
 
 \hypersetup{
@@ -2708,7 +2708,7 @@
 
 }
 
-\caption[Árbol de datos]{Árbol de datos}\label{fig:unnamed-chunk-50}
+\caption[Árbol de clasificación]{Árbol de clasificación}\label{fig:unnamed-chunk-50}
 \end{figure}
 
 \end{knitrout}
@@ -2889,7 +2889,7 @@
 \end{kframe}
 \end{knitrout}
  				
- 				De la siguiente forma, se prueba para los casos del ejercicio. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} se dan diferentes valores a $y$ para un mismo $x$ lo que hace que la \textbf{pendiente} de esta recta \textbf{tienda a infinito}, pues al calcular el valor de $b$, se divide por $S^2_x$, pero es igual a 0 al no variar los $x_i$ y \textbf{se obtendrá un error}. La solución a este problema se corresponde con una recta del tipo $x=x_i$. 
+ 				De la siguiente forma, se prueba para los casos del ejercicio. Se observa que las aproximaciones no son buenas, pues los valores de $R^2$ no se aproximan a 1. En la \Cref{fig:recta1} se debe a que los puntos se encuentran de manera un tanto dispersa, dando a entender que no existe relación entre las variables. En la \Cref{fig:recta2} se ve claramente que la relación es cuadrática, por lo que es inadecuado utilizar una recta para aproximar esos puntos. En la \Cref{fig:recta3} el problema viene dado por un outlier, y en la \Cref{fig:recta4} el problema viene ocasionado porque se tienen diferentes valores de $y$ para un mismo $x$, a excepción de un único punto, lo que permite calcular una recta que pase por dicho punto y por la media del resto. 
  				
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2970,25 +2970,30 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{sample4} \hlkwb{=} \hlkwd{read.xlsx}\hlstd{(}\hlstr{"../Memoria/data/conj4.xlsx"}\hlstd{,} \hlkwc{colNames}\hlstd{=}\hlnum{FALSE}\hlstd{)}
-\hlkwd{fcd_regression}\hlstd{(sample4,} \hlnum{33}\hlstd{)}
+\hlkwd{fcd_regression}\hlstd{(sample4,} \hlnum{1.5}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## Recta de regresión
-## y = NaN x + NaN 
-## R2 = NaN
+## y = 0.5 x + 3.002 
+## R2 = 0.667
 \end{verbatim}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in int\_abline(a = a, b = b, h = h, v = v, untf = untf, ...): 'a' y 'b' deben ser finitos}}\end{kframe}\begin{figure}[H]
+\end{kframe}\begin{figure}[H]
 
 {\centering \includegraphics[width=\maxwidth]{figure/recta4-1} 
 
 }
 
-\caption[Recta con pendiente infinita]{Recta con pendiente infinita}\label{fig:recta4}
+\caption[Recta con pendiente positiva]{Recta con pendiente positiva}\label{fig:recta4}
 \end{figure}
 
+\begin{kframe}\begin{verbatim}
+## Outlier: (8, 8.84)
+## Outlier: (8, 5.25)
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
+ 				
+ 				En conclusión, se puede decir que ninguna de las regresiones es óptima al no tener un valor próximo a 1 sus $R^2$ por los motivos ya expuestos. 
  				
  	\appendix
  	\chapter{Librería de funciones auxiliares}\label{ap:Libreria}
